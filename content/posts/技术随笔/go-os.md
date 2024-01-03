@@ -1,5 +1,6 @@
 ---
 title: 一次失败的项目实践——春节七天乐（不起来）
+slug: "go-os"
 draft: false
 author: "shinya"
 tags: ["golang", "os", "riscv"]

@@ -1,5 +1,6 @@
 ---
 title: MapReduce 论文阅读
+slug: "mapreducepaper"
 tags: ["mapreduce","6.5840","6.824"]
 date: 2022-01-16T17:32:00Z
 draft: false

@@ -1,5 +1,6 @@
 ---
 title: 一起写个数据库 —— 2. 引用计数缓存框架和共享内存数组
+slug: "mydb2"
 date: 2021-11-30T23:18:00Z
 tags: ["java", "mydb"]
 draft: false

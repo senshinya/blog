@@ -1,5 +1,6 @@
 ---
 title: "漫谈编程语言"
+slug: "chitchat-about-programming-language"
 date: 2023-04-08T13:16:36.812Z
 draft: false
 author: "shinya"

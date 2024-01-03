@@ -1,5 +1,6 @@
 ---
 title: Raft 论文阅读
+slug: "raftextendedpaper"
 tags: ["raft","6.5840","6.824"]
 draft: false
 author: "shinya"

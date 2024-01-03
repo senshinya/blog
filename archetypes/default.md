@@ -1,5 +1,8 @@
 +++
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
 date = {{ .Date }}
-draft = true
+slug = '{{ replace .Name "-" " " | title }}'
+draft = false
+author = "shinya"
+description = ""
 +++

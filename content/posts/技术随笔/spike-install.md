@@ -1,5 +1,6 @@
 ---
 title: "RISC-V 工具链与模拟器（emulator）的安装"
+slug: "spike-install"
 date: 2023-05-24T17:51:09.461Z
 draft: false
 author: "shinya"

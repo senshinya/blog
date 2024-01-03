@@ -1,0 +1,47 @@
+baseURL: 'https://shinya.click/'
+languageCode: zh-cn
+title: shinyaのブログ
+theme: tania
+
+params:
+  titleEmoji: "😎"
+  siteName: "shinyaのブログ"
+  siteDesc: "素晴らしです！"
+  author: "shinya"
+
+permalinks:
+  posts: '/article/:slug'
+
+menu:
+  header:
+    - name: Tags
+      url: /tags/
+    - name: Projects
+      url: /projects/
+    - name: About
+      url: /about/
+  footer:
+    - name: RSS
+      url: /index.xml
+
+markup:
+  highlight:
+    noClasses: false
+    lineNos: true
+  goldmark:
+    renderer:
+      unsafe: true
+
+outputs:
+  home: ["HTML", "RSS", "JSON"]
+
+comments:
+  enabled: true
+  provider: giscus
+
+  giscus:
+    repo: senshinya/blog
+    id: R_kgDOLAV3QQ
+    category:
+      name: Announcements
+      id: DIC_kwDOLAV3Qc4CcKlC

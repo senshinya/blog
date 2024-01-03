@@ -1,5 +1,6 @@
 ---
 title: 6.5840 实验 2a —— Leader 选举
+slug: "raftlab2a"
 tags: ["raft","6.5840","6.824"]
 draft: false
 author: "shinya"

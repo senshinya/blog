@@ -1,5 +1,6 @@
 ---
 title: 6.5840 实验一 —— MapReduce
+slug: "mapreducelab"
 tags: ["mapreduce","6.5840","6.824"]
 date: 2022-01-20T22:29:00Z
 draft: false

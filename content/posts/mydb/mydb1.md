@@ -1,5 +1,6 @@
 ---
 title: 一起写个数据库 —— 1. 从最简单的 TM 开始
+slug: "mydb1"
 date: 2021-11-28T16:10:00Z
 tags: ["java", "mydb"]
 draft: false

@@ -1,5 +1,6 @@
 ---
 title: 提问的智慧
+slug: "question-smartly"
 tags: ["提问的智慧"]
 date: 2021-12-27T01:50:00Z
 draft: false

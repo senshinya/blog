@@ -5,7 +5,6 @@
 @import "base/scaffolding";
 @import "base/headings";
 @import "base/links";
-@import "base/scrollbar";
 
 
 @import "components/navbar";
@@ -16,10 +15,12 @@
 @import "components/helpers";
 @import "components/table";
 @import "components/tags";
+@import "components/search";
 
 @import "components/post";
+@import "components/comments";
 @import "components/highlight";
-@import "components/side";
+@import "components/footnotes";
 @import "components/suggested";
 @import "components/projects";
 @import "components/terms";

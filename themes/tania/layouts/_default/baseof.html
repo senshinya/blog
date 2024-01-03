@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode }}">
-    {{ partial "head.html" . }}
+    {{ partial "head/head" . }}
+    {{ partialCached "head/colorScheme" . }}
 
     <body class="dark">
         {{ partial "header.html" . }}
         <main>
             {{ block "main" . }}{{ end }}
         </main>
-        {{ partial "footer.html" . }}
+        {{ partial "footer/footer" . }}
     </body>
 </html>
