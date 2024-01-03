@@ -4,7 +4,7 @@ title = 'shinyaのブログ'
 theme = 'tania'
 
 [params]
-titleEmoji = "😃"
+titleEmoji = "😎"
 siteKeyword = "shinya,Shinya,blog,博客"
 siteDesc = "Shinya's Blog,shinya 的博客"
 siteAuthor = "shinya"
