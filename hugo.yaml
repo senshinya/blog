@@ -8,7 +8,6 @@ params:
   siteName: "shinyaのブログ"
   siteDesc: "素晴らしです！"
   author: "shinya"
-  titleLogo: favicon.ico
 
   comments:
     enabled: true
@@ -28,10 +27,16 @@ menu:
   header:
     - name: Tags
       url: /tags/
+      weight: 1
     - name: Projects
       url: /projects/
+      weight: 2
     - name: About
       url: /about/
+      weight: 3
+    - name: Friends
+      url: /friends/
+      weight: 4
   footer:
     - name: RSS
       url: /index.xml
