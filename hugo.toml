@@ -33,7 +33,7 @@ home = ["HTML", "RSS", "JSON"]
 
 [comments]
 enabled = true
-provider = giscus
+provider = "giscus"
 
 [comments.giscus]
 repo = "senshinya/blog"
