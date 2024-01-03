@@ -5,21 +5,20 @@
 }
 
 .myfriend {
-    width: 56px !important;
-    height: 56px !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
     border-radius: 50%!important;
-    padding: 2px;
-    margin-top: 20px !important;
-    margin-left: 14px !important;
+    margin-top: 0.5rem !important;
+    margin-left: 0.5rem !important;
     background-color: var(--light-transparent-bg);
 }
 
 .frienddiv {
     overflow: auto;
-    height: 100px;
+    height: 5rem;
     width: 49%;
     display: inline-block !important;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     background: none;
     
     -webkit-transition: all ease-out 0.3s;
@@ -56,20 +55,20 @@
 }
 
 .frienddivleft {
-    width: 92px;
+    width: 6rem;
     float: left;
-    margin-right: -5px;
+    margin-right: -0.5rem;
 }
 
 .frienddivright {
-    margin-top: 18px;
-    margin-right: 18px;
+    margin-top: 0.5rem;
+    margin-right: 0.2rem;
 }
 
 .friendname {
     text-overflow: ellipsis;
     font-size: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
     color: var(--h1-color);
 }
 
@@ -80,11 +79,13 @@
 }
 
 @media screen and (max-width: 600px) {
+    .frienddiv {
+        width: 100%;
+    }
     .friendinfo {
         display: none;
     }
     .frienddivleft {
-        width: 84px;
         margin: auto;
     }
     .frienddivright {
@@ -92,9 +93,9 @@
         margin: auto;
         display: flex;
         align-items: center;
-        justify-content: center;
+        // justify-content: center;
     }
     .friendname {
-        font-size: 18px;
+        font-size: 1.3rem;
     }
 }
