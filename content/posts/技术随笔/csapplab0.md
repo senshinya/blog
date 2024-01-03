@@ -172,7 +172,7 @@ $ sudo make install
 
 安装完成后，就可以在任何位置，通过 cgdb 命令打开了。如下：
 
-![CGDB](/images/cgdb.jpg)
+![CGDB](./images/cgdb.jpg)
 
 CGDB
 

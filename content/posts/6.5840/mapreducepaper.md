@@ -53,7 +53,7 @@ reduce(String key, Iterator values):
 
 MapReduce 作为一种编程模型或者说编程思想，实现方式可以有很多。Google 在论文中给出了一种实现方法，用于局域网内互相连接的大量机器。执行流程如下图：
 
-![mapReduce 执行流程](/images/mapreduce.jpg)
+![mapReduce 执行流程](./images/mapreduce.jpg)
 
 1. MapReduce 框架首先将输入文件划分为 M 片，每片通常为 16MB 到 64MB 大小。随后会启动集群中的机器（进程）。
 2. 集群中的一个进程是一个特殊的 master 进程。剩余的 worker 进程都由 master 分配任务。一共有 M 个 map 任务和 R 个 reduce 任务需要分配。master 会挑选空闲的 worker，一次分配一个 map 任务或者一个 reduce 任务。

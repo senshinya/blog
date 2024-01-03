@@ -24,7 +24,7 @@ date: 2023-02-02T23:24:55Z
 
 但我确实首先想到了一个绝妙的名字：goose
 
-![README](/images/goose-readme.png)
+![README](./images/goose-readme.png)
 
 太妙了兄弟们！
 
@@ -223,7 +223,7 @@ Type           Offset             VirtAddr           PhysAddr
 
 百思不得其解，于是开始试验起来，最后发现，只要加上 `-T` 这个链接参数，就会出现这种情况。但是不加又不行，这些内存段不能被加载到低地址上，因为那是 mmio 的位置。于是我去 go 的 github 仓库里发了个 issue：[cmd/link: wrong program header offset when cross-compile to riscv64 when setting -T text alignment](https://github.com/golang/go/issues/57983)。描述了一下后，得到的回答是：
 
-![ISSUE](/images/go_issue1.png)
+![ISSUE](./images/go_issue1.png)
 
 看来是 RV64 对 `-T` 的支持不太完善……
 

@@ -12,7 +12,7 @@ description: "5840 的 Lab1，对着论文照葫芦画瓢，实现 MapReduce 系
 
 实验一是要实现一个 MapReduce 系统，基本就是两个部分：实现 master 程序和实现 worker 程序。这个实验基本就是劝退怪了，一来是对 golang 的 rpc 和并发的使用要比较熟悉，二来就是要对 MapReduce 的整个流程机制要比较熟悉。其实有一个小秘诀，就是拼命看论文中的这张图，再拼命看下面的流程讲解：
 
-![mapReduce 执行流程](/images/mapreduce.jpg)
+![mapReduce 执行流程](./images/mapreduce.jpg)
 
 这个实验我实现了两个版本，主要是并发控制的方式有些不同。最初是基于 mutex 锁的版本，后来重构成了基于 channel 的无锁版本。无锁版本的实现比较优雅，所以讲解也主要基于无锁版本。
 

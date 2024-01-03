@@ -40,7 +40,7 @@ MYDB 分为后端和前端，前后端通过 socket 进行交互。前端（客�
 
 五个模块的依赖关系如下：
 
-![](/images/mydb0.jpg)
+![](./images/mydb0.jpg)
 
 MYDB 模块依赖
 
@@ -94,6 +94,6 @@ mvn exec:java -Dexec.mainClass="top.guoziyang.mydb.client.Launcher"
 
 一个执行示例：
 
-![](/images/mydb0example.jpg)
+![](./images/mydb0example.jpg)
 
 MYDB 运行示例
