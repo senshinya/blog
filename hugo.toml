@@ -1,6 +1,6 @@
 baseURL = 'https://shinya.click/'
 languageCode = 'zh-cn'
-title = '菜狗の日常'
+title = 'shinyaのブログ'
 theme = 'tania'
 
 [params]
