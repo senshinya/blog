@@ -9,6 +9,17 @@ params:
   siteDesc: "素晴らしです！"
   author: "shinya"
 
+  comments:
+    enabled: true
+    provider: giscus
+
+    giscus:
+      repo: senshinya/blog
+      id: R_kgDOLAV3QQ
+      category:
+        name: Announcements
+        id: DIC_kwDOLAV3Qc4CcKlC
+
 permalinks:
   posts: '/article/:slug'
 
@@ -34,14 +45,3 @@ markup:
 
 outputs:
   home: ["HTML", "RSS", "JSON"]
-
-comments:
-  enabled: true
-  provider: giscus
-
-  giscus:
-    repo: senshinya/blog
-    id: R_kgDOLAV3QQ
-    category:
-      name: Announcements
-      id: DIC_kwDOLAV3Qc4CcKlC
