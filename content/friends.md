@@ -8,4 +8,3 @@ comments: false
 ---
 
 {{< friend name="西贝の小窝" url="https://www.jiazixin.xyz" logo="/fav/jiazixin.jpg" word="前途的小学弟！" >}}
-{{< friend name="西贝の小窝" url="https://www.jiazixin.xyz" logo="/fav/jiazixin.jpg" word="前途的小学弟！" >}}
