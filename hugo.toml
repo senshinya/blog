@@ -32,7 +32,7 @@ unsafe = true
 home = ["HTML", "RSS", "JSON"]
 
 [comments]
-enable = true
+enabled = true
 provider = giscus
 
 [comments.giscus]
