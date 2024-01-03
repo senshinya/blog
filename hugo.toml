@@ -30,3 +30,15 @@ unsafe = true
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
+
+[comments]
+enable = true
+provider = giscus
+
+[comments.giscus]
+repo = "senshinya/blog"
+id = "R_kgDOLAV3QQ"
+category = { name = "Announcements", id = "DIC_kwDOLAV3Qc4CcKlC" }
+mapping = "pathname"
+reactionsEnabled = 1
+emitMetadata = 0
