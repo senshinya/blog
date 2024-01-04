@@ -1,0 +1,22 @@
+## REFERENCES: 
+##  http://www.robotstxt.org
+##  https://www.eff.org/deeplinks/2023/12/no-robotstxt-how-ask-chatgpt-and-google-bard-not-use-your-website-training
+
+## To exclude all robots from the entire server:
+# User-agent: *
+# Disallow: /
+
+## To allow all robots complete access:
+# User-agent: *
+# Disallow:
+
+## Say NO to training large language models
+User-agent: CCBot
+User-agent: ChatGPT-User
+User-agent: FacebookBot
+User-agent: Google-Extended
+User-agent: GPTBot
+User-agent: Omgilibot
+Disallow: /
+
+Sitemap: https://shinya.click/sitemap.txt
