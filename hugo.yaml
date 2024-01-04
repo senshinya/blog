@@ -2,6 +2,8 @@ baseURL: 'https://shinya.click/'
 languageCode: zh-cn
 title: shinyaのブログ
 theme: tania
+sitemap:
+  filename: sitemap.txt
 
 params:
   titleEmoji: "😎"

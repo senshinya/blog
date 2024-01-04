@@ -1,0 +1,4 @@
+https://shinya.click
+{{ range .Data.Pages -}}
+{{.Permalink}}
+{{ end -}}
