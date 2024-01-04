@@ -1,7 +1,7 @@
 ---
 title: 一起写个数据库 —— 5. 页面索引与 DM 的实现
 slug: "mydb5"
-date: 2021-12-11T15:16:00Z
+date: 2021-12-11T15:16:00+08:00
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"

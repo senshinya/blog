@@ -1,7 +1,7 @@
 ---
 title: 一起写个数据库 —— 7. 死锁检测与 VM 的实现
 slug: "mydb7"
-date: 2021-12-23T21:20:00Z
+date: 2021-12-23T21:20:00+08:00
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"

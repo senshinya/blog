@@ -2,7 +2,7 @@
 title: CSAPP LAB 环境搭建
 slug: "csapplab0"
 tags: ["CSAPP"]
-date: 2021-12-27T00:09:00Z
+date: 2021-12-27T00:09:00+08:00
 draft: false
 author: "shinya"
 description: "实际是一篇 WSL 软广（"

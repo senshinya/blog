@@ -2,7 +2,7 @@
 title: 《三体》中的“大多数人”
 slug: "people-in-three-body"
 tags: ["三体","读书"]
-date: 2022-04-11T00:13:13Z
+date: 2022-04-11T00:13:13+08:00
 draft: false
 author: "shinya"
 description: "《三体》中的“人性”"

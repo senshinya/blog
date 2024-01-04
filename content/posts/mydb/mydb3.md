@@ -1,7 +1,7 @@
 ---
 title: 一起写个数据库 —— 3. 数据页的缓存与管理
 slug: "mydb3"
-date: 2021-12-05T15:28:00Z
+date: 2021-12-05T15:28:00+08:00
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"

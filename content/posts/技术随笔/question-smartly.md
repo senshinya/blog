@@ -2,7 +2,7 @@
 title: 提问的智慧
 slug: "question-smartly"
 tags: ["提问的智慧"]
-date: 2021-12-27T01:50:00Z
+date: 2021-12-27T01:50:00+08:00
 draft: false
 author: "shinya"
 description: "我知道你很急，但你先别急，学会聪明地提问"

@@ -1,7 +1,7 @@
 ---
 title: 一起写个数据库 —— 10. 服务端客户端的实现及其通信规则
 slug: "mydb10"
-date: 2021-12-25T18:26:00Z
+date: 2021-12-25T18:26:00+08:00
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"

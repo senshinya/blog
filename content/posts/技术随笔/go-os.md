@@ -5,7 +5,7 @@ draft: false
 author: "shinya"
 tags: ["golang", "os", "riscv"]
 description: "一次用 Golang 编写操作系统的失败尝试"
-date: 2023-02-02T23:24:55Z
+date: 2023-02-02T23:24:55+08:00
 ---
 
 ### 缘起

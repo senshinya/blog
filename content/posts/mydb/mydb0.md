@@ -1,7 +1,7 @@
 ---
 title: 一起写个数据库 —— 0. 项目结构和一些不得不说的话
 slug: "mydb0"
-date: 2021-11-27T14:43:00Z
+date: 2021-11-27T14:43:00+08:00
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"
