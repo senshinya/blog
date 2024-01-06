@@ -2,6 +2,7 @@
 title: 一起写个数据库 —— 6. 记录的版本与事务隔离
 slug: "mydb6"
 date: 2021-12-18T14:58:00+08:00
+categories: ["mydb"]
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"

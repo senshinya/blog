@@ -5,6 +5,7 @@ date: 2023-04-08T13:16:36.812+08:00
 draft: false
 author: "shinya"
 description: "以自己设计编程语言为主线，从计算机系统的层面浅浅地聊了下各个编程语言"
+categories: ["技术随笔"]
 tags: ["programming language","C","golang","cpp","java"]
 ---
 

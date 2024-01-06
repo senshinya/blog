@@ -1,11 +1,12 @@
 ---
 title: 6.5840 实验 2a —— Leader 选举
 slug: "raftlab2a"
+categories: ["6.5840"]
 tags: ["raft","6.5840","6.824"]
 draft: false
 author: "shinya"
 description: "5840 Lab2 的第一部分，实现 Leader 选举，同时搭好整体处理框架"
-date: 2022-12-16T02:06:10Z
+date: 2022-12-16T02:06:10+08:00
 ---
 
 ### 前言

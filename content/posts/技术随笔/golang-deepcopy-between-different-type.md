@@ -1,6 +1,7 @@
 ---
 title: golang 支持不同类型结构体间的深拷贝
 slug: "golang-deepcopy-between-types"
+categories: ["技术随笔"]
 tags: ["golang","反射","深拷贝"]
 date: 2022-08-15T01:05:01+08:00
 draft: false

@@ -1,6 +1,7 @@
 ---
 title: 提问的智慧
 slug: "question-smartly"
+categories: ["技术随笔"]
 tags: ["提问的智慧"]
 date: 2021-12-27T01:50:00+08:00
 draft: false

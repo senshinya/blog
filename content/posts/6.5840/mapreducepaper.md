@@ -1,8 +1,9 @@
 ---
 title: MapReduce 论文阅读
 slug: "mapreducepaper"
+categories: ["6.5840"]
 tags: ["mapreduce","6.5840","6.824"]
-date: 2022-01-16T17:32:00Z
+date: 2022-01-16T17:32:00+08:00
 draft: false
 author: "shinya"
 description: "MapReduce 已经是 04 年的论文了，仍然是当今众多大数据处理框架的理论基础"

@@ -2,6 +2,7 @@
 title: 一起写个数据库 —— 8. 索引管理
 slug: "mydb8"
 date: 2021-12-24T21:01:00+08:00
+categories: ["mydb"]
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"

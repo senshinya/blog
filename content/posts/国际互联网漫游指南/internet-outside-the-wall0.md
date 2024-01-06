@@ -1,6 +1,7 @@
 ---
 title: "国际互联网漫游指南 —— 引子"
 slug: "internet-outside-the-wall0"
+categories: ["国际互联网漫游指南"]
 tags: ["防火墙","国际互联网","梯子","国际互联网漫游指南"]
 date: 2024-01-04T23:40:49+08:00
 draft: false

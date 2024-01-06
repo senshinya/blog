@@ -1,6 +1,7 @@
 ---
 title: 《三体》中的“大多数人”
 slug: "people-in-three-body"
+categories: ["日常随笔"]
 tags: ["三体","读书"]
 date: 2022-04-11T00:13:13+08:00
 draft: false

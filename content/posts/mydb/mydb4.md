@@ -2,6 +2,7 @@
 title: 一起写个数据库 —— 4. 日志文件与恢复策略
 slug: "mydb4"
 date: 2021-12-08T22:55:00+08:00
+categories: ["mydb"]
 tags: ["java", "mydb"]
 draft: false
 author: "shinya"
