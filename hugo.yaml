@@ -5,6 +5,34 @@ theme: tania
 sitemap:
   filename: sitemap.txt
 
+permalinks:
+  posts: '/posts/:slug'
+
+menu:
+  header:
+    - name: About
+      url: /about/
+      weight: 1
+    - name: Posts
+      url: /posts/
+      weight: 2
+    - name: Projects
+      url: /projects/
+      weight: 3
+    - name: Friends
+      url: /friends/
+      weight: 4
+  footer:
+    - name: RSS
+      url: /index.xml
+
+markup:
+  highlight:
+    noClasses: false
+
+outputs:
+  home: ["HTML", "RSS", "JSON"]
+
 params:
   titleEmoji: "😎"
   siteName: "shinyaのブログ"
@@ -21,32 +49,3 @@ params:
       category:
         name: Announcements
         id: DIC_kwDOLAV3Qc4CcKlC
-
-permalinks:
-  posts: '/article/:slug'
-
-menu:
-  header:
-    - name: Tags
-      url: /tags/
-      weight: 1
-    - name: About
-      url: /about/
-      weight: 3
-    - name: Friends
-      url: /friends/
-      weight: 4
-  footer:
-    - name: RSS
-      url: /index.xml
-
-markup:
-  highlight:
-    noClasses: false
-    lineNos: true
-  goldmark:
-    renderer:
-      unsafe: true
-
-outputs:
-  home: ["HTML", "RSS", "JSON"]
