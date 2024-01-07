@@ -311,6 +311,6 @@ public void close() {
 
 今天是 2021 年 12 月 11 日，A-SOUL 一周年直播。祝 A-SOUL 一周年快乐！还会有两周年、三周年、十周年！鸟巢见！！！
 
-![](./images/asoul_oneyear.jpg)
+![](/images/asoul_oneyear.jpg)
 
 我们是，ASOUL！
