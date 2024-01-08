@@ -104,7 +104,7 @@ private long getXidPosition(long xid) {
 }
 ```
 
-`begin()` 方法会开始一个事务，更具体的，首先设置 xidCounter+1 事务的状态为 committed，随后 xidCounter 自增，并更新文件头。
+`begin()` 方法会开始一个事务，更具体的，首先设置 xidCounter+1 事务的状态为 active，随后 xidCounter 自增，并更新文件头。
 
 ```java
 // 开始一个事务，并返回XID
