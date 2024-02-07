@@ -36,7 +36,7 @@ markup:
     noClasses: false
 
 outputs:
-  home: ["HTML", "RSS", "JSON"]
+  home: ["HTML", "RSS"]
 
 params:
   titleEmoji: "😎"

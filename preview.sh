@@ -1,0 +1,1 @@
+hugo serve --bind 192.168.6.55 --baseURL http://192.168.6.55/
