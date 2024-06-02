@@ -1,3 +1,3 @@
 [submodule "themes/tania"]
 	path = themes/tania
-	url = https://github.com/senshinya/hugo-theme-tania.git
+	url = git@github.com:senshinya/hugo-theme-tania.git
