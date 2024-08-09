@@ -7,7 +7,7 @@ const DEV = inject<Ref<boolean>>('DEV')
 const { theme } = useData()
 
 const { hasSidebar } = useSidebar()
-const path = useRoute()
+const path = useRoute().path
 
 const isDocFooterVisible = computed(() => {
   const { footer = {} } = theme.value
