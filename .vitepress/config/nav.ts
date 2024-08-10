@@ -8,7 +8,7 @@ export const nav: DefaultTheme.NavItem[] = [
       {
         text: '学无止境',
         items: [
-          { text: 'MYDB', link: '/projects/mydb' },
+          { text: 'MYDB', link: '/projects/mydb/mydb0' },
         ]
       },
     ]
@@ -20,19 +20,19 @@ export const nav: DefaultTheme.NavItem[] = [
       {
         text: '学无止境',
         items: [
-          { text: '6.5840', link: '/notes/6.5840' },
+          { text: '6.5840', link: '/notes/6.5840/mapreducepaper' },
         ]
       },
     ]
   },
   {
     text: '折腾',
-    link: '/fiddling',
+    link: '/fiddling/debian-as-side-router',
     activeMatch: '^/fiddling'
   },
   {
     text: '日常',
-    link: '/daily',
+    link: '/daily/plan2024',
     activeMatch: '^/daily'
   },
   {

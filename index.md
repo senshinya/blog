@@ -12,7 +12,7 @@ hero:
   actions:
     - theme: brand
       text: 进入博客
-      link: /blog
+      link: /projects/mydb/mydb0
     - theme: alt
       text: 看看 Github
       link: https://github.com/senshinya
@@ -21,19 +21,19 @@ features:
   - icon: 🏛️
     title: 项目
     details: 知者行之始，行者知之成<br />穷则默默造轮，达则四处推广
-    link: /projects
+    link: /projects/mydb/mydb0
   - icon: 📖
     title: 笔记
     details: 学而不思则欠拟合，思而不学则过拟合<br />今日不学习，明日变垃圾
-    link: /learn
+    link: /notes/6.5840/mapreducepaper
   - icon: 💡
     title: 折腾
     details: 日常穷折腾<br /><br /><small>上班摸鱼首选</small>
-    link: /fiddling
+    link: /fiddling/debian-as-side-router
   - icon: 🌟
     title: 日常
     details: 我们所经历的每个平凡的日常<br />也许就是连续发生的奇迹
-    link: /daily
+    link: /daily/plan2024
   - icon: 🧾
     title: 碎碎念
     details: 就当我在扯淡
@@ -43,8 +43,6 @@ features:
     details: '<small class="bottom-small">喜欢代码，讨厌上班</small>'
     link: /shinya
 ---
-
-<ClientOnly><Heatmap /></ClientOnly>
 
 <style>
 .m-home-layout .details small {

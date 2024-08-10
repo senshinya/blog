@@ -2,12 +2,13 @@
 import { inject, Ref, computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import { useSidebar } from 'vitepress/theme'
+import { useFormatPath } from '../utils/useFormatPath';
 
 const DEV = inject<Ref<boolean>>('DEV')
 const { theme } = useData()
 
 const { hasSidebar } = useSidebar()
-const path = useRoute().path
+const path = useFormatPath()
 
 const isDocFooterVisible = computed(() => {
   const { footer = {} } = theme.value
