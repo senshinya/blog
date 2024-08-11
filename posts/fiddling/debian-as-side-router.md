@@ -1,5 +1,5 @@
 ---
-title: 【透明代理无缝越墙】debian 旁路由方案
+title: debian 旁路由方案
 slug: "debian-as-side-router"
 categories: ["技术随笔"]
 tags: ["debian","旁路由","软路由","翻墙","网络"]
