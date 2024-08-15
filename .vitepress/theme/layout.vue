@@ -9,6 +9,7 @@ import navVistor from './components/navVisitor.vue'
 import imageViewer from './components/imageViewer.vue'
 import postFooter from './components/postFooter.vue'
 import postCopyright from './components/postCopyright.vue'
+import docTitle from './components/docTitle.vue'
 
 const { isDark, frontmatter } = useData()
 
@@ -66,6 +67,9 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
     </template>
     <template #doc-footer-before>
       <ClientOnly><postCopyright /></ClientOnly>
+    </template>
+    <template #doc-before>
+      <ClientOnly><docTitle /></ClientOnly>
     </template>
   </DefaultTheme.Layout>
   </div>

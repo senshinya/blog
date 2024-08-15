@@ -27,7 +27,7 @@ export const nav: DefaultTheme.NavItem[] = [
   },
   {
     text: '折腾',
-    link: '/fiddling/debian-as-side-router',
+    link: '/fiddling/fix-port-forward-in-side-router',
     activeMatch: '^/fiddling'
   },
   {

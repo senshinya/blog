@@ -3,4 +3,4 @@ title: "折腾"
 showArticleMetadata: false
 ---
 
-<ClientOnly><Redirect route="/debian-as-side-router"/></ClientOnly>
+<ClientOnly><Redirect route="/fix-port-forward-in-side-router"/></ClientOnly>
