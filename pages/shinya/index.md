@@ -7,6 +7,7 @@ lastUpdated: false
 aside: false
 prev: false
 next: false
+showTitle: false
 ---
 
 # 信也<Badge type="tip" text="shinya" class="small"/>です！

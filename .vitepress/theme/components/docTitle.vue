@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div v-show="showTitle">
         <h2>{{ title }}</h2>
+        <hr>
     </div>
-    <hr>
 </template>
 
 <script setup lang="ts">
@@ -12,13 +12,15 @@ const { frontmatter } = useData();
 const route = useRoute();
 const data = reactive({
     title: frontmatter.value?.title,
+    showTitle: frontmatter.value?.showTitle ?? true,
 });
-const { title } = toRefs(data);
+const { title, showTitle } = toRefs(data);
 watch(
     () => route.path,
     () => {
         nextTick(() => {
             data.title = frontmatter.value?.title;
+            data.showTitle = frontmatter.value?.showTitle ?? true;
         });
     },
     {
