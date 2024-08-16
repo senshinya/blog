@@ -3,6 +3,13 @@ import { metaData } from './config/metadata'
 import { head } from './config/head'
 import { nav } from './config/nav'
 import { sidebar } from './config/sidebar'
+import { RssPlugin, RSSOptions } from 'vitepress-plugin-rss'
+
+const RSS: RSSOptions = {
+  title: '信也のブログ',
+  baseUrl: "https://shinya.click",
+  copyright: 'Copyright © 2017-2024 信也のブログ',
+}
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -77,5 +84,13 @@ export default defineConfig({
     'posts/:categorie/index.md': ':categorie.md',
     'posts/:categorie/:file.md': ':categorie/:file.md',
     'pages/:categorie/index.md': ':categorie.md'
+  },
+
+  sitemap: {
+    hostname: 'https://shinya.click'
+  },
+
+  vite: {
+    plugins: [RssPlugin(RSS)]
   }
 })

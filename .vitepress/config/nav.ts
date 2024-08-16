@@ -27,7 +27,7 @@ export const nav: DefaultTheme.NavItem[] = [
   },
   {
     text: '折腾',
-    link: '/fiddling/fix-port-forward-in-side-router',
+    link: '/fiddling/fake-ip-based-transparent-proxy',
     activeMatch: '^/fiddling'
   },
   {

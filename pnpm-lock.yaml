@@ -45,6 +45,9 @@ importers:
       vite:
         specifier: ^5.3.5
         version: 5.3.5(@types/node@22.1.0)(sass@1.77.8)
+      vitepress-plugin-rss:
+        specifier: ^0.2.10
+        version: 0.2.10(vitepress@1.3.2(@algolia/client-search@4.24.0)(@types/node@22.1.0)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.16.0))
       vue:
         specifier: ^3.4.37
         version: 3.4.37
@@ -508,6 +511,9 @@ packages:
 
   '@shikijs/transformers@1.12.1':
     resolution: {integrity: sha512-zOpj/S2thBvnJV4Ty3EE8aRs/VqCbV+lgtEYeBRkPxTW22uLADEIZq0qjt5W2Rfy2KSu29e73nRyzp4PefjUTg==}
+
+  '@sugarat/theme-shared@0.0.2':
+    resolution: {integrity: sha512-HCrMyHpLEcKLnDco1SIbpCik4+QhLnsI35IrqoSZp2dqHnVPRohaStCbqWHiqYgewQXiDvTfg0dQ90QqD64ESA==}
 
   '@types/blueimp-md5@2.18.2':
     resolution: {integrity: sha512-dJ9yRry9Olt5GAWlgCtE5dK9d/Dfhn/V7hna86eEO2Pn76+E8Y0S0n61iEUEGhWXXgtKtHxtZLVNwL8X+vLHzg==}
@@ -988,6 +994,10 @@ packages:
   fastq@1.17.1:
     resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
 
+  feed@4.2.2:
+    resolution: {integrity: sha512-u5/sxGfiMfZNtJ3OvQpXcvotFpYkL0n9u9mM2vkui2nGo8b4wvDkJ8gAkYqbA8QpGyFCv3RK0Z+Iv+9veCS9bQ==}
+    engines: {node: '>=0.4.0'}
+
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
@@ -1344,6 +1354,9 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  sax@1.4.1:
+    resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
+
   scroll-into-view-if-needed@2.2.31:
     resolution: {integrity: sha512-dGCXy99wZQivjmjIqihaBQNjryrz5rueJY7eHfTdyWEiR4ttYpsajb14rn9s5d4DY4EcY6+4+U/maARBXJedkA==}
 
@@ -1506,6 +1519,11 @@ packages:
       terser:
         optional: true
 
+  vitepress-plugin-rss@0.2.10:
+    resolution: {integrity: sha512-Bg6KOluYqlVmlq6uCOMat8wIZgygTJoJoG/5O41ZkXK/E5EL+jclM3v8Y45OIUZ/K9uH9Y215gXxHYlRSJD9zg==}
+    peerDependencies:
+      vitepress: ^1
+
   vitepress@1.3.2:
     resolution: {integrity: sha512-6gvecsCuR6b1Cid4w19KQiQ02qkpgzFRqiG0v1ZBekGkrZCzsxdDD5y4WH82HRXAOhU4iZIpzA1CsWqs719rqA==}
     hasBin: true
@@ -1556,6 +1574,10 @@ packages:
   wrap-ansi@8.1.0:
     resolution: {integrity: sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==}
     engines: {node: '>=12'}
+
+  xml-js@1.6.11:
+    resolution: {integrity: sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==}
+    hasBin: true
 
   yaml@2.5.0:
     resolution: {integrity: sha512-2wWLbGbYDiSqqIKoPjar3MPgB94ErzCtrNE1FdqGuaO0pi2JGjmE8aW8TDZwzU7vuxcGRdL/4gPQwQ7hD5AMSw==}
@@ -1973,6 +1995,11 @@ snapshots:
   '@shikijs/transformers@1.12.1':
     dependencies:
       shiki: 1.12.1
+
+  '@sugarat/theme-shared@0.0.2':
+    dependencies:
+      cross-spawn: 7.0.3
+      gray-matter: 4.0.3
 
   '@types/blueimp-md5@2.18.2': {}
 
@@ -2504,6 +2531,10 @@ snapshots:
     dependencies:
       reusify: 1.0.4
 
+  feed@4.2.2:
+    dependencies:
+      xml-js: 1.6.11
+
   fill-range@7.1.1:
     dependencies:
       to-regex-range: 5.0.1
@@ -2832,6 +2863,8 @@ snapshots:
       immutable: 4.3.7
       source-map-js: 1.2.0
 
+  sax@1.4.1: {}
+
   scroll-into-view-if-needed@2.2.31:
     dependencies:
       compute-scroll-into-view: 1.0.20
@@ -3001,6 +3034,13 @@ snapshots:
       fsevents: 2.3.3
       sass: 1.77.8
 
+  vitepress-plugin-rss@0.2.10(vitepress@1.3.2(@algolia/client-search@4.24.0)(@types/node@22.1.0)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.16.0)):
+    dependencies:
+      '@sugarat/theme-shared': 0.0.2
+      fast-glob: 3.3.2
+      feed: 4.2.2
+      vitepress: 1.3.2(@algolia/client-search@4.24.0)(@types/node@22.1.0)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.16.0)
+
   vitepress@1.3.2(@algolia/client-search@4.24.0)(@types/node@22.1.0)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.16.0):
     dependencies:
       '@docsearch/css': 3.6.1
@@ -3079,5 +3119,9 @@ snapshots:
       ansi-styles: 6.2.1
       string-width: 5.1.2
       strip-ansi: 7.1.0
+
+  xml-js@1.6.11:
+    dependencies:
+      sax: 1.4.1
 
   yaml@2.5.0: {}
