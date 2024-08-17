@@ -267,9 +267,11 @@ ExecStopPost  = +/usr/bin/bash /var/lib/clash/clean.sh
 
 注意到 ExecStartPost 和 ExecStopPost 阶段我们执行了两个文件 iptables.sh 和 clean.sh，用来设置和清空路由表。
 
-iptables.sh 内容如下：
+iptables.sh 和 clean.sh 内容如下：
 
-```sh
+::: code-group
+
+```sh [iptables.sh]
 #!/usr/bin/env bash
 
 set -ex
@@ -335,12 +337,7 @@ iptables -t mangle -A OUTPUT -j clash_local
 sysctl -w net.ipv4.conf.all.route_localnet=1
 iptables -t nat -A PREROUTING -p icmp -d 198.18.0.0/16 -j DNAT --to-destination 127.0.0.1
 ```
-
-每行都有详细的注释，再细节可以去问 ChatGPT
-
-clean.sh 内容如下
-
-```sh
+```sh [clean.sh]
 #!/usr/bin/env bash
 
 set -ex
@@ -354,6 +351,9 @@ iptables -t mangle -F
 iptables -t mangle -X clash || true
 iptables -t mangle -X clash_local || true
 ```
+:::
+
+每行都有详细的注释，再细节可以去问 ChatGPT
 
 #### clash 配置文件
 

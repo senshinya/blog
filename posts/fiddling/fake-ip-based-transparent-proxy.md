@@ -80,9 +80,11 @@ ExecStopPost  = +/usr/bin/bash /etc/sing-box/clean.sh
 
 这其实和上个方案类似，也是在启动时设置路由表，并在 sing-box 关闭时清除。sing-box 的所有配置都位于 `/etc/sing-box` 下，默认读取的配置文件也是 `/etc/sing-box/config.json` ，所以我们也保持统一。
 
-新建 `/etc/sing-box/iptables.sh` 如下：
+新建 `/etc/sing-box/iptables.sh` 和 `/etc/sing-box/clean.sh` 如下：
 
-```shell
+::: code-group
+
+```shell [iptables.sh]
 #!/usr/bin/env bash
 
 set -ex
@@ -148,13 +150,7 @@ sysctl -w net.ipv4.conf.all.route_localnet=1
 iptables -t nat -A PREROUTING -p icmp -d 198.18.0.0/16 -j DNAT --to-destination 127.0.0.1
 ```
 
-这其实和上篇文章的 iptables.sh 高度相似，只是最终 clash 链的最终处理变为了：将目标地址为 198.18.0.0/15 的流量转发到 7893 的 tproxy 端口，其他流量则走默认规则。实际上就是将被主路由转发的 FakeIP 流量交给 sing-box 处理了。
-
-这里两个处理链：clash 和 clash_local，我还是保留了 clash 的名称，因为实际上就是从 clash 方案简单修改来的。
-
- `/etc/sing-box/iptables.sh` 则完全没有变化：
-
-```shell
+```shell [clean.sh]
 #!/usr/bin/env bash
 
 set -ex
@@ -168,6 +164,12 @@ iptables -t mangle -F
 iptables -t mangle -X clash || true
 iptables -t mangle -X clash_local || true
 ```
+
+:::
+
+iptables.sh 其实和上篇文章的 iptables.sh 高度相似，只是最终 clash 链的最终处理变为了：将目标地址为 198.18.0.0/15 的流量转发到 7893 的 tproxy 端口，其他流量则走默认规则。实际上就是将被主路由转发的 FakeIP 流量交给 sing-box 处理了。clean.sh 则完全没有变化。
+
+这里两个处理链：clash 和 clash_local，我还是保留了 clash 的名称，因为实际上就是从 clash 方案简单修改来的。（偷懒）
 
 接着就是 sing-box 的配置文件，我这里给出一份配置模板：
 
