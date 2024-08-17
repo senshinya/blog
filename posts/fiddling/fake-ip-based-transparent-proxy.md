@@ -1,12 +1,8 @@
 ---
 title: 基于 FakeIP 的透明代理分流
-slug: "fake-ip-based-transparent-proxy"
-categories: ["技术随笔"]
 tags: ["软路由","翻墙","网络","透明代理","FakeIP"]
 date: 2024-08-16T23:53:00+08:00
-draft: false
 author: "shinya"
-description: "透明代理的终极解决方案（真的吗）"
 ---
 
 ### 前言

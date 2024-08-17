@@ -1,11 +1,7 @@
 ---
 title: 8. 索引管理
-slug: "mydb8"
 date: 2021-12-24T21:01:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "IM 直接使用最经典的 B+ 树索引～"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im) 中。

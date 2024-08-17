@@ -1,11 +1,7 @@
 ---
 title: 实验一 —— MapReduce
-slug: "mapreducelab"
-categories: ["6.5840"]
 tags: ["mapreduce","6.5840","6.824"]
 date: 2022-01-20T22:29:00+08:00
-draft: false
-description: "5840 的 Lab1，对着论文照葫芦画瓢，实现 MapReduce 系统"
 ---
 
 ### 前言

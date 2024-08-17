@@ -1,11 +1,7 @@
 ---
 title: 3. 数据页的缓存与管理
-slug: "mydb3"
 date: 2021-12-05T15:28:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "DM 以页面为单位缓存或者操作数据"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache) 和 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page) 中。

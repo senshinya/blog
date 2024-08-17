@@ -8,6 +8,7 @@ const sync = fg.sync;
 export const sidebar: DefaultTheme.Sidebar = {
     '/projects/mydb': getItemsByCategory('posts/projects/mydb'),
     '/notes/6.5840': getItemsByCategory('posts/notes/6.5840'),
+    '/notes/system_architect': getItemsByInnerCategory('posts/notes/system_architect'),
     '/fiddling': getItemsByDate('posts/fiddling'),
     '/daily': getItemsByDate('posts/daily'),
 }
@@ -123,6 +124,87 @@ function getItemsByCategory(path: string) {
         items: items,
         // collapsed: items.length < groupCollapsedSize || total > titleCollapsedSize,
         collapsed: total > titleCollapsedSize,
+    })
+
+    return groups;
+}
+
+// 根据 posts/分类/二级分类/标题.md的目录格式, 获取侧边栏分组及分组下标题
+function getItemsByInnerCategory(path: string) {
+    let groups: SidebarItem[] = [];
+    // 侧边栏分组数组
+    let items: SidebarItem[] = [];
+    let total = 0;
+    // 当分组内文章数量少于 2 篇或文章总数显示超过 20 篇时，自动折叠分组
+    const titleCollapsedSize = 20;
+
+    // 获取章节标题
+    let chapter: string = '';
+    let showChapterCount: boolean = true;
+    let showChapterCountName: string = '';
+    let needRoute: boolean = false;
+    if (fs.existsSync(`${path}/index.md`)) {
+        const { data } = matter.read(`${path}/index.md`);
+        data.title !== undefined ? chapter = data.title : chapter = path;
+        data.showChapterCount !== undefined ? showChapterCount = data.showChapterCount : showChapterCount = true;
+        data.showChapterCountName !== undefined ? showChapterCountName = data.showChapterCountName : showChapterCountName = '篇';
+        data.needRoute !== undefined ? needRoute = data.needRoute : needRoute = false;
+    }
+
+    // 获取二级分类
+    sync(`${path}/*`, {
+        onlyDirectories: true,
+        objectMode: true,
+    }).sort((a, b) => {
+        if (fs.existsSync(`${a.path}/index.md`) && fs.existsSync(`${b.path}/index.md`)) {
+            let aData = matter.read(`${a.path}/index.md`);
+            let bData = matter.read(`${b.path}/index.md`);
+            return aData.data.sort - bData.data.sort;
+        }
+        return 0;
+    }).forEach(({ name }) => {
+        let group = name;
+        let chapter: string = '';
+        let showChapterCount: boolean = true;
+        let showChapterCountName: string = '';
+        let needRoute: boolean = false;
+        if (fs.existsSync(`${path}/${group}/index.md`)) {
+            const { data } = matter.read(`${path}/${group}/index.md`);
+            data.title !== undefined ? chapter = data.title : chapter = group;
+            data.showChapterCount !== undefined ? showChapterCount = data.showChapterCount : showChapterCount = true;
+            data.showChapterCountName !== undefined ? showChapterCountName = data.showChapterCountName : showChapterCountName = '篇';
+            data.needRoute !== undefined ? needRoute = data.needRoute : needRoute = false;
+        }
+
+        // 2. 获取分组下的所有文章
+        sync(`${path}/${group}/*.md`, {
+            onlyFiles: true,
+            objectMode: true,
+            ignore: ['**/index.md']
+        }).forEach((article) => {
+            const { data } = matter.read(`${article.path}`);
+            // 向前追加标题
+            items.push({
+                text: data.title,
+                link: `/${article.path}`.replace('posts/', ''),
+                date: data.date,
+                sort: data.sort,
+            });
+            total += 1;
+        })
+
+        // 排序
+        sortArticleItems(items, true);
+
+        groups.push({
+            text: `${chapter !== '' ? chapter : path} ${showChapterCount && items.length > 0 ? `(${items.length}${showChapterCountName})` : ''}`,
+            link: `${needRoute ? `/${path}`.replace('posts/', '') : ''}`,
+            items: items,
+            // collapsed: items.length < groupCollapsedSize || total > titleCollapsedSize,
+            collapsed: total > titleCollapsedSize,
+        })
+
+        items = [];
     })
 
     return groups;

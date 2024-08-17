@@ -1,11 +1,7 @@
 ---
 title: 4. 日志文件与恢复策略
-slug: "mydb4"
 date: 2021-12-08T22:55:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "为保证可用性，数据的恢复在 DM 层就实现了"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger) 和 [https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java](https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java) 中。

@@ -1,12 +1,8 @@
 ---
 title: Java 中 this 关键字导致编译期常量传播优化失效的问题
-slug: "this-in-javac-string-concat"
-categories: ["技术随笔"]
 tags: ["java"]
 date: 2022-04-16T00:01:28+08:00
-draft: false
 author: "shinya"
-description: "Java 的一个小坑，算是个有趣的现象，实际开发中应该没人那么干"
 ---
 
 名字起的有点长了，但是这确实是个挺有趣的问题。如下代码：

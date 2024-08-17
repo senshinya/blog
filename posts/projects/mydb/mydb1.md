@@ -1,11 +1,7 @@
 ---
 title: 1. 从最简单的 TM 开始
-slug: "mydb1"
 date: 2021-11-28T16:10:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "最简单的是基于文件的事务管理模块 TM，可以等价于一个文件锁"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tm) 中。

@@ -1,11 +1,8 @@
 ---
 title: "GFW 原理考"
-slug: "tech-about-gfw"
-categories: ["国际互联网漫游指南"]
 tags: ["防火墙","国际互联网","梯子"]
 date: 2024-06-23T15:31:32+08:00
 author: "shinya"
-description: "防火长城（英语：Great Firewall，GFW），中国国家防火墙，或简称为墙、防火墙等，中国网信办称其为数据跨境安全网关，是该国政府过滤国际互联网出口内容的软硬件系统集合"
 ---
 
 技术无罪。

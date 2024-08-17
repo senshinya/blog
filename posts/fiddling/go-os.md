@@ -1,11 +1,7 @@
 ---
 title: 一次失败的项目实践——春节七天乐（不起来）
-slug: "go-os"
-draft: false
 author: "shinya"
-categories: ["技术随笔"]
 tags: ["golang", "os", "riscv"]
-description: "一次用 Golang 编写操作系统的失败尝试"
 date: 2023-02-02T23:24:55+08:00
 ---
 

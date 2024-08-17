@@ -1,12 +1,8 @@
 ---
 title: CSAPP LAB 环境搭建
-slug: "csapplab0"
-categories: ["技术随笔"]
 tags: ["CSAPP"]
 date: 2021-12-27T00:09:00+08:00
-draft: false
 author: "shinya"
-description: "实际是一篇 WSL 软广（"
 ---
 
 ### 前言

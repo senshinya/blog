@@ -1,11 +1,7 @@
 ---
 title: 6. 记录的版本与事务隔离
-slug: "mydb6"
 date: 2021-12-18T14:58:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "VM 实现了 MVCC，但在实际实现中还是偷了个懒：每个数据实际上只有一个版本"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm) 中。

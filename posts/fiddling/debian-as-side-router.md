@@ -1,12 +1,8 @@
 ---
 title: debian 旁路由方案
-slug: "debian-as-side-router"
-categories: ["技术随笔"]
 tags: ["debian","旁路由","软路由","翻墙","网络","透明代理"]
 date: 2024-07-13T17:49:00+08:00
-draft: false
 author: "shinya"
-description: "折腾了这么多年的最终稳定方案（或许"
 ---
 
 ### 前言

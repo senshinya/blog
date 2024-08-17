@@ -1,11 +1,7 @@
 ---
 title: 2. 引用计数缓存框架和共享内存数组
-slug: "mydb2"
 date: 2021-11-30T23:18:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "磨刀不误砍柴工，先实现一个通用的缓存框架"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common) 中。

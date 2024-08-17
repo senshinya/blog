@@ -1,11 +1,7 @@
 ---
 title: 9. 字段与表管理
-slug: "mydb9"
 date: 2021-12-25T15:44:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "TBM 管理表和字段，同时也解析 SQL 语句：当然我偷了个懒没实现完整的语法词法分析器"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser) 与 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm) 中。

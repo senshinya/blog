@@ -1,10 +1,6 @@
 ---
 title: Raft 论文阅读
-slug: "raftextendedpaper"
-categories: ["6.5840"]
 tags: ["raft","6.5840","6.824"]
-draft: false
-description: "当前最主流的共识算法的论文，值得多读精读"
 date: 2022-12-03T21:40:09+08:00
 ---
 

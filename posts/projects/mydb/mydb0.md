@@ -1,11 +1,7 @@
 ---
 title: 0. 项目结构和一些不得不说的话
-slug: "mydb0"
 date: 2021-11-27T14:43:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "前言、契机、MYDB 的结构和启动方法"
 ---
 
 项目地址：[https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

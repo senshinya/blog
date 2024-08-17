@@ -1,12 +1,8 @@
 ---
 title: 旁路由端口映射失效解决
-slug: "fix-port-forward-in-side-router"
-categories: ["技术随笔"]
 tags: ["debian","旁路由","NAT","端口映射","端口转发","网络"]
 date: 2024-08-15T23:50:00+08:00
-draft: false
 author: "shinya"
-description: "解决使用旁路由时端口映射失效的问题"
 ---
 
 ### 前言

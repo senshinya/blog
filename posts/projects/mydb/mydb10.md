@@ -1,11 +1,7 @@
 ---
 title: 10. 服务端客户端的实现及其通信规则
-slug: "mydb10"
 date: 2021-12-25T18:26:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "最终一个 DB 开始需要开放端口供客户端连接操作的，这又是经典的网络内容了"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server) 、 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client) 与 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport) 中。

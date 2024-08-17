@@ -1,11 +1,7 @@
 ---
 title: "RISC-V 工具链与模拟器（emulator）的安装"
-slug: "spike-install"
 date: 2023-05-24T17:51:09.461+08:00
-draft: false
 author: "shinya"
-description: "简单介绍了 RISC-V 工具链与 spike 的大致作用与安装方法"
-categories: ["技术随笔"]
 tags: ["riscv","spike","riscv-pk"]
 ---
 

@@ -21,6 +21,7 @@ export const nav: DefaultTheme.NavItem[] = [
         text: '学无止境',
         items: [
           { text: '6.5840', link: '/notes/6.5840/mapreducepaper' },
+          { text: '系统架构设计师', link: '/notes/system_architect/knowledge/knowledge1' },
         ]
       },
     ]

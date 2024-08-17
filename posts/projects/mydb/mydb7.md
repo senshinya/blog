@@ -1,11 +1,7 @@
 ---
 title: 7. 死锁检测与 VM 的实现
-slug: "mydb7"
 date: 2021-12-23T21:20:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "当然，一个 DB 需要防止死锁的发生，本质是一个依赖图算法"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm) 中。

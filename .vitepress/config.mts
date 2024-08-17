@@ -85,6 +85,8 @@ export default defineConfig({
   rewrites: {
     'posts/:categorie/:type/index.md': ':categorie/:type.md',
     'posts/:categorie/:type/:file.md': ':categorie/:type/:file.md',
+    'posts/:categorie/:type/:type1/index.md': ':categorie/:type/:type1.md',
+    'posts/:categorie/:type/:type1/:file.md': ':categorie/:type/:type1/:file.md',
     'posts/:categorie/index.md': ':categorie.md',
     'posts/:categorie/:file.md': ':categorie/:file.md',
     'pages/:categorie/index.md': ':categorie.md'

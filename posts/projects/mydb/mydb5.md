@@ -1,11 +1,7 @@
 ---
 title: 5. 页面索引与 DM 的实现
-slug: "mydb5"
 date: 2021-12-11T15:16:00+08:00
-categories: ["mydb"]
 tags: ["java", "mydb"]
-draft: false
-description: "分层模型中，每一层都要为上层提供一个抽象，DM 提供的抽象就是 DataItem：本质上是对数据的抽象封装"
 ---
 
 本章涉及代码都在 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageIndex、https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/dataItem](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageIndex、https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/dataItem) 和 [https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm) 中。
