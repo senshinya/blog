@@ -9,6 +9,10 @@ const RSS: RSSOptions = {
   title: '信也のブログ',
   baseUrl: "https://shinya.click",
   copyright: 'Copyright © 2017-2024 信也のブログ',
+  ignoreHome: true,
+  filter: (post, idx) => {
+    return post.filepath.includes('posts/') && !post.filepath.includes('index.md')
+  }
 }
 
 // https://vitepress.dev/reference/site-config
