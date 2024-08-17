@@ -23,7 +23,7 @@ export default defineConfig({
   head: head,
 
   // 最后更新时间
-  lastUpdated: true,
+  lastUpdated: false,
 
   // 简洁的url
   cleanUrls: true,

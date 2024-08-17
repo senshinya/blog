@@ -1,7 +1,7 @@
 <!-- .vitepress/theme/Layout.vue -->
 
 <script setup lang="ts">
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import { nextTick, provide } from 'vue'
 import comment from './components/comment.vue'
@@ -10,13 +10,18 @@ import imageViewer from './components/imageViewer.vue'
 import postFooter from './components/postFooter.vue'
 import postCopyright from './components/postCopyright.vue'
 import docTitle from './components/docTitle.vue'
+import codeblocksFold from 'vitepress-plugin-codeblocks-fold'
+import 'vitepress-plugin-codeblocks-fold/style/index.css'
 
 const { isDark, frontmatter } = useData()
+const route = useRoute()
 
 var customClass: string = ''
 if (frontmatter.value?.layoutClass) {
   customClass = frontmatter.value.layoutClass
 }
+
+codeblocksFold({ route, frontmatter }, true, 400);
 
 const enableTransitions = () =>
   'startViewTransition' in document &&
