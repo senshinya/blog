@@ -11,4 +11,6 @@ export const head: HeadConfig[] = [
   ['link', { rel: 'apple-touch-icon', href: '/favicon.ico' }],
   ['link', { rel: 'mask-icon', href: '/favicon.ico', color: '#3eaf7c' }],
   ['link', { rel: 'icon', href: '/favicon.ico' }],
+  ['script', { async: 'true', src: 'https://www.googletagmanager.com/gtag/js?id=G-ME465W29KC' }],
+  ['script', {}, "window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-ME465W29KC');" ],
 ]
