@@ -20,9 +20,10 @@ import CalendarLabel from 'cal-heatmap/plugins/CalendarLabel'
 import 'cal-heatmap/cal-heatmap.css'
 import dayjs from 'dayjs'
 
-import { useData } from "vitepress"
+import { useData, useRouter } from "vitepress"
 import { watch } from "vue"
 const { isDark } = useData();
+const router = useRouter();
 
 const yyDaysTemplate: CalHeatmap.Template = DateHelper => {
     const ALLOWED_DOMAIN_TYPE: CalHeatmap.DomainType[] = ['month'];
@@ -110,9 +111,6 @@ function paint(cal: CalHeatmap, theme: 'light' | 'dark') {
                 Tooltip,
                 {
                     text: function (timestamp: number, value: number, dayjsDate: dayjs.Dayjs) {
-                        if (timestamp > Date.now()) {
-                            return dayjsDate.format('别急，这一天还没来🫣')
-                        }
                         if (!value) {
                             return 'no contributions on ' + dayjsDate.format('YYYY-MM-DD');
                         } else {
@@ -147,19 +145,18 @@ function paint(cal: CalHeatmap, theme: 'light' | 'dark') {
 }
 
 function destory(cal: CalHeatmap) {
-    cal.destroy()
+    cal.destroy();
 }
 
 let cal: CalHeatmap;
 watch(
     isDark,
     () => {
+        if (cal !== undefined) destory(cal);
         if (isDark.value) {
-            if (cal !== undefined) destory(cal);
             cal = new CalHeatmap();
             paint(cal, 'dark');
         } else {
-            if (cal !== undefined) destory(cal);
             cal = new CalHeatmap();
             paint(cal, 'light');
         }
