@@ -125,7 +125,7 @@ function paint(cal: CalHeatmap, theme: 'light' | 'dark') {
                 LegendLite,
                 {
                     itemSelector: '#cal-heatmap-legend',
-                    includeBlank: true,
+                    includeBlank: false,
                     radius: 2,
                     width: 14,
                     height: 14,
