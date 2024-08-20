@@ -44,7 +44,7 @@ features:
     link: /shinya
 ---
 
-<Client-Only><Heatmap /></Client-Only>
+<Heatmap />
 
 <style>
 .m-home-layout .details small {

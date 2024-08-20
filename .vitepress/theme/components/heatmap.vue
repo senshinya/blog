@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useData } from "vitepress"
 import { reactive, watch, toRefs, ref, onMounted } from "vue"
-import { CalendarHeatmap } from 'vue3-calendar-heatmap'
+import 'vue3-calendar-heatmap/dist/style.css'
 
 const { isDark } = useData();
 const data = reactive({
@@ -46,7 +46,7 @@ watch(
 
 <template>
     <div class="heatmap-wrapper">
-        <CalendarHeatmap :round="1.5" :values="heatMapData" :end-date="endDate" :dark-mode="darkMode" :range-color="colorRange"/>
+        <calendar-heatmap :round="1.5" :values="heatMapData" :end-date="endDate" :dark-mode="darkMode" :range-color="colorRange"/>
         <div id="heatmap-legend">
             <div>Github Contributions from <a href="https://github.com/senshinya" target="_blank">shinya</a></div>
         </div>
@@ -77,64 +77,5 @@ watch(
     .heatmap-wrapper {
         display: none;
     }
-}
-
-.vch__container {
-    .vch__legend {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .vch__external-legend-wrapper {
-        margin: 0 8px;
-    }
-}
-
-svg.vch__wrapper {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 8px;
-    width: 100%;
-
-    .vch__months__labels__wrapper text.vch__month__label {
-        font-size: 8px;
-    }
-
-    .vch__days__labels__wrapper text.vch__day__label,
-    .vch__legend__wrapper text {
-        font-size: 9px;
-    }
-
-    text.vch__month__label,
-    text.vch__day__label,
-    .vch__legend__wrapper text {
-        fill: #767676;
-    }
-
-    rect.vch__day__square:hover {
-        stroke: #555;
-        stroke-width: 2px;
-        paint-order: stroke;
-    }
-
-    rect.vch__day__square:focus {
-        outline: none;
-    }
-
-    &.dark-mode {
-        text.vch__month__label,
-        text.vch__day__label,
-        .vch__legend__wrapper text {
-            fill: #fff;
-        }
-    }
-}
-
-.tippy-box {
-    background-color: var(--vp-c-neutral);
-    font-size: 0.8rem;
-    color: var(--vp-c-neutral-inverse);
-    padding: 0.4rem;
-    border-radius: 5px;
 }
 </style>

@@ -4,6 +4,7 @@ import type { Theme } from 'vitepress'
 import { EnhanceAppContext } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import layout from './layout.vue'
+import VueCalendarHeatmap from 'vue3-calendar-heatmap'
 
 import './styles/index.scss'
 
@@ -46,6 +47,7 @@ export default {
         { immediate: true }
       )
     }
+    app.use(VueCalendarHeatmap)
   }
 
   // Layout: () => {
