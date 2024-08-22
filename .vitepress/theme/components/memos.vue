@@ -1,0 +1,154 @@
+<template>
+    <div class="memos-container">
+        <div v-for="memo of memoList" :key="memo.uid">
+            <div class="card">
+                <div class="header">
+                    <span class="time-text">{{ memo.createTime }}</span>
+                </div>
+
+                <div class="memo-content" v-html="memo.content" />
+
+                <div class="memo-img-container" v-if="memo.containImage">
+                    <img v-for="file of memo.resources" :key="file.name" class="imgwrp" loading="lazy"
+                        :src="file.url" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { marked } from "marked"
+import { reactive, toRefs } from "vue"
+
+interface memosRes {
+    memos: memo[]
+}
+
+interface image {
+    name: string
+    filename: string
+    url: string
+}
+
+interface memo {
+    uid: string
+    createTime: string
+    content: string
+    resources: image[]
+    containImage: boolean
+}
+
+async function fetchMemos(): Promise<memosRes> {
+    const response = await fetch("https://memos.lab.shinya.click:18443/api/v1/memos?filter=visibilities%20%3D%3D%20%5B%27PUBLIC%27%5D")
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const resp: memosRes = await response.json();
+    return resp
+}
+
+function convertToLocalTime(dateString: string, timeZone: string = 'Asia/Shanghai'): string {
+    // 创建 Date 对象
+    const date = new Date(dateString);
+
+    // 提取所需的时间组件
+    const options: Intl.DateTimeFormatOptions = {
+        timeZone: timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false // 使用 24 小时制
+    };
+
+    const formatter = new Intl.DateTimeFormat('zh-CN', options);
+    const parts = formatter.formatToParts(date);
+
+    // 构建最终输出格式
+    const year = parts.find(part => part.type === 'year')?.value;
+    const month = parts.find(part => part.type === 'month')?.value;
+    const day = parts.find(part => part.type === 'day')?.value;
+    const hour = parts.find(part => part.type === 'hour')?.value;
+    const minute = parts.find(part => part.type === 'minute')?.value;
+    const second = parts.find(part => part.type === 'second')?.value;
+
+    // 拼接成目标格式
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
+
+const data = reactive({
+    memoList: [] as memo[]
+})
+const { memoList } = toRefs(data);
+fetchMemos().then(resp => {
+    for (const memo of resp.memos) {
+        memo.content = marked.parseInline(memo.content) as string
+        memo.createTime = convertToLocalTime(memo.createTime);
+        memo.containImage = memo.resources.length !== 0;
+        for (const resource of memo.resources) {
+            resource.url = "https://memos.lab.shinya.click:18443/file/" + resource.name + "/" + resource.filename
+        }
+    }
+    memoList.value = resp.memos
+})
+</script>
+
+<style lang="scss" scoped>
+.card {
+    margin-bottom: .5rem;
+    border-width: 1px; 
+    position: relative;
+    border-radius: .5rem;
+    border-color: var(--vp-c-bg);
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: var(--memo-bg);
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .time-text {
+            display: inline-block;
+            font-size: .875rem;
+            text-decoration: none;
+            color: var(--memo-time)
+        }
+    }
+
+    .memo-content {
+        margin-top: 5px;
+        font-size: 1rem;
+        word-break: break-all;
+        white-space: pre-wrap;
+        color: var(--memo-content);
+    }
+
+    .memo-img-container {
+        display: flex;
+        overflow-x: auto;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+
+        .imgwrp {
+            width: 80px;
+            height: 80px;
+            margin: 0;
+            margin-right: 10px;
+        }
+    }
+}
+
+.card:hover {
+    border-color: var(--memo-card-border);
+}
+</style>

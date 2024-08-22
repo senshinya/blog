@@ -21,6 +21,7 @@
     "dayjs": "^1.11.12",
     "fast-glob": "^3.3.2",
     "gray-matter": "^4.0.3",
+    "marked": "^14.0.0",
     "tailwindcss": "^3.4.7",
     "tippy.js": "^6.3.7",
     "vite": "^5.3.5",

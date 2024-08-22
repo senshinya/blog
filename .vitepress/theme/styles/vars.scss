@@ -105,3 +105,17 @@
 .DocSearch {
     --docsearch-primary-color: var(--vp-c-brand) !important;
 }
+
+:root {
+    --memo-bg: #fafafa;
+    --memo-time: #9ca3af;
+    --memo-content: #1f2937;
+    --memo-card-border: #e5e7eb;
+}
+
+.dark {
+    --memo-bg: #27272A;
+    --memo-time: #6b7280;
+    --memo-content: #9ca3af;
+    --memo-card-border: #3f3f46;
+}
