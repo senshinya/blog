@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { withPwa } from '@vite-pwa/vitepress'
 import { metaData } from './config/metadata'
 import { head } from './config/head'
 import { nav } from './config/nav'
@@ -16,7 +17,7 @@ const RSS: RSSOptions = {
 }
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withPwa(defineConfig({
   title: metaData.title,
   description: metaData.description,
   lang: metaData.lang,
@@ -98,5 +99,7 @@ export default defineConfig({
 
   vite: {
     plugins: [RssPlugin(RSS)]
-  }
-})
+  },
+
+  pwa: {}
+}))
