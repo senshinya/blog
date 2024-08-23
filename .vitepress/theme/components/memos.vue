@@ -9,8 +9,10 @@
                 <div class="memo-content" v-html="memo.content" />
 
                 <div class="memo-img-container" v-if="memo.containImage">
-                    <img v-for="file of memo.resources" :key="file.name" class="imgwrp" loading="lazy"
-                        :src="file.url" />
+                    <div class="img-container" v-for="file of memo.resources">
+                        <img :key="file.name" class="imgwrp" loading="lazy"
+                            :src="file.url" />
+                    </div>
                 </div>
 
             </div>
@@ -139,11 +141,15 @@ fetchMemos().then(resp => {
         margin-top: .5rem;
         margin-bottom: .5rem;
 
-        .imgwrp {
+        .img-container {
             width: 80px;
             height: 80px;
             margin: 0;
             margin-right: 10px;
+        }
+
+        .imgwrp {
+            height: 100%;
         }
     }
 }
