@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { marked } from "marked"
+import { marked, Tokens } from "marked"
 import { reactive, toRefs } from "vue"
 
 interface memosRes {
@@ -87,6 +87,17 @@ const data = reactive({
     memoList: [] as memo[]
 })
 const { memoList } = toRefs(data);
+
+const renderer = new marked.Renderer();
+renderer.image = function({href, title, text}: Tokens.Image):string {
+  return `
+    <div class="img-container">
+        <img class="imgwrp" loading="lazy" src="${href}" />
+    </div>
+  `
+};
+marked.use({renderer: renderer})
+
 fetchMemos().then(resp => {
     for (const memo of resp.memos) {
         memo.content = marked.parse(memo.content.replace(new RegExp('\n', 'g'), '\n\n')) as string
@@ -100,7 +111,7 @@ fetchMemos().then(resp => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card {
     margin-bottom: .5rem;
     border-width: 1px; 
@@ -140,25 +151,17 @@ fetchMemos().then(resp => {
         *:not(:first-child):not([hidden]) {
             margin-top: .5rem;
         }
-    }
-
-    .memo-img-container {
-        display: flex;
-        overflow-x: auto;
-        margin-top: .5rem;
-        margin-bottom: .5rem;
 
         .img-container {
-            width: 160px;
-            height: 160px;
-            margin: 0;
-            margin-right: 10px;
-        }
+            width: 50%;
 
-        .imgwrp {
-            height: 100%;
+            .imgwrp {
+                height: 100%;
+            }
         }
+    
     }
+    
 }
 
 .card:hover {
