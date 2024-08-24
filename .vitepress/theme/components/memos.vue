@@ -43,7 +43,7 @@ interface memo {
 }
 
 async function fetchMemos(): Promise<memosRes> {
-    const response = await fetch("https://memos.lab.shinya.click:18443/api/v1/memos?filter=visibilities%20%3D%3D%20%5B%27PUBLIC%27%5D")
+    const response = await fetch("https://memos.lab.shinya.click:18443/api/v1/memos?pageSize=1000&&filter=visibilities%20%3D%3D%20%5B%27PUBLIC%27%5D")
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -89,7 +89,7 @@ const data = reactive({
 const { memoList } = toRefs(data);
 fetchMemos().then(resp => {
     for (const memo of resp.memos) {
-        memo.content = marked.parseInline(memo.content) as string
+        memo.content = marked.parse(memo.content.replace(new RegExp('\n', 'g'), '\n\n')) as string
         memo.createTime = convertToLocalTime(memo.createTime);
         memo.containImage = memo.resources.length !== 0;
         for (const resource of memo.resources) {
@@ -131,8 +131,15 @@ fetchMemos().then(resp => {
         margin-top: 5px;
         font-size: 1rem;
         word-break: break-all;
-        white-space: pre-wrap;
         color: var(--memo-content);
+
+        * {
+            margin: 0;
+        }
+
+        *:not(:first-child):not([hidden]) {
+            margin-top: .5rem;
+        }
     }
 
     .memo-img-container {
@@ -142,8 +149,8 @@ fetchMemos().then(resp => {
         margin-bottom: .5rem;
 
         .img-container {
-            width: 80px;
-            height: 80px;
+            width: 160px;
+            height: 160px;
             margin: 0;
             margin-right: 10px;
         }
