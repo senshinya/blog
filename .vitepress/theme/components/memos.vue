@@ -96,11 +96,15 @@ renderer.image = function({href, title, text}: Tokens.Image):string {
     </div>
   `
 };
-marked.use({renderer: renderer})
+marked.use({
+    renderer: renderer,
+    breaks: true,
+    gfm: true,
+})
 
 fetchMemos().then(resp => {
     for (const memo of resp.memos) {
-        memo.content = marked.parse(memo.content.replace(new RegExp('\n', 'g'), '\n\n')) as string
+        memo.content = marked.parse(memo.content) as string
         memo.createTime = convertToLocalTime(memo.createTime);
         memo.containImage = memo.resources.length !== 0;
         for (const resource of memo.resources) {
