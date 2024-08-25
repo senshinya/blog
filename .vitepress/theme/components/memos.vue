@@ -25,7 +25,7 @@ import { marked, Tokens } from "marked"
 import { reactive, toRefs } from "vue"
 
 interface memosRes {
-    memos: memo[]
+    data: memo[]
 }
 
 interface image {
@@ -38,12 +38,10 @@ interface memo {
     uid: string
     createTime: string
     content: string
-    resources: image[]
-    containImage: boolean
 }
 
 async function fetchMemos(): Promise<memosRes> {
-    const response = await fetch("https://memos.lab.shinya.click:18443/api/v1/memos?pageSize=1000&&filter=visibilities%20%3D%3D%20%5B%27PUBLIC%27%5D")
+    const response = await fetch("https://memos-api.kobayashi-shinya.workers.dev/memos")
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -103,15 +101,11 @@ marked.use({
 })
 
 fetchMemos().then(resp => {
-    for (const memo of resp.memos) {
+    for (const memo of resp.data) {
         memo.content = marked.parse(memo.content) as string
         memo.createTime = convertToLocalTime(memo.createTime);
-        memo.containImage = memo.resources.length !== 0;
-        for (const resource of memo.resources) {
-            resource.url = "https://memos.lab.shinya.click:18443/file/" + resource.name + "/" + resource.filename
-        }
     }
-    memoList.value = resp.memos
+    memoList.value = resp.data
 })
 </script>
 

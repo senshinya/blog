@@ -47,7 +47,6 @@ export default {
       )
     }
     app.use(VueCalendarHeatmap);
-    app.use(NolebaseGitChangelogPlugin);
   }
 
   // Layout: () => {
