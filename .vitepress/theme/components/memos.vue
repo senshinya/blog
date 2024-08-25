@@ -151,9 +151,10 @@ fetchMemos().then(resp => {
         }
 
         .img-container {
-            width: 50%;
+            width: 40%;
 
             .imgwrp {
+                width:100%;
                 height: 100%;
             }
         }
