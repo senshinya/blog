@@ -11,6 +11,16 @@ import postFooter from './components/postFooter.vue'
 import postCopyright from './components/postCopyright.vue'
 import docTitle from './components/docTitle.vue'
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold'
+import { 
+  NolebaseEnhancedReadabilitiesMenu, 
+  NolebaseEnhancedReadabilitiesScreenMenu, 
+} from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
+import {  
+  NolebaseHighlightTargetedHeading,  
+} from '@nolebase/vitepress-plugin-highlight-targeted-heading/client'
+
+import '@nolebase/vitepress-plugin-highlight-targeted-heading/client/style.css'
+import '@nolebase/vitepress-plugin-enhanced-readabilities/client/style.css'
 import 'vitepress-plugin-codeblocks-fold/style/index.css'
 
 const { isDark, frontmatter } = useData()
@@ -75,6 +85,15 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
     </template>
     <template #doc-before>
       <ClientOnly><docTitle /></ClientOnly>
+    </template>
+    <template #nav-bar-content-after>
+      <ClientOnly><NolebaseEnhancedReadabilitiesMenu /></ClientOnly>
+    </template>
+    <template #nav-screen-content-after>
+      <ClientOnly><NolebaseEnhancedReadabilitiesScreenMenu /></ClientOnly>
+    </template>
+    <template #layout-top>
+      <ClientOnly><NolebaseHighlightTargetedHeading /></ClientOnly>
     </template>
   </DefaultTheme.Layout>
   </div>

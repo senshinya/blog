@@ -98,8 +98,21 @@ export default withPwa(defineConfig({
   },
 
   vite: {
-    plugins: [RssPlugin(RSS)]
+    optimizeDeps: {
+      exclude: [ 
+        '@nolebase/vitepress-plugin-enhanced-readabilities/client', 
+      ],
+    },
+    ssr: {
+      noExternal: [ 
+        '@nolebase/vitepress-plugin-enhanced-readabilities',
+        '@nolebase/vitepress-plugin-highlight-targeted-heading',
+      ], 
+    },
+    plugins: [
+      RssPlugin(RSS),
+    ]
   },
-
+  
   pwa: {}
 }))
