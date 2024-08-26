@@ -33,7 +33,7 @@ interface memo {
 }
 
 async function fetchMemos(): Promise<memosRes> {
-    const response = await fetch("https://memos-api.shinya.click/memos")
+    const response = await fetch("https://memos.shinya.click/api/memos")
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
