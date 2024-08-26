@@ -5,8 +5,6 @@ import { EnhanceAppContext } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import layout from './layout.vue'
 import VueCalendarHeatmap from 'vue3-calendar-heatmap'
-import type { Options } from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
-import { InjectionKey, LayoutMode, SpotlightStyle } from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
 import { 
   NolebaseGitChangelogPlugin
 } from '@nolebase/vitepress-plugin-git-changelog/client'
@@ -51,15 +49,6 @@ export default {
     }
     app.use(VueCalendarHeatmap);
     app.use(NolebaseGitChangelogPlugin);
-    app.provide(InjectionKey, {
-      layoutSwitch: {
-        defaultMode: LayoutMode.SidebarWidthAdjustableOnly,
-      },
-      spotlight: {
-        defaultToggle: true,
-        defaultStyle: SpotlightStyle.Aside
-      }
-    } as Options)
   }
 
   // Layout: () => {
