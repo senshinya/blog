@@ -131,7 +131,7 @@ fetchMemos().then(resp => {
     .memo-content {
         margin-top: 5px;
         font-size: 1rem;
-        word-break: break-all;
+        word-break: break-word;
         color: var(--memo-content);
 
         * {
