@@ -7,14 +7,6 @@
                 </div>
 
                 <div class="memo-content" v-html="memo.content" />
-
-                <div class="memo-img-container" v-if="memo.containImage">
-                    <div class="img-container" v-for="file of memo.resources">
-                        <img :key="file.name" class="imgwrp" loading="lazy"
-                            :src="file.url" />
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
