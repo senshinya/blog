@@ -118,7 +118,11 @@ export default withPwa(defineConfig({
       GitChangelog({ 
         repoURL: () => 'https://github.com/senshinya/blog',
       }), 
-      GitChangelogMarkdownSection(),
+      GitChangelogMarkdownSection({
+        sections: {
+          disableContributors: true, 
+        }
+      }),
     ]
   },
   

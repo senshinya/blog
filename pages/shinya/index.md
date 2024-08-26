@@ -8,6 +8,7 @@ aside: false
 prev: false
 next: false
 showTitle: false
+gitChangelog: false
 ---
 
 # 信也<Badge type="tip" text="shinya" class="small"/>です！

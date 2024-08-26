@@ -9,12 +9,7 @@ prev: false
 next: false
 showTitle: false
 showComment: false
+gitChangelog: false
 ---
 
 <Memos />
-
-<style>
-    .VPNolebaseEnhancedReadabilitiesSpotlightHoverBlock {
-        display: none !important
-    }
-</style>
