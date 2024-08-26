@@ -12,3 +12,9 @@ showComment: false
 ---
 
 <Memos />
+
+<style>
+    .VPNolebaseEnhancedReadabilitiesSpotlightHoverBlock {
+        display: none !important
+    }
+</style>
