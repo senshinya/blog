@@ -7,6 +7,11 @@ import layout from './layout.vue'
 import VueCalendarHeatmap from 'vue3-calendar-heatmap'
 import type { Options } from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
 import { InjectionKey, LayoutMode, SpotlightStyle } from '@nolebase/vitepress-plugin-enhanced-readabilities/client'
+import { 
+  NolebaseGitChangelogPlugin
+} from '@nolebase/vitepress-plugin-git-changelog/client'
+
+import '@nolebase/vitepress-plugin-git-changelog/client/style.css'
 import '@nolebase/vitepress-plugin-enhanced-mark/client/style.css'
 import './styles/index.scss'
 
@@ -45,6 +50,7 @@ export default {
       )
     }
     app.use(VueCalendarHeatmap);
+    app.use(NolebaseGitChangelogPlugin);
     app.provide(InjectionKey, {
       layoutSwitch: {
         defaultMode: LayoutMode.SidebarWidthAdjustableOnly,

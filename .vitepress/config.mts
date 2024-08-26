@@ -5,6 +5,10 @@ import { head } from './config/head'
 import { nav } from './config/nav'
 import { sidebar } from './config/sidebar'
 import { RssPlugin, RSSOptions } from 'vitepress-plugin-rss'
+import { 
+  GitChangelog, 
+  GitChangelogMarkdownSection, 
+} from '@nolebase/vitepress-plugin-git-changelog/vite'
 
 const RSS: RSSOptions = {
   title: '信也のブログ',
@@ -111,6 +115,10 @@ export default withPwa(defineConfig({
     },
     plugins: [
       RssPlugin(RSS),
+      GitChangelog({ 
+        repoURL: () => 'https://github.com/senshinya/blog',
+      }), 
+      GitChangelogMarkdownSection(),
     ]
   },
   
