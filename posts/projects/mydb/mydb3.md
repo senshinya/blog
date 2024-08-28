@@ -1,6 +1,7 @@
 ---
 title: 3. 数据页的缓存与管理
 date: 2021-12-05T15:28:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

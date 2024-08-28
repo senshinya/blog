@@ -1,6 +1,7 @@
 ---
 title: 8. 索引管理
 date: 2021-12-24T21:01:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

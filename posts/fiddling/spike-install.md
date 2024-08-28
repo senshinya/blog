@@ -1,6 +1,7 @@
 ---
 title: "RISC-V 工具链与模拟器（emulator）的安装"
 date: 2023-05-24T17:51:09.461+08:00
+category: 折腾
 author: "shinya"
 tags: ["riscv","spike","riscv-pk"]
 ---

@@ -1,6 +1,7 @@
 ---
 title: "漫谈编程语言"
 date: 2023-04-08T13:16:36.812+08:00
+category: 折腾
 author: "shinya"
 tags: ["programming language","C","golang","cpp","java"]
 ---

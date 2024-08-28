@@ -1,6 +1,7 @@
 ---
 title: 6. 记录的版本与事务隔离
 date: 2021-12-18T14:58:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: MapReduce 论文阅读
 tags: ["mapreduce","6.5840","6.824"]
+category: "6.5840"
 date: 2022-01-16T17:32:00+08:00
 ---
 

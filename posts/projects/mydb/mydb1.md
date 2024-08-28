@@ -1,6 +1,7 @@
 ---
 title: 1. 从最简单的 TM 开始
 date: 2021-11-28T16:10:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

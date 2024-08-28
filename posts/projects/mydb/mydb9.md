@@ -1,6 +1,7 @@
 ---
 title: 9. 字段与表管理
 date: 2021-12-25T15:44:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

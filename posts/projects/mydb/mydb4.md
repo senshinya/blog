@@ -1,6 +1,7 @@
 ---
 title: 4. 日志文件与恢复策略
 date: 2021-12-08T22:55:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

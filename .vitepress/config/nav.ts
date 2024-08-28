@@ -42,6 +42,10 @@ export const nav: DefaultTheme.NavItem[] = [
     activeMatch: '^/balabala'
   },
   {
+    text: '归档',
+    link: '/archive',
+  },
+  {
     text: '关于我',
     link: '/shinya',
   }

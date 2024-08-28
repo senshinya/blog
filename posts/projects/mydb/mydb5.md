@@ -1,6 +1,7 @@
 ---
 title: 5. 页面索引与 DM 的实现
 date: 2021-12-11T15:16:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

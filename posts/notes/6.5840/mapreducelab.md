@@ -1,6 +1,7 @@
 ---
 title: 实验一 —— MapReduce
 tags: ["mapreduce","6.5840","6.824"]
+category: "6.5840"
 date: 2022-01-20T22:29:00+08:00
 ---
 

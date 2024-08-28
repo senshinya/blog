@@ -1,6 +1,7 @@
 ---
 title: 7. 死锁检测与 VM 的实现
 date: 2021-12-23T21:20:00+08:00
+category: mydb
 tags: ["java", "mydb"]
 ---
 

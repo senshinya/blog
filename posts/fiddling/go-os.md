@@ -2,6 +2,7 @@
 title: 一次失败的项目实践——春节七天乐（不起来）
 author: "shinya"
 tags: ["golang", "os", "riscv"]
+category: 折腾
 date: 2023-02-02T23:24:55+08:00
 ---
 

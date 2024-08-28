@@ -1,6 +1,7 @@
 ---
 title: "GFW 原理考"
 tags: ["防火墙","国际互联网","梯子"]
+category: 折腾
 date: 2024-06-23T15:31:32+08:00
 author: "shinya"
 ---

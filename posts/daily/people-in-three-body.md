@@ -2,6 +2,7 @@
 title: 《三体》中的“大多数人”
 tags: ["三体","读书"]
 date: 2022-04-11T00:13:13+08:00
+category: 日常
 author: "shinya"
 ---
 

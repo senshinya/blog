@@ -2,6 +2,7 @@
 title: 提问的智慧
 tags: ["提问的智慧"]
 date: 2021-12-27T01:50:00+08:00
+category: 折腾
 author: "shinya"
 ---
 

@@ -1,6 +1,7 @@
 ---
 title: 旁路由端口映射失效解决
 tags: ["debian","旁路由","NAT","端口映射","端口转发","网络"]
+category: 折腾
 date: 2024-08-15T23:50:00+08:00
 author: "shinya"
 ---

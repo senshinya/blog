@@ -1,6 +1,7 @@
 ---
 title: CSAPP LAB 环境搭建
 tags: ["CSAPP"]
+category: 折腾
 date: 2021-12-27T00:09:00+08:00
 author: "shinya"
 ---
