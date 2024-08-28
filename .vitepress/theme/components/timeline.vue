@@ -47,10 +47,6 @@ const posts = rawPosts.map(item => ({
 	--c-blue-500: #688afd;
 }
 
-/* Some basic CSS overrides */
-
-/* End basic CSS override */
-
 .timeline {
 	width: 100%;
 	max-width: 700px;
@@ -113,13 +109,13 @@ const posts = rawPosts.map(item => ({
 		flex-shrink: 0;
 	}
 	a {
-		color: var(--c-grey-500);
-		font-weight: 500;
-		text-decoration: none;
+		color: var(--c-grey-500) !important;
+		font-weight: 500 !important;
+		text-decoration: none !important;
 		&:hover,
 		&:focus {
-			outline: 0; // Don't actually do this
-			color: var(--c-blue-500);
+			outline: 0 !important;
+			color: var(--c-blue-500) !important;
 		}
 	}
 }
