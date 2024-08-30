@@ -15,6 +15,7 @@
 <script setup lang="ts">
 import { marked, Tokens } from "marked"
 import { reactive, toRefs } from "vue"
+import memosRaw from '../../../memos.json'
 
 interface memosRes {
     data: memo[]
@@ -92,13 +93,12 @@ marked.use({
     gfm: true,
 })
 
-fetchMemos().then(resp => {
-    for (const memo of resp.data) {
-        memo.content = marked.parse(memo.content) as string
-        memo.createTime = convertToLocalTime(memo.createTime);
-    }
-    memoList.value = resp.data
-})
+const memosResp: memosRes =  memosRaw as memosRes;
+for (const memo of memosResp.data) {
+    memo.content = marked.parse(memo.content) as string
+    memo.createTime = convertToLocalTime(memo.createTime);
+}
+memoList.value = memosResp.data
 </script>
 
 <style lang="scss">

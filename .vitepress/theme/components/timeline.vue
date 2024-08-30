@@ -7,7 +7,7 @@
                 </i>
             </span>
             <div class="timeline-item-description">
-                <span>shinya 巨献</span>
+                <span>信也 巨献</span>
             </div>
         </li>
         <template v-for="item of posts">
@@ -38,13 +38,13 @@ const posts = rawPosts.map(item => ({
 
 <style lang="scss">
 :root {
-	--c-grey-100: #f4f6f8;
-	--c-grey-200: #e3e3e3;
-	--c-grey-300: #b2b2b2;
-	--c-grey-400: #7b7b7b;
-	--c-grey-500: #3d3d3d;
+	--vp-c-text-4: #dcdcdc;
+	--vp-c-text-5: #f0f0f0;
+}
 
-	--c-blue-500: #688afd;
+.dark {
+	--vp-c-text-4: #969696;
+	--vp-c-text-5: #313131;
 }
 
 .timeline {
@@ -56,7 +56,7 @@ const posts = rawPosts.map(item => ({
 	flex-direction: column;
 	padding: 0 0 32px 32px;
     padding-left: 32px !important;
-	border-left: 2px solid var(--c-grey-200);
+	border-left: 2px solid var(--vp-c-text-4);
 	font-size: 1rem;
     margin-top: 0 !important;
 
@@ -82,20 +82,15 @@ const posts = rawPosts.map(item => ({
 	margin-left: -52px;
 	flex-shrink: 0;
 	overflow: hidden;
-	box-shadow: 0 0 0 6px #fff;
+	box-shadow: 0 0 0 6px var(--vp-c-bg);
 	svg {
 		width: 20px;
 		height: 20px;
 	}
 
 	&.faded-icon {
-		background-color: var(--c-grey-100);
-		color: var(--c-grey-400);
-	}
-
-	&.filled-icon {
-		background-color: var(--c-blue-500);
-		color: #fff;
+		background-color: var(--vp-c-text-5);
+		color: var(--vp-c-text-2);
 	}
 }
 
@@ -103,19 +98,19 @@ const posts = rawPosts.map(item => ({
 	display: flex;
 	padding-top: 10px;
 	gap: 8px;
-	color: var(--c-grey-400);
+	color: var(--vp-c-text-2);
 
 	img {
 		flex-shrink: 0;
 	}
 	a {
-		color: var(--c-grey-500) !important;
+		color: var(--vp-c-text-1) !important;
 		font-weight: 500 !important;
 		text-decoration: none !important;
 		&:hover,
 		&:focus {
 			outline: 0 !important;
-			color: var(--c-blue-500) !important;
+			color: var(--vp-c-text-1) !important;
 		}
 	}
 }

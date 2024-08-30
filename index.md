@@ -7,7 +7,7 @@ hero:
   name: "信也のブログ"
   tagline: 写代码的
   image:
-    src: /bg.png
+    src: https://blog-img.shinya.click/bg.png
     alt: background
   actions:
     - theme: brand
