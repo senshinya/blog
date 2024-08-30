@@ -14,6 +14,7 @@ const RSS: RSSOptions = {
   title: '信也のブログ',
   baseUrl: "https://shinya.click",
   copyright: 'Copyright © 2017-2024 信也のブログ',
+  filename: 'feed',
   ignoreHome: true,
   filter: (post, idx) => {
     return post.filepath.includes('posts/') && !post.filepath.includes('index.md')
