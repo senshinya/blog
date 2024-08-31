@@ -63,6 +63,7 @@ export default withPwa(defineConfig({
     },
 
     socialLinks: [
+      { icon: {svg: '🚇'}, link: 'https://www.travellings.cn/go.html'},
       { icon: 'github', link: 'https://github.com/senshinya' }
     ],
 
