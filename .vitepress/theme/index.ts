@@ -5,11 +5,7 @@ import { EnhanceAppContext } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import layout from './layout.vue'
 import VueCalendarHeatmap from 'vue3-calendar-heatmap'
-import { 
-  NolebaseGitChangelogPlugin
-} from '@nolebase/vitepress-plugin-git-changelog/client'
 
-import '@nolebase/vitepress-plugin-git-changelog/client/style.css'
 import '@nolebase/vitepress-plugin-enhanced-mark/client/style.css'
 import './styles/index.scss'
 
@@ -48,7 +44,6 @@ export default {
       )
     }
     app.use(VueCalendarHeatmap);
-    app.use(NolebaseGitChangelogPlugin);
   }
 
   // Layout: () => {
