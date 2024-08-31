@@ -229,7 +229,7 @@ T1 在第二次读取的时候，读到了已经提交的 T2 修改的值，导�
 
 ```
 (XMIN == Ti and                 // 由Ti创建且
- (XMAX == NULL or               // 尚未被删除
+ (XMAX == NULL                  // 尚未被删除
 ))
 or                              // 或
 (XMIN is commited and           // 由一个已提交的事务创建且
@@ -287,7 +287,7 @@ private static boolean repeatableRead(TransactionManager tm, Transaction t, Entr
     if(tm.isCommitted(xmin) && xmin < xid && !t.isInSnapshot(xmin)) {
         if(xmax == 0) return true;
         if(xmax != xid) {
-            if(!tm.isCommitted(xmax)  xmax > xid  t.isInSnapshot(xmax)) {
+            if(!tm.isCommitted(xmax) || xmax > xid || t.isInSnapshot(xmax)) {
                 return true;
             }
         }
