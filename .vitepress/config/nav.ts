@@ -33,7 +33,7 @@ export const nav: DefaultTheme.NavItem[] = [
   },
   {
     text: '日常',
-    link: '/daily/plan2024',
+    link: '/daily/anti-chronic-gastritis',
     activeMatch: '^/daily'
   },
   {
