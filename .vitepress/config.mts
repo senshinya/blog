@@ -117,6 +117,7 @@ export default withPwa(defineConfig({
   },
   
   pwa: {
-    outDir: 'dist'
+    outDir: 'dist',
+    selfDestroying: true
   }
 }))
