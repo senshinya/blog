@@ -189,15 +189,19 @@ async function loadMoreMemos() {
 
 .load-more {
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
 
   .load-more-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px; // 固定宽度
+    height: 40px; // 固定高度
     background-color: transparent;
     color: var(--vp-c-text-2);
     border: 1px solid var(--vp-c-divider);
     border-radius: 4px;
-    padding: 10px 20px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -220,7 +224,6 @@ async function loadMoreMemos() {
     }
 
     .loading-spinner {
-      display: inline-block;
       width: 14px;
       height: 14px;
       border: 2px solid var(--vp-c-text-3);
