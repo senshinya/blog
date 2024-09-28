@@ -6,7 +6,6 @@ export const nav: DefaultTheme.NavItem[] = [
     activeMatch: '^/projects',
     items: [
       {
-        text: '学无止境',
         items: [
           { text: 'MYDB', link: '/projects/mydb/mydb0' },
         ]
@@ -18,7 +17,6 @@ export const nav: DefaultTheme.NavItem[] = [
     activeMatch: '^/notes',
     items: [
       {
-        text: '学无止境',
         items: [
           { text: '6.5840', link: '/notes/6.5840/mapreducepaper' },
           { text: '系统架构设计师', link: '/notes/system_architect/knowledge/knowledge1' },
@@ -33,7 +31,7 @@ export const nav: DefaultTheme.NavItem[] = [
   },
   {
     text: '日常',
-    link: '/daily/anti-chronic-gastritis',
+    link: '/daily/work-for-3-years',
     activeMatch: '^/daily'
   },
   {

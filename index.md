@@ -33,7 +33,7 @@ features:
   - icon: 🌟
     title: 日常
     details: 我们所经历的每个平凡的日常<br />也许就是连续发生的奇迹
-    link: /daily/anti-chronic-gastritis
+    link: /daily/work-for-3-years
   - icon: 🧾
     title: 碎碎念
     details: 就当我在扯淡

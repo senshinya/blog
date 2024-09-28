@@ -10,6 +10,9 @@ overrides:
   '@antv/attr': 0.3.5
 
 patchedDependencies:
+  '@luckrya/markdown-it-link-to-card':
+    hash: tsgxbj7tmkahqwvbmwfkmupifu
+    path: patches/@luckrya__markdown-it-link-to-card.patch
   cal-heatmap@4.2.4:
     hash: v2cupc6o3nvrnz7t6s6sr77v5m
     path: patches/cal-heatmap@4.2.4.patch
@@ -70,6 +73,9 @@ importers:
       '@arco-plugins/vite-vue':
         specifier: ^1.4.5
         version: 1.4.5
+      '@luckrya/markdown-it-link-to-card':
+        specifier: ^0.3.3
+        version: 0.3.3(patch_hash=tsgxbj7tmkahqwvbmwfkmupifu)
       '@nolebase/vitepress-plugin-enhanced-mark':
         specifier: ^2.4.0
         version: 2.4.0(@algolia/client-search@4.24.0)(@types/node@22.5.0)(postcss@8.4.41)(sass@1.77.8)(search-insights@2.16.0)(terser@5.31.6)
@@ -958,6 +964,12 @@ packages:
 
   '@lit/reactive-element@2.0.4':
     resolution: {integrity: sha512-GFn91inaUa2oHLak8awSIigYz0cU0Payr1rcFsrkf5OJ5eSPxElyZfKh0f2p9FsTiZWXQdWGJeXZICEfXXYSXQ==}
+
+  '@luckrya/markdown-it-link-to-card@0.3.3':
+    resolution: {integrity: sha512-rvNeV7x1j1TN++au10wMyzbT3GiumMVt61DiJ++jTJeAZsdBIL4ORN/o5uqF01IAlHUWVXKGUpHRaZXqxatKdg==}
+
+  '@luckrya/utility@0.1.1':
+    resolution: {integrity: sha512-TWkgqawyVdaDnPBeOGJTJfI32isrG/t4e4R0Vf2LBMvU2stSDCnJUblKJhcgL9O5EQRb5TBwWj2Pyzc209tQyA==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2943,6 +2955,10 @@ packages:
     resolution: {integrity: sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==}
     hasBin: true
 
+  xmlhttprequest@1.8.0:
+    resolution: {integrity: sha512-58Im/U0mlVBLM38NdZjHyhuMtCqa61469k2YP/AaPbvCoV9aQGUpbJBj1QRm2ytRiVQBD/fsw7L2bJGDVQswBA==}
+    engines: {node: '>=0.4.0'}
+
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
 
@@ -3995,6 +4011,13 @@ snapshots:
   '@lit/reactive-element@2.0.4':
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.2.1
+
+  '@luckrya/markdown-it-link-to-card@0.3.3(patch_hash=tsgxbj7tmkahqwvbmwfkmupifu)':
+    dependencies:
+      '@luckrya/utility': 0.1.1
+      xmlhttprequest: 1.8.0
+
+  '@luckrya/utility@0.1.1': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -6234,6 +6257,8 @@ snapshots:
   xml-js@1.6.11:
     dependencies:
       sax: 1.4.1
+
+  xmlhttprequest@1.8.0: {}
 
   yallist@3.1.1: {}
 
