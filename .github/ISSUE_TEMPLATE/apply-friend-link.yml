@@ -1,0 +1,36 @@
+name: 申请友链
+description: 申请 https://shinya.click 的友链，请先把本站加为友链
+title: "申请友链: "
+labels: []
+assignees:
+  - senshinya # 这里改成你的GitHub ID
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 站点名字
+      placeholder: 你的站点名字
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: 站点地址
+      placeholder: 站点地址
+    validations:
+      required: true
+  - type: input
+    id: word
+    attributes:
+      label: 站点描述
+      placeholder: 这是站点描述
+    validations:
+      required: true
+  - type: input
+    id: logo
+    attributes:
+      label: 站点图标或个人头像
+      description: 站点图标或个人头像
+      placeholder: https://example.com/avatar.png
+    validations:
+      required: true
