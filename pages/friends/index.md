@@ -7,6 +7,7 @@ lastUpdated: false
 aside: false
 prev: false
 next: false
+showComment: false
 showTitle: false
 gitChangelog: false
 ---
