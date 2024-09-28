@@ -10,9 +10,6 @@ overrides:
   '@antv/attr': 0.3.5
 
 patchedDependencies:
-  '@luckrya/markdown-it-link-to-card':
-    hash: tsgxbj7tmkahqwvbmwfkmupifu
-    path: patches/@luckrya__markdown-it-link-to-card.patch
   cal-heatmap@4.2.4:
     hash: v2cupc6o3nvrnz7t6s6sr77v5m
     path: patches/cal-heatmap@4.2.4.patch
@@ -75,7 +72,7 @@ importers:
         version: 1.4.5
       '@luckrya/markdown-it-link-to-card':
         specifier: ^0.3.3
-        version: 0.3.3(patch_hash=tsgxbj7tmkahqwvbmwfkmupifu)
+        version: 0.3.3
       '@nolebase/vitepress-plugin-enhanced-mark':
         specifier: ^2.4.0
         version: 2.4.0(@algolia/client-search@4.24.0)(@types/node@22.5.0)(postcss@8.4.41)(sass@1.77.8)(search-insights@2.16.0)(terser@5.31.6)
@@ -4012,7 +4009,7 @@ snapshots:
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.2.1
 
-  '@luckrya/markdown-it-link-to-card@0.3.3(patch_hash=tsgxbj7tmkahqwvbmwfkmupifu)':
+  '@luckrya/markdown-it-link-to-card@0.3.3':
     dependencies:
       '@luckrya/utility': 0.1.1
       xmlhttprequest: 1.8.0
