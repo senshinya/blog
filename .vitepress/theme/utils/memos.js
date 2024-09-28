@@ -1,7 +1,7 @@
 import https from 'https';
 import { promises as fs } from 'fs';
 
-const url = 'https://memos.shinya.click/api/memos';
+const url = 'https://memos.shinya.click/api/memos?limit=10';
 
 const requestOptions = {
     headers: {
