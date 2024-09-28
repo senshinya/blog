@@ -44,6 +44,10 @@ export const nav: DefaultTheme.NavItem[] = [
     link: '/archive',
   },
   {
+    text: '朋友们',
+    link: '/friends',
+  },
+  {
     text: '关于我',
     link: '/shinya',
   }
