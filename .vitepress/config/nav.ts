@@ -26,7 +26,7 @@ export const nav: DefaultTheme.NavItem[] = [
   },
   {
     text: '折腾',
-    link: '/fiddling/fake-ip-based-transparent-proxy',
+    link: '/fiddling/more-accurate-chnroute',
     activeMatch: '^/fiddling'
   },
   {

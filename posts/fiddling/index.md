@@ -3,4 +3,4 @@ title: "折腾"
 showArticleMetadata: false
 ---
 
-<ClientOnly><Redirect route="/fake-ip-based-transparent-proxy"/></ClientOnly>
+<ClientOnly><Redirect route="/more-accurate-chnroute"/></ClientOnly>
