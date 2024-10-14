@@ -14,7 +14,8 @@ import codeblocksFold from 'vitepress-plugin-codeblocks-fold'
 import {  
   NolebaseHighlightTargetedHeading,  
 } from '@nolebase/vitepress-plugin-highlight-targeted-heading/client'
-
+import { SpeedInsights } from '@vercel/speed-insights/vue';
+import { inject } from '@vercel/analytics';
 import '@nolebase/vitepress-plugin-highlight-targeted-heading/client/style.css'
 import 'vitepress-plugin-codeblocks-fold/style/index.css'
 
@@ -60,6 +61,8 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
     }
   )
 })
+
+inject();
 </script>
 
 <template>
@@ -86,6 +89,7 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
     </template>
   </DefaultTheme.Layout>
   </div>
+  <ClientOnly><SpeedInsights /></ClientOnly>
 </template>
 
 <style>

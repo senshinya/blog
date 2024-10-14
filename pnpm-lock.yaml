@@ -21,6 +21,12 @@ importers:
       '@giscus/vue':
         specifier: ^3.0.0
         version: 3.0.0(vue@3.4.38)
+      '@vercel/analytics':
+        specifier: ^1.3.1
+        version: 1.3.1
+      '@vercel/speed-insights':
+        specifier: ^1.0.12
+        version: 1.0.12(vue-router@4.4.5(vue@3.4.38))(vue@3.4.38)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.41)
@@ -60,6 +66,9 @@ importers:
       vue:
         specifier: ^3.4.38
         version: 3.4.38
+      vue-router:
+        specifier: ^4.4.5
+        version: 4.4.5(vue@3.4.38)
       vue3-calendar-heatmap:
         specifier: ^2.0.5
         version: 2.0.5(tippy.js@6.3.7)(vue@3.4.38)
@@ -1177,6 +1186,40 @@ packages:
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
 
+  '@vercel/analytics@1.3.1':
+    resolution: {integrity: sha512-xhSlYgAuJ6Q4WQGkzYTLmXwhYl39sWjoMA3nHxfkvG+WdBT25c563a7QhwwKivEOZtPJXifYHR1m2ihoisbWyA==}
+    peerDependencies:
+      next: '>= 13'
+      react: ^18 || ^19
+    peerDependenciesMeta:
+      next:
+        optional: true
+      react:
+        optional: true
+
+  '@vercel/speed-insights@1.0.12':
+    resolution: {integrity: sha512-ZGQ+a7bcfWJD2VYEp2R1LHvRAMyyaFBYytZXsfnbOMkeOvzGNVxUL7aVUvisIrTZjXTSsxG45DKX7yiw6nq2Jw==}
+    peerDependencies:
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      react: ^18 || ^19
+      svelte: ^4
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
+
   '@vite-pwa/vitepress@0.5.0':
     resolution: {integrity: sha512-a+BnACLMYOf/u2o6RhOJIdJgOW9wym9mTJGWbOLzFHE+fPjg+z1t/Xqm9LvOBQYEDIkrGrf+KxN4COQ0B8hbHg==}
     peerDependencies:
@@ -1204,6 +1247,9 @@ packages:
 
   '@vue/compiler-ssr@3.4.38':
     resolution: {integrity: sha512-YXznKFQ8dxYpAz9zLuVvfcXhc31FSPFDcqr0kyujbOwNhlmaNvL2QfIy+RZeJgSn5Fk54CWoEUeW+NVBAogGaw==}
+
+  '@vue/devtools-api@6.6.4':
+    resolution: {integrity: sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==}
 
   '@vue/devtools-api@7.3.9':
     resolution: {integrity: sha512-D+GTYtFg68bqSu66EugQUydsOqaDlPLNmYw5oYk8k81uBu9/bVTUrqlAJrAA9Am7MXhKz2gWdDkopY6sOBf/Bg==}
@@ -2516,6 +2562,9 @@ packages:
   serialize-javascript@6.0.2:
     resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
 
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+
   set-function-length@1.2.2:
     resolution: {integrity: sha512-pgRc4hJ4/sNjWCSS9AmnS40x3bNMDTknHgL5UaMBTMyJnU90EgWh1Rz+MC9eFu4BuN/UwZjKQuY/1v3rM7HMfg==}
     engines: {node: '>= 0.4'}
@@ -2847,6 +2896,11 @@ packages:
     peerDependenciesMeta:
       '@vue/composition-api':
         optional: true
+
+  vue-router@4.4.5:
+    resolution: {integrity: sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==}
+    peerDependencies:
+      vue: ^3.2.0
 
   vue3-calendar-heatmap@2.0.5:
     resolution: {integrity: sha512-qvveNQlTS5Aw7AvRLs0zOyu3uP5iGJlXJAnkrkG2ElDdyQ8H1TJhQ8rL702CROjAg16ezIveUY10nCO7lqZ25w==}
@@ -4255,6 +4309,15 @@ snapshots:
 
   '@types/web-bluetooth@0.0.20': {}
 
+  '@vercel/analytics@1.3.1':
+    dependencies:
+      server-only: 0.0.1
+
+  '@vercel/speed-insights@1.0.12(vue-router@4.4.5(vue@3.4.38))(vue@3.4.38)':
+    optionalDependencies:
+      vue: 3.4.38
+      vue-router: 4.4.5(vue@3.4.38)
+
   '@vite-pwa/vitepress@0.5.0(vite-plugin-pwa@0.20.1(vite@5.4.2(@types/node@22.5.0)(less@4.2.0)(sass@1.77.8)(terser@5.31.6))(workbox-build@7.1.1)(workbox-window@7.1.0))':
     dependencies:
       vite-plugin-pwa: 0.20.1(vite@5.4.2(@types/node@22.5.0)(less@4.2.0)(sass@1.77.8)(terser@5.31.6))(workbox-build@7.1.1)(workbox-window@7.1.0)
@@ -4293,6 +4356,8 @@ snapshots:
     dependencies:
       '@vue/compiler-dom': 3.4.38
       '@vue/shared': 3.4.38
+
+  '@vue/devtools-api@6.6.4': {}
 
   '@vue/devtools-api@7.3.9':
     dependencies:
@@ -5672,6 +5737,8 @@ snapshots:
     dependencies:
       randombytes: 2.1.0
 
+  server-only@0.0.1: {}
+
   set-function-length@1.2.2:
     dependencies:
       define-data-property: 1.1.4
@@ -6077,6 +6144,11 @@ snapshots:
 
   vue-demi@0.14.10(vue@3.4.38):
     dependencies:
+      vue: 3.4.38
+
+  vue-router@4.4.5(vue@3.4.38):
+    dependencies:
+      '@vue/devtools-api': 6.6.4
       vue: 3.4.38
 
   vue3-calendar-heatmap@2.0.5(tippy.js@6.3.7)(vue@3.4.38):

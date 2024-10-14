@@ -31,7 +31,7 @@ features:
     details: 日常穷折腾<br /><br /><small>上班摸鱼首选</small>
     link: /fiddling/more-accurate-chnroute
   - icon: 🌟
-    title: 日常
+    title: 生活
     details: 我们所经历的每个平凡的日常<br />也许就是连续发生的奇迹
     link: /daily/work-for-3-years
   - icon: 🧾

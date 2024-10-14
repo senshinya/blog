@@ -1,6 +1,6 @@
 ---
-title: "日常"
+title: "生活"
 showArticleMetadata: false
 ---
 
-<ClientOnly><Redirect route="/plan2024"/></ClientOnly>
+<ClientOnly><Redirect route="/work-for-3-years"/></ClientOnly>

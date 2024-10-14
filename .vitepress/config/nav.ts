@@ -30,7 +30,7 @@ export const nav: DefaultTheme.NavItem[] = [
     activeMatch: '^/fiddling'
   },
   {
-    text: '日常',
+    text: '生活',
     link: '/daily/work-for-3-years',
     activeMatch: '^/daily'
   },
