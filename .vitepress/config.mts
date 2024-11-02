@@ -46,11 +46,6 @@ export default withPwa(defineConfig({
       level: 'deep'
     },
 
-    editLink: {
-      pattern: 'https://github.com/senshinya/blog/edit/main/:path',
-      text: '不妥之处，敬请雅正'
-    },
-
     lastUpdated: {
       text: '最后更新于',
       formatOptions: {
