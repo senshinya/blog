@@ -5,6 +5,7 @@ import { head } from './config/head'
 import { nav } from './config/nav'
 import { sidebar } from './config/sidebar'
 import { RssPlugin, RSSOptions } from 'vitepress-plugin-rss'
+import { SearchPlugin } from "vitepress-plugin-search";
 
 const RSS: RSSOptions = {
   title: '信也のブログ',
@@ -110,6 +111,12 @@ export default withPwa(defineConfig({
     },
     plugins: [
       RssPlugin(RSS),
+      SearchPlugin({
+        buttonLabel: "搜索",
+        placeholder: "关键词",
+        encode: false,
+        tokenize: "full"
+      })
     ]
   },
   
