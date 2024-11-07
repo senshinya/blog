@@ -5,7 +5,6 @@ import { head } from './config/head'
 import { nav } from './config/nav'
 import { sidebar } from './config/sidebar'
 import { RssPlugin, RSSOptions } from 'vitepress-plugin-rss'
-import { SearchPlugin } from "vitepress-plugin-search";
 
 const RSS: RSSOptions = {
   title: '信也のブログ',
@@ -61,7 +60,7 @@ export default withPwa(defineConfig({
     },
 
     socialLinks: [
-      { icon: {svg: trian_svg}, link: 'https://www.travellings.cn/go.html'},
+      { icon: { svg: trian_svg }, link: 'https://www.travellings.cn/go.html' },
       { icon: 'github', link: 'https://github.com/senshinya' }
     ],
 
@@ -81,6 +80,22 @@ export default withPwa(defineConfig({
       license: '署名-相同方式共享 4.0 国际 (CC BY-SA 4.0)',
       licenseLink: 'https://creativecommons.org/licenses/by/4.0/legalcode.zh-hans'
     },
+
+    search: {
+      provider: 'algolia',
+      options: {
+        appId: '4JXKQ77XI6',
+        apiKey: 'bc4ac570c6bcb861908c51bc081e1ca6',
+        indexName: 'shinya',
+        placeholder: '请输入关键词',
+        translations: {
+          button: {
+            buttonText: '搜索',
+            buttonAriaLabel: '搜索'
+          }
+        }
+      }
+    }
   },
 
   rewrites: {
@@ -107,19 +122,13 @@ export default withPwa(defineConfig({
       noExternal: [
         '@nolebase/vitepress-plugin-enhanced-readabilities',
         '@nolebase/vitepress-plugin-highlight-targeted-heading',
-      ], 
+      ],
     },
     plugins: [
-      RssPlugin(RSS),
-      SearchPlugin({
-        buttonLabel: "搜索",
-        placeholder: "关键词",
-        encode: false,
-        tokenize: "full"
-      })
+      RssPlugin(RSS)
     ]
   },
-  
+
   pwa: {
     outDir: 'dist',
     selfDestroying: true
