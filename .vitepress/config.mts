@@ -88,6 +88,11 @@ export default withPwa(defineConfig({
         apiKey: 'bc4ac570c6bcb861908c51bc081e1ca6',
         indexName: 'shinya',
         placeholder: '请输入关键词',
+        // @ts-ignore
+        maxResultsPerGroup: 50,
+        searchParameters: {
+          hitsPerPage: 50,
+        },
         translations: {
           button: {
             buttonText: '搜索',
