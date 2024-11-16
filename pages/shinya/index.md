@@ -18,7 +18,7 @@ gitChangelog: false
                                 -- 一个想躺平的小开发
 ```
 
-公钥
+GPG 公钥
 ```
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
