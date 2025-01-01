@@ -1,7 +1,7 @@
 ---
 title: 2024 年终，个人设备盘点
 tags: ["设备", "年度总结"]
-category: 折腾
+category: 日常
 date: 2024-12-29T19:06:23+08:00
 ---
 # 2024 年终，个人设备盘点
@@ -26,6 +26,6 @@ date: 2024-12-29T19:06:23+08:00
 
 ### 大玩具：Apple Vision Pro
 
-### 其他 VR/AR 设备：Pico 4 Pro & 雷鸟Air 2 & Oculus Quest 2
+### 其他 VR/AR 设备：Pico 4 Pro & 雷鸟Air 2
 
 ### 其他游戏设备：PS5 & Switch 续航版
