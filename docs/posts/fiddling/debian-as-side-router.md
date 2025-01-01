@@ -1,6 +1,6 @@
 ---
 title: debian 旁路由方案
-tags: ["折腾","debian","旁路由","软路由","翻墙","网络","透明代理"]
+tags: ["debian","旁路由","翻墙","透明代理"]
 category: 折腾
 date: 2024-07-13T17:49:00+08:00
 sticky: 5

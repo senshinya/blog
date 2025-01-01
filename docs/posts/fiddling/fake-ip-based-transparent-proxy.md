@@ -1,6 +1,6 @@
 ---
 title: 基于 FakeIP 的透明代理分流
-tags: ["折腾","软路由","翻墙","网络","透明代理","FakeIP"]
+tags: ["翻墙","透明代理","FakeIP"]
 category: 折腾
 date: 2024-08-16T23:53:00+08:00
 sticky: 4

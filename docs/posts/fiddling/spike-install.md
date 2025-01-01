@@ -2,7 +2,7 @@
 title: RISC-V 工具链与模拟器（emulator）的安装
 date: 2023-05-24T17:51:09.461+08:00
 category: 折腾
-tags: ["折腾", "环境搭建", "riscv","spike","riscv-pk"]
+tags: ["环境搭建", "riscv","spike","riscv-pk"]
 ---
 # RISC-V 工具链与模拟器（emulator）的安装
 

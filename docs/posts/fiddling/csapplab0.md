@@ -1,6 +1,6 @@
 ---
 title: CSAPP LAB 环境搭建
-tags: ["折腾", "CSAPP", "实验", "环境搭建"]
+tags: [ "CSAPP", "实验", "环境搭建"]
 category: 折腾
 date: 2021-12-27T00:09:00+08:00
 ---
