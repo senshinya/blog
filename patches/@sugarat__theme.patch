@@ -1,0 +1,329 @@
+diff --git a/package.json b/package.json
+index 2e00035d33fedb6343900e9952dce166ccabe09a..b18e2b7d3fa3e422e8b5fbcfc27c43f6bc0cfdb9 100644
+--- a/package.json
++++ b/package.json
+@@ -40,9 +40,11 @@
+     "element-plus": "^2.7"
+   },
+   "dependencies": {
++    "@antv/g2": "^5.2.10",
+     "@giscus/vue": "^2.4.0",
+     "@mdit-vue/shared": "^0.12.1",
+     "@mermaid-js/mermaid-mindmap": "^9.3.0",
++    "@sugarat/theme-shared": "0.0.3",
+     "@vue/shared": "^3.4.26",
+     "@vueuse/core": "^9.13.0",
+     "markdown-it-task-checkbox": "^1.0.6",
+@@ -50,13 +52,12 @@
+     "oh-my-live2d": "^0.19.3",
+     "swiper": "^11.1.1",
+     "vitepress-markdown-timeline": "^1.2.1",
++    "vitepress-plugin-announcement": "0.1.3",
+     "vitepress-plugin-group-icons": "^1.2.4",
+     "vitepress-plugin-mermaid": "2.0.13",
+-    "vitepress-plugin-tabs": "0.2.0",
+-    "vitepress-plugin-announcement": "0.1.3",
++    "vitepress-plugin-pagefind": "0.4.12",
+     "vitepress-plugin-rss": "0.3.0",
+-    "@sugarat/theme-shared": "0.0.3",
+-    "vitepress-plugin-pagefind": "0.4.12"
++    "vitepress-plugin-tabs": "0.2.0"
+   },
+   "devDependencies": {
+     "@element-plus/icons-vue": "^2.3.1",
+@@ -67,8 +68,8 @@
+     "typescript": "^5.4.5",
+     "vite": "^5.4.9",
+     "vitepress": "1.5.0",
+-    "vue": "^3.5.12",
+-    "vitepress-plugin-51la": "0.1.0"
++    "vitepress-plugin-51la": "0.1.0",
++    "vue": "^3.5.12"
+   },
+   "scripts": {
+     "dev": "npm run build:node && npm run dev:docs",
+diff --git a/src/components/BlogApp.vue b/src/components/BlogApp.vue
+index 3e3e57f4173bbe4b5a93965eca1a6c294ff7fc4f..9c58d30d9d0167bc1543e80a89dfaecf3dfba15e 100644
+--- a/src/components/BlogApp.vue
++++ b/src/components/BlogApp.vue
+@@ -63,6 +63,7 @@ const openTransition = useDarkTransitionConfig()
+         <div class="header-banner">
+           <BlogHomeBanner />
+         </div>
++        <slot name="home-banner-after" />
+         <div class="content-wrapper">
+           <div class="blog-list-wrapper">
+             <BlogList />
+@@ -190,7 +191,7 @@ const openTransition = useDarkTransitionConfig()
+ 
+ .header-banner {
+   width: 100%;
+-  padding: 60px 0;
++  padding: 60px 0 20px 0;
+ }
+ 
+ .content-wrapper {
+diff --git a/src/components/BlogArticleAnalyze.vue b/src/components/BlogArticleAnalyze.vue
+index 92c18fe01ae8b65077a25d0da55fda8b39a6c3c6..9b1dba5a8df09b95a040332dc6548821c1a775f2 100644
+--- a/src/components/BlogArticleAnalyze.vue
++++ b/src/components/BlogArticleAnalyze.vue
+@@ -36,6 +36,10 @@ const showAnalyze = computed(
+   () => frontmatter.value?.readingTime ?? article?.value?.readingTime ?? true
+ )
+ 
++const showMeta = computed(
++  () => frontmatter.value?.showMeta ?? true
++)
++
+ const wordCount = ref(0)
+ const imageCount = ref(0)
+ const wordTime = computed(() => {
+@@ -139,7 +143,7 @@ const timeTitle = computed(() =>
+       {{ topReadTime }}
+     </span>
+   </div>
+-  <div id="hack-article-des" ref="$des" class="meta-des">
++  <div v-if="showMeta" id="hack-article-des" ref="$des" class="meta-des">
+     <!-- TODO：是否需要原创？转载等标签，理论上可以添加标签解决，可以参考 charles7c -->
+     <span v-if="author && !hiddenAuthor" class="author" :title="authorTitle">
+       <ElIcon><UserFilled /></ElIcon>
+diff --git a/src/components/BlogAuthor.vue b/src/components/BlogAuthor.vue
+index 9588a6e339efc04f21e70032f03f9c8a2860ae87..c9e4a5653a6b49e8c2fabbb5aa9e810060879720 100644
+--- a/src/components/BlogAuthor.vue
++++ b/src/components/BlogAuthor.vue
+@@ -44,11 +44,11 @@ const show = computed(() => author.value || logo.value)
+     background-color: rgba(var(--bg-gradient-home));
+   }
+ 
+-  img:hover {
+-    transform: rotate(666turn);
+-    transition-duration: 59s;
+-    transition-timing-function: cubic-bezier(.34, 0, .84, 1)
+-  }
++  // img:hover {
++  //   transform: rotate(666turn);
++  //   transition-duration: 59s;
++  //   transition-timing-function: cubic-bezier(.34, 0, .84, 1)
++  // }
+ 
+   p {
+     text-align: center;
+diff --git a/src/components/BlogHomeBanner.vue b/src/components/BlogHomeBanner.vue
+index 74888f1691f60b12333d9f6d89a07a4a28807588..96caadff51f83ee1d0b816c5167be90c52a418a7 100644
+--- a/src/components/BlogHomeBanner.vue
++++ b/src/components/BlogHomeBanner.vue
+@@ -102,10 +102,6 @@ h1 {
+     bottom: 0px;
+     font-size: 14px;
+     margin-left: 10px;
+-
+-    &::before {
+-      content: '- ';
+-    }
+   }
+ }
+ 
+diff --git a/src/components/BlogHomeHeaderAvatar.vue b/src/components/BlogHomeHeaderAvatar.vue
+index 1a61ae267cf5da0f997595fa3dc538f23d8776e2..16db415e9527f8274b5c0eecec3c7a651b684692 100644
+--- a/src/components/BlogHomeHeaderAvatar.vue
++++ b/src/components/BlogHomeHeaderAvatar.vue
+@@ -37,12 +37,6 @@ const alwaysHide = computed(() => frontmatter.value.blog?.minScreenAvatar === fa
+         border: 5px solid rgba(var(--bg-gradient-home));
+         box-sizing: border-box;
+     }
+-
+-    img:hover {
+-        transform: rotate(666turn);
+-        transition-duration: 59s;
+-        transition-timing-function: cubic-bezier(.34, 0, .84, 1)
+-    }
+ }
+ 
+ @media screen and (min-width: 768px) {
+diff --git a/src/components/BlogHomeInfo.vue b/src/components/BlogHomeInfo.vue
+index 8e4cafa53b268eb81452ce52683d2ce88a804c3c..4425411dbae39d97d4437af27eaa9bdca5a079f2 100644
+--- a/src/components/BlogHomeInfo.vue
++++ b/src/components/BlogHomeInfo.vue
+@@ -10,6 +10,9 @@ import BlogFriendLink from './BlogFriendLink.vue'
+     <!-- 统计数据，日后支持，点击筛选出左侧的数据 -->
+     <BlogHomeOverview />
+ 
++    <!-- 标签 -->
++    <BlogHomeTags />
++
+     <!-- 置顶的一些文章 -->
+     <BlogHotArticle />
+ 
+@@ -17,9 +20,6 @@ import BlogFriendLink from './BlogFriendLink.vue'
+     <ClientOnly>
+       <BlogFriendLink />
+     </ClientOnly>
+-
+-    <!-- 标签 -->
+-    <BlogHomeTags />
+   </div>
+ </template>
+ 
+diff --git a/src/components/BlogHomeTags.vue b/src/components/BlogHomeTags.vue
+index 2140149e2113c530c122a2d3f6b5e11acbf7b12f..e3df05f9e4fcf3867c91c54b9828744f53e5f527 100644
+--- a/src/components/BlogHomeTags.vue
++++ b/src/components/BlogHomeTags.vue
+@@ -1,7 +1,8 @@
+ <script lang="ts" setup>
+-import { computed, watch } from 'vue'
++import { computed, watch, inject, onMounted, onBeforeUnmount } from 'vue'
+ import { ElTag } from 'element-plus'
+ import { useBrowserLocation, useDark, useUrlSearchParams } from '@vueuse/core'
++import { WordCloud } from '@antv/g2plot'
+ import { useRoute, useRouter } from 'vitepress'
+ import {
+   useActiveTag,
+@@ -19,8 +20,17 @@ const title = computed(() => (typeof homeTagsConfig.value === 'boolean' || !home
+   ? `${tagsSvgStr}标签`
+   : homeTagsConfig.value?.title
+ )
++
+ const tags = computed(() => {
+-  return [...new Set(docs.value.map(v => v.meta.tag || []).flat(3))]
++  const allTags = docs.value.map(v => v.meta.tag || []).flat(3);
++  const tagCount = allTags.reduce((acc, tag) => {
++    acc[tag] = (acc[tag] || 0) + 1;
++    return acc
++  }, {});
++  return Object.entries(tagCount).map(([name, value]) => ({
++    name,
++    value
++  }));
+ })
+ 
+ const activeTag = useActiveTag()
+@@ -31,38 +41,22 @@ const isDark = useDark({
+ 
+ const colorMode = computed(() => (isDark.value ? 'light' : 'dark'))
+ 
+-const tagType: any = ['', 'info', 'success', 'warning', 'danger']
+ const currentPage = useCurrentPageNum()
+ const router = useRouter()
+ 
+ function handleCloseTag() {
+   activeTag.value.label = ''
+-  activeTag.value.type = ''
+   currentPage.value = 1
+   router.go(`${window.location.origin}${router.route.path}`)
+ }
+ 
+ const location = useBrowserLocation()
+ 
+-function handleTagClick(tag: string, type: string) {
+-  if (tag === activeTag.value.label) {
+-    handleCloseTag()
+-    return
+-  }
+-  activeTag.value.type = type
+-  activeTag.value.label = tag
+-  currentPage.value = 1
+-  router.go(
+-    `${location.value.origin}${router.route.path}?tag=${tag}&type=${type}`
+-  )
+-}
+-
+ watch(
+   location,
+   () => {
+     if (location.value.href) {
+       const url = new URL(location.value.href!)
+-      activeTag.value.type = url.searchParams.get('type') || ''
+       activeTag.value.label = url.searchParams.get('tag') || ''
+     }
+   },
+@@ -71,16 +65,54 @@ watch(
+   }
+ )
+ 
++function handleTagClick(tag: string) {
++  if (tag === activeTag.value.label) {
++    handleCloseTag()
++    return
++  }
++  activeTag.value.label = tag
++  currentPage.value = 1
++  router.go(
++    `${location.value.origin}${router.route.path}?tag=${tag}`
++  )
++}
++
+ watch(
+   route,
+   () => {
+     const params = useUrlSearchParams()
+     if (!params.tag) {
+-      activeTag.value.type = ''
+       activeTag.value.label = ''
+     }
+   }
+ )
++
++let wordCloud;
++onMounted(() => {
++  wordCloud = new WordCloud("wordcloud-container", {
++    data: tags.value,
++    wordField: 'name',
++    weightField: 'value',
++    colorField: 'name',
++    wordStyle: {
++      // fontFamily: 'Verdana',
++      fontSize: [14, 35],
++      rotation: 0,
++    },
++    // onWordCloudClick: wordCloudClick,
++    // 返回值设置成一个 [0, 1) 区间内的值，
++    // 可以让每次渲染的位置相同（前提是每次的宽高一致）。
++    random: () => 0.5,
++  });
++  wordCloud.on('element:click', (...args) => {
++    handleTagClick(args[0].data.data.text)
++  });
++  wordCloud.render();
++});
++
++onBeforeUnmount(() => {
++  wordCloud.destroy();
++})
+ </script>
+ 
+ <template>
+@@ -89,23 +121,13 @@ watch(
+     <div class="card-header">
+       <span class="title svg-icon" v-html="title" />
+       <ElTag
+-        v-if="activeTag.label" :type="activeTag.type || 'primary'" :effect="colorMode" closable
++        v-if="activeTag.label" :type="'primary'" :effect="colorMode" closable
+         @close="handleCloseTag"
+       >
+         {{ activeTag.label }}
+       </ElTag>
+     </div>
+-    <!-- 标签列表 -->
+-    <ul class="tag-list">
+-      <li v-for="(tag, idx) in tags" :key="tag">
+-        <ElTag
+-          :type="tagType[idx % tagType.length] || 'primary'" :effect="colorMode"
+-          @click="handleTagClick(tag, tagType[idx % tagType.length])"
+-        >
+-          {{ tag }}
+-        </ElTag>
+-      </li>
+-    </ul>
++    <div id="wordcloud-container"></div>
+   </div>
+ </template>
+ 
+@@ -156,4 +178,8 @@ watch(
+     cursor: pointer;
+   }
+ }
++
++#wordcloud-container {
++  height: 250px;
++}
+ </style>
