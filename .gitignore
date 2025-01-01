@@ -9,9 +9,9 @@ feeds-sub.json
 components.d.ts
 memos.json
 
-.vitepress/cache/
-.vitepress/dist/
-.vitepress/build/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/.vitepress/build/
 
 # Logs
 logs

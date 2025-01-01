@@ -1,4 +1,23 @@
+import fg from 'fast-glob'
 import type { DefaultTheme } from 'vitepress'
+import matter from 'gray-matter'
+
+function findLatest(path: string) : string {
+  let date : number = 0;
+  let res : string = '';
+  fg.sync(`${path}/*.md`, {
+    onlyFiles: true,
+    objectMode: true,
+    ignore: ['**/index.md']
+  }).forEach((article) => {
+    const { data } = matter.read(`${article.path}`);
+    if (new Date(data.date).getTime() > date) {
+      date = new Date(data.date).getTime();
+      res = `/${article.path}`.replace('docs/posts/', '')
+    }
+  })
+  return res;
+}
 
 export const nav: DefaultTheme.NavItem[] = [
   {
@@ -26,12 +45,12 @@ export const nav: DefaultTheme.NavItem[] = [
   },
   {
     text: '折腾',
-    link: '/fiddling/more-accurate-chnroute',
+    link: findLatest('docs/posts/fiddling'),
     activeMatch: '^/fiddling'
   },
   {
     text: '生活',
-    link: '/daily/work-for-3-years',
+    link: findLatest('docs/posts/daily'),
     activeMatch: '^/daily'
   },
   {
