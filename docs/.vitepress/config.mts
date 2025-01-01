@@ -31,7 +31,7 @@ export default withPwa(defineConfig({
     sidebarMenuLabel: '相关文章',
     lastUpdatedText: '上次更新于',
 
-    logo: 'https://blog-img.shinya.click/2025/c29e5b489f71d9cde191b50e2656cdb7.png',
+    logo: './bg.webp',
     nav: nav,
     socialLinks: [
       { icon: { svg: trian_svg }, link: 'https://www.travellings.cn/go.html' },
