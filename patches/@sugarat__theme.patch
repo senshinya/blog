@@ -269,3 +269,26 @@ index 2140149e2113c530c122a2d3f6b5e11acbf7b12f..102f6f120d02633bbb65cf84973a16aa
 +  height: 250px;
 +}
  </style>
+diff --git a/src/composables/config/blog.ts b/src/composables/config/blog.ts
+index 203340ab841a56fd7d2a77e9bb81dae7188b5787..c40eeec077f8690337fdff1f031c8e4b8bbc1906 100644
+--- a/src/composables/config/blog.ts
++++ b/src/composables/config/blog.ts
+@@ -18,6 +18,7 @@ import {
+   watch,
+ } from 'vue'
+ import { useColorMode } from '@vueuse/core'
++import moment from 'moment'
+ 
+ import { formatDate, replaceValue } from '../../utils/client'
+ import type { Theme } from './index'
+@@ -417,8 +418,8 @@ export function useFormatShowDate() {
+     }
+ 
+     function formatShowDate(date: any) {
+-      const source = +new Date(date)
+-      const now = +new Date()
++      const source = moment(date).valueOf()
++      const now = moment().valueOf()
+       const diff = now - source
+       const oneSeconds = 1000
+       const oneMinute = oneSeconds * 60
