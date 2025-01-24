@@ -19,7 +19,7 @@ if (isDark.value) {
 }
 
 const fetchData = async () => {
-    const response = await fetch('https://github-calendar-api.shinya.click/api?senshinya');
+    const response = await fetch('https://wakatime-calendar-api.shinya.click/api');
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
@@ -46,9 +46,9 @@ watch(
 
 <template>
     <div class="heatmap-wrapper">
-        <calendar-heatmap :round="1.5" :values="heatMapData" :end-date="endDate" :dark-mode="darkMode" :range-color="colorRange"/>
+        <calendar-heatmap :round="1.5" tooltip-unit="hours" :values="heatMapData" :end-date="endDate" :dark-mode="darkMode" :range-color="colorRange"/>
         <div id="heatmap-legend">
-            <div>Github Contributions from <a href="https://github.com/senshinya" target="_blank">shinya</a></div>
+            <div>每日 Coding 时间 from WakaTime</div>
         </div>
     </div>
 </template>
