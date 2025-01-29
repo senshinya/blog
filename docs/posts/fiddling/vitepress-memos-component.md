@@ -926,6 +926,12 @@ export default {
 
 Thanks to VitePress，我们可以很方便地通过 Vue 组件的方式，编写说说前端并嵌入博客
 
+首先安装 markedjs 依赖，pnpm 可使用如下命令：
+
+```shell
+pnpm add marked
+```
+
 在你的博客的主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和拓展名也许会有区别）的同级目录下，新建一个 `components` 文件夹（已有则无需新建），在其中新建 `memos.vue`
 
 ```js
@@ -1281,4 +1287,4 @@ showMeta: false
 <Memos />
 ```
 
-完事手工
+完事收工
