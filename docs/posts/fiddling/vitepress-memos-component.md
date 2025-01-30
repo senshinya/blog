@@ -399,7 +399,7 @@ KV 中存储一个 `index` key，value 是一个 uid 的数组，作为全部说
                 <button onclick="prevPage()" class="secondary">
                     <i class="fas fa-chevron-left"></i>
                 </button>
-                <span id="page-info">新 Memo</span>
+                <span id="page-info"></span>
                 <button onclick="nextPage()" class="secondary">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -408,7 +408,7 @@ KV 中存储一个 `index` key，value 是一个 uid 的数组，作为全部说
 
         <div class="memo-detail">
             <div class="memo-detail-header">
-                <div class="memo-info" id="memo-info"></div>
+                <div class="memo-info" id="memo-info">新 Memo</div>
                 <button class="create-btn" onclick="createMemo()">
                     <i class="fas fa-plus"></i> 发布新 Memo
                 </button>
