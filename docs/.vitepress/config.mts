@@ -20,6 +20,9 @@ export default withPwa(defineConfig({
   outDir: './dist',
   // 详见：https://vitepress.dev/zh/reference/site-config#head
   head: head,
+  sitemap: {
+    hostname: 'https://shinya.click'
+  },
   themeConfig: {
     // 展示 2,3 级标题在目录中
     outline: {
