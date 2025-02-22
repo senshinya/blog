@@ -5,9 +5,12 @@ import VueCalendarHeatmap from 'vue3-calendar-heatmap'
 import { h } from 'vue'
 import Heatmap from './components/heatmap.vue'
 import Memos from './components/memos.vue'
+import BiliVideo from './components/biliVideo.vue'
+import manyPictures from 'many-pictures';
 
 import codeblocksFold from 'vitepress-plugin-codeblocks-fold';
 import 'vitepress-plugin-codeblocks-fold/style/index.css'
+import 'many-pictures/es/style.css'
 
 // import { 
 //     NolebaseEnhancedReadabilitiesMenu, 
@@ -55,6 +58,8 @@ export default {
   extends: BlogTheme,
   enhanceApp({ app }) {
     app.use(VueCalendarHeatmap);
+    app.use(manyPictures);
+    app.component('BiliVideo', BiliVideo);
     app.component('Heatmap', Heatmap);
     app.component('Memos', Memos);
     // app.provide(InjectionKey, { 

@@ -3,8 +3,6 @@ title: 更精确的基于 BGP 的国内外 IP 分流
 tags: ["软路由","透明代理","分流","BGP"]
 category: 折腾
 date: 2024-10-07T16:51:00+08:00
-sticky: 3
-aside: false
 ---
 # 更精确的基于 BGP 的国内外 IP 分流
 

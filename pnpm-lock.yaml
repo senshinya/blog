@@ -34,6 +34,9 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
+      many-pictures:
+        specifier: ^1.1.2
+        version: 1.1.2
       marked:
         specifier: ^15.0.4
         version: 15.0.4
@@ -937,6 +940,9 @@ packages:
   '@ljharb/through@2.3.13':
     resolution: {integrity: sha512-/gKJun8NNiWGZJkGzI/Ragc53cOdcLNdzjLaIa+GEjguQs0ulsurx8WN0jijdK9yPqDvziX995sMRLyLt1uZMQ==}
     engines: {node: '>= 0.4'}
+
+  '@many-pictures/utils@1.0.1':
+    resolution: {integrity: sha512-rDbUZ3XbkDYkBd18t0Sf9bjyTqxXUS+hIxq5byaDQDELV3VxiCxtWnOibEx4dp8ZrcgN6XupFfL/m6MhQyJAww==}
 
   '@mdit-vue/shared@0.12.1':
     resolution: {integrity: sha512-bXgd0KThe4jC2leCFDFsyrudXIckvTwV4WnQK/rRMrXq0/BAuVdSNdIv1LGCWZxD5+oDyPyEPd0lalTIFwqsmg==}
@@ -2483,6 +2489,9 @@ packages:
   make-dir@2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
     engines: {node: '>=6'}
+
+  many-pictures@1.1.2:
+    resolution: {integrity: sha512-Cu3KyGqEPvIuyASfzY5AMmZc00AonDlBjPJysiG9KbYeUChw5w9T9pXagARnCnVxGNQmIMryp9zMcUK1YCOaoQ==}
 
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
@@ -4543,6 +4552,8 @@ snapshots:
     dependencies:
       call-bind: 1.0.8
 
+  '@many-pictures/utils@1.0.1': {}
+
   '@mdit-vue/shared@0.12.1':
     dependencies:
       '@mdit-vue/types': 0.12.0
@@ -6245,6 +6256,10 @@ snapshots:
       pify: 4.0.1
       semver: 5.7.2
     optional: true
+
+  many-pictures@1.1.2:
+    dependencies:
+      '@many-pictures/utils': 1.0.1
 
   mark.js@8.11.1: {}
 
