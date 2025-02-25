@@ -41,6 +41,15 @@ const members = [
       { icon: { svg: github_svg}, link: 'https://github.com/fallintodust' },
       { icon: { svg: blog_svg }, link: 'https://www.cnblogs.com/fallingdust ' }
     ]
+  },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/91717732',
+    name: 'Ancy',
+    title: 'Coding with love!',
+    links: [
+      { icon: { svg: github_svg}, link: 'https://github.com/Anxcye' },
+      { icon: { svg: blog_svg }, link: 'https://anxcye.com' }
+    ]
   }
 ]
 </script>
