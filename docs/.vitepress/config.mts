@@ -49,18 +49,21 @@ export default withPwa(defineConfig({
   },
   vite: {
     optimizeDeps: {
-      exclude: [ 
+      exclude: [
         // '@nolebase/vitepress-plugin-enhanced-readabilities/client', 
-        'vitepress', 
-        '@nolebase/ui', 
-      ], 
+        'vitepress',
+        '@nolebase/ui',
+      ],
+      include: [
+        '@antv/g2plot',
+      ]
     },
-    ssr: { 
+    ssr: {
       noExternal: [
         // '@nolebase/vitepress-plugin-enhanced-readabilities', 
         '@nolebase/ui',
         '@nolebase/vitepress-plugin-highlight-targeted-heading',
-      ], 
+      ],
     },
   },
 
