@@ -1,6 +1,8 @@
 // 主题独有配置
 import { getThemeConfig } from '@sugarat/theme/node'
 
+import { popover } from './config/popover'
+
 // 开启RSS支持（RSS配置）
 import type { Theme } from '@sugarat/theme'
 
@@ -74,6 +76,9 @@ const blogTheme = getThemeConfig({
 
   // 文章默认作者
   author: 'shinya',
+
+  // 公告
+  popover: popover,
 })
 
 export { blogTheme }
