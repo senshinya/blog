@@ -80,7 +80,10 @@ interface memo {
   <div class="memo-load-more">
     <button class="memo-load-more-button" id="load-more-button">
       <span id="load-more-button-text" class="font-navbar">再示诸般</span>
-      <span id="loading-spinner" class="memo-loading-spinner"></span>
+      <span
+        id="loading-spinner"
+        class="memo-loading-spinner"
+        style="display: none;"></span>
     </button>
   </div>
 </div>
@@ -173,9 +176,12 @@ interface memo {
         content: marked.parse(memo.content),
         createTime: convertToLocalTime(memo.createTime),
       }));
-      newMemos.forEach((memo) => {
+      newMemos.forEach((memo, index) => {
         const memoElement = document.createElement("div");
         memoElement.setAttribute("data-key", memo.uid);
+        memoElement.style.opacity = "0";
+        memoElement.style.transform = "translateY(20px)";
+        memoElement.style.transition = "opacity 0.5s ease, transform 0.5s ease";
         memoElement.innerHTML = `
           <div class="memo-card">
             <div class="memo-header">
@@ -185,6 +191,10 @@ interface memo {
           </div>
         `;
         memosList?.appendChild(memoElement);
+        setTimeout(() => {
+          memoElement.style.opacity = "1";
+          memoElement.style.transform = "translateY(0)";
+        }, 50 * index);
       });
       currentOffset += result.data.length;
       hasMoreMemos = result.hasMore;
