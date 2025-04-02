@@ -1,0 +1,67 @@
+---
+import { themeConfig } from "@/config";
+
+const {
+  repo = "",
+  repoID = "",
+  category = "",
+  categoryID = "",
+  mapping = "pathname",
+  inputPosition = "top",
+  lang = "zh-CN",
+  loading = "lazy",
+} = themeConfig.comment?.giscus ?? {};
+---
+
+<div class="giscus mt-16">
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={repo}
+    data-repo-id={repoID}
+    data-category={category}
+    data-category-id={categoryID}
+    data-mapping={mapping}
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position={inputPosition}
+    data-lang={lang}
+    data-loading={loading}
+    crossorigin="anonymous"
+    async></script>
+</div>
+
+<script is:inline>
+  const host = window.location.origin;
+  document.addEventListener("DOMContentLoaded", () => {
+    const theme = document.documentElement.classList.contains("dark")
+      ? host+"/css/giscus_dark.css"
+      : host+"/css/giscus_light.css";
+    const giscusScript = document.querySelector("script[src*='giscus.app']");
+    giscusScript.setAttribute("data-theme", theme);
+    const newScript = giscusScript.cloneNode(true);
+    giscusScript.replaceWith(newScript);
+  });
+
+  function changeGiscusTheme() {
+    const iframe = document.querySelector("iframe.giscus-frame");
+    if (!iframe) return;
+    const theme = document.documentElement.classList.contains("dark")
+      ? host+"/css/giscus_dark.css"
+      : host+"/css/giscus_light.css";
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme } } },
+      "https://giscus.app",
+    );
+  }
+
+  const observer = new MutationObserver(changeGiscusTheme);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  window.onload = () => {
+    changeGiscusTheme();
+  };
+</script>

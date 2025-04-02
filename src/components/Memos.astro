@@ -240,6 +240,7 @@ interface memo {
 
       .memo-time-text {
         display: inline-block;
+        margin-bottom: 0.25rem;
         font-size: 0.875rem;
         text-decoration: none;
         color: oklch(var(--un-preset-theme-colors-primary) / 0.6);
@@ -297,9 +298,9 @@ interface memo {
         border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.5);
       }
 
-      &:active:not(:disabled) {
-        transform: translateY(1px);
-      }
+      // &:active:not(:disabled) {
+      //   transform: translateY(1px);
+      // }
 
       &:disabled {
         opacity: 0.5;
