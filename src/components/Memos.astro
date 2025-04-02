@@ -107,12 +107,28 @@ interface memo {
   var hasMoreMemos = true;
   var currentOffset = 10;
 
-  const loadMoreButton = document.getElementById(
+  var loadMoreButton = document.getElementById(
     "load-more-button",
   ) as HTMLButtonElement;
-  const loadMoreButtonText = document.getElementById("load-more-button-text");
-  const loadingSpinner = document.getElementById("loading-spinner");
-  const memosList = document.getElementById("memos-list");
+  var loadMoreButtonText = document.getElementById("load-more-button-text");
+  var loadingSpinner = document.getElementById("loading-spinner");
+  var memosList = document.getElementById("memos-list");
+
+  function initMemos() {
+    isLoading = false;
+    hasMoreMemos = true;
+    currentOffset = 10;
+
+    loadMoreButton = document.getElementById(
+      "load-more-button",
+    ) as HTMLButtonElement;
+    loadMoreButtonText = document.getElementById("load-more-button-text");
+    loadingSpinner = document.getElementById("loading-spinner");
+    memosList = document.getElementById("memos-list");
+    loadMoreButton?.addEventListener("click", loadMoreMemos);
+
+    updateButtonState();
+  }
 
   function updateButtonState() {
     if (!hasMoreMemos) {
@@ -217,8 +233,8 @@ interface memo {
     content: string;
   }
 
-  loadMoreButton?.addEventListener("click", loadMoreMemos);
-  updateButtonState();
+  document.addEventListener("DOMContentLoaded", initMemos);
+  document.addEventListener("astro:page-load", initMemos);
 </script>
 
 <style is:global lang="scss">
