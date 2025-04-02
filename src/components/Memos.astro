@@ -1,0 +1,200 @@
+---
+import initMemosRaw from "../../memos.json";
+import { marked } from "marked";
+import type { Tokens } from "marked";
+
+const renderer = new marked.Renderer();
+renderer.image = function ({ href }: Tokens.Image): string {
+  return `
+    <div class="img-container">
+        <img class="imgwrp" loading="lazy" src="${href}" />
+    </div>
+  `;
+};
+marked.use({
+  renderer: renderer,
+  breaks: true,
+  gfm: true,
+});
+
+const initMemos = (initMemosRaw as memosRes).data.map((memo) => ({
+  ...memo,
+  content: marked.parse(memo.content),
+  createTime: convertToLocalTime(memo.createTime),
+}));
+
+function convertToLocalTime(
+  dateString: string,
+  timeZone: string = "Asia/Shanghai",
+): string {
+  // 创建 Date 对象
+  const date = new Date(dateString);
+
+  // 提取所需的时间组件
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false, // 使用 24 小时制
+  };
+
+  const formatter = new Intl.DateTimeFormat("zh-CN", options);
+  const parts = formatter.formatToParts(date);
+
+  // 构建最终输出格式
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+  const hour = parts.find((part) => part.type === "hour")?.value;
+  const minute = parts.find((part) => part.type === "minute")?.value;
+  const second = parts.find((part) => part.type === "second")?.value;
+
+  // 拼接成目标格式
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
+
+interface memosRes {
+  data: memo[];
+  hasMore: boolean;
+}
+
+interface memo {
+  uid: string;
+  createTime: string;
+  content: string;
+}
+---
+
+<div class="memos-container">
+  {
+    initMemos.map((memo) => (
+      <div data-key={memo.uid}>
+        <div class="card">
+          <div class="header">
+            <span class="time-text font-time">{memo.createTime}</span>
+          </div>
+          <div class="heti memo-content" set:html={memo.content} />
+        </div>
+      </div>
+    ))
+  }
+
+  <div class="load-more">
+    <button class="load-more-button" id="load-more-button">
+      <span v-if="!isLoading">加载更多</span>
+      <!-- <span v-else class="loading-spinner"></span> -->
+    </button>
+  </div>
+</div>
+
+<style lang="scss">
+  .card {
+    border-style: solid;
+    margin-bottom: 0.25rem;
+    border-bottom: solid 0.5px;
+    position: relative;
+    border-color: oklch(var(--un-preset-theme-colors-primary) / 0.2);
+    padding-top: 0.75rem;
+    padding-bottom: 0.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .time-text {
+        display: inline-block;
+        font-size: 0.875rem;
+        text-decoration: none;
+        color: oklch(var(--un-preset-theme-colors-primary)/ 0.6);
+      }
+    }
+
+    .memo-content {
+      margin-top: 5px;
+      font-size: 1rem;
+      word-break: break-word;
+      color: oklch(var(--un-preset-theme-colors-secondary));
+
+      * {
+        margin: 0;
+      }
+
+      *:not(:first-child):not([hidden]) {
+        margin-top: 0.5rem;
+      }
+
+      .img-container {
+        width: 40%;
+
+        .imgwrp {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  // .card:hover {
+  //   border-color: oklch(var(--un-preset-theme-colors-secondary));
+  // }
+
+  .load-more {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    .load-more-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 120px; // 固定宽度
+      height: 40px; // 固定高度
+      background-color: transparent;
+      color: var(--vp-c-text-2);
+      border: 1px solid var(--vp-c-divider);
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+
+      &:hover:not(:disabled) {
+        background-color: var(--vp-c-bg-soft);
+        color: var(--vp-c-text-1);
+        border-color: var(--vp-c-text-2);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(1px);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .loading-spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid var(--vp-c-text-3);
+        border-radius: 50%;
+        border-top-color: var(--vp-c-text-1);
+        animation: spin 0.8s linear infinite;
+      }
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>
