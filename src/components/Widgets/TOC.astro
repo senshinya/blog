@@ -1,237 +1,229 @@
 ---
-import type { MarkdownHeading } from 'astro'
-import { ui } from '@/i18n/ui'
-import { getPageInfo } from '@/utils/page'
+import type { MarkdownHeading } from "astro";
+import { ui } from "@/i18n/ui";
+import { getPageInfo } from "@/utils/page";
 
 interface Props {
-  headings: MarkdownHeading[]
+  headings: MarkdownHeading[];
 }
 
-const { currentLang } = getPageInfo(Astro.url.pathname)
-const currentUI = ui[currentLang as keyof typeof ui]
+const { currentLang } = getPageInfo(Astro.url.pathname);
+const currentUI = ui[currentLang as keyof typeof ui];
 
-const { headings = [] } = Astro.props
-const filteredHeadings = headings.filter(heading =>
-  heading.depth >= 2
-  && heading.depth <= 4
-  && heading.text !== 'Footnotes',
-)
+const { headings = [] } = Astro.props;
+const filteredHeadings = headings.filter(
+  (heading) =>
+    heading.depth >= 2 && heading.depth <= 4 && heading.text !== "Footnotes",
+);
 ---
 
-{filteredHeadings.length > 0 && (
-  <div
-    class="mb-6 bg-secondary/5 2xl:(fixed left-0 top-53 max-w-[min(calc(50vw-38rem),13rem)] border-none bg-transparent)"
-    border="~ secondary/5 rounded solid"
-  >
-    <input
-      type="checkbox"
-      id="toc-toggle"
-      class="accordion-toggle"
-      hidden
-    />
-    <div class="relative h-12 w-full bg-transparent">
-      <label
-        for="toc-toggle"
-        class="absolute inset-0 flex cursor-pointer items-center 2xl:(static h-max w-max flex c-secondary/60 transition-colors ease-in hover:c-secondary)"
-      >
-        <span class="toc-title">
-          {currentUI.toc}
-        </span>
-
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          fill="currentColor"
-          class="ml-4 hidden aspect-square w-4.2 2xl:(mt-4 block origin-center active:scale-90)"
+{
+  filteredHeadings.length > 0 && (
+    <div
+      class="mb-6 bg-secondary/5 2xl:(fixed left-0 top-43.5 max-w-[min(calc(50vw-38rem),13rem)] border-none bg-transparent)"
+      border="~ secondary/5 rounded solid"
+    >
+      <input type="checkbox" id="toc-toggle" class="accordion-toggle" hidden />
+      <div class="relative h-12 w-full bg-transparent">
+        <label
+          for="toc-toggle"
+          class="absolute inset-0 flex cursor-pointer items-center 2xl:(static h-max w-max flex c-secondary/25 transition-colors ease-out hover:c-secondary/60)"
         >
-          <path d="m12 1c-6.1 0-11 4.9-11 11s4.9 11 11 11 11-4.9 11-11-4.9-11-11-11m0 20c-5.8 0-10.5-4-10.5-9s4.7-9 10.5-9 10.5 4 10.5 9-4.7 9-10.5 9" />
-        </svg>
-      </label>
-    </div>
+          <span class="toc-title">{currentUI.toc}</span>
 
-    {/* Expandable content wrapper */}
-    <div class="accordion-wrapper">
-      <nav
-        id="toc-content"
-        class="accordion-content"
-        aria-label="Table of Contents"
-      >
-        <ul class="toc-list">
-          {filteredHeadings.map(heading => (
-            <li
-              class:list={{
-                'ml-0': heading.depth === 2,
-                'ml-4': heading.depth === 3,
-                'ml-8': heading.depth === 4,
-              }}
-            >
-              <a
-                href={`#${heading.slug}`}
-                class:list={[
-                  { 'toc-link-h2': heading.depth === 2 },
-                  { 'toc-link-h3': heading.depth === 3 },
-                  { 'toc-link-h4': heading.depth === 4 },
-                ]}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="currentColor"
+            class="ml-4 hidden aspect-square w-4.2 2xl:(mt-4 block origin-center active:scale-90)"
+          >
+            <path d="M22.2 2.3H1.8v1.6h19.8zM1.8 21.7h19.8l.6-1.6H1.8zM15.5 11.2H1.8v1.6h13.1z" />
+          </svg>
+        </label>
+      </div>
+
+      {/* Expandable content wrapper */}
+      <div class="accordion-wrapper">
+        <nav
+          id="toc-content"
+          class="accordion-content"
+          aria-label="Table of Contents"
+        >
+          <ul class="toc-list">
+            {filteredHeadings.map((heading) => (
+              <li
+                class:list={{
+                  "ml-0": heading.depth === 2,
+                  "ml-4": heading.depth === 3,
+                  "ml-8": heading.depth === 4,
+                }}
               >
-                {heading.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+                <a
+                  href={`#${heading.slug}`}
+                  class:list={[
+                    { "toc-link-h2": heading.depth === 2 },
+                    { "toc-link-h3": heading.depth === 3 },
+                    { "toc-link-h4": heading.depth === 4 },
+                  ]}
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </div>
-  </div>
-)}
+  )
+}
 
 <!-- Override heti default styles  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 <style>
-.toc-title {
-  --at-apply: 'font-semibold ml-4 select-none 2xl:hidden';
-}
-
-.toc-list {
-  --at-apply: 'list-none pl-0 space-y-2 mt-1 mb-4 2xl:space-y-1.2';
-}
-
-.toc-link-h2, .toc-link-h3, .toc-link-h4 {
-  --at-apply: 'text-sm no-underline font-normal text-balance select-none 2xl:(text-3.2 c-secondary/60 transition-colors ease-in hover:(c-secondary font-medium))';
-}
-
-/* Initial collapsed state with zero height grid row */
-.accordion-wrapper {
-  --at-apply: 'grid rows-[0fr] duration-300 ease-in-out';
-}
-
-.accordion-content {
-  --at-apply: 'overflow-hidden max-h-66 lg:max-h-82 2xl:(max-h-[calc(100vh-21.5rem)]) px-4';
-}
-
-/* When toggle is checked, expand the wrapper to show content */
-.accordion-toggle:checked ~ .accordion-wrapper {
-  grid-template-rows: 1fr;
-}
-
-.accordion-toggle:checked ~ .accordion-wrapper .accordion-content {
-  --at-apply: 'overflow-y-auto';
-}
-
-@media (min-width: 1536px) {
-  .accordion-wrapper {
-    grid-template-rows: 1fr;
+  .toc-title {
+    --at-apply: "font-semibold ml-4 select-none 2xl:hidden";
   }
 
-  .accordion-toggle:checked ~ .accordion-wrapper {
-    grid-template-rows: 0fr;
+  .toc-list {
+    --at-apply: "list-none pl-0 space-y-2 mt-1 mb-4 2xl:space-y-1.2";
+  }
+
+  .toc-link-h2,
+  .toc-link-h3,
+  .toc-link-h4 {
+    --at-apply: "text-sm no-underline font-normal text-balance select-none 2xl:(text-3.2 c-secondary/60 transition-colors ease-in hover:(c-secondary font-medium))";
+  }
+
+  /* Initial collapsed state with zero height grid row */
+  .accordion-wrapper {
+    --at-apply: "grid rows-[0fr] duration-300 ease-in-out";
   }
 
   .accordion-content {
-    --at-apply: 'overflow-y-auto';
+    --at-apply: "overflow-hidden max-h-66 lg:max-h-82 2xl:(max-h-[calc(100vh-21.5rem)]) px-4";
+  }
+
+  /* When toggle is checked, expand the wrapper to show content */
+  .accordion-toggle:checked ~ .accordion-wrapper {
+    grid-template-rows: 1fr;
   }
 
   .accordion-toggle:checked ~ .accordion-wrapper .accordion-content {
-    --at-apply: 'overflow-hidden';
+    --at-apply: "overflow-y-auto";
   }
 
-  .toc-link-active {
-    --at-apply: 'c-secondary font-medium';
+  @media (min-width: 1536px) {
+    .accordion-wrapper {
+      grid-template-rows: 1fr;
+    }
+
+    .accordion-toggle:checked ~ .accordion-wrapper {
+      grid-template-rows: 0fr;
+    }
+
+    .accordion-content {
+      --at-apply: "overflow-y-auto";
+    }
+
+    .accordion-toggle:checked ~ .accordion-wrapper .accordion-content {
+      --at-apply: "overflow-hidden";
+    }
+
+    .toc-link-active {
+      --at-apply: "c-secondary font-medium";
+    }
   }
-}
 </style>
 
 <!-- TOC Highlight Script >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
 <script>
-function setupTOCHighlight() {
-  const tocContent = document.getElementById('toc-content')
-  if (!tocContent)
-    return
+  function setupTOCHighlight() {
+    const tocContent = document.getElementById("toc-content");
+    if (!tocContent) return;
 
-  const tocLinks = tocContent.querySelectorAll('a')
-  if (tocLinks.length === 0)
-    return
+    const tocLinks = tocContent.querySelectorAll("a");
+    if (tocLinks.length === 0) return;
 
-  // Check if in large screen (2xl) mode
-  let is2xl = window.innerWidth >= 1536
+    // Check if in large screen (2xl) mode
+    let is2xl = window.innerWidth >= 1536;
 
-  // Build mapping from heading IDs to TOC links
-  const headingMap = new Map<string, HTMLAnchorElement>()
-  tocLinks.forEach((link) => {
-    const id = link.getAttribute('href')?.substring(1)
-    if (id)
-      headingMap.set(id, link as HTMLAnchorElement)
-  })
+    // Build mapping from heading IDs to TOC links
+    const headingMap = new Map<string, HTMLAnchorElement>();
+    tocLinks.forEach((link) => {
+      const id = link.getAttribute("href")?.substring(1);
+      if (id) headingMap.set(id, link as HTMLAnchorElement);
+    });
 
-  let currentActiveLink: HTMLAnchorElement | null = null
+    let currentActiveLink: HTMLAnchorElement | null = null;
 
-  function highlightLink(link: HTMLAnchorElement) {
-    if (link === currentActiveLink)
-      return
+    function highlightLink(link: HTMLAnchorElement) {
+      if (link === currentActiveLink) return;
 
-    if (currentActiveLink) {
-      currentActiveLink.classList.remove('toc-link-active')
-    }
+      if (currentActiveLink) {
+        currentActiveLink.classList.remove("toc-link-active");
+      }
 
-    link.classList.add('toc-link-active')
-    currentActiveLink = link
+      link.classList.add("toc-link-active");
+      currentActiveLink = link;
 
-    // Only scroll the TOC in large screen (2xl) mode
-    if (is2xl) {
-      scrollLinkToCenter(link)
-    }
-  }
-
-  // Scroll the link to center position
-  function scrollLinkToCenter(link: HTMLAnchorElement) {
-    link.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    })
-  }
-
-  // Intersection observer callback
-  const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
-    const visibleHeading = entries.find(entry => entry.isIntersecting)?.target
-
-    if (visibleHeading && visibleHeading.id) {
-      const link = headingMap.get(visibleHeading.id)
-      if (link)
-        highlightLink(link)
-    }
-  }
-
-  // Create the intersection observer
-  const headingObserver = new IntersectionObserver(intersectionCallback, {
-    rootMargin: '0% 0% -66% 0%',
-    threshold: [0.4],
-  })
-
-  // Observe all heading elements
-  document.querySelectorAll('h2, h3, h4').forEach((heading) => {
-    if (heading.id && heading.id !== 'footnotes') {
-      headingObserver.observe(heading)
-    }
-  })
-
-  // Highlight the first TOC item by default
-  if (tocLinks.length > 0) {
-    highlightLink(tocLinks[0] as HTMLAnchorElement)
-  }
-
-  // Listen for window resize events
-  window.addEventListener('resize', () => {
-    const newIs2xl = window.innerWidth >= 1536
-    if (is2xl !== newIs2xl) {
-      // Update screen size flag
-      is2xl = newIs2xl
-
-      if (currentActiveLink && is2xl) {
-        scrollLinkToCenter(currentActiveLink)
+      // Only scroll the TOC in large screen (2xl) mode
+      if (is2xl) {
+        scrollLinkToCenter(link);
       }
     }
-  })
-}
 
-setupTOCHighlight()
-document.addEventListener('astro:after-swap', setupTOCHighlight)
+    // Scroll the link to center position
+    function scrollLinkToCenter(link: HTMLAnchorElement) {
+      link.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+
+    // Intersection observer callback
+    const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
+      const visibleHeading = entries.find(
+        (entry) => entry.isIntersecting,
+      )?.target;
+
+      if (visibleHeading && visibleHeading.id) {
+        const link = headingMap.get(visibleHeading.id);
+        if (link) highlightLink(link);
+      }
+    };
+
+    // Create the intersection observer
+    const headingObserver = new IntersectionObserver(intersectionCallback, {
+      rootMargin: "0% 0% -66% 0%",
+      threshold: [0.4],
+    });
+
+    // Observe all heading elements
+    document.querySelectorAll("h2, h3, h4").forEach((heading) => {
+      if (heading.id && heading.id !== "footnotes") {
+        headingObserver.observe(heading);
+      }
+    });
+
+    // Highlight the first TOC item by default
+    if (tocLinks.length > 0) {
+      highlightLink(tocLinks[0] as HTMLAnchorElement);
+    }
+
+    // Listen for window resize events
+    window.addEventListener("resize", () => {
+      const newIs2xl = window.innerWidth >= 1536;
+      if (is2xl !== newIs2xl) {
+        // Update screen size flag
+        is2xl = newIs2xl;
+
+        if (currentActiveLink && is2xl) {
+          scrollLinkToCenter(currentActiveLink);
+        }
+      }
+    });
+  }
+
+  setupTOCHighlight();
+  document.addEventListener("astro:after-swap", setupTOCHighlight);
 </script>
-
