@@ -27,10 +27,7 @@ function convertToLocalTime(
   dateString: string,
   timeZone: string = "Asia/Shanghai",
 ): string {
-  // 创建 Date 对象
   const date = new Date(dateString);
-
-  // 提取所需的时间组件
   const options: Intl.DateTimeFormatOptions = {
     timeZone: timeZone,
     year: "numeric",
@@ -39,21 +36,16 @@ function convertToLocalTime(
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: false, // 使用 24 小时制
+    hour12: false,
   };
-
   const formatter = new Intl.DateTimeFormat("zh-CN", options);
   const parts = formatter.formatToParts(date);
-
-  // 构建最终输出格式
   const year = parts.find((part) => part.type === "year")?.value;
   const month = parts.find((part) => part.type === "month")?.value;
   const day = parts.find((part) => part.type === "day")?.value;
   const hour = parts.find((part) => part.type === "hour")?.value;
   const minute = parts.find((part) => part.type === "minute")?.value;
   const second = parts.find((part) => part.type === "second")?.value;
-
-  // 拼接成目标格式
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
@@ -69,50 +61,188 @@ interface memo {
 }
 ---
 
-<div class="memos-container">
-  {
-    initMemos.map((memo) => (
-      <div data-key={memo.uid}>
-        <div class="card">
-          <div class="header">
-            <span class="time-text font-time">{memo.createTime}</span>
+<div class="memos-container" id="memos-container">
+  <div id="memos-list">
+    {
+      initMemos.map((memo) => (
+        <div data-key={memo.uid}>
+          <div class="memo-card">
+            <div class="memo-header">
+              <span class="memo-time-text font-time">{memo.createTime}</span>
+            </div>
+            <div class="heti memo-content" set:html={memo.content} />
           </div>
-          <div class="heti memo-content" set:html={memo.content} />
         </div>
-      </div>
-    ))
-  }
+      ))
+    }
+  </div>
 
-  <div class="load-more">
-    <button class="load-more-button" id="load-more-button">
-      <span v-if="!isLoading">加载更多</span>
-      <!-- <span v-else class="loading-spinner"></span> -->
+  <div class="memo-load-more">
+    <button class="memo-load-more-button" id="load-more-button">
+      <span id="load-more-button-text" class="font-navbar">再示诸般</span>
+      <span id="loading-spinner" class="memo-loading-spinner"></span>
     </button>
   </div>
 </div>
 
-<style lang="scss">
-  .card {
+<script>
+  import { marked } from "marked";
+  import type { Tokens } from "marked";
+
+  const renderer = new marked.Renderer();
+  renderer.image = function ({ href }: Tokens.Image): string {
+    return `
+    <div class="memo-img-container">
+        <img class="memo-imgwrp" loading="lazy" src="${href}" />
+    </div>
+  `;
+  };
+  marked.use({
+    renderer: renderer,
+    breaks: true,
+    gfm: true,
+  });
+
+  var isLoading = false;
+  var hasMoreMemos = true;
+  var currentOffset = 10;
+
+  const loadMoreButton = document.getElementById(
+    "load-more-button",
+  ) as HTMLButtonElement;
+  const loadMoreButtonText = document.getElementById("load-more-button-text");
+  const loadingSpinner = document.getElementById("loading-spinner");
+  const memosList = document.getElementById("memos-list");
+
+  function updateButtonState() {
+    if (!hasMoreMemos) {
+      if (loadMoreButton) {
+        loadMoreButton.style.display = "none";
+      }
+      return;
+    }
+    if (isLoading) {
+      if (loadMoreButton) {
+        loadMoreButton.disabled = true;
+      }
+      if (loadMoreButtonText) {
+        loadMoreButtonText.style.display = "none";
+      }
+      if (loadingSpinner) {
+        loadingSpinner.style.display = "inline-block";
+      }
+    } else {
+      if (loadMoreButton) {
+        loadMoreButton.disabled = false;
+      }
+      if (loadMoreButtonText) {
+        loadMoreButtonText.style.display = "inline-block";
+      }
+      if (loadingSpinner) {
+        loadingSpinner.style.display = "none";
+      }
+    }
+  }
+
+  async function loadMoreMemos() {
+    if (!hasMoreMemos || isLoading) return;
+    isLoading = true;
+    updateButtonState();
+    try {
+      const url = `https://memos.shinya.click/api/memos?limit=10&offset=${currentOffset}`;
+      const response = await fetch(url);
+      const result: memosRes = await response.json();
+      const newMemos = result.data.map((memo) => ({
+        ...memo,
+        content: marked.parse(memo.content),
+        createTime: convertToLocalTime(memo.createTime),
+      }));
+      newMemos.forEach((memo) => {
+        const memoElement = document.createElement("div");
+        memoElement.setAttribute("data-key", memo.uid);
+        memoElement.innerHTML = `
+          <div class="memo-card">
+            <div class="memo-header">
+              <span class="memo-time-text font-time">${memo.createTime}</span>
+            </div>
+            <div class="heti memo-content">${memo.content}</div>
+          </div>
+        `;
+        memosList?.appendChild(memoElement);
+      });
+      currentOffset += result.data.length;
+      hasMoreMemos = result.hasMore;
+    } catch (error) {
+      console.error("Failed to load memos:", error);
+    } finally {
+      isLoading = false;
+      updateButtonState();
+    }
+  }
+
+  function convertToLocalTime(
+    dateString: string,
+    timeZone: string = "Asia/Shanghai",
+  ): string {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      timeZone: timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat("zh-CN", options);
+    const parts = formatter.formatToParts(date);
+    const year = parts.find((part) => part.type === "year")?.value;
+    const month = parts.find((part) => part.type === "month")?.value;
+    const day = parts.find((part) => part.type === "day")?.value;
+    const hour = parts.find((part) => part.type === "hour")?.value;
+    const minute = parts.find((part) => part.type === "minute")?.value;
+    const second = parts.find((part) => part.type === "second")?.value;
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+  }
+
+  interface memosRes {
+    data: memo[];
+    hasMore: boolean;
+  }
+
+  interface memo {
+    uid: string;
+    createTime: string;
+    content: string;
+  }
+
+  loadMoreButton?.addEventListener("click", loadMoreMemos);
+  updateButtonState();
+</script>
+
+<style is:global lang="scss">
+  .memo-card {
     border-style: solid;
-    margin-bottom: 0.25rem;
+    // margin-bottom: 0.25rem;
     border-bottom: solid 0.5px;
     position: relative;
     border-color: oklch(var(--un-preset-theme-colors-primary) / 0.2);
     padding-top: 0.75rem;
-    padding-bottom: 0.25rem;
+    padding-bottom: 1.25rem;
     padding-left: 1rem;
     padding-right: 1rem;
 
-    .header {
+    .memo-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      .time-text {
+      .memo-time-text {
         display: inline-block;
         font-size: 0.875rem;
         text-decoration: none;
-        color: oklch(var(--un-preset-theme-colors-primary)/ 0.6);
+        color: oklch(var(--un-preset-theme-colors-primary) / 0.6);
       }
     }
 
@@ -130,10 +260,10 @@ interface memo {
         margin-top: 0.5rem;
       }
 
-      .img-container {
+      .memo-img-container {
         width: 40%;
 
-        .imgwrp {
+        .memo-imgwrp {
           width: 100%;
           height: 100%;
         }
@@ -141,24 +271,20 @@ interface memo {
     }
   }
 
-  // .card:hover {
-  //   border-color: oklch(var(--un-preset-theme-colors-secondary));
-  // }
-
-  .load-more {
+  .memo-load-more {
     text-align: center;
     margin-top: 40px;
     margin-bottom: 40px;
 
-    .load-more-button {
+    .memo-load-more-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 120px; // 固定宽度
       height: 40px; // 固定高度
       background-color: transparent;
-      color: var(--vp-c-text-2);
-      border: 1px solid var(--vp-c-divider);
+      color: oklch(var(--un-preset-theme-colors-primary) / 0.6);
+      border: 1px solid oklch(var(--un-preset-theme-colors-secondary) / 0.2);
       border-radius: 4px;
       font-size: 14px;
       font-weight: 500;
@@ -167,9 +293,8 @@ interface memo {
       outline: none;
 
       &:hover:not(:disabled) {
-        background-color: var(--vp-c-bg-soft);
-        color: var(--vp-c-text-1);
-        border-color: var(--vp-c-text-2);
+        color: oklch(var(--un-preset-theme-colors-primary));
+        border-color: oklch(var(--un-preset-theme-colors-secondary) / 0.5);
       }
 
       &:active:not(:disabled) {
@@ -181,12 +306,12 @@ interface memo {
         cursor: not-allowed;
       }
 
-      .loading-spinner {
+      .memo-loading-spinner {
         width: 14px;
         height: 14px;
-        border: 2px solid var(--vp-c-text-3);
+        border: 2px solid oklch(var(--un-preset-theme-colors-primary) / 0.6);
         border-radius: 50%;
-        border-top-color: var(--vp-c-text-1);
+        border-top-color: oklch(var(--un-preset-theme-colors-primary) / 0.6);
         animation: spin 0.8s linear infinite;
       }
     }
