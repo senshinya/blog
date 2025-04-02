@@ -60,8 +60,6 @@ const {
     giscusContainer.appendChild(script);
   }
 
-  document.addEventListener("DOMContentLoaded", loadGiscus);
-
   function changeGiscusTheme() {
     const iframe = document.querySelector("iframe.giscus-frame");
     if (!iframe) return;
@@ -74,15 +72,7 @@ const {
     );
   }
 
-  const observer = new MutationObserver(changeGiscusTheme);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-  window.onload = () => {
-    loadGiscus();
-  };
-  document.addEventListener("astro:page-load", () => {
-    loadGiscus();
-  });
+  document.addEventListener("DOMContentLoaded", loadGiscus);
+  document.addEventListener("theme-changed", changeGiscusTheme);
+  document.addEventListener("astro:page-load", loadGiscus);
 </script>
