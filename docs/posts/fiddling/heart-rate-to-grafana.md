@@ -1,3 +1,9 @@
+---
+title: My heart beats for U —— 心率同步 Grafana 展示
+tags: ["Grafana","心率","Apple Watch"]
+date: 2025-03-31T23:51:00+08:00
+---
+
 # My heart beats for U —— 心率同步 Grafana 展示
 
 整了个小活：把苹果健康的心率定时同步到服务器上，并由 Grafana 绘制展示，效果大概如下：
