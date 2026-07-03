@@ -79,13 +79,18 @@ catalogs:
 
 engineStrict: true
 
-minimumReleaseAgeExclude:
-  - es-toolkit@1.48.1
+overrides:
+  '@dxup/nuxt': ^0.5.2
+  nuxtseo-layer-devtools: link:__unneeded__
 
 patchedDependencies:
+  # 图片支持配置 1.5x 像素密度
   '@nuxt/image': patches/@nuxt__image.patch
+  # remark ts 插件使用 unrun 运行
+  # 代码块不将 tab 转为空格
+  # 行内代码 props.code 传入原文
   '@nuxtjs/mdc': patches/@nuxtjs__mdc.patch
-  '@vue/shared': patches/@vue__shared.patch
+  # adoptedStyleSheet ::highlight 高亮选择器
   plain-shiki: patches/plain-shiki.patch
 
 shamefullyHoist: true
