@@ -16,10 +16,12 @@
 > - 部署前必须完成项目个性化配置与内容修改，不得将我的信息用于你的网站图标/名称，严禁将项目内我的文章以你的名义重新发布至公开环境。
 > - 部署前必须完成项目个性化配置与内容修改，不得将我的信息用于你的网站图标/名称，严禁将项目内我的文章以你的名义重新发布至公开环境。
 
-近期 Fork 项目后将我的文章部署在互联网且不遵守 CC 协议的行为增加，追查耗费了我巨大精力，因此我将直接将侵权网站列在下方，希望能减少此类现象的发生。
+近期 Fork 项目后将我的文章部署在互联网且不遵守 CC 协议的行为增加，追查耗费了我巨大精力，因此我将直接将侵权网站列在此标题，希望能减少此类现象的发生。
 
 <!-- 1. 2025-12-05 [钟神秀](https://github.com/zsxcoder/Nuxt-blog-v3)：blog.zsxcoder.top《我们的设备被拿来做了什么：软件的背景行为》 -->
 <!-- 2. 2025-12-28 [Axel Beta](https://github.com/ErenAxel/blog-v3)：sc.axel.xin《我们的设备被拿来做了什么：软件的背景行为》《深色模式开发的最佳实践》《寻不回手工油糕》 -->
+
+-
 
 ## 使用本主题的博客
 
@@ -33,10 +35,10 @@
 
 | 博客名称                                     | 作者          | 对应上游版本号 | 下游特色功能                                 |
 | -------------------------------------------- | ------------- | -------------- | -------------------------------------------- |
-| **[纸鹿摸鱼处](https://blog.zhilu.site/)**   | **L33Z22L11** | v3.7.0         | (我是上游)                                   |
+| **[纸鹿摸鱼处](https://blog.zhilu.site/)**   | **L33Z22L11** | v3.7.1         | (我是上游)                                   |
 | [希乐博客](https://blog.xlenco.top/)         | Xlenco        | v3.4.8         | 最新评论                                     |
 | [月空人](https://www.weilog.me/)             | Whbbit1999    | v3.7.0-alpha.4 | 项目/博客/Snippets页                         |
-| [Mugzx's Blog](https://blog.mugzx.top/)      | Mugzx         | v3.7.0-rc.0    | 设计风格统一                                 |
+| [Mugzx's Blog](https://blog.mugzx.top/)      | Mugzx         | v3.7.0         | 设计风格统一                                 |
 | [喵落阁](https://blog-v3.kemeow.top/)        | Kemeow815     | v3.4.7         | 即刻+友圈+最新评论+游戏/番剧页               |
 | [梦爱吃鱼](https://blog.bsgun.cn/)           | JLinmr        | v3.6.0         | 即刻+友圈+最新评论                           |
 | [Mikuの极光星](https://blog.sotkg.com/)      | PaloMiku      | v3.6.5         | 设计风格统一，设置面板                       |
@@ -49,7 +51,7 @@
 | [fishcpy的小破站](https://blog.fis.ink/)     | fishcpy       | v3.4.8         | 友圈+Artalk评论                              |
 | [六月墨语](https://blog.june.ink/)           | Akuma-real    | v3.6.3         | 友圈+最新评论                                |
 | [Cталин博客](https://blog.jiclub.site/)      | StalinDev54   | v3.4.8         | 侧栏时间轴+关于页                            |
-| [栖童の小站](https://blog.linux-qitong.top/) | Linux-qitong  | v3.7.0-rc.1    | 即刻+友圈                                    |
+| [栖童の小站](https://blog.linux-qitong.top/) | Linux-qitong  | v3.7.0         | 即刻+友圈                                    |
 | [墨韵云阁](https://luoyuanxiang.top/)        | luoyuanxiang  | v3.6.0-rc.2    |                                              |
 | [鹊楠の小窝](https://blog.quenan.cn/)        | QNquenan      | v3.4.9         |                                              |
 | [KingKangBlog](https://blog.kingkang.xyz/)   | KingStoning   | v3.4.9         |                                              |
