@@ -80,7 +80,7 @@ catalogs:
 engineStrict: true
 
 overrides:
-  '@dxup/nuxt': ^0.5.2
+  '@dxup/nuxt': ^0.5.3
   nuxtseo-layer-devtools: link:__unneeded__
 
 patchedDependencies:

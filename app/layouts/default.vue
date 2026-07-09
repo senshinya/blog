@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const { slots } = inject<any>(Symbol.for('dxup:layout-slots')) || {}
+</script>
+
 <template>
 <NuxtLoadingIndicator />
 <NuxtRouteAnnouncer :style="{ position: 'absolute' }" />
@@ -12,7 +16,7 @@
 		<slot name="aside" />
 	</BlogAside>
 </div>
-<BlogPanel :has-aside="Boolean($slots.aside)" />
+<BlogPanel :has-aside="slots?.aside" />
 <BikariyaModals />
 </template>
 
