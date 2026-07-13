@@ -18,12 +18,15 @@ const tuningRef = useTemplateRef('tuning-panel')
 useAvoidTarget(tuningRef, showTuning)
 
 const { data: listRaw } = await useAsyncData('posts:index', () => getArticleIndexOptions(), { default: () => [] })
-const { listSorted, isAscending, sortOrder } = useArticleSort(listRaw)
+const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted)
 
 const listGrouped = computed(() => {
+	// reverse 不是可有可无的：groupBy 的键是 "2021" 这类类整数字符串，JS 会把它们当作数组索引，
+	// Object.entries 一律按数值升序吐出，与 listSorted 的倒序无关。故这里必须再翻一次，
+	// 年份才是新到旧。与去掉排序开关之前的默认行为（allowAscending: false）一致
 	const groupList = Object.entries(groupBy(listCategorized.value, getArticleYear))
-	return isAscending.value ? groupList : groupList.reverse()
+	return groupList.reverse()
 })
 
 // 不能使用 /api/stats，因为可能切换分组方式
@@ -36,7 +39,7 @@ const yearlyWordCount = computed(() =>
 
 function getArticleYear(article: ArticleProps) {
 	try {
-		return toZonedTemporal(article[sortOrder.value] as string).year.toString()
+		return toZonedTemporal(article.date as string).year.toString()
 	}
 	catch {
 		return ''
@@ -51,13 +54,12 @@ function getArticleYear(article: ArticleProps) {
 	<TransitionGroup name="aside-widget">
 		<WidgetBlogStats key="blog-stats" />
 		<WidgetBlogLog key="blog-log" />
+		<WidgetBlogTech key="blog-tech" />
 	</TransitionGroup>
 </template>
 
 <div class="archive proper-height">
-	<PostOrderToggle
-		v-model:is-ascending="isAscending"
-		v-model:sort-order="sortOrder"
+	<PostFilter
 		v-model:category="category"
 		:categories
 	>
@@ -67,7 +69,7 @@ function getArticleYear(article: ArticleProps) {
 				label="密度调节"
 			/>
 		</ZSecret>
-	</PostOrderToggle>
+	</PostFilter>
 
 	<section
 		v-for="[year, yearGroup] in listGrouped"
@@ -102,7 +104,6 @@ function getArticleYear(article: ArticleProps) {
 				v-bind="article"
 				:to="article.path"
 				:show-category="column < 3"
-				:use-updated="sortOrder === 'updated'"
 				:style="getFixedDelay(index * 0.03)"
 			/>
 		</TransitionGroup>

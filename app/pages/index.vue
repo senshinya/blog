@@ -8,7 +8,7 @@ useSeoMeta({
 })
 
 const { data: listRaw } = await useAsyncData('posts:index', () => getArticleIndexOptions(), { default: () => [] })
-const { listSorted, isAscending, sortOrder } = useArticleSort(listRaw, { bindDirectionQuery: 'asc', bindOrderQuery: 'sort' })
+const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted, { bindQuery: 'category' })
 const { page, totalPages, listPaged } = usePagination(listCategorized, { bindQuery: 'page' })
 
@@ -51,9 +51,7 @@ const { data: previewCount } = useAsyncData(
 <PostSlide v-if="listRecommended.length && page === 1 && !category" :list="listRecommended" />
 
 <div class="post-list">
-	<PostOrderToggle
-		v-model:is-ascending="isAscending"
-		v-model:sort-order="sortOrder"
+	<PostFilter
 		v-model:category="category"
 		:categories
 	>
@@ -63,7 +61,7 @@ const { data: previewCount } = useAsyncData(
 				查看预览文章
 			</UtilLink>
 		</ZSecret>
-	</PostOrderToggle>
+	</PostFilter>
 
 	<TransitionGroup tag="menu" class="proper-height" name="float-in">
 		<PostArticle
@@ -71,7 +69,6 @@ const { data: previewCount } = useAsyncData(
 			:key="article.path"
 			v-bind="article"
 			:to="article.path"
-			:use-updated="sortOrder === 'updated'"
 			:style="getFixedDelay(index * 0.05)"
 		/>
 	</TransitionGroup>

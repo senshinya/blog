@@ -21,14 +21,12 @@ const layoutStore = useLayoutStore()
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
-
 	overflow: auto;
 	padding: 0.5rem;
 	z-index: var(--z-index-popover);
 
 	// 离场的 widget 必须脱离文档流：否则它收缩期间仍然占位（flex 的 gap 也还在），
 	// 下方 widget 只能等它彻底消失后硬跳上来，TransitionGroup 的 FLIP 位移就白设了。
-	//
 	// 包含块由布局给的 position: sticky 提供（窄屏下是本组件的 fixed），两者都是定位元素，
 	// 不要在此另加 position: relative —— scoped 样式会编译成 #blog-aside[data-v-xxx]，
 	// 特异度高于布局里的 #blog-aside，会把 sticky 覆盖掉，侧栏就不吸顶了。

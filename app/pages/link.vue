@@ -30,6 +30,7 @@ const copyFields = {
 		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
 	<TransitionGroup name="aside-widget">
 		<WidgetBlogStats key="blog-stats" />
+		<WidgetMemos key="memos" />
 		<WidgetBlogTech key="blog-tech" />
 	</TransitionGroup>
 </template>

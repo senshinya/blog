@@ -33,7 +33,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 </script>
 
 <template>
-<BlogWidget card title="碎碎念">
+<BlogWidget card title="碎语">
 	<template #action>
 		<UtilLink to="/memos" class="more">
 			全部<Icon name="tabler:chevron-right" />

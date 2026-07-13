@@ -101,7 +101,7 @@ export default defineAppConfig({
 	/** 友链页面 */
 	link: {
 		/** 无订阅源展示静音图标 */
-		remindNoFeed: true,
+		remindNoFeed: false,
 		/** 友链分组内随机排序 */
 		randomInGroup: true,
 	},
@@ -112,8 +112,8 @@ export default defineAppConfig({
 			title: '',
 			items: [
 				{ icon: 'tabler:files', text: '文章', url: '/' },
-				{ icon: 'tabler:bubble-text', text: '碎语', url: '/memos' },
 				{ icon: 'tabler:map-2', text: '游记', url: '/travels' },
+				{ icon: 'tabler:bubble-text', text: '碎语', url: '/memos' },
 				{ icon: 'tabler:archive', text: '归档', url: '/archive' },
 				{ icon: 'tabler:link', text: '友链', url: '/link' },
 			],
@@ -122,10 +122,6 @@ export default defineAppConfig({
 
 	pagination: {
 		perPage: 10,
-		/** 默认排序方式，需要是 this.article.order 中的键名 */
-		sortOrder: 'date' as keyof typeof blogConfig.article.order,
-		/** 允许（普通/预览/归档）文章列表正序，开启后排序方式左侧图标可切换顺序 */
-		allowAscending: false,
 	},
 
 	themes: {
