@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
 
-const props = defineProps<{ useUpdated?: boolean } & ArticleProps>()
-const showAllDate = isTimeDiffSignificant(props.date, props.updated)
+defineProps<ArticleProps>()
 </script>
 
 <template>
@@ -19,16 +18,9 @@ const showAllDate = isTimeDiffSignificant(props.date, props.updated)
 
 		<div class="article-info">
 			<UtilDate
-				v-if="date && (showAllDate || !useUpdated)"
+				v-if="date"
 				:date
 				icon="tabler:pencil-minus"
-			/>
-
-			<UtilDate
-				v-if="updated && (showAllDate || useUpdated)"
-				:class="{ 'use-updated': useUpdated }"
-				:date="updated"
-				icon="tabler:clock-edit"
 			/>
 
 			<span v-if="categories" :style="{ color: getCategoryColor(categories[0]) }">
@@ -70,10 +62,6 @@ const showAllDate = isTimeDiffSignificant(props.date, props.updated)
 
 	&:empty {
 		display: none;
-	}
-
-	.use-updated {
-		order: -1;
 	}
 }
 

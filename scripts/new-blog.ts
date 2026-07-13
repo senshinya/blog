@@ -151,7 +151,6 @@ const frontmatter = {
 	title,
 	description: `讲述关于${title}的故事，并根据${tags?.join('、')}给出${category}。`,
 	date: dateStr,
-	updated: dateStr,
 	image: '# 封面图推荐 2:1，不含与标题重复的文字',
 	permalink,
 	type: type === 'tech' ? undefined : type,

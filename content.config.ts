@@ -12,7 +12,6 @@ export interface ArticleSchema {
 	title?: string
 	description?: string
 	date?: string
-	updated?: string
 	published?: string
 	categories?: string[]
 	tags?: string[]
@@ -32,7 +31,6 @@ const articleSchema = z.object({
 	title: z.string().optional(),
 	description: z.string().optional(),
 	date: z.string().optional(),
-	updated: z.string().optional(),
 	published: z.string().optional(),
 	categories: z.array(z.string()).default([blogConfig.defaultCategory]),
 	tags: z.array(z.string()).default([]),
@@ -63,7 +61,7 @@ export const collections = {
 			sitemap: defineSitemapSchema({
 				name: 'content',
 				onUrl: (url, entry) => {
-					const lastmod = (entry.updated || entry.published || entry.date) as string | undefined
+					const lastmod = (entry.published || entry.date) as string | undefined
 					if (lastmod)
 						url.lastmod = new Date(lastmod).toLocaleDateString('sv')
 				},

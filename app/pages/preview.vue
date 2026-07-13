@@ -5,7 +5,7 @@ useSeoMeta({
 	description: `${appConfig.title}的文章预览。`,
 })
 const { data: listRaw } = await useAsyncData('previews:index', () => getArticleIndexOptions('previews/%'), { default: () => [] })
-const { listSorted, isAscending, sortOrder } = useArticleSort(listRaw)
+const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted)
 </script>
 
@@ -25,9 +25,7 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 				<Icon name="tabler:chevron-left" />
 			</UtilLink>预览
 		</h1>
-		<PostOrderToggle
-			v-model:is-ascending="isAscending"
-			v-model:sort-order="sortOrder"
+		<PostFilter
 			v-model:category="category"
 			:categories
 		/>
@@ -40,7 +38,6 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 			:key="article.path"
 			v-bind="article"
 			:to="article.path"
-			:use-updated="sortOrder === 'updated'"
 		/>
 	</menu>
 </div>

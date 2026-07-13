@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
 
-const props = defineProps<{
+defineProps<{
 	to?: string
-	useUpdated?: boolean
 	showCategory?: boolean
 } & ArticleProps>()
-
-const mainDate = computed(() => props.useUpdated ? props.updated : props.date)
 </script>
 
 <template>
 <li class="article-item">
-	<UtilDate class="dim-hover" :date="mainDate" format="monthDay" />
+	<UtilDate class="dim-hover" :date format="monthDay" />
 
 	<div class="gradient-card" :style="{ '--c-accent': getCategoryColor(categories?.[0]) }">
 		<UtilLink class="article-link scrollbar-hidden scrollcheck-x" :to :title="description">
@@ -20,13 +17,6 @@ const mainDate = computed(() => props.useUpdated ? props.updated : props.date)
 				<Icon v-if="showCategory" :name="getCategoryIcon(categories?.[0])" />
 				{{ title }}
 			</span>
-
-			<UtilDate
-				v-if="date && useUpdated && isTimeDiffSignificant(date, updated)"
-				class="dim-hover info"
-				:date="date"
-				:format="updated && isSameUnit(date, updated, 'year') ? 'monthDay' : 'date'"
-			/>
 
 			<ul v-if="tags?.length" class="dim-hover info tag-list">
 				<li v-for="tag in tags" :key="tag" v-text="tag" />

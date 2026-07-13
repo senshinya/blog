@@ -47,11 +47,6 @@ const blogConfig = {
 			tech: {},
 			story: {},
 		},
-		/** 分类排序方式，键为排序字段，值为显示名称 */
-		order: {
-			date: '创建日期',
-			updated: '更新日期',
-		},
 		/** 使用 pnpm new 新建文章时自动生成自定义链接（permalink/abbrlink） */
 		useRandomPremalink: false,
 		/** 隐藏基于文件路由（不是自定义链接）的 URL /post 路径前缀 */

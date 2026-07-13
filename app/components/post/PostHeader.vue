@@ -37,14 +37,6 @@ const { copy, copied } = useCopy(shareText)
 				icon="tabler:pencil-minus"
 			/>
 
-			<UtilDate
-				v-if="updated && isTimeDiffSignificant(date, updated, 1)"
-				v-tip
-				:tip-transform="d => `修改于${d}`"
-				:date="updated"
-				icon="tabler:clock-edit"
-			/>
-
 			<span v-if="categories">
 				<Icon :name="getCategoryIcon(categories[0])" />
 				{{ categories[0] }}

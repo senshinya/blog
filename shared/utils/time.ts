@@ -1,42 +1,8 @@
 import { Temporal } from 'temporal-polyfill'
 import blogConfig from '~~/blog.config'
 
-export function isSameUnit(date1: string, date2: string, unit: Temporal.DateTimeUnit) {
-	try {
-		const p1 = toZonedTemporal(date1).toPlainDateTime()
-		const p2 = toZonedTemporal(date2).toPlainDateTime()
-		return p1.until(p2, {
-			largestUnit: unit,
-			smallestUnit: unit,
-			roundingMode: 'trunc',
-		}).blank
-	}
-	catch {
-		return false
-	}
-}
-
-/** 检查两个时间相对现在是否相差显著 */
-export function isTimeDiffSignificant(
-	date1?: string,
-	date2?: string,
-	/** 对于时间差的敏感程度，0~1 之间，1:不同则认为显著，>1:始终认为显著 */
-	threshold = 0.6,
-) {
-	if (!date1 || !date2 || threshold <= 0)
-		return false
-	if (threshold > 1)
-		return true
-	try {
-		const now = Temporal.Now.instant().epochMilliseconds
-		const diff1 = now - toZonedTemporal(date1).epochMilliseconds
-		const diff2 = now - toZonedTemporal(date2).epochMilliseconds
-		return diff1 / diff2 < threshold || diff2 / diff1 < threshold
-	}
-	catch {
-		return true
-	}
-}
+// isSameUnit 和 isTimeDiffSignificant 随「更新日期」一并删除 ——
+// 它们存在的唯一目的就是判断 date 和 updated 差得够不够远、值不值得两个都显示
 
 const timeIntervals = [
 	{ label: '世纪', threshold: 60 * 60 * 24 * 365.2422 * 100 },

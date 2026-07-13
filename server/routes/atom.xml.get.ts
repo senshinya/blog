@@ -43,14 +43,17 @@ function renderContent(post: ContentCollectionItem) {
 export default defineEventHandler(async (event) => {
 	const posts = await queryCollection(event, 'content')
 		.where('stem', 'LIKE', 'posts/%')
-		.order('updated', 'DESC')
+		.order('date', 'DESC')
 		.limit(blogConfig.feed.limit)
 		.all()
 
 	const entries = posts.map(post => ({
 		id: getUrl(post.path),
 		title: post.title ?? '',
-		updated: formatIsoDate(post.updated),
+		// Atom 的 <updated> 是必填元素（RFC 4287 §4.2.15），不能因为字段删了就不发。
+		// 改用创建日期 —— 原先这里取的 post.updated 其实一篇文章都没写过，
+		// 等于一直在给 formatIsoDate 喂 undefined，顺带上面那句 order('updated') 也是在按空列排
+		updated: formatIsoDate(post.date),
 		author: { name: post.author || blogConfig.author.name },
 		content: {
 			$type: 'html',

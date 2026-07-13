@@ -1,6 +1,6 @@
 import type { ContentCollectionItem } from '@nuxt/content'
 import type { MetaSlotsTree } from '~~/remark-plugins/rehype-meta-slots'
-import type { ArticleOrderType, ArticleProps } from '~/types/article'
+import type { ArticleProps } from '~/types/article'
 import { orderBy } from 'es-toolkit/array'
 
 /** 获取已加载的文章内容/元信息 */
@@ -26,7 +26,7 @@ export function useArticle(path?: MaybeRefOrGetter<string | undefined>) {
 export function getArticleIndexOptions(path = 'posts/%') {
 	return queryCollection('content')
 		.where('stem', 'LIKE', path)
-		.select('categories', 'date', 'description', 'image', 'path', 'readingTime', 'recommend', 'tags', 'title', 'type', 'updated')
+		.select('categories', 'date', 'description', 'image', 'path', 'readingTime', 'recommend', 'tags', 'title', 'type')
 		.all()
 }
 
@@ -56,45 +56,16 @@ export function useCategory(list: MaybeRefOrGetter<ArticleProps[]>, options?: Us
 	}
 }
 
-interface UseArticleSortOptions {
-	bindDirectionQuery?: string
-	bindOrderQuery?: string
-	initialAscend?: boolean
-	initialOrder?: ArticleOrderType
-}
-
-export function useArticleSort(list: MaybeRefOrGetter<ArticleProps[]>, options?: UseArticleSortOptions) {
-	const appConfig = useAppConfig()
-	const {
-		bindDirectionQuery,
-		bindOrderQuery,
-		initialAscend = false,
-		initialOrder = appConfig.pagination.sortOrder || 'date',
-	} = options || {}
-
-	const sortOrder = bindOrderQuery
-		? useRouteQuery(bindOrderQuery, initialOrder)
-		: ref<ArticleOrderType>(initialOrder)
-
-	const booleanQueryTransformer = {
-		get: (val: string) => val === 'true',
-		set: (val: boolean) => val.toString(),
-	}
-
-	const isAscending = bindDirectionQuery
-		? useRouteQuery(bindDirectionQuery, initialAscend.toString(), { transform: booleanQueryTransformer })
-		: ref<boolean>(initialAscend)
-
-	const listSorted = computed(() => orderBy(
-		toValue(list),
-		[sortOrder.value, 'date'],
-		[isAscending.value ? 'asc' : 'desc'],
-	))
-
+/**
+ * 文章列表一律按创建日期倒序。
+ *
+ * 曾经这里是一整套可切换的排序（排序字段 + 升降序，都绑在 URL query 上），
+ * 但可选的字段只有 date 和 updated 两个，而 updated 从来没有一篇文章真正写过 ——
+ * 于是那个开关永远在两个等价的顺序之间切换。连同 updated 一起删掉了。
+ */
+export function useArticleSort(list: MaybeRefOrGetter<ArticleProps[]>) {
 	return {
-		sortOrder,
-		isAscending,
-		listSorted,
+		listSorted: computed(() => orderBy(toValue(list), ['date'], ['desc'])),
 	}
 }
 
