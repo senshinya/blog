@@ -21,6 +21,19 @@ const STYLE = {
 	dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
 }
 
+/**
+ * 中文优先的标签。
+ *
+ * 瓦片里本来就带 name:zh（北京那块能取到「丰镇市」「京台高速」），是 CARTO 的样式没去读它 ——
+ * 它把 text-field 写死成 {name_en}（低缩放）和 {name}（高缩放），于是中国地名一路显示成英文。
+ * 这里不换底图，只在样式装载后把标签图层的 text-field 重写掉。
+ *
+ * 退到 name（本地名）而不是直接退到拉丁名：日本地名缺 name:zh 时，「清水寺」比「Kiyomizu-dera」好读。
+ * CJK 字形由 MapLibre 的 localIdeographFontFamily（默认 sans-serif）在本地渲染，不向字形服务器要 ——
+ * 所以中文标签既不额外耗带宽，也不用配字体。
+ */
+const LABEL_FIELD = ['coalesce', ['get', 'name:zh'], ['get', 'name'], ['get', 'name:latin']]
+
 const container = useTemplateRef<HTMLElement>('container')
 const colorMode = useColorMode()
 
@@ -37,30 +50,73 @@ function styleUrl() {
 	return colorMode.value === 'dark' ? STYLE.dark : STYLE.light
 }
 
+/** 把当前样式里所有地名标签换成中文优先。样式一换（换肤）就得重放一次 */
+function localizeLabels() {
+	if (!map)
+		return
+
+	for (const layer of map.getStyle().layers) {
+		if (layer.type !== 'symbol')
+			continue
+
+		const field = layer.layout?.['text-field']
+		if (!field)
+			continue
+
+		// 只动画地名的图层。门牌号图层的 text-field 是 {housenumber}，跟 name 无关，
+		// 一并重写会让三个 name 字段全取空，门牌号当场消失
+		if (!JSON.stringify(field).includes('name'))
+			continue
+
+		map.setLayoutProperty(layer.id, 'text-field', LABEL_FIELD)
+	}
+}
+
 function geoPhotos() {
 	return props.photos.filter(photo => photo.lat != null && photo.lng != null)
 }
 
-/** popup 里是一张缩略图 + 图题。MapLibre 只吃 DOM 节点，故手工拼 */
+/**
+ * popup 里是一张缩略图 + 图题。MapLibre 只吃 DOM 节点，故手工拼。
+ *
+ * 这里**故意不给 img 赋 src** —— 赋 src 的那一刻浏览器就开始下载了（此时 loading 还是
+ * 默认的 eager，之后再补 loading='lazy' 也拦不住已经在飞的请求）。而 renderPhotos 会给
+ * 每张照片都建一个 popup：封面屏那一下要建 49 个，等于把整趟旅程的原图（27 MB，都是
+ * 4000px 以上的相机原片）全部预载一遍，把 PhotoCard 那边辛苦做的 lazy 整个抵消掉。
+ *
+ * src 留到 popup 真正打开时再补（见 renderPhotos）。样式里给了 aspect-ratio，
+ * 所以没有 src 时占位尺寸也是对的，图到位不会把 popup 撑得跳一下。
+ */
 function popupContent(photo: TravelPhoto) {
 	const figure = document.createElement('figure')
 	figure.className = 'travel-popup'
 
 	const img = document.createElement('img')
-	img.src = photo.src
 	img.alt = photo.alt
-	img.loading = 'lazy'
+
+	// 占位色。CSS 那条规则是按 [style*="--lqip:"] 命中的，setProperty 写出来的正是这个形状
+	const meta = getImgMeta(photo.src)
+	if (meta)
+		img.style.setProperty('--lqip', `#${meta.lqip}`)
 
 	const caption = document.createElement('figcaption')
 	caption.textContent = photo.alt
 
 	figure.append(img, caption)
-	return figure
+	return { figure, img }
 }
 
 function clearMarkers() {
 	markers.forEach(marker => marker.remove())
 	markers = new Map()
+}
+
+/** 收掉所有已打开的 popup —— 同一时刻只该有当前这张照片的那一个 */
+function closePopups() {
+	markers.forEach((marker) => {
+		if (marker.getPopup()?.isOpen())
+			marker.togglePopup()
+	})
 }
 
 /** 把视野收回到当前这批照片的范围 */
@@ -105,11 +161,19 @@ function renderPhotos() {
 		dot.setAttribute('aria-label', photo.alt)
 		element.append(dot)
 
+		const { figure, img } = popupContent(photo)
+
 		const popup = new maplibre.Popup({
 			offset: 14,
 			closeButton: false,
 			maxWidth: '15rem',
-		}).setDOMContent(popupContent(photo))
+		}).setDOMContent(figure)
+
+		// 到这一刻才真去取图。once 就够：popup 关掉再开时 MapLibre 留着同一份 DOM，
+		// img 上的 src 还在，不必重设
+		popup.once('open', () => {
+			img.src = getTravelImg(photo.src, TravelImgWidth.popup)
+		})
 
 		const marker = new maplibre.Marker({ element })
 			.setLngLat([photo.lng!, photo.lat!])
@@ -123,7 +187,7 @@ function renderPhotos() {
 	map.fitBounds(bounds, { padding: 72, maxZoom: 15, duration: 1200 })
 }
 
-/** 聚焦单张照片：飞过去并开 popup */
+/** 聚焦单张照片：飞过去，并且只留它自己的 popup */
 function focusPhoto(photo: TravelPhoto) {
 	if (!map || photo.lat == null || photo.lng == null)
 		return
@@ -133,6 +197,9 @@ function focusPhoto(photo: TravelPhoto) {
 		zoom: 16,
 		duration: 1200,
 	})
+
+	// 先收掉上一张的 popup，否则一路翻下去会在地图上堆一片弹窗
+	closePopups()
 
 	const marker = markers.get(photo)
 	if (marker && !marker.getPopup()?.isOpen())
@@ -156,7 +223,10 @@ onMounted(async () => {
 		})
 
 		map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'bottom-right')
-		map.on('load', () => ready.value = true)
+		map.on('load', () => {
+			localizeLabels()
+			ready.value = true
+		})
 	}
 	catch (error) {
 		console.error('[travel] 地图初始化失败，降级为无地图模式：', error)
@@ -187,12 +257,20 @@ watch(() => props.focus, (photo) => {
 	}
 
 	// 看图器关掉了：收起 popup，视野退回这一屏的全貌
-	markers.forEach(marker => marker.getPopup()?.isOpen() && marker.togglePopup())
+	closePopups()
 	fitToPhotos()
 })
 
-// 标记是 DOM 覆盖物，不随 setStyle 销毁，故换肤后无需重建
-watch(() => colorMode.value, () => map?.setStyle(styleUrl()))
+// 标记是 DOM 覆盖物，不随 setStyle 销毁，故换肤后无需重建。
+// 但图层表会被整份换掉，中文标签得跟着重放 —— styledata 在新样式就位后触发，
+// 用 once 而不是 on：localizeLabels 自己会改 layout，on 会被自己触发的 styledata 打回来，转成死循环
+watch(() => colorMode.value, () => {
+	if (!map)
+		return
+
+	map.setStyle(styleUrl())
+	map.once('styledata', localizeLabels)
+})
 </script>
 
 <template>

@@ -31,6 +31,11 @@ const photoCount = travel.days.reduce((sum, day) => sum + day.photos.length, 0)
 /** 当前这一屏；-1 是封面屏 */
 const activeIndex = ref(-1)
 
+// 声明放在这里而不是挨着 onMounted：stepPhoto 跨天翻图时要用 screens 去滚动定位，
+// 而它在下面，声明晚了会触发 no-use-before-define
+const scroller = useTemplateRef<HTMLElement>('scroller')
+const screens = ref<HTMLElement[]>([])
+
 // ── 看图器 ──
 // 不用全站那个灯箱：它是整屏遮罩，一弹出就把右边的地图盖住了，
 // 「看大图」和「看这张拍在哪」两件事互相打架。这里的看图器只占叙事列，
@@ -57,8 +62,27 @@ function closeViewer() {
 
 function stepPhoto(delta: number) {
 	const next = viewerIndex.value + delta
-	if (next >= 0 && next < viewerPhotos.value.length)
+
+	// 还在这一天之内，翻页就完事
+	if (next >= 0 && next < viewerPhotos.value.length) {
 		viewerIndex.value = next
+		return
+	}
+
+	// 翻过了这一天的头尾：接着串到相邻那一天，不用退出看图模式
+	const nextScreen = viewerScreen.value + (delta > 0 ? 1 : -1)
+	const photos = travel.days[nextScreen]?.photos
+	if (!photos?.length)
+		return // 整篇的第一张之前 / 最后一张之后，到头了
+
+	viewerScreen.value = nextScreen
+	viewerIndex.value = delta > 0 ? 0 : photos.length - 1
+
+	// 底下的页面也跟着翻到这一天：否则关掉看图器会发现自己还停在上一天
+	activeIndex.value = nextScreen
+	screens.value
+		.find(screen => screen.dataset.index === String(nextScreen))
+		?.scrollIntoView({ block: 'start' })
 }
 
 // 看图时滚轮不翻屏，而是一张一张翻照片。
@@ -113,9 +137,6 @@ onKeyStroke(['ArrowRight', 'ArrowDown'], (e) => {
 /** 窄屏上地图是吸顶条，占着一截高度，给个收起开关 */
 const mapCollapsed = ref(false)
 
-const scroller = useTemplateRef<HTMLElement>('scroller')
-const screens = ref<HTMLElement[]>([])
-
 // 封面屏是静态元素、日子屏是 v-for 出来的，两者不能共用一个 ref 名
 // （v-for 的 ref 收集成数组，静态 ref 会把它覆盖掉）。统一在挂载后查一次 DOM。
 onMounted(() => {
@@ -145,13 +166,19 @@ useIntersectionObserver(
 )
 
 /**
- * 喂给地图的照片：封面屏给全程（开场先亮出整趟路线的轮廓），
- * 之后只给当前这一天。
+ * 喂给地图的照片：封面屏给全程（开场先亮出整趟路线的轮廓），之后只给当前这一天。
+ *
+ * 看图时直接认看图器所在的那一天 —— 一路翻到下一天时，地图要立刻跟着换掉标记，
+ * 不能等 IntersectionObserver 那一拍。
  */
-const mapPhotos = computed(() => activeIndex.value < 0
-	? travel.days.flatMap(day => day.photos)
-	: travel.days[activeIndex.value]?.photos ?? [],
-)
+const mapPhotos = computed(() => {
+	if (viewerOpen.value)
+		return viewerPhotos.value
+
+	return activeIndex.value < 0
+		? travel.days.flatMap(day => day.photos)
+		: travel.days[activeIndex.value]?.photos ?? []
+})
 
 /** 只在「这一天的第一屏」上打 Day 徽章 —— 同一天可能拆成好几屏 */
 function startsNewDay(index: number) {
@@ -185,7 +212,7 @@ function startsNewDay(index: number) {
 			<section
 				class="travel-screen travel-cover"
 				data-index="-1"
-				:style="{ backgroundImage: `url(${travel.coverImage})` }"
+				:style="{ backgroundImage: `url(${getTravelImg(travel.coverImage, TravelImgWidth.hero)})` }"
 			>
 				<div class="travel-cover-text">
 					<p class="travel-cover-badge">
@@ -271,16 +298,33 @@ function startsNewDay(index: number) {
 					<Icon name="tabler:x" />
 				</button>
 
-				<img
-					:key="viewerPhoto.src"
-					class="travel-viewer-img"
-					:src="viewerPhoto.src"
-					:alt="viewerPhoto.alt"
-				>
+				<!--
+					figcaption 只能是 figure 的子元素，故补上这层 figure —— 之前它直接躺在 div 里，
+					是无效 HTML，浏览器根本不给它 figcaption 语义，还会警告水合风险。
+					figure 上挂 display: contents（见样式），不生成盒子，img 和 figcaption 仍是
+					.travel-viewer 的直接 flex 子项，布局一点不动。
+				-->
+				<figure class="travel-viewer-figure">
+					<!--
+						width / height 是这里唯一真正修布局跳变的东西：这张图只有 max-width/max-height，
+						没有任何内在尺寸，加载前是 0×0，加载完突然撑开，把底下的图题和翻页条一起顶下去。
+						（游记别处的图都有 aspect-ratio 的盒子兜着，不跳；正文那 37 张则跳得更凶。）
+						--lqip 只是在占好的位置上先糊一层主色，它本身修不了跳变。
+					-->
+					<img
+						:key="viewerPhoto.src"
+						class="travel-viewer-img"
+						:src="getTravelImg(viewerPhoto.src, TravelImgWidth.viewer)"
+						:alt="viewerPhoto.alt"
+						:width="getImgMeta(viewerPhoto.src)?.w"
+						:height="getImgMeta(viewerPhoto.src)?.h"
+						:style="getLqipStyle(viewerPhoto.src)"
+					>
 
-				<figcaption class="travel-viewer-caption">
-					{{ viewerPhoto.caption || viewerPhoto.alt }}
-				</figcaption>
+					<figcaption class="travel-viewer-caption">
+						{{ viewerPhoto.caption || viewerPhoto.alt }}
+					</figcaption>
+				</figure>
 
 				<div class="travel-viewer-bar">
 					<button
@@ -537,6 +581,16 @@ function startsNewDay(index: number) {
 	background-color: var(--c-bg-a80);
 	backdrop-filter: blur(1rem) saturate(1.6);
 	z-index: 4;
+}
+
+// 只为让 figcaption 有个合法的父元素，不参与布局。
+// 不能让它生成盒子：.travel-viewer-img 的 max-height: 100% 要有一个「高度确定」的父元素才算得出来，
+// 而 .travel-viewer 是 position: fixed + inset，高度是确定的。中间插一个高度由内容撑起（auto）的
+// figure，那个百分比就会解析成 none，图会当场撑破容器。
+// display: contents 让 figure 不生成盒子，img 和 figcaption 仍是 .travel-viewer 的直接 flex 子项 ——
+// 连 gap: 1rem 都照常落在它们之间，布局一个像素都不动
+.travel-viewer-figure {
+	display: contents;
 }
 
 .travel-viewer-img {
