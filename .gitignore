@@ -23,6 +23,13 @@ logs
 .env.*
 !.env.example
 
-# Custom
+# Deploy platforms
 .vercel
+.netlify
+
+# AI 助手的工作文件：设计稿、实施计划、会话产物，都是过程性的，不进仓库
+docs/
+.claude/
+
+# Custom
 content/posts/test.md
