@@ -27,6 +27,11 @@ const cache = new Map<string, GiscusCount>()
  * 走 giscus 的公开接口（它用自己 App 的 token 代查 GitHub），
  * 故前端无需任何 token，也不必自建服务端。
  *
+ * 但**不能直接 fetch giscus.app** —— 那个接口对任何 Origin 都硬编码返回
+ * `Access-Control-Allow-Origin: https://giscus.app`，不回显请求方，浏览器必拦。
+ * 故走 /giscus-api/* 这个同源代理，由服务端转发过去。
+ * dev 下由 nuxt.config 的 routeRules 提供，生产由 netlify.toml 的 redirects 提供。
+ *
  * 尚无人评论/reaction 的 term 不存在对应 Discussion，接口返回 404 —— 这是
  * 绝大多数碎语的常态，按「零互动」处理，不当作错误。
  */
@@ -52,7 +57,7 @@ export default function useGiscusCount(term: MaybeRefOrGetter<string>, visible: 
 					totalCommentCount: number
 					reactions: Record<string, { count: number }>
 				}
-			}>('https://giscus.app/api/discussions', {
+			}>('/giscus-api/discussions', {
 				query: {
 					repo: giscus.repo,
 					term: key,

@@ -97,6 +97,24 @@ export default defineNuxtConfig({
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
 		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		'/favicon.ico': { redirect: { to: blogConfig.favicon } },
+		/**
+		 * giscus 接口的同源代理（碎语的 reaction 数走它，见 composables/useGiscusCount）。
+		 *
+		 * 不能让浏览器直接去 fetch giscus.app —— 那个接口对任何 Origin 都硬编码返回
+		 * `Access-Control-Allow-Origin: https://giscus.app`，不回显请求方，
+		 * 也就是压根不打算被第三方站点跨域调用（它只服务自己的 iframe）。
+		 * 于是浏览器必拦，reaction 永远读不出来。
+		 *
+		 * 绕开的办法不是去调 CORS 响应头（方向反了，那是我们发给别人的头），
+		 * 而是把请求收回同源：前端打 /giscus-api/*，由服务端转发到 giscus.app/api/*。
+		 * 同源请求根本不触发 CORS 检查。
+		 *
+		 * 这份只在 dev 下生效 —— 生产走 SSG（netlify-static preset），没有服务端，
+		 * nitro 会把 proxy 规则丢弃。生产的那条在 netlify.toml 里，两处要一起改。
+		 *
+		 * 路径避开 /giscus/*：那个留给自定义主题 CSS（见 netlify.toml），撞上会被代理劫持。
+		 */
+		'/giscus-api/**': { proxy: 'https://giscus.app/api/**' },
 		'/subscriptions.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 	},
 

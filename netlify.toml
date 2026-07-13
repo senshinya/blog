@@ -1,3 +1,31 @@
+# Netlify 只从 base directory（本项目为仓库根）读这个文件。
+# 放进 public/ 是不行的 —— 那样它只会被当成静态资源发布到 dist/netlify.toml，不会被解析。
+
+# ── giscus 接口的同源代理 ──────────────────────────────────────────────
+# 碎语的 reaction 数走它，见 app/composables/useGiscusCount.ts。
+#
+# 不能让浏览器直接 fetch giscus.app：那个接口对任何 Origin 都硬编码返回
+# `Access-Control-Allow-Origin: https://giscus.app`，不回显请求方 —— 它压根不打算被
+# 第三方站点跨域调用（只服务自己的 iframe）。浏览器必拦，reaction 永远读不出来。
+#
+# 解法不是去调 CORS 响应头，而是把请求收回同源：前端打 /giscus-api/*，
+# 由 Netlify 转发到 giscus.app/api/*。同源请求不触发 CORS 检查。
+#
+# 路径特意避开 /giscus/* —— 那个留给下面的自定义主题 CSS，撞在一起会被代理劫持。
+#
+# 为什么必须写在这里，而不是只靠 nuxt.config 的 routeRules proxy：
+# 站点走 SSG（nuxt generate → netlify-static preset），没有服务端，nitro 会把 proxy
+# 规则直接丢弃、不写进 dist/_redirects。routeRules 那份只在 dev 下生效。
+[[redirects]]
+  from = "/giscus-api/*"
+  to = "https://giscus.app/api/:splat"
+  status = 200
+  force = true
+
+# ── 自定义 giscus 主题 CSS ────────────────────────────────────────────
+# 方向与上面相反：这是「我们的站点把文件发给 giscus」。giscus 的 iframe（origin 为
+# giscus.app）跨域来取 /giscus/*.css，故需放行它的 origin。
+# 目前 public/giscus/ 下还没有文件，这条是为将来备下的。
 [[headers]]
   for = "/giscus/*"
   [headers.values]
