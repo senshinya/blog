@@ -1,4 +1,5 @@
-import { resolve } from 'node:path'
+import { readdirSync } from 'node:fs'
+import { basename, resolve } from 'node:path'
 import { arch, env, version as nodeVersion, platform } from 'node:process'
 import { pathToFileURL } from 'node:url'
 import { name as ciName, CLOUDFLARE_PAGES, GITHUB_ACTIONS, NETLIFY } from 'ci-info'
@@ -12,6 +13,12 @@ import redirectList from './redirects.json'
 function pluginPath(path: string) {
 	return pathToFileURL(resolve(`./remark-plugins/${path}.ts`)).href
 }
+
+// 游记数据是 app/travels/*.yaml。加载 nuxt.config 的 jiti 不认 yaml，配置期读不到内容，
+// 所以从文件名推路由 —— 文件名即 slug，这条约定由迁移脚本和 app/travels/index.ts 共同保证。
+const travelRoutes = readdirSync(resolve('./app/travels'))
+	.filter(file => file.endsWith('.yaml'))
+	.map(file => `/travels/${basename(file, '.yaml')}`)
 
 // 此处配置无需修改
 export default defineNuxtConfig({
@@ -76,12 +83,9 @@ export default defineNuxtConfig({
 			// https://github.com/nuxt/content/issues/2378
 			autoSubfolderIndex: CLOUDFLARE_PAGES || GITHUB_ACTIONS || NETLIFY ? false : undefined,
 
-			// 游记本轮未迁移，但正文里仍留有指向 /travels/* 的内链（如 one-month-using-android
-			// 里的「关西行」）。预渲染爬虫会顺着内链爬过去、拿到 404，进而中断整个构建。
-			// 只忽略 /travels 这一个前缀，其余路由的 404 仍然照常让构建失败——
-			// 不用 failOnError: false，否则任何一个真坏掉的页面都会被静默放行。
-			// 代价：这些链接上线后点进去是 404，待游记迁完后删掉此项。
-			ignore: ['/travels'],
+			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳。
+			// 显式登记：列表页 + 每篇详情页，漏链也不会静默不生成。
+			routes: ['/travels', ...travelRoutes],
 		},
 	},
 
