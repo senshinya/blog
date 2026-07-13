@@ -1,0 +1,290 @@
+slug: kansai-202504
+title: 近畿地方
+subtitle: "2025.4"
+posttitle: 游记：近畿地方（2025.4）
+description: |-
+  4 月的一个周末，
+  同事说，我们去日本玩吧，
+  于是，我们就去了日本。
+published: 2025-05-19
+totaldays: 3
+coverImage: https://blog-img.774352199.xyz/X1lM9m.webp
+days:
+  - day: 0
+    title: 浦东机场的不眠之夜
+    descriptions:
+      - 周五晚上一下班就乘高铁前往上海浦东机场，机票定在了周六早上六点。头一次赶这么早的飞机，毫无经验，定了一家离机场很远的酒店，最后一合计，得，不如在机场凑活一夜了。
+      - 如果我能提前知道在浦东机场过夜有多么困难，我宁愿在酒店躺上几个小时，也不愿意在硬板凳上坐到天亮。
+      - 为了“快速入睡”，我甚至带了两瓶酒，最终除了让我变得更困了之外，也只让这个夜晚变得更难熬了一点而已。
+    photos:
+      - src: https://blog-img.774352199.xyz/YrOYzP.webp
+        alt: 努力加班
+        caption: 在值机大厅抢到一个座位实属不易，更别说是电源插座旁边的位置，即使是一些已经闭店的餐饮店，餐桌上都躺满了人。S 君：即使是周五，也要努力加班哦！
+        lat: 31.1535527
+        lng: 121.80436
+      - src: https://blog-img.774352199.xyz/6p1Ygk.webp
+        alt: 宁拍我，那我也拍宁！
+        caption: K 君第一次带着他的长枪短炮出门旅游，四处拍拍拍，偷感十足
+        lat: 31.1507027
+        lng: 121.80728
+      - src: https://blog-img.774352199.xyz/oBCAWM.webp
+        alt: 强颜欢笑地加班
+        caption: 此时已是凌晨四点了，完成了值机和安检，过了海关。S 君终于可以不受打扰地……加班了
+        lat: 31.1506972
+        lng: 121.8073194
+      - src: https://blog-img.774352199.xyz/VWe7oM.webp
+        alt: 屁桃航空
+        caption: 距离日出越来越近，前序航班也终于抵达了机场
+        lat: 31.15072
+        lng: 121.80741
+      - src: https://blog-img.774352199.xyz/Haz3sP.webp
+        alt: 第二天的朝阳
+        caption: 绕着候机厅走了一圈又一圈，忽然一大群人趴在窗户边拍照。哦！原来日出了
+        lat: 31.150605
+        lng: 121.807594
+      - src: https://blog-img.774352199.xyz/egvYLZ.webp
+        alt: 一架丑丑的绿色飞机
+        caption: 终于检了票，登了机，准备出发了。窗外降落着一架丑丑的俄罗斯飞机
+        lat: 31.15028
+        lng: 121.808594
+  - day: 1
+    title: 云上
+    descriptions:
+      - 🛫 ——> 🛬
+      - 第二次尝试睡觉失败
+      - 本身就是一个睡眠浅的人，发动机的轰鸣声、飞机的震动，都让我无法入睡，只得对着窗外发呆。S 君和 K 君倒是睡得很熟，年轻就是好，倒头就睡
+    photos:
+      - src: https://blog-img.774352199.xyz/2s45dj.webp
+        alt: 起飞 🛫 咯
+        caption: 最喜欢这样阴云密布的天气起飞，这意味着飞机会穿过云层，飞到云海之上
+        lat: 31.15092
+        lng: 121.809425
+      - src: https://blog-img.774352199.xyz/FByyUH.webp
+        alt: 云上，但不是贵州
+        lat: 30.9678027
+        lng: 122.13342
+      - src: https://blog-img.774352199.xyz/PhKuO2.webp
+        alt: 云上其二
+        lat: 30.9699416
+        lng: 122.14048
+      - src: https://blog-img.774352199.xyz/8wSA4R.webp
+        alt: 小岛
+        caption: 百无聊赖地飞了半天后看到的第一片小岛
+        lat: 32.8994638
+        lng: 129.580627
+      - src: https://blog-img.774352199.xyz/HAAY0y.webp
+        alt: 四国岛其一
+        caption: 终于看到了大片的陆地，飞到四国岛上空了
+        lat: 34.1282
+        lng: 134.566483
+      - src: https://blog-img.774352199.xyz/gRislE.webp
+        alt: 四国岛其二
+        caption: 日本的地形确实很不平坦，大片连绵起伏的山峦，只有少数连成一片的平原。日本的城市规模都比较小，一小片平原上可能就能挤下三四座城市，在中国大概就是一个城市及其下属区县的范围
+        lat: 34.2280305
+        lng: 134.875275
+      - src: https://blog-img.774352199.xyz/FXbyzk.webp
+        alt: 降落关西国际
+        caption: 关西国际机场坐落在濑户内海的人工岛上，天气一般，有些灰蒙蒙的。天气好的时候能看到海
+        lat: 34.43206
+        lng: 135.24771
+      - src: https://blog-img.774352199.xyz/axF4fX.webp
+        alt: Haruka
+        caption: 乘坐熟悉的 Hello Kitty Haruka 电车，只不过这次的目的是京都
+        lat: 34.392638
+        lng: 135.3321027
+  - day: 1
+    title: 我大抵确实是醒着的罢
+    descriptions:
+      - 由于日本的宾馆只能下午三点入住的落后规定，三人开始了流浪京都
+      - 人已经没意识了，但身体还在四处溜达
+    photos:
+      - src: https://blog-img.774352199.xyz/LaNbtP.webp
+        alt: 潦草的午饭
+        caption: 三人全是 P 人，预约餐馆是不可能的。在京都站地下随便找了家不需要排队的餐厅。事实证明，不需要排队的餐厅是有原因的。一小份半生不熟的带血牛排，怎么嚼都嚼不烂，还贵的要命
+        lat: 34.9867972
+        lng: 135.7580361
+      - src: https://blog-img.774352199.xyz/GlHSXJ.webp
+        alt: 闹市区内的神社
+        caption: 酒店定在了京都四条附近，算是整个京都最现代化的地方。这样的闹市区主干道旁，依然可以看到许多的神社，和周边的 xx 银行 xx 大厦一起，让人有种时空交错之感
+        lat: 35.00742
+        lng: 135.7597194
+      - src: https://blog-img.774352199.xyz/n9RrOE.webp
+        alt: 因幡堂平等寺 —— 猫猫神社
+        caption: 将行李寄存在了宾馆。S 君和 K 君都是家有毛孩子的人，所以规划中的第一站就是因幡堂平等寺，又被称为猫猫神社。平等寺供奉的其实是药师佛，但却因为售卖猫咪御守而闻名，🍠 上有人遇到过寺中的虎斑猫。可惜我们此行未能撞见，只听得佛像后面的喵喵声不断。我购买了一个猫猫样式的手账绑带，期待着某天能遇到心仪样式的手账
+        lat: 34.9993416
+        lng: 135.7602638
+      - src: https://blog-img.774352199.xyz/KSjTQ6.webp
+        alt: 路边草丛中的小小 ⛩️
+        lat: 34.9988805
+        lng: 135.7680111
+      - src: https://blog-img.774352199.xyz/z5nLnr.webp
+        alt: 深巷中的晚樱
+        caption: 绿肥红瘦
+        lat: 34.9988694
+        lng: 135.7682333
+      - src: https://blog-img.774352199.xyz/iPS74e.webp
+        alt: 鸭川其一
+        caption: 鸭川有一种魔力，和哈尔滨的松花江一样，所有的漫无目的溜达最终都会汇聚到这里
+        lat: 34.9989
+        lng: 135.7688
+      - src: https://blog-img.774352199.xyz/N8ieWN.webp
+        alt: 鸭川其二
+        caption: 坐在鸭川旁望着河对岸发呆，有种时空穿梭之感，也可能是我睡着了一会又醒了。旁边有一群看着是大学生的人在野餐，不断有人或骑车或跑步从后面经过，一切都是那么闲适，除了 S 君还在用手机开会
+        lat: 34.999005
+        lng: 135.7695305
+      - src: https://blog-img.774352199.xyz/d8cp3H.webp
+        alt: 睡大觉
+        caption: 终于熬到了下午三点，返回宾馆办了入住。S 君躺在床上玩手机，屏幕还没关人就睡着了，当然也可能是开会累的
+        lat: 35.007616
+        lng: 135.7597361
+      - src: https://blog-img.774352199.xyz/bBuDpy.webp
+        alt: 撸串，爽！
+        caption: 一觉睡到天黑，开始外出觅食。最终找到了一家居酒屋。日本人吃饭总是非常小份，两个人吃着三四串烧鸟，干喝啤酒。我们三人直接几十串起点，配上三杯鸡尾酒，不胜酒力的 K 君直接红温
+        lat: 35.0086
+        lng: 135.7615305
+  - day: 2
+    title: 🦌 城奈良 —— 春日大社和东大寺
+    descriptions:
+      - 关西娱乐体验游必去的一站就是奈良，和自然亲密接触
+      - 整座城市都充满了独特的自然气息 —— 鹿便便味
+      - 这波主打一个白嫖，一包鹿饼干都不买，就硬摸硬撸
+    photos:
+      - src: https://blog-img.774352199.xyz/xvWtRr.webp
+        alt: 近铁奈良外
+        caption: 不愧是世界闻名的旅游城市，在各种电车地铁上已经看过了铺天盖地的奈良旅游广告，奈良的人流量也确实比京都大阪大很多
+        lat: 34.684327
+        lng: 135.829225
+      - src: https://blog-img.774352199.xyz/Alg5Te.webp
+        alt: 尼康 —— 打鸟更清晰
+        lat: 34.685
+        lng: 135.83248
+      - src: https://blog-img.774352199.xyz/4WifFm.webp
+        alt: 路旁小🦌其一
+        caption: 奈良的道路旁经常有这样盘腿坐着的小🦌，也许是吃饱喝足了，很温顺，靠上前去也不会追着你要饼干。因为一点饼干都没买，有点心虚，只是虚摸了几下头
+        lat: 34.68365
+        lng: 135.838438
+      - src: https://blog-img.774352199.xyz/7X1dwM.webp
+        alt: 路旁小🦌其二
+        caption: K 君倒是毫不客气，对着🦌头就是一阵硬蹭，🦌脸上居然露出了笑容，好嘛原来是 M 🦌
+        lat: 34.68365
+        lng: 135.838438
+      - src: https://blog-img.774352199.xyz/ux8RMP.webp
+        alt: 网红鹿
+        caption: 春日大社的入口处，经常会有一只鹿站在两座长明灯之间，周边围了一大群人拍照喂食。这只鹿也凹着造型，自得其乐
+        lat: 34.681061
+        lng: 135.8444638
+      - src: https://blog-img.774352199.xyz/1UgEGE.webp
+        alt: 鞠躬小🦌
+        caption: 神社中的小🦌比奈良公园的有礼貌得多，不会穷追不设咬衣角撞腰子，反而会低头鞠躬求投喂
+        lat: 34.68092
+        lng: 135.8459472
+      - src: https://blog-img.774352199.xyz/VpuSwQ.webp
+        alt: 丰饶巨鹿
+        caption: 我超，铁批！
+        lat: 34.6808805
+        lng: 135.8466805
+      - src: https://blog-img.774352199.xyz/18ZFvJ.webp
+        alt: 吉！
+        caption: 上次在清水寺抽出凶签后耿耿于怀，这次在春日大社终于抽中吉签。可怜的 S 君抽了个凶签
+        lat: 34.681072
+        lng: 135.8484194
+      - src: https://blog-img.774352199.xyz/h6hz4h.webp
+        alt: 网红鹿其二
+        caption: 清水寺的出口处也有一只喜欢凹造型的小🦌，只是相对于入口，人流寥寥
+        lat: 34.6809694
+        lng: 135.84764
+      - src: https://blog-img.774352199.xyz/i66eZ6.webp
+        alt: 东大寺
+        caption: 尽管不是第一次参观东大寺了，但还是由衷地在心里赞叹了一句：真的好大。国内很少看到如此巨大的寺庙
+        lat: 34.6882361
+        lng: 135.83935
+      - src: https://blog-img.774352199.xyz/3HNlIx.webp
+        alt: 广目天王
+        caption: 东大寺中广目天王的形象，怒目圆瞪。话说广目天王不是个使琵琶的吗，还是我黑猴玩多了？S 君在东大寺又求了一签，依然是凶，于是他将自己所有的零钱都捐了出去
+        lat: 34.689083
+        lng: 135.8396138
+  - day: 2
+    title: 若草山上便便多
+    descriptions:
+      - 从东大寺出门向东南方向往山上走，就是若草山了
+      - 🍠 意义上的若草山范围很小，只有面朝西侧的一个小坡。整个坡几乎没有可以坐下的地方，全是🦌便便。身在坡上，耳中所闻皆是中文，和在国内一样
+      - 于是我们决定走一条不那么网红的路线，那就是爬上真正的若草山的山顶，俯瞰整个奈良城
+    photos:
+      - src: https://blog-img.774352199.xyz/FM2yAW.jpg
+        alt: 偏僻的上山道
+        caption: 偏僻的上山道，人迹罕至
+        lat: 34.6857083
+        lng: 135.8504472
+      - src: https://blog-img.774352199.xyz/OlFC10.jpg
+        alt: 食草🦌
+        caption: 山上的🦌也不再追着人要饼，只是低头默默地啃食着青草。说实话如果不是这些鹿，我都快忘记鹿其实是食草动物而不是食饼动物了
+        lat: 34.686175
+        lng: 135.850314
+      - src: https://blog-img.774352199.xyz/P9rOIJ.jpg
+        alt: 半山腰
+        caption: 半山腰有一片小台地，反倒是有一些游客，似乎是打算在此扎营。东边日出西边雨，称得上绝景
+        lat: 34.6883
+        lng: 135.8513027
+      - src: https://blog-img.774352199.xyz/1uYlTL.webp
+        alt: 偶像剧中的场景
+        lat: 34.68828
+        lng: 135.8513
+      - src: https://blog-img.774352199.xyz/5K50g0.jpg
+        alt: 登顶！
+        caption: 费劲力气终于登顶，此时太阳快要下山，恰好被天边的一片云遮住了。在山顶等了一会想要等太阳再次露脸，但夕阳还是在云层后面就落下了山头
+        lat: 34.6900416
+        lng: 135.853761
+      - src: https://blog-img.774352199.xyz/UeUhOL.jpg
+        alt: 人生照片
+        caption: 下山时 K 君用超长焦给我和 S 君拍了张照片，如果不是那个国际通用手势，从各种意义上来说都称得上是人生照片了
+        lat: 34.687957
+        lng: 135.851129
+      - src: https://blog-img.774352199.xyz/mpXAEK.jpg
+        alt: 满坡的🦌
+        caption: 若草山山脚下，天已蒙上了黑影。满山的🦌也不再追逐打闹，只是默默地低头吃草
+        lat: 34.685311
+        lng: 135.847342
+      - src: https://blog-img.774352199.xyz/ZTYoPO.webp
+        alt: 奈良米贵
+        caption: 来日本之前，日本的米价就已经疯涨到上了新闻。便利店中 1.5 KG 米的价格为 1920 日元，约合 30 多人民币一斤，令人咋舌
+        lat: 34.684598
+        lng: 135.828862
+  - day: 3
+    title: 当归
+    descriptions:
+      - 最后一天倒是没有特别的规划，于是把最后一天定为血拼日
+      - 快乐的时光总是匆匆，仿佛是不愿我们离去，飞机专门晚点了四个小时
+    photos:
+      - src: https://blog-img.774352199.xyz/PUlYJt.jpg
+        alt: 高岛屋附近的麦当当
+        caption: 市中心的麦当当在和柯南联名，还有小兰头型的汉堡
+        lat: 35.00373
+        lng: 135.7675472
+      - src: https://blog-img.774352199.xyz/GXtuL9.webp
+        alt: 任天堂京都
+        caption: 在高岛屋退税时，任天堂京都也在同一层楼。本想着去买一些卡带，说不定会便宜。结果店里只有游戏机、手柄，和一大堆贵的咋舌的手办
+        lat: 35.00356
+        lng: 135.7682194
+      - src: https://blog-img.774352199.xyz/QDRn8G.jpg
+        alt: 也是代购了一次
+        caption: 受同事 C 所托，在 EDION 买了张 PS5 的双影奇境，可惜回国后发现和国内买其实没差
+        lat: 35.003289
+        lng: 135.769633
+      - src: https://blog-img.774352199.xyz/3eYCtn.jpg
+        alt: 血拼成果
+        caption: 游荡了好几家商场才堪堪买齐，算上退税大概比在京东买便宜了 20% 到 30% 左右
+        lat: 35.005675
+        lng: 135.759827
+      - src: https://blog-img.774352199.xyz/grNniL.jpg
+        alt: 乘坐 haruka，去机场啦
+        lat: 34.985583
+        lng: 135.756024
+      - src: https://blog-img.774352199.xyz/BzWgH5.jpg
+        alt: 沿途风景
+        caption: 去机场时大概是下午三点多，正好是日本的放学时间。趴在窗边，看到很多放学的 JK DK，三三两两地走在街道上。真是青春啊，虽说人无法同时拥有青春和对青春的感受，但是有的人的青春，确实是要更青春一些
+        lat: 34.8889527
+        lng: 135.670027
+      - src: https://blog-img.774352199.xyz/tRRKQ1.jpg
+        alt: 最后再看一眼日本吧
+        lat: 34.4334416
+        lng: 135.2434527

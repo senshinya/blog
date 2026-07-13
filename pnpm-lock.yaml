@@ -181,6 +181,9 @@ catalogs:
     temporal-polyfill:
       specifier: ^1.0.1
       version: 1.0.1
+    yaml:
+      specifier: ^2.9.0
+      version: 2.9.0
 
 overrides:
   '@dxup/nuxt': ^0.5.3
@@ -370,6 +373,9 @@ importers:
       unrun:
         specifier: catalog:framework
         version: 0.3.1(synckit@0.11.13)
+      yaml:
+        specifier: catalog:util
+        version: 2.9.0
 
 packages:
 
