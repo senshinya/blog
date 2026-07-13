@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import { arch, env, version as nodeVersion, platform } from 'node:process'
 import { pathToFileURL } from 'node:url'
-import { name as ciName, CLOUDFLARE_PAGES, GITHUB_ACTIONS, NETLIFY } from 'ci-info'
+import { name as ciName, CLOUDFLARE_PAGES, GITHUB_ACTIONS, NETLIFY, VERCEL } from 'ci-info'
 import { mapValues } from 'es-toolkit/object'
 import { pascalCase } from 'es-toolkit/string'
 import { Temporal } from 'temporal-polyfill'
@@ -282,9 +282,20 @@ ${packageJson.homepage}
 		// 尽量以这些密度点对点显示
 		densities: [1, 1.5, 2],
 		format: ['avif', 'webp'],
-		// Neylify 下 netlify 处理器无法显示站外图片，ipx 处理器无法显示站内图片，需彻底禁用
-		// https://github.com/nuxt/image/issues/1353
-		provider: NETLIFY ? 'none' : undefined,
+		/**
+		 * 在托管平台上一律关掉 @nuxt/image 的处理器。
+		 *
+		 * Netlify：netlify 处理器显示不了站外图片，ipx 处理器显示不了站内图片，只能彻底禁用。
+		 * https://github.com/nuxt/image/issues/1353
+		 *
+		 * Vercel：能用，但是**计费**的（Hobby 版每月 1000 张源图），而站内图不过是
+		 * favicon、头像这种，为它们烧配额不划算。何况正文和游记的图早就走 Cloudflare
+		 * 自己的 /cdn-cgi/image/ 变换了（见 utils/img.ts 的 getCfImgUrl），
+		 * 尺寸和格式都已经定死，再让平台优化器过一手纯属多余。
+		 *
+		 * 本地开发不受影响（provider 走默认的 ipx）。
+		 */
+		provider: NETLIFY || VERCEL ? 'none' : undefined,
 	},
 
 	linkChecker: {
