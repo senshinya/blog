@@ -2,10 +2,8 @@
 const { timeEstablished } = useAppConfig()
 
 const blogLog = [
-	{ label: '2025-07-26', value: '重构到 Nuxt 4 + Nuxt Content v3，启用 zhilu.site 域名' },
-	{ label: '2024-08-11', value: '重构到 Nuxt 3 + Nuxt Content v2' },
-	{ label: '2023-05-24', value: '更换框架为 Hexo，升级博客' },
-	{ label: '2020-08-24', value: '使用 zhilu.cyou 域名' },
+	{ label: '2026-07-13', value: '迁移到 Nuxt 4 + Nuxt Content v3，内容回归 Markdown' },
+	{ label: '2026-05-10', value: '重构为 SvelteKit + PocketBase，自建后台 CMS' },
 	{ label: timeEstablished, value: '发布第一篇文章' },
 ]
 </script>

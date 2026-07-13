@@ -5,8 +5,8 @@ import {
 	LazyWidgetBlogLog,
 	LazyWidgetBlogStats,
 	LazyWidgetBlogTech,
-	LazyWidgetCommGroup,
 	LazyWidgetEmpty,
+	LazyWidgetMemos,
 	LazyWidgetToc,
 } from '#components'
 
@@ -15,8 +15,8 @@ const rawWidgets = {
 	LazyWidgetBlogLog,
 	LazyWidgetBlogStats,
 	LazyWidgetBlogTech,
-	LazyWidgetCommGroup,
 	LazyWidgetEmpty,
+	LazyWidgetMemos,
 	LazyWidgetToc,
 }
 

@@ -11,7 +11,11 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 
 <template>
 <template #aside>
-	<WidgetBlogLog />
+	<!-- TransitionGroup 必须在此层：dxup 把布局里的 <slot name="aside"> 编译成 LayoutSlot 组件，
+		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
+	<TransitionGroup name="aside-widget">
+		<WidgetBlogLog key="blog-log" />
+	</TransitionGroup>
 </template>
 
 <div class="preview">

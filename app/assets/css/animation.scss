@@ -31,6 +31,26 @@
 	transition: transform var(--delay) !important;
 }
 
+// 侧栏 widget 换页时的进出场：以顶边为轴展开 / 向上收拢。
+// 用 scaleY 而非 max-height，是因为 max-height 得先猜一个「够大」的值，
+// 内容比它矮时缓动会提前跑完，动画尾巴发木。
+.aside-widget-enter-active,
+.aside-widget-leave-active {
+	transform-origin: top;
+	transition: transform 0.25s, opacity 0.25s;
+}
+
+.aside-widget-enter-from,
+.aside-widget-leave-to {
+	opacity: 0;
+	transform: scaleY(0);
+}
+
+// 留在原地的 widget 平滑让位（FLIP），否则会在进出场的瞬间硬跳
+.aside-widget-move {
+	transition: transform 0.25s;
+}
+
 .collapse-enter-active,
 .collapse-leave-active {
 	contain: paint;

@@ -36,6 +36,19 @@ export default function usePagination<T>(list: MaybeRefOrGetter<T[]>, options?: 
 
 	// 不应在此处 watch list
 
+	// 翻页只改 query 不改 path，而 Nuxt 默认的 scrollBehavior 在 to.path === from.path
+	// 时不滚动（它假定同路径的 query 变化是筛选/排序，不该打断阅读位置）。分页是例外：
+	// 内容整个换掉了，视口却停在原地，用户会落在新一页的中间，故在此显式处理。
+	if (import.meta.client) {
+		watch(page, () => {
+			// 不指定 behavior，缺省的 auto 会继承全局 CSS 的 scroll-behavior: smooth，
+			// 从而与文章页切换上/下一篇时的滚动手感一致（那里是真实路由跳转，
+			// Nuxt 默认 scrollBehavior 返回 { top: 0 }，同样走 CSS 的平滑）。
+			// 减少动效的用户已由 CSS 里的 prefers-reduced-motion 降级为 auto。
+			window.scrollTo({ top: 0 })
+		})
+	}
+
 	return {
 		totalPages,
 		page,

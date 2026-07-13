@@ -29,7 +29,7 @@ function hasHeading(tocTree: TocLink, heading?: string): boolean {
 			<Icon name="tabler:arrow-bar-to-up" />
 		</a>
 
-		<a href="#twikoo" aria-label="评论区">
+		<a href="#comment" aria-label="评论区">
 			<Icon name="tabler:message-dots" />
 		</a>
 	</template>

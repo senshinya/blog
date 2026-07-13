@@ -25,6 +25,15 @@ const copyFields = {
 </script>
 
 <template>
+<template #aside>
+	<!-- TransitionGroup 必须在此层：dxup 把布局里的 <slot name="aside"> 编译成 LayoutSlot 组件，
+		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
+	<TransitionGroup name="aside-widget">
+		<WidgetBlogStats key="blog-stats" />
+		<WidgetBlogTech key="blog-tech" />
+	</TransitionGroup>
+</template>
+
 <div class="mobile-only">
 	<BlogHeader to="/" suffix="友链" tag="h1" />
 </div>

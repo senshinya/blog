@@ -31,8 +31,12 @@ else {
 
 <template>
 <template #aside>
-	<!-- 更换页面时相同 key 的组件不会更新 -->
-	<component :is="widget.comp" v-for="widget in widgets" :key="widget.name" />
+	<!-- TransitionGroup 必须在此层：dxup 把布局里的 <slot name="aside"> 编译成 LayoutSlot 组件，
+		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
+	<TransitionGroup name="aside-widget">
+		<!-- 更换页面时相同 key 的组件不会更新 -->
+		<component :is="widget.comp" v-for="widget in widgets" :key="widget.name" />
+	</TransitionGroup>
 </template>
 
 <template v-if="post">

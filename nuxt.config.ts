@@ -27,7 +27,7 @@ export default defineNuxtConfig({
 			link: [
 				{ rel: 'icon', href: blogConfig.favicon },
 				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
-				{ rel: 'preconnect', href: blogConfig.twikoo.preload },
+				{ rel: 'preconnect', href: 'https://giscus.app' },
 				{ rel: 'stylesheet', href: 'https://cdnjs.snrat.com/ajax/libs/KaTeX/0.16.44/katex.min.css', media: 'print', onload: 'this.media="all"' },
 				// "InterVariable", "Inter", "InterDisplay"
 				{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css', media: 'print', onload: 'this.media="all"' },
@@ -75,6 +75,13 @@ export default defineNuxtConfig({
 			// 修复部分平台会在文章路径后添加 `/`，导致闪现 404 错误
 			// https://github.com/nuxt/content/issues/2378
 			autoSubfolderIndex: CLOUDFLARE_PAGES || GITHUB_ACTIONS || NETLIFY ? false : undefined,
+
+			// 游记本轮未迁移，但正文里仍留有指向 /travels/* 的内链（如 one-month-using-android
+			// 里的「关西行」）。预渲染爬虫会顺着内链爬过去、拿到 404，进而中断整个构建。
+			// 只忽略 /travels 这一个前缀，其余路由的 404 仍然照常让构建失败——
+			// 不用 failOnError: false，否则任何一个真坏掉的页面都会被静默放行。
+			// 代价：这些链接上线后点进去是 404，待游记迁完后删掉此项。
+			ignore: ['/travels'],
 		},
 	},
 
