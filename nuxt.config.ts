@@ -89,6 +89,35 @@ export default defineNuxtConfig({
 			// 显式登记：列表页 + 每篇详情页，漏链也不会静默不生成。
 			routes: ['/travels', ...travelRoutes],
 		},
+
+		/**
+		 * Vercel 专用。部署在 Netlify 时这段是惰性的（vercel preset 不跑就不读）。
+		 *
+		 * 与 Netlify 那边同样的两件事，只是换了个平台的表达方式：
+		 * public/_redirects 和 netlify.toml 到了 Vercel 全是废纸 —— 前者还会被当成
+		 * 普通静态文件公开发布出去，语义完全无效。
+		 *
+		 * 写在这里而不是 vercel.json：SSG 下 nitro 走 Vercel 的 Build Output API，
+		 * 直接产出 .vercel/output/config.json 来定义路由。而 nitro 的 generateBuildConfig 是
+		 *   defu(nitro.options.vercel?.config, { version: 3, routes: [...] })
+		 * defu 对数组是拼接、且用户的项在前，所以这里的规则会落到 config.json 的 routes 最顶端，
+		 * 稳稳排在任何兜底之前。vercel.json 与 Build Output API 的交互我没验证过，不赌。
+		 */
+		vercel: {
+			config: {
+				routes: [
+					// giscus 接口的同源代理，见 app/composables/useGiscusCount.ts
+					{ src: '/giscus-api/(.*)', dest: 'https://giscus.app/api/$1' },
+					// 自定义 giscus 主题 CSS：方向相反，是 giscus 的 iframe 跨域来取我们的文件。
+					// continue: true —— 只挂头，不截断路由，让请求继续走到静态文件
+					{
+						src: '/giscus/(.*)',
+						headers: { 'Access-Control-Allow-Origin': 'https://giscus.app' },
+						continue: true,
+					},
+				],
+			},
+		},
 	},
 
 	// @keep-sorted
