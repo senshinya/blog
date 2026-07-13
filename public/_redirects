@@ -1,0 +1,19 @@
+# giscus 接口的同源代理。碎语的 reaction 数走它，见 app/composables/useGiscusCount.ts。
+#
+# 为什么要代理：giscus 的接口对**任何** Origin 都硬编码返回
+#   Access-Control-Allow-Origin: https://giscus.app
+# 不回显请求方 —— 它压根不打算被第三方站点跨域调用（只服务自己的 iframe）。
+# 浏览器必拦，与我们的域名无关。调 CORS 响应头是解决不了的（方向反了，那是我们发给
+# 别人的头）。把请求收回同源即可绕开：前端打 /giscus-api/*，由 Netlify 转发过去。
+#
+# 为什么必须写在这个文件里，而不是 netlify.toml：
+#   1. Netlify 先处理 _redirects，再处理 netlify.toml（官方文档明确如此）；
+#   2. nitro 的 netlify preset 会往 _redirects 末尾追加一条 `/* /404.html 404` 兜底，
+#      它是通配规则，会把 netlify.toml 里的任何规则统统遮蔽掉 —— force = true 也没用，
+#      因为顺序在它之前就已经命中了。
+# 而 nitro 的 writeRedirects() 会把本文件的内容**原样前置**到它生成的规则之前，
+# 所以写在这里的规则优先级最高。（放 netlify.toml 里试过，线上 404，正是被兜底截胡。）
+#
+# 路径用 /giscus-api/* 而非 /giscus/*：后者留给自定义 giscus 主题 CSS（方向相反 ——
+# 是 giscus 的 iframe 跨域来取我们的文件，见 netlify.toml 的 headers），撞上会被劫持。
+/giscus-api/*  https://giscus.app/api/:splat  200
