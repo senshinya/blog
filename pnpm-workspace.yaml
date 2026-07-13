@@ -59,6 +59,7 @@ catalogs:
     embla-carousel-autoplay: ^8.6.0
     embla-carousel-vue: ^8.6.0
     embla-carousel-wheel-gestures: ^8.1.0
+    maplibre-gl: ^5.24.0
     vue-tippy: ^6.7.1
   util:
     '@clack/prompts': ^1.6.0

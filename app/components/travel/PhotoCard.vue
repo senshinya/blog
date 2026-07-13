@@ -1,46 +1,29 @@
 <script setup lang="ts">
 import type { TravelPhoto } from '~/types/travel'
-import { LazyPopoverLightbox } from '#components'
 
 // 组件名特意不叫 TravelPhoto：那会和 ~/types/travel 里的 TravelPhoto 类型撞名，
 // 而详情页两者都要用（模板里用组件、script 里用类型）
-const props = defineProps<{
+defineProps<{
 	photo: TravelPhoto
 }>()
 
-const emit = defineEmits<{
-	focus: []
+// 只管当个缩略图，点开大图由详情页统一承载 ——
+// 看图器要和右侧地图联动，得由知道「当前是哪一天、第几张」的那一层来管
+defineEmits<{
+	open: []
 }>()
-
-const pic = useTemplateRef<HTMLImageElement>('pic')
-const modalStore = useModalStore()
-
-// 不用 useLightbox()：它只把 alt 当图注透传，而游记照片的 caption 是另一段更长的
-// 文字。仿 content/Pic.vue 直接用 modalStore，才能把 caption 送进灯箱。
-const { open } = modalStore.use(
-	() => h(LazyPopoverLightbox, {
-		el: unrefElement(pic)!,
-		caption: props.photo.caption || props.photo.alt,
-	}),
-	{ unique: true },
-)
-
-function onClick() {
-	emit('focus')
-	open()
-}
 </script>
 
 <template>
 <li class="travel-photo">
 	<img
-		ref="pic"
 		:src="photo.src"
 		:alt="photo.alt"
 		loading="lazy"
-		@click="onClick"
+		@click="$emit('open')"
 	>
-	<span v-if="photo.alt" class="travel-photo-alt">{{ photo.alt }}</span>
+	<!-- aria-hidden：这行字和 img 的 alt 是同一句，读屏会念两遍 -->
+	<span v-if="photo.alt" class="travel-photo-alt" aria-hidden>{{ photo.alt }}</span>
 </li>
 </template>
 

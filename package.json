@@ -47,6 +47,7 @@
     "embla-carousel-vue": "catalog:ui",
     "embla-carousel-wheel-gestures": "catalog:ui",
     "es-toolkit": "catalog:util",
+    "maplibre-gl": "catalog:ui",
     "marked": "^18.0.6",
     "minisearch": "catalog:util",
     "nuxt": "catalog:framework",
