@@ -1,3 +1,60 @@
+import imageMeta from '~/assets/image-meta.json'
+
+/**
+ * 图床所在的 zone。只有它开了 Cloudflare Images Transformations，
+ * 别处的图走不了 /cdn-cgi/image/，得原样返回。
+ */
+const CF_IMG_HOST = 'https://blog-img.774352199.xyz'
+
+export interface ImgMeta {
+	/** 原始宽度 */
+	w: number
+	/** 原始高度 */
+	h: number
+	/** 三个主色打包成的 8 位十六进制，见 assets/css/lqip.css */
+	lqip: string
+}
+
+/** 由 scripts/gen-image-meta.ts 预生成。SVG 和站外图不在其中，取不到就是 undefined */
+const META = imageMeta as Record<string, ImgMeta>
+
+export const getImgMeta = (src: string): ImgMeta | undefined => META[src]
+
+/**
+ * LQIP 内联样式：`{ '--lqip': '#986cc921' }`。
+ *
+ * 光有这个还不够 —— 它画的是元素的 background，元素得先有尺寸，梯度才有地方画。
+ * 所以调用处务必同时把 getImgMeta() 的 w/h 作为 width/height 属性写上去，
+ * 否则图仍会在加载完成的那一刻把下文顶开（这才是 CLS 的来源，LQIP 本身修不了）。
+ */
+export function getLqipStyle(src: string) {
+	const meta = META[src]
+	return meta ? { '--lqip': `#${meta.lqip}` } : undefined
+}
+
+/**
+ * 走 Cloudflare Images Transformations 取一个指定宽度的变体。
+ *
+ * 图床上放的是原片：游记是相机直出（最大 4284×5712 / 24.5 MP），正文里也有 6016×3384 的截图。
+ * 解码耗时按**源像素数**算，不按文件大小算 —— 一张 24.5 MP 的图解码成位图是 93 MB，
+ * 而它要画的可能只是个 208px 的格子。
+ *
+ * 变换在图床那个 zone 的边缘完成，跟博客部署在哪无关，故不走 @nuxt/image
+ * （它的 provider 在 Netlify 下被整个关掉了，见 nuxt.config.ts）。
+ *
+ * 默认 fit 是 scale-down，小图不会被放大 —— 正文里那些本来就只有 1024 宽的截图，
+ * 请求 1600 也只会原样返回。
+ *
+ * 计费按「唯一变换」= 图片 × 参数组合，同月重复只算一次，免费额度 5000/月。
+ * 所以宽度要收敛到少数几档，别按容器像素随手生成。
+ */
+export function getCfImgUrl(src: string, width: number) {
+	if (!src.startsWith(CF_IMG_HOST))
+		return src
+
+	return `${CF_IMG_HOST}/cdn-cgi/image/width=${width},format=auto${src.slice(CF_IMG_HOST.length)}`
+}
+
 // @keep-sorted
 const services = {
 	baidu: 'https://image.baidu.com/search/down?url=',

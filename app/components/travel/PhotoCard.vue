@@ -16,10 +16,12 @@ defineEmits<{
 
 <template>
 <li class="travel-photo">
+	<!-- 盒子已由 aspect-ratio 预留，不会跳；--lqip 只是让空着的那一格别是块死灰 -->
 	<img
-		:src="photo.src"
+		:src="getTravelImg(photo.src, TravelImgWidth.thumb)"
 		:alt="photo.alt"
 		loading="lazy"
+		:style="getLqipStyle(photo.src)"
 		@click="$emit('open')"
 	>
 	<!-- aria-hidden：这行字和 img 的 alt 是同一句，读屏会念两遍 -->

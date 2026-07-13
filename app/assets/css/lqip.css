@@ -1,0 +1,91 @@
+/*!
+ * LQIP（Low-Quality Image Placeholder）：图还没到时，先用三个主色渲一层渐变占住位置。
+ *
+ * 每张图只带 8 个字节 —— 一个 32 位整数，里面塞了三个颜色（左上、中心、右下），
+ * 由 scripts/gen-image-meta.ts 预生成，以内联自定义属性的形式写在元素上：
+ *
+ *     <img style="--lqip: #986cc921">
+ *
+ * 下面这堆 calc 就是把那 32 位当场解包回三个颜色。位布局（高位在前）：
+ *
+ *     [c0: 11 位][c1: 11 位][c2: 10 位]
+ *      4+4+3      4+4+3      3+4+3      ← 各自的 R/G/B 位宽，绿都给 4 位（人眼最敏感）
+ *
+ * 而 #RRGGBBAA 提供的是 R(31..24) G(23..16) B(15..8) A(7..0) —— 两套边界并不对齐，
+ * 所以每个分量都得跨字节拼：比如 c1 的绿 = G 的最低 1 位 << 3 | B 的最高 3 位。
+ * 这也是为什么这里非用 round(down,…) / mod() / pow() 不可。
+ *
+ * 这个文件必须是 .css 而不是 .scss：Sass 自带的 round() 只收一个参数，
+ * 见到 round(down, …) 会直接报错。
+ *
+ * 依赖相对颜色语法 color(from …)（Chrome 119+ / Safari 16.4+ / Firefox 128+）
+ * 与 CSS 数学函数（Chrome 125+）。不支持的浏览器整条 background 声明失效，
+ * 退回元素原本的底色 —— 降级是安全的，只是没有占位色。
+ *
+ * 出处：https://frzi.medium.com/lqip-css-73dc6dda2529
+ */
+
+[style*="--lqip:"] {
+  --lqip-c: var(--lqip);
+
+  /* c0 = 位 31..21：R 的高 4 位、R 的低 4 位、G 的高 3 位 */
+  --lqip-c0: color(
+    from var(--lqip-c)
+    srgb
+    calc(round(down, r * 255 / pow(2, 4)) / 15)
+    calc(mod(round(down, r * 255), pow(2, 4)) / 15)
+    calc(round(down, g * 255 / pow(2, 5)) / 7)
+    / 1
+  );
+
+  /* c1 = 位 20..10：横跨 G 和 B */
+  --lqip-c1: color(
+    from var(--lqip-c)
+    srgb
+    calc(mod(round(down, g * 255 / 2), pow(2, 4)) / 15)
+    calc(((mod(round(down, g * 255), 2) * pow(2, 3)) + (round(down, b * 255 / pow(2, 5)))) / 15)
+    calc(mod(round(down, b * 255 / pow(2, 2)), pow(2, 3)) / 7)
+    / 1
+  );
+
+  /* c2 = 位 9..0：横跨 B 和 A */
+  --lqip-c2: color(
+    from var(--lqip-c)
+    srgb
+    calc((((mod(round(down, b * 255), pow(2, 2)) * 2)) + round(down, alpha * 255 / pow(2, 7))) / 7)
+    calc(mod(round(down, alpha * 255 / pow(2, 3)), pow(2, 4)) / 15)
+    calc(mod(round(down, alpha * 255), pow(2, 3)) / 7)
+    / 1
+  );
+
+  /* 右下色铺在右下、中心色铺在中间，最后垫一层左上色打底 —— 三个色互相渗开，
+     糊成一张极粗的印象图。多段 alpha 是为了让边缘化得开，不留同心圆的硬圈 */
+  background:
+    radial-gradient(
+      150% 75% at 80% 100%,
+      var(--lqip-c2),
+      rgb(from var(--lqip-c2) r g b / 98%) 10%,
+      rgb(from var(--lqip-c2) r g b / 92%) 20%,
+      rgb(from var(--lqip-c2) r g b / 82%) 30%,
+      rgb(from var(--lqip-c2) r g b / 68%) 40%,
+      rgb(from var(--lqip-c2) r g b / 32%) 60%,
+      rgb(from var(--lqip-c2) r g b / 18%) 70%,
+      rgb(from var(--lqip-c2) r g b / 8%) 80%,
+      rgb(from var(--lqip-c2) r g b / 2%) 90%,
+      transparent
+    ),
+    radial-gradient(
+      100% 75% at 40% 50%,
+      var(--lqip-c1),
+      rgb(from var(--lqip-c1) r g b / 98%) 10%,
+      rgb(from var(--lqip-c1) r g b / 92%) 20%,
+      rgb(from var(--lqip-c1) r g b / 82%) 30%,
+      rgb(from var(--lqip-c1) r g b / 68%) 40%,
+      rgb(from var(--lqip-c1) r g b / 32%) 60%,
+      rgb(from var(--lqip-c1) r g b / 18%) 70%,
+      rgb(from var(--lqip-c1) r g b / 8%) 80%,
+      rgb(from var(--lqip-c1) r g b / 2%) 90%,
+      transparent
+    ),
+    var(--lqip-c0);
+}

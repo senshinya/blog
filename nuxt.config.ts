@@ -67,6 +67,8 @@ export default defineNuxtConfig({
 		'@/assets/css/article.scss',
 		'@/assets/css/color.scss',
 		'@/assets/css/font.scss',
+		// .css 而非 .scss：里头的 round(down, …) 会被 Sass 自带的单参 round() 顶掉
+		'@/assets/css/lqip.css',
 		'@/assets/css/main.scss',
 		'@/assets/css/reusable.scss',
 	],
