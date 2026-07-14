@@ -58,7 +58,7 @@ export default defineAppConfig({
 		/** 侧边栏底部图标导航 */
 		iconNav: [
 			{ icon: 'tabler:brand-github', text: 'GitHub: senshinya', url: 'https://github.com/senshinya' },
-			{ icon: 'tabler:brand-telegram', text: 'Telegram: senshinya', url: 'https://t.me/senshinya' },
+			{ icon: 'tabler:brand-telegram', text: 'Telegram: senshinya', url: 'https://telegram.me/senshinya' },
 			{ icon: 'tabler:mail', text: blogConfig.author.email, url: `mailto:${blogConfig.author.email}` },
 			{ icon: 'tabler:rss', text: 'Atom订阅', url: '/atom.xml' },
 			{ icon: 'ri:subway-line', text: '开往 - 博客下一站', url: 'https://www.travellings.cn/go.html' },
@@ -76,7 +76,7 @@ export default defineAppConfig({
 				title: '社交',
 				items: [
 					{ icon: 'tabler:brand-github', text: 'senshinya', url: 'https://github.com/senshinya' },
-					{ icon: 'tabler:brand-telegram', text: 'senshinya', url: 'https://t.me/senshinya' },
+					{ icon: 'tabler:brand-telegram', text: 'senshinya', url: 'https://telegram.me/senshinya' },
 					{ icon: 'tabler:mail', text: blogConfig.author.email, url: `mailto:${blogConfig.author.email}` },
 				],
 			},
