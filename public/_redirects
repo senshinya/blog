@@ -17,3 +17,18 @@
 # 路径用 /giscus-api/* 而非 /giscus/*：后者留给自定义 giscus 主题 CSS（方向相反 ——
 # 是 giscus 的 iframe 跨域来取我们的文件，见 netlify.toml 的 headers），撞上会被劫持。
 /giscus-api/*  https://giscus.app/api/:splat  200
+
+# 碎语详情页的 SPA 回退。
+#
+# 碎语是运行时数据（构建期取数只会拿到上次部署的快照，新发的那条永远缺席），
+# 故 /memos/<id> 在构建期无法枚举，静态产物里没有对应的 HTML 文件，直接访问必然 404。
+# 办法是预渲染一个「加载态」的壳（nuxt.config 的 nitro.prerender.routes 里登记为
+# /memos/_shell），再把所有 /memos/* 200 重写到它身上，剩下的交给客户端路由。
+#
+# 不会误伤真实文件：Netlify 只在请求路径上没有文件时才应用重定向规则（除非用 200! 强制），
+# 而 /memos/* 底下唯一的产物就是 _shell.html 自己。
+# 也不会误伤列表页：/memos 不带尾部路径，匹配不上 /memos/*。
+#
+# 同样必须写在这个文件里（理由见上）：nitro 追加的 `/* /404.html 404` 是通配兜底，
+# 排在本文件的内容之后，故这条先命中。
+/memos/*  /memos/_shell.html  200

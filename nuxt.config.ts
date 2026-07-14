@@ -87,7 +87,15 @@ export default defineNuxtConfig({
 
 			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳。
 			// 显式登记：列表页 + 每篇详情页，漏链也不会静默不生成。
-			routes: ['/travels', ...travelRoutes],
+			//
+			// /memos/_shell 是碎语详情页的 SPA 壳。碎语是运行时数据（构建期取数只会拿到
+			// 上次部署的快照），所以 /memos/<id> 无法在构建期枚举，静态产物里也就没有对应的
+			// HTML 文件。办法是预渲染一个「加载态」的壳，再由各平台把 /memos/* 的请求 200 重写到
+			// 它身上（Netlify 见 public/_redirects，Vercel 见下方 vercel.config.routes），
+			// 剩下的交给客户端路由。
+			//
+			// memo 的 id 是 22 位 nanoid，撞不上 _shell 这个名字。
+			routes: ['/travels', ...travelRoutes, '/memos/_shell'],
 		},
 
 		/**
@@ -108,6 +116,15 @@ export default defineNuxtConfig({
 				routes: [
 					// giscus 接口的同源代理，见 app/composables/useGiscusCount.ts
 					{ src: '/giscus-api/(.*)', dest: 'https://giscus.app/api/$1' },
+					/**
+					 * 碎语详情页的 SPA 回退：把 /memos/<id> 重写到预渲染出来的壳上，
+					 * 由客户端路由接管（见 nitro.prerender.routes 的说明）。
+					 *
+					 * 用 (.+) 而非 (.*)：后者会连 /memos/ 本身一起吞掉，把列表页顶成详情页的壳。
+					 * 这条排在 handle: filesystem 之前，故 dest 改写后仍会回到文件系统去取
+					 * memos/_shell 那个产物；/memos（列表页）不带尾斜杠，压根不匹配。
+					 */
+					{ src: '/memos/(.+)', dest: '/memos/_shell' },
 					// 自定义 giscus 主题 CSS：方向相反，是 giscus 的 iframe 跨域来取我们的文件。
 					// continue: true —— 只挂头，不截断路由，让请求继续走到静态文件
 					{
@@ -144,6 +161,19 @@ export default defineNuxtConfig({
 		 * 路径避开 /giscus/*：那个留给自定义主题 CSS（见 netlify.toml），撞上会被代理劫持。
 		 */
 		'/giscus-api/**': { proxy: 'https://giscus.app/api/**' },
+		/**
+		 * 碎语详情页的壳必须是**纯客户端**的，不能被服务端渲染 —— 这是整套 SPA 回退的关键。
+		 *
+		 * 任何经服务端渲染的页面，payload 里都会带上它被渲染时的路径（nuxt/app/nuxt.ts 中
+		 * `payload.path = ssrContext.url`）。而水合时 Nuxt 的路由插件**优先采信这个路径**，
+		 * 而不是地址栏（pages/runtime/plugins/router.ts 的 createCurrentLocation：
+		 * 二者不一致时取 renderedPath）。于是壳被重写到 /memos/<id> 上之后，
+		 * 路由会当场跳回 /memos/_shell，页面转头去取一条叫 "_shell" 的碎语。
+		 *
+		 * ssr: false 之后这个壳压根不经服务端渲染，payload 里没有 path，
+		 * 路由只能照地址栏办事 —— 这才是我们要的。顺带也不再有水合不匹配可言。
+		 */
+		'/memos/_shell': { ssr: false },
 		'/subscriptions.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 	},
 
@@ -326,5 +356,11 @@ ${packageJson.homepage}
 		name: blogConfig.title,
 		url: blogConfig.url,
 		defaultLocale: blogConfig.language,
+	},
+
+	sitemap: {
+		// _shell 是碎语详情页的 SPA 壳（见 nitro.prerender.routes），不是一个可读的页面。
+		// 它只因为被预渲染才会被 sitemap 收录，得手动摘出去。
+		exclude: ['/memos/_shell'],
 	},
 })

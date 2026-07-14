@@ -1,9 +1,5 @@
 <script setup lang="ts">
-interface Memo {
-	name: string
-	content: string
-	createTime: string
-}
+import type { Memo } from '~/utils/memo'
 
 const LIMIT = 5
 

@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { marked } from 'marked'
+import type { Memo } from '~/utils/memo'
 
-interface Memo {
-	name: string
-	content: string
-	createTime: string
-	pinned: boolean
-	tags?: string[]
-}
 interface MemoPage {
 	memos: Memo[]
 	nextPageToken?: string
@@ -21,8 +14,6 @@ useSeoMeta({
 	title: '碎语',
 	description: `${appConfig.title}的碎碎念，一些来不及写成文章的短想法。`,
 })
-
-marked.use({ breaks: true, gfm: true })
 
 const memos = ref<Memo[]>([])
 const nextPageToken = ref('')
@@ -61,16 +52,7 @@ async function loadMore() {
 	}
 }
 
-// memo 是自建 Memos 服务里自己写的内容，与文章正文同等信任，故不做净化
-const parsedMemos = computed(() => memos.value.map((memo) => {
-	const { text, images } = splitMemoImages(memo.content)
-	return {
-		...memo,
-		id: memo.name.split('/').pop() ?? memo.name,
-		html: marked.parse(text) as string,
-		images,
-	}
-}))
+const parsedMemos = computed(() => memos.value.map(parseMemo))
 </script>
 
 <template>
