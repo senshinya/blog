@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { BgmCollection } from '~/utils/bangumi'
+import { withBgmProxy } from '~/utils/bangumi'
 
 /**
  * 一条 Bangumi 收藏卡片：左海报(120×180) + 右信息。
@@ -8,9 +9,14 @@ import type { BgmCollection } from '~/utils/bangumi'
  */
 const props = defineProps<{ item: BgmCollection }>()
 
+const appConfig = useAppConfig()
 const subject = computed(() => props.item.subject)
 const title = computed(() => subject.value.name_cn || subject.value.name)
-const cover = computed(() => subject.value.images?.common || subject.value.images?.large || '')
+// 封面同样走反代（API 回传的仍是 lain.bgm.tv 原址，不会被反代改写）
+const cover = computed(() => {
+	const raw = subject.value.images?.common || subject.value.images?.large || ''
+	return raw ? withBgmProxy(appConfig.bangumi.proxy, raw) : ''
+})
 const link = computed(() => `https://bgm.tv/subject/${props.item.subject_id}`)
 
 // 0 = 暂无评分 / 未评分，按「无」处理

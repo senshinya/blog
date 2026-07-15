@@ -26,6 +26,14 @@ export const BGM_CATEGORIES: BgmCategory[] = [
 export const BGM_STATUS_TYPES = [3, 2, 1] as const
 export type BgmStatusType = typeof BGM_STATUS_TYPES[number]
 
+/**
+ * 给 bgm 资源 URL（API 或 lain.bgm.tv 封面）套上反代前缀，形如
+ * `https://forward.shinya.click/https://api.bgm.tv/...`。前缀为空则原样直连。
+ */
+export function withBgmProxy(proxy: string, url: string): string {
+	return proxy ? proxy + url : url
+}
+
 // ---- API 响应结构（只声明用得到的字段）----
 
 export interface BgmSubject {

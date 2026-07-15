@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { BgmCollection, BgmCollectionPage, BgmStatusType } from '~/utils/bangumi'
-import { BGM_CATEGORIES, BGM_STATUS_TYPES } from '~/utils/bangumi'
+import { BGM_CATEGORIES, BGM_STATUS_TYPES, withBgmProxy } from '~/utils/bangumi'
 
 const PAGE_SIZE = 20
-const API = 'https://api.bgm.tv/v0/users'
+const BGM_API = 'https://api.bgm.tv/v0/users'
 
 const appConfig = useAppConfig()
 useSeoMeta({
@@ -24,14 +24,16 @@ const loadingMore = ref(false)
 const error = ref<Error>()
 
 function fetchPage(offset: number) {
-	return $fetch<BgmCollectionPage>(`${API}/${appConfig.bangumi.uid}/collections`, {
-		query: {
-			subject_type: category.value.subjectType,
-			type: status.value,
-			limit: PAGE_SIZE,
-			offset,
-		},
+	// 手动拼 query 而非用 $fetch 的 query 选项：反代前缀里嵌了完整的 https://，
+	// 交给 ofetch/ufo 处理有可能被规范化，这里整条 URL 原样传入最稳
+	const query = new URLSearchParams({
+		subject_type: String(category.value.subjectType),
+		type: String(status.value),
+		limit: String(PAGE_SIZE),
+		offset: String(offset),
 	})
+	const url = `${BGM_API}/${appConfig.bangumi.uid}/collections?${query}`
+	return $fetch<BgmCollectionPage>(withBgmProxy(appConfig.bangumi.proxy, url))
 }
 
 // 切换分类/状态会连发请求，用递增的 token 丢弃迟到的旧响应，避免顺序错乱覆盖列表
