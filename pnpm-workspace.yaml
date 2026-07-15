@@ -83,6 +83,8 @@ engineStrict: true
 
 overrides:
   '@dxup/nuxt': ^0.5.3
+  # 修复 esbuild dev server 路径穿越（GHSA-g7r4-m6w7-qqqr，仅 Windows），抬到已修复版
+  esbuild: '>=0.28.1'
   nuxtseo-layer-devtools: link:__unneeded__
 
 patchedDependencies:
