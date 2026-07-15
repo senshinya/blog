@@ -69,6 +69,10 @@ main {
 	--color-canvas-inset: var(--c-bg-2);
 	--color-canvas-subtle: var(--c-bg-1);
 
+	/* ── 卡片 / 输入框（细边框卡片方案）── */
+	--ld-bg-card: var(--c-bg-3); /* 卡片：抬升灰，浮在页面之上 */
+	--gs-field-bg: var(--c-bg-2); /* 输入框：略暗于卡片的内嵌井 */
+
 	/* ── 文字层级 ── */
 	--color-fg-default: var(--c-text-1);
 	--color-fg-muted: var(--c-text-2);
@@ -140,23 +144,18 @@ main .gsc-loading-image {
 	background-image: url(https://github.githubassets.com/images/mona-loading-dark.gif);
 }
 
-/* ═══ 无边框 · 融入博客正文 ═══════════════════════════════════════
-   以下覆盖的是 giscus 自带的布局 CSS（类名取自其组件源码），不是变量：
-   去掉卡片的边框 / 圆角 / 填充底色，让评论像正文一样平铺在页面上；
-   回复保留 giscus 的 .gsc-tl-line 时间线，用缩进 + 竖线连接，而非灰色卡块。 */
+/* ═══ 细边框卡片 · 融入博客正文 ═══════════════════════════════════
+   覆盖 giscus 自带的布局 CSS（类名取自其组件源码）：评论与评论框做成
+   1px 细边框 + 圆角的卡片，浮在页面灰底上；回复保留 .gsc-tl-line 时间线。
+   卡片间距沿用 giscus 的 .gsc-timeline / .gsc-main flex gap，无需另加 margin。 */
 
-/* 评论卡片本体（.gsc-comment 的首个子 div，含作者高亮卡）：溶进页面 */
-.gsc-comment > div {
-	border: 0 !important;
-	border-radius: 0 !important;
-	background: transparent !important;
-}
-
-/* 顶层评论之间：一条极细分隔线代替卡片轮廓 */
-.gsc-comment + .gsc-comment {
-	margin-top: 4px;
-	padding-top: 20px;
-	border-top: 1px solid var(--color-border-muted);
+/* 评论卡片 + 评论框：1px 细边框卡片 */
+.gsc-comment > div,
+.gsc-comment-box {
+	background: var(--ld-bg-card) !important;
+	border: 1px solid var(--color-border-default) !important;
+	border-radius: 12px !important;
+	box-shadow: none !important;
 }
 
 /* 回复区：去掉内嵌灰块与边框，只留缩进与时间线 */
@@ -166,35 +165,25 @@ main .gsc-loading-image {
 	background: transparent !important;
 }
 
-/* 评论框：外框（.gsc-comment-box 的 1px 边框）与标签栏一律透明无框 */
-.gsc-comment-box {
-	border: 0 !important;
-	background: transparent !important;
-}
+/* 评论框标签栏：透明无框；编写 / 预览靠文字明暗区分选中 */
 .gsc-comment-box-tabs {
 	border: 0 !important;
 	background: transparent !important;
 }
-/* 编写 / 预览 标签：去掉方框，靠文字明暗区分选中 */
 .gsc-comment-box-tabs button {
 	border-color: transparent !important;
 	background: transparent !important;
 }
 
-/* 输入区：整块柔和填充 + 圆角；聚焦描边复用 giscus 自带的 .gsc-comment-box-write:focus-within 环（已是主色） */
-.gsc-comment-box-write {
+/* 输入区 / 折叠的回复框：描边输入框（--gs-field-bg：深色为略暗内嵌井） */
+.gsc-comment-box-write,
+.gsc-reply-box {
+	background: var(--gs-field-bg) !important;
+	border: 1px solid var(--color-border-default) !important;
 	border-radius: 8px !important;
-	background: var(--color-canvas-subtle) !important;
 }
 .gsc-comment-box-textarea,
 .gsc-comment-box-textarea-extras {
 	border: 0 !important;
 	background: transparent !important;
-}
-
-/* 折叠的回复框：同样的柔和填充 */
-.gsc-reply-box {
-	border: 0 !important;
-	border-radius: 8px !important;
-	background: var(--color-canvas-subtle) !important;
 }
