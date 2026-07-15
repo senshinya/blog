@@ -19,6 +19,17 @@ const el = useTemplateRef('giscus')
 
 const giscusTheme = computed(() => colorMode.value === 'dark' ? 'dark' : 'light')
 
+/**
+ * giscus 的主题 <link> 是在它自己的 iframe（origin: giscus.app）里创建的，
+ * 相对路径会拼到 giscus.app 上，故必须给绝对 URL。
+ * 用 location.origin 而非硬编码域名：prod / preview / 自定义域名各自加载本部署下的
+ * /giscus/*.css（CORS 头见 netlify.toml 与 nuxt.config vercel.config.routes）。
+ * 只在客户端调用（onMounted / watch 回调），SSR 阶段不碰 window。
+ */
+function themeUrl(theme: string) {
+	return `${location.origin}/giscus/${theme}.css`
+}
+
 onMounted(() => {
 	const { giscus } = appConfig
 	if (!giscus || !el.value)
@@ -41,7 +52,7 @@ onMounted(() => {
 		emitMetadata: giscus.emitMetadata,
 		inputPosition: giscus.inputPosition,
 		lang: giscus.lang,
-		theme: giscusTheme.value,
+		theme: themeUrl(giscusTheme.value),
 		loading: 'lazy',
 	})
 
@@ -52,7 +63,7 @@ onMounted(() => {
 watch(giscusTheme, (theme) => {
 	document.querySelectorAll<HTMLIFrameElement>('iframe.giscus-frame')
 		.forEach(frame => frame.contentWindow?.postMessage(
-			{ giscus: { setConfig: { theme } } },
+			{ giscus: { setConfig: { theme: themeUrl(theme) } } },
 			'https://giscus.app',
 		))
 })

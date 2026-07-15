@@ -1,0 +1,199 @@
+/**
+ * giscus 自定义主题 · 浅色
+ *
+ * 色板取自 app/assets/css/color.scss 的 :root/.light，与站点严格一致
+ * （直接照抄那里的 hsl() 表达式，而非近似 hex，改站点色板时这里也要跟着改）。
+ *
+ * 只重铸「外壳」——背景、文字层级、边框、链接/焦点、主按钮、反应态——统一到站点蓝；
+ * 评论里代码块的语法高亮沿用 GitHub 官方浅色值不动，读者本就期待它长得像 GitHub。
+ *
+ * 由 giscus 的 iframe（origin: giscus.app）跨域加载，需带 CORS 头，
+ * 见 netlify.toml 与 nuxt.config.ts 的 vercel.config.routes。
+ */
+main {
+	/* ── 站点色板（app/assets/css/color.scss :root/.light） ── */
+	--hue: 220deg;
+	--c-text: hsl(var(--hue) 0% 0%);
+	--c-text-1: hsl(var(--hue) 0% 20%);
+	--c-text-2: hsl(var(--hue) 0% 40%);
+	--c-text-3: hsl(var(--hue) 0% 70%);
+	--c-bg: hsl(var(--hue) 0% 100%);
+	--c-bg-1: hsl(var(--hue) 20% 98%);
+	--c-bg-2: hsl(var(--hue) 10% 95%);
+	--c-bg-3: hsl(var(--hue) 10% 92%);
+	--c-bg-soft: hsl(var(--hue) 20% 20% / 10%);
+	--c-border: hsl(var(--hue) 10% 91%);
+	--c-primary: hsl(var(--hue) 100% 55%);
+	--c-primary-hover: hsl(var(--hue) 100% 48%);
+	--c-primary-soft: hsl(var(--hue) 100% 60% / 15%);
+	--c-success: #5A5;
+	--c-warning: #D85;
+	--c-error: #D55;
+
+	/* ── 语法高亮：GitHub 官方浅色，勿动 ── */
+	--color-prettylights-syntax-comment: #6e7781;
+	--color-prettylights-syntax-constant: #0550ae;
+	--color-prettylights-syntax-entity: #8250df;
+	--color-prettylights-syntax-storage-modifier-import: #24292f;
+	--color-prettylights-syntax-entity-tag: #116329;
+	--color-prettylights-syntax-keyword: #cf222e;
+	--color-prettylights-syntax-string: #0a3069;
+	--color-prettylights-syntax-variable: #953800;
+	--color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
+	--color-prettylights-syntax-invalid-illegal-text: #f6f8fa;
+	--color-prettylights-syntax-invalid-illegal-bg: #82071e;
+	--color-prettylights-syntax-carriage-return-text: #f6f8fa;
+	--color-prettylights-syntax-carriage-return-bg: #cf222e;
+	--color-prettylights-syntax-string-regexp: #116329;
+	--color-prettylights-syntax-markup-list: #3b2300;
+	--color-prettylights-syntax-markup-heading: #0550ae;
+	--color-prettylights-syntax-markup-italic: #24292f;
+	--color-prettylights-syntax-markup-bold: #24292f;
+	--color-prettylights-syntax-markup-deleted-text: #82071e;
+	--color-prettylights-syntax-markup-deleted-bg: #ffebe9;
+	--color-prettylights-syntax-markup-inserted-text: #116329;
+	--color-prettylights-syntax-markup-inserted-bg: #dafbe1;
+	--color-prettylights-syntax-markup-changed-text: #953800;
+	--color-prettylights-syntax-markup-changed-bg: #ffd8b5;
+	--color-prettylights-syntax-markup-ignored-text: #eaeef2;
+	--color-prettylights-syntax-markup-ignored-bg: #0550ae;
+	--color-prettylights-syntax-meta-diff-range: #8250df;
+	--color-prettylights-syntax-brackethighlighter-angle: #57606a;
+	--color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
+	--color-prettylights-syntax-constant-other-reference-link: #0a3069;
+
+	/* ── 表面 ── */
+	--color-canvas-default: var(--c-bg);
+	--color-canvas-overlay: var(--c-bg-1);
+	--color-canvas-inset: var(--c-bg-2);
+	--color-canvas-subtle: var(--c-bg-1);
+
+	/* ── 文字层级 ── */
+	--color-fg-default: var(--c-text-1);
+	--color-fg-muted: var(--c-text-2);
+	--color-fg-subtle: var(--c-text-3);
+
+	/* ── 边框 ── */
+	--color-border-default: var(--c-border);
+	--color-border-muted: var(--c-border);
+	--color-neutral-muted: var(--c-bg-soft);
+
+	/* ── 强调色 = 站点主色（链接、@提及、焦点环、激活态） ── */
+	--color-accent-fg: var(--c-primary);
+	--color-accent-emphasis: var(--c-primary);
+	--color-accent-muted: var(--c-primary-soft);
+	--color-accent-subtle: var(--c-primary-soft);
+
+	/* ── 语义色：前景取站点值，背景弱色沿用官方 ── */
+	--color-success-fg: var(--c-success);
+	--color-attention-fg: var(--c-warning);
+	--color-attention-muted: #d4a72c66;
+	--color-attention-subtle: #fff8c5;
+	--color-danger-fg: var(--c-error);
+	--color-danger-muted: #ff818266;
+	--color-danger-subtle: #ffebe9;
+
+	/* ── 次级按钮（回复、反应选择器等） ── */
+	--color-btn-text: var(--c-text-1);
+	--color-btn-bg: var(--c-bg-1);
+	--color-btn-border: var(--c-border);
+	--color-btn-shadow: 0 1px 0 #1f23280a;
+	--color-btn-inset-shadow: inset 0 1px 0 #ffffff40;
+	--color-btn-hover-bg: var(--c-bg-2);
+	--color-btn-hover-border: var(--c-border);
+	--color-btn-active-bg: var(--c-bg-3);
+	--color-btn-active-border: var(--c-border);
+	--color-btn-selected-bg: var(--c-bg-2);
+
+	/* ── 主按钮：GitHub 绿 → 站点蓝，文字 --c-bg，与 partial/Button.vue 的 .primary 一致 ── */
+	--color-btn-primary-text: var(--c-bg);
+	--color-btn-primary-bg: var(--c-primary);
+	--color-btn-primary-border: #1f232826;
+	--color-btn-primary-shadow: 0 1px 0 #1f23281a;
+	--color-btn-primary-inset-shadow: inset 0 1px 0 #ffffff08;
+	--color-btn-primary-hover-bg: var(--c-primary-hover);
+	--color-btn-primary-hover-border: #1f232826;
+	--color-btn-primary-selected-bg: var(--c-primary-hover);
+	--color-btn-primary-selected-shadow: inset 0 1px 0 #002d1133;
+	--color-btn-primary-disabled-text: var(--c-text-3);
+	--color-btn-primary-disabled-bg: var(--c-primary-soft);
+	--color-btn-primary-disabled-border: #1f232826;
+
+	/* ── 其它控件 ── */
+	--color-action-list-item-default-hover-bg: var(--c-bg-soft);
+	--color-segmented-control-bg: var(--c-bg-2);
+	--color-segmented-control-button-bg: var(--c-bg);
+	--color-segmented-control-button-selected-border: var(--c-text-3);
+	--color-primer-shadow-inset: inset 0 1px 0 #d0d7de33;
+
+	/* ── 反应按钮 hover ── */
+	--color-social-reaction-bg-hover: var(--c-bg-2);
+	--color-social-reaction-bg-reacted-hover: var(--c-primary-soft);
+}
+
+main .pagination-loader-container {
+	background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line.svg);
+}
+
+main .gsc-loading-image {
+	background-image: url(https://github.githubassets.com/images/mona-loading-default.gif);
+}
+
+/* ═══ 无边框 · 融入博客正文 ═══════════════════════════════════════
+   以下覆盖的是 giscus 自带的布局 CSS（类名取自其组件源码），不是变量：
+   去掉卡片的边框 / 圆角 / 填充底色，让评论像正文一样平铺在页面上；
+   回复保留 giscus 的 .gsc-tl-line 时间线，用缩进 + 竖线连接，而非灰色卡块。 */
+
+/* 评论卡片本体（.gsc-comment 的首个子 div，含作者高亮卡）：溶进页面 */
+.gsc-comment > div {
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+}
+
+/* 顶层评论之间：一条极细分隔线代替卡片轮廓 */
+.gsc-comment + .gsc-comment {
+	margin-top: 4px;
+	padding-top: 20px;
+	border-top: 1px solid var(--color-border-muted);
+}
+
+/* 回复区：去掉内嵌灰块与边框，只留缩进与时间线 */
+.gsc-replies {
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+}
+
+/* 评论框：外框（.gsc-comment-box 的 1px 边框）与标签栏一律透明无框 */
+.gsc-comment-box {
+	border: 0 !important;
+	background: transparent !important;
+}
+.gsc-comment-box-tabs {
+	border: 0 !important;
+	background: transparent !important;
+}
+/* 编写 / 预览 标签：去掉方框，靠文字明暗区分选中 */
+.gsc-comment-box-tabs button {
+	border-color: transparent !important;
+	background: transparent !important;
+}
+
+/* 输入区：整块柔和填充 + 圆角；聚焦描边复用 giscus 自带的 .gsc-comment-box-write:focus-within 环（已是主色） */
+.gsc-comment-box-write {
+	border-radius: 8px !important;
+	background: var(--color-canvas-subtle) !important;
+}
+.gsc-comment-box-textarea,
+.gsc-comment-box-textarea-extras {
+	border: 0 !important;
+	background: transparent !important;
+}
+
+/* 折叠的回复框：同样的柔和填充 */
+.gsc-reply-box {
+	border: 0 !important;
+	border-radius: 8px !important;
+	background: var(--color-canvas-subtle) !important;
+}
