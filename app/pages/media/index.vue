@@ -110,8 +110,21 @@ async function loadMore() {
 	}
 }
 
-onMounted(reload)
-watch([categoryKey, statusKey], reload)
+// 硬开深链(/media?category=game&status=collect)时，客户端 router 会晚一拍才把 query 解析到位。
+// 若在 onMounted 直接取数，会先按默认(番剧·在看)打一枪、query 落定后再打第二枪。
+// 故等 router.isReady() 后再首取，并用 ready 挡掉 query 落定过程中的那次 watch 触发。
+const ready = ref(false)
+
+onMounted(async () => {
+	await router.isReady()
+	ready.value = true
+	reload()
+})
+
+watch([categoryKey, statusKey], () => {
+	if (ready.value)
+		reload()
+})
 </script>
 
 <template>
