@@ -48,7 +48,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 
 			<ol v-else class="feed">
 				<li v-for="memo in memos" :key="memo.id">
-					<UtilLink :to="`/memos#${memo.id}`" class="item">
+					<UtilLink :to="`/memos/${memo.id}`" class="item">
 						<!-- monthDay 是定宽的，日期列才能对齐成左轨 -->
 						<UtilDate class="date" :date="memo.createTime" format="monthDay" />
 
