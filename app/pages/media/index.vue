@@ -33,7 +33,7 @@ function fetchPage(offset: number) {
 		offset: String(offset),
 	})
 	const url = `${BGM_API}/${appConfig.bangumi.uid}/collections?${query}`
-	return $fetch<BgmCollectionPage>(withBgmProxy(appConfig.bangumi.proxy, url))
+	return $fetch<BgmCollectionPage>(withBgmProxy(appConfig.bangumi.apiProxy, url))
 }
 
 // 切换分类/状态会连发请求，用递增的 token 丢弃迟到的旧响应，避免顺序错乱覆盖列表

@@ -15,7 +15,7 @@ const title = computed(() => subject.value.name_cn || subject.value.name)
 // 封面同样走反代（API 回传的仍是 lain.bgm.tv 原址，不会被反代改写）
 const cover = computed(() => {
 	const raw = subject.value.images?.common || subject.value.images?.large || ''
-	return raw ? withBgmProxy(appConfig.bangumi.proxy, raw) : ''
+	return raw ? withBgmProxy(appConfig.bangumi.imgProxy, raw) : ''
 })
 const link = computed(() => `https://bgm.tv/subject/${props.item.subject_id}`)
 
