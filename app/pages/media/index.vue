@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { BgmCollection, BgmCollectionPage, BgmStatusType } from '~/utils/bangumi'
-import { BGM_CATEGORIES, BGM_STATUS_TYPES, withBgmProxy } from '~/utils/bangumi'
+import type { BgmCollection, BgmCollectionPage, BgmStatusKey } from '~/utils/bangumi'
+import { BGM_CATEGORIES, BGM_STATUS_KEYS, BGM_STATUS_TYPES, withBgmProxy } from '~/utils/bangumi'
 
 const PAGE_SIZE = 20
 const BGM_API = 'https://api.bgm.tv/v0/users'
@@ -11,11 +11,36 @@ useSeoMeta({
 	description: `${appConfig.title}追过的番剧、看过的影视、玩过的游戏，同步自 Bangumi。`,
 })
 
-// 分类（番剧/影视/游戏）与状态（在看/看过/想看）两级切换
-const categoryKey = ref(BGM_CATEGORIES[0]!.key)
-const status = ref<BgmStatusType>(BGM_STATUS_TYPES[0])
+const route = useRoute()
+const router = useRouter()
 
+const DEFAULT_CATEGORY = BGM_CATEGORIES[0]!.key
+const DEFAULT_STATUS: BgmStatusKey = BGM_STATUS_KEYS[0]
+
+// 筛选状态以 URL query 为准（?category=&status=）：读 query 决定当前视图，点击时写回。
+// 深链、浏览器前进/后退因此天然可用；非法值回落默认，默认值省略以保持裸 /media 干净
+const categoryKey = computed(() => {
+	const raw = route.query.category
+	const key = (Array.isArray(raw) ? raw[0] : raw) || ''
+	return BGM_CATEGORIES.some(c => c.key === key) ? key : DEFAULT_CATEGORY
+})
+const statusKey = computed<BgmStatusKey>(() => {
+	const raw = route.query.status
+	const key = (Array.isArray(raw) ? raw[0] : raw) || ''
+	return (BGM_STATUS_KEYS as readonly string[]).includes(key) ? key as BgmStatusKey : DEFAULT_STATUS
+})
 const category = computed(() => BGM_CATEGORIES.find(c => c.key === categoryKey.value)!)
+const statusType = computed(() => BGM_STATUS_TYPES[BGM_STATUS_KEYS.indexOf(statusKey.value)]!)
+
+// 只把非默认值写进 query，默认组合对应裸 /media；push 让每个组合成为可后退的历史条目
+function applyFilter(cat: string, stat: BgmStatusKey) {
+	const query: Record<string, string> = {}
+	if (cat !== DEFAULT_CATEGORY)
+		query.category = cat
+	if (stat !== DEFAULT_STATUS)
+		query.status = stat
+	router.push({ query })
+}
 
 const items = ref<BgmCollection[]>([])
 const total = ref(0)
@@ -28,7 +53,7 @@ function fetchPage(offset: number) {
 	// 交给 ofetch/ufo 处理有可能被规范化，这里整条 URL 原样传入最稳
 	const query = new URLSearchParams({
 		subject_type: String(category.value.subjectType),
-		type: String(status.value),
+		type: String(statusType.value),
 		limit: String(PAGE_SIZE),
 		offset: String(offset),
 	})
@@ -86,7 +111,7 @@ async function loadMore() {
 }
 
 onMounted(reload)
-watch([categoryKey, status], reload)
+watch([categoryKey, statusKey], reload)
 </script>
 
 <template>
@@ -120,7 +145,7 @@ watch([categoryKey, status], reload)
 				class="filter-cat"
 				:class="{ active: c.key === categoryKey }"
 				:aria-pressed="c.key === categoryKey"
-				@click="categoryKey = c.key"
+				@click="applyFilter(c.key, statusKey)"
 			>
 				<Icon :name="c.icon" />{{ c.label }}
 			</button>
@@ -136,9 +161,9 @@ watch([categoryKey, status], reload)
 				:key="i"
 				type="button"
 				class="filter-status-tab"
-				:class="{ active: BGM_STATUS_TYPES[i] === status }"
-				:aria-pressed="BGM_STATUS_TYPES[i] === status"
-				@click="status = BGM_STATUS_TYPES[i]!"
+				:class="{ active: BGM_STATUS_KEYS[i] === statusKey }"
+				:aria-pressed="BGM_STATUS_KEYS[i] === statusKey"
+				@click="applyFilter(categoryKey, BGM_STATUS_KEYS[i]!)"
 			>
 				{{ label }}
 			</button>

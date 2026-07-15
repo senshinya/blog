@@ -26,6 +26,10 @@ export const BGM_CATEGORIES: BgmCategory[] = [
 export const BGM_STATUS_TYPES = [3, 2, 1] as const
 export type BgmStatusType = typeof BGM_STATUS_TYPES[number]
 
+/** 状态的 URL slug，顺序对齐 BGM_STATUS_TYPES 与各分类的 statusLabels */
+export const BGM_STATUS_KEYS = ['doing', 'collect', 'wish'] as const
+export type BgmStatusKey = typeof BGM_STATUS_KEYS[number]
+
 /**
  * 给 bgm 资源 URL（API 或 lain.bgm.tv 封面）套上反代前缀，形如
  * `https://forward.shinya.click/https://api.bgm.tv/...`。前缀为空则原样直连。
