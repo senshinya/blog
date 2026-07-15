@@ -84,6 +84,7 @@ export default defineAppConfig({
 				title: '信息',
 				items: [
 					{ icon: 'simple-icons:nuxt', text: `主题: ${pascalCase(name)} ${version}`, url: 'https://github.com/L33Z22L11/blog-v3' },
+					{ icon: 'tabler:certificate', text: '萌ICP备20248008号', url: 'https://icp.gov.moe/?keyword=20248008' },
 				],
 			},
 		] satisfies Nav,
