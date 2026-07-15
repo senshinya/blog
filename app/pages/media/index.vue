@@ -17,22 +17,27 @@ const router = useRouter()
 const DEFAULT_CATEGORY = BGM_CATEGORIES[0]!.key
 const DEFAULT_STATUS: BgmStatusKey = BGM_STATUS_KEYS[0]
 
-// 筛选状态以 URL query 为准（?category=&status=）：读 query 决定当前视图，点击时写回。
-// 深链、浏览器前进/后退因此天然可用；非法值回落默认，默认值省略以保持裸 /media 干净
-const categoryKey = computed(() => {
-	const raw = route.query.category
-	const key = (Array.isArray(raw) ? raw[0] : raw) || ''
+// 从一段 query 值解析出合法的分类/状态，非法回落默认
+function parseCategory(v: unknown): string {
+	const raw = Array.isArray(v) ? v[0] : v
+	const key = typeof raw === 'string' ? raw : ''
 	return BGM_CATEGORIES.some(c => c.key === key) ? key : DEFAULT_CATEGORY
-})
-const statusKey = computed<BgmStatusKey>(() => {
-	const raw = route.query.status
-	const key = (Array.isArray(raw) ? raw[0] : raw) || ''
+}
+function parseStatus(v: unknown): BgmStatusKey {
+	const raw = Array.isArray(v) ? v[0] : v
+	const key = typeof raw === 'string' ? raw : ''
 	return (BGM_STATUS_KEYS as readonly string[]).includes(key) ? key as BgmStatusKey : DEFAULT_STATUS
-})
+}
+
+// 筛选状态直接由 URL query 派生（?category=&status=）。
+// /media 在 nuxt.config 配了 ssr:false 并预渲染成客户端壳：产物不带 payload.path，
+// 水合时路由照地址栏解析，route.query 从首帧即正确 —— 深链首取即用 URL 上的参数，不会先按默认打一枪。
+const categoryKey = computed(() => parseCategory(route.query.category))
+const statusKey = computed(() => parseStatus(route.query.status))
 const category = computed(() => BGM_CATEGORIES.find(c => c.key === categoryKey.value)!)
 const statusType = computed(() => BGM_STATUS_TYPES[BGM_STATUS_KEYS.indexOf(statusKey.value)]!)
 
-// 只把非默认值写进 query，默认组合对应裸 /media；push 让每个组合成为可后退的历史条目
+// 点击只写回 query（默认值省略以保持裸 /media；push 让每个组合可后退），状态由上面的 computed 派生
 function applyFilter(cat: string, stat: BgmStatusKey) {
 	const query: Record<string, string> = {}
 	if (cat !== DEFAULT_CATEGORY)
@@ -44,7 +49,7 @@ function applyFilter(cat: string, stat: BgmStatusKey) {
 
 const items = ref<BgmCollection[]>([])
 const total = ref(0)
-const loading = ref(true) // 首屏取数走客户端（server: false 语义），预渲染时先显示加载态
+const loading = ref(true) // 客户端取数，首帧先显示加载态
 const loadingMore = ref(false)
 const error = ref<Error>()
 
@@ -110,21 +115,9 @@ async function loadMore() {
 	}
 }
 
-// 硬开深链(/media?category=game&status=collect)时，客户端 router 会晚一拍才把 query 解析到位。
-// 若在 onMounted 直接取数，会先按默认(番剧·在看)打一枪、query 落定后再打第二枪。
-// 故等 router.isReady() 后再首取，并用 ready 挡掉 query 落定过程中的那次 watch 触发。
-const ready = ref(false)
-
-onMounted(async () => {
-	await router.isReady()
-	ready.value = true
-	reload()
-})
-
-watch([categoryKey, statusKey], () => {
-	if (ready.value)
-		reload()
-})
+onMounted(reload)
+// 点击 / 前进后退改变 query → 上面的 computed 更新 → 这里重新取数
+watch([categoryKey, statusKey], reload)
 </script>
 
 <template>
