@@ -55,6 +55,12 @@ const blogConfig = {
 		robotsNotIndex: ['/preview', '/previews/*'],
 	},
 
+	/** Bangumi(bgm.tv)收藏，用于 /media 娱乐页（番剧/影视/游戏） */
+	bangumi: {
+		/** 数字 UID：该账号没有自定义用户名，只能用 UID。接口 /v0/users/{uid}/collections */
+		uid: '1264845',
+	},
+
 	/** 博客 Atom 订阅源 */
 	feed: {
 		/** 订阅源最大文章数量 */
