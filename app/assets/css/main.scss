@@ -19,7 +19,6 @@
 	text-autospace: normal;
 	text-size-adjust: none;
 	color: var(--c-text-1);
-	transition: color 0.1s, background-color 0.2s;
 	scroll-behavior: smooth;
 	scroll-padding: 2rem;
 	scrollbar-color: var(--c-text-3) transparent;
@@ -34,8 +33,22 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		transition: none;
 		scroll-behavior: auto;
+	}
+}
+
+// 主题淡入淡出放在 body，而不是 :root：:root 拥有文档滚动条，在它身上做
+// background-color 过渡会让 Chrome 在切换配色时把整条滚动条涂成灰色、盖住滚动条，
+// 直到手动滚动一次才恢复（Safari 无此问题）。
+// :root 的底色保持静态（盖住溢出/overscroll 区域），可见的过渡交给铺满视口的 body。
+body {
+	min-height: 100dvh;
+	background-color: var(--c-bg-1);
+	color: var(--c-text-1);
+	transition: color 0.1s, background-color 0.2s;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
 	}
 }
 
