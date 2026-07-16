@@ -77,7 +77,7 @@ const paramEntries = computed(() => Object.entries(props.params ?? {}))
 	align-items: center;
 	align-self: stretch;
 	justify-content: center;
-	width: 92px;
+	width: 132px;
 	background-color: var(--c-bg-2);
 
 	:deep(img) {
@@ -88,7 +88,7 @@ const paramEntries = computed(() => Object.entries(props.params ?? {}))
 
 	// 无照片：图标块，取分区强调色
 	&.logo {
-		font-size: 2rem;
+		font-size: 2.2rem;
 		color: var(--sec, var(--c-primary));
 	}
 }
