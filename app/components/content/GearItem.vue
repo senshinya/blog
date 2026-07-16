@@ -56,7 +56,10 @@ const hasImage = computed(() => !!props.image)
 }
 
 .gear-body {
+	// flex: 1 让正文吃满卡片剩余高度；当无图卡与大图卡同排被拉高时，
+	// 配合 align-items: center 把图标+文字竖直居中，而非顶在上沿留空
 	display: flex;
+	flex: 1;
 	align-items: center;
 	gap: 0.6rem;
 	padding: 0.6em 0.8em;
