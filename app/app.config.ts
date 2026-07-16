@@ -116,6 +116,7 @@ export default defineAppConfig({
 				{ icon: 'tabler:map-2', text: '游记', url: '/travels' },
 				{ icon: 'tabler:bubble-text', text: '碎语', url: '/memos' },
 				{ icon: 'tabler:movie', text: '娱乐', url: '/media' },
+				{ icon: 'tabler:devices', text: '装备', url: '/uses' },
 				{ icon: 'tabler:archive', text: '归档', url: '/archive' },
 				{ icon: 'tabler:link', text: '友链', url: '/link' },
 			],
