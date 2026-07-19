@@ -14,7 +14,7 @@ tags: ["折腾", "vps", "自托管"]
 
 ### Netcup ARM
 
-挑 VPS 比想象中纠结。DigitalOcean 和 Linode 同配置贵一倍以上，直接排除。Hetzner 性价比是有的，可惜 ARM 节点选址不灵活。国内小厂便宜，但备案是大坑，而且带宽小的可怜。兜了一圈还是 Netcup。
+挑 VPS 纠结了一阵。DigitalOcean 和 Linode 同配置贵一倍以上，直接排除。Hetzner 性价比是有的，可惜 ARM 节点选址不灵活。国内小厂便宜，但备案是大坑，而且带宽小得可怜。兜了一圈还是 Netcup。
 
 型号是 VPS 2000 ARM G11，10 vCore、16G 内存、512G NVMe、2.5 Gbps，月价 €13.41 含税。同样的配置放到 x86 至少得贵一倍。流量走 flatrate，24 小时滑动平均超过 2 TB 才限速到 200 Mbps，我这种小破站根本碰不到。
 
@@ -43,15 +43,15 @@ Caddyfile 那边一行 `reverse_proxy trek:3000` 收尾。从 `docker compose up
 
 后半夜的折腾大概就是从这个念头开始的。~~手痒~~反正配置富裕，闲着也是闲着，干脆把一直想自托管的东西都搬上来。
 
-第二天起床顺手装了 Forgejo 负责代码托管，博客也借此机会翻新了一遍，下面单独说。邮件是 Stalwart + SnappyMail + 自己写的 Resend bridge 三件套。AI 那条线挂 CLIProxyAPI，把 OpenAI / Claude / Gemini 几家订阅统一起来，前端是 Open WebUI。再往后是密码、网盘、图床、笔记、稍后读、RSS、PDF 工具集，能自托管的几乎都尝试了一遍。SSO 用 Authelia，一次登录处处可用。备份是 Dagu 起一个 DAG，每天加密快照到 R2。
+第二天起床顺手装了 Forgejo 负责代码托管，博客也借此机会翻新了一遍，下面单独说。邮件是 Stalwart + SnappyMail + 自己写的 Resend bridge 三件套。AI 那条线挂 CLIProxyAPI，把 OpenAI / Claude / Gemini 几家订阅统一起来，前端是 Open WebUI。再往后是密码、网盘、图床、笔记、稍后读、RSS、PDF 工具集，能自托管的几乎都尝试了一遍。SSO 用 Authelia。备份是 Dagu 起一个 DAG，每天加密快照到 R2。
 
 陆陆续续装完，整套结构大概是这样：
 
 ![画的时候还没把博客算进去，现在看只会更满](https://blog-img.774352199.xyz/4F9LtW.png)
 
-入口侧走 Cloudflare SaaS 智能解析回源，Caddy 是唯一的外向 TLS 终点，按 Host 头反代到对应容器。需要登录的服务统一挂 Authelia forward_auth。出站邮件走 Resend 的 HTTPS API 桥接，绕开 Netcup 封掉的 25 端口。备份每天全量加密快照到 Cloudflare R2。
+入口侧走 Cloudflare SaaS 智能解析回源，Caddy 是唯一的外向 TLS 终点，按 Host 头反代到对应容器。需要登录的服务统一挂 Authelia forward_auth。出站邮件走 Resend 的 HTTPS API 桥接，绕开 Netcup 封掉的 25 端口。
 
-Dockge 面板里二十来个 stack 全绿着，看着确实有满足感。当然，这里面相当一部分是部署成瘾上头——本来只想要一个 TREK，最后 TREK 在这张图里只占一个小格子。
+Dockge 面板里二十来个 stack 全绿着。当然，这里面相当一部分是部署成瘾上头——本来只想要一个 TREK，最后 TREK 在这张图里只占一个小格子。
 
 ### 迁博客
 
@@ -61,7 +61,7 @@ Dockge 面板里二十来个 stack 全绿着，看着确实有满足感。当然
 
 新栈是 SvelteKit 2 + adapter-node SSR + UnoCSS，视觉沿用 retypeset，样式按 UnoCSS 重写了一份。内容后端换成 PocketBase，建了 7 个 collection，把文章、标签、游记、游记天数、游记照片、独立页面、友链全收进 SQLite。i18n 改成 zh / en / ja 三语并存。Astro 那边导出来的 markdown 写了个 migration 脚本一锅倒进 PB，123 篇文章、4 篇游记、148 张游记照片记录，加上 pages 和 friends 全部落库。
 
-部署改成蓝绿。blog-blue 和 blog-green 两个容器常驻，活色由 `/opt/app/blog/active` 标记，Caddy 的反代上游从 `/opt/app/caddy-blog/upstream.caddy` 这个文件 import。CI 推完新镜像跑 switch.sh：起 target 色、等 healthcheck、改 import 文件、caddy reload 切流，失败自动回滚。做完之后发文章不用再等三分钟 build，PB 后台改一下，保存即生效。
+部署改成蓝绿。blog-blue 和 blog-green 两个容器常驻，活跃的由 `/opt/app/blog/active` 标记，Caddy 的反代上游从 `/opt/app/caddy-blog/upstream.caddy` 这个文件 import。CI 推完新镜像跑 switch.sh：起 target 色、等 healthcheck、改 import 文件、caddy reload 切流，失败自动回滚。做完之后发文章不用再等三分钟 build，PB 后台改一下，保存即生效。
 
 后台是 SvelteKit 内部的 SPA，挂在 /admin 下，走 Authelia forward_auth。admin 到 PB 的写请求经 Caddy 同源反代 `/api/pb/*`，token 由 Caddy 注入，浏览器和 git 仓库都摸不到这把 key。PB 写入会触发一个 JS 钩子 POST 到 blog 容器的内部端点，做服务端缓存失效，再调一次 Cloudflare API purge 边缘缓存，公开页平均还是 CDN 命中。
 

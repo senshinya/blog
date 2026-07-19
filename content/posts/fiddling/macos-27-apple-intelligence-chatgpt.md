@@ -8,7 +8,7 @@ tags: ["折腾", "macOS", "Apple 智能", "ChatGPT"]
 
 又是一年科技春晚 WWDC，macOS 27 如约而至。该换的皮换了，该升的版本号升了，唯独 macOS 27 最大的升级：Apple 智能，国行机器依然无法使用，又是一次环大陆更新，依旧的二等公民。
 
-去年 [macOS 26](/fiddling/macos-26-trial) 我还没什么感觉，今年想着机器都在手里了，不如折腾一下。本机是国行 MacBook air M5，系统 macOS 27（26A5353q）。整个过程分两段：先用一个内核扩展启用 Apple 智能，再尝试开启 ChatGPT 扩展——因为它有自己的一套地理围栏限制，比 Apple 智能整体的地区管控要严格的多。
+去年 [macOS 26](/fiddling/macos-26-trial) 我还没什么感觉，今年想着机器都在手里了，不如折腾一下。本机是国行 MacBook Air M5，系统 macOS 27（26A5353q）。整个过程分两段：先用一个内核扩展启用 Apple 智能，再尝试开启 ChatGPT 扩展——因为它有自己的一套地理围栏限制，比 Apple 智能整体的地区管控要严格得多
 
 ## 原理
 
@@ -43,7 +43,7 @@ csrutil disable
 sudo ./install.sh
 ```
 
-脚本会检查 SIP 和 Apple Silicon 状态，装好 kext、配好开机自启的 LaunchDaemon，刷新 Apple 智能相关的守护进程。首次加载 kext 时系统会拦截，需要在「系统设置 → 隐私与安全性」中允许，重启即可。
+脚本会检查 SIP 和 Apple Silicon 状态，装好 kext、配好开机自启的 LaunchDaemon，刷新 Apple 智能相关的守护进程。首次加载 kext 时系统会拦截，需要在「系统设置 → 隐私与安全性」中允许，重启即可
 
 这里有个坑：
 
@@ -58,11 +58,11 @@ sudo ./install.sh status     # SIP / AMFI / region / kext / 资格 一览
 ioreg -ard1 -c IOPlatformExpertDevice | plutil -p - | grep region-info   # 应为 0x4c4c2f41 即 "LL/A"
 ```
 
-`region-info` 值为 `LL/A`、资格域 GREYMATTER 的值为 4（eligible）。重启进设置，Apple 智能的配置项出现了，写作工具、Genmoji、图乐园、Foundation Models 全能正常使用。到这一步我以为已经收工了。
+`region-info` 值为 `LL/A`、资格域 GREYMATTER 的值为 4（eligible）。重启进设置，Apple 智能的配置项出现了，写作工具、Genmoji、图乐园、Foundation Models 全能正常使用。
 
 完美！
 
-## 以为大功告成，ChatGPT 偏不出来
+## ChatGPT 扩展
 
 问题出在 Siri 的 ChatGPT 扩展。Siri 设置中，预期应当展示一个 ChatGPT 扩展的设置开关用于登录 ChatGPT 账号。Siri 还会提示「ChatGPT 的 Apple 智能支持内容仍在下载」。
 
@@ -77,7 +77,7 @@ Retrieved provider status for ChatGPT: .forciblyHidden, info:
 
 三条原因如下：`partnerNotSelected` 是因为开关没有出现，暂且不论。真正的问题在于后两条：当前的 IP 国家码不符，系统的地区设置不符。
 
-这就有意思了。kext 已经将设备区域改成了美版，`RegionCode` 是 US，但 ChatGPT 插件却不读取设备的 `RegionCode`，它依据 `countryd` 进程实时计算出的「你现在人在哪个国家」。也就是说 ChatGPT 扩展依据的是另一套地理围栏，而不仅仅是设备地区。
+这就有意思了。kext 已经将设备区域改成了美版，`RegionCode` 是 US，但 ChatGPT 插件却不读取设备的 `RegionCode`，它依据 `countryd` 进程实时计算出的「你现在人在哪个国家」。
 
 ## 解决 countryd
 
@@ -106,23 +106,23 @@ WiFiAP (优先级 1)  >  Location 定位 (优先级 4)  >  GeoIP (优先级 5)
 21:49:51  "WiFi AP update", "countryCode":"CN"   ← 9 秒后又变回 CN
 ```
 
-热点自己的 BSSID 返回空，这符合预期。可九秒之后又被归为 CN，因为 Apple 的 WiFi 定位不只看你连接的那个热点——它扫描周围**所有**的 WiFi 信号。我连上了热点，可我家、我邻居、整栋楼的国内路由器，照样把我定位到中国。
+热点自己的 BSSID 返回空。可九秒之后又被归为 CN，因为 Apple 的 WiFi 定位不只看你连接的那个热点——它扫描周围**所有** 的 WiFi 信号。我连上了热点，可我家、我邻居、整栋楼的国内路由器，照样把我定位到中国。
 
-只要 WiFi 开着，连接哪个热点都没有用，周围的国内 AP 会前赴后继地出卖你。
+只要 WiFi 开着，连接哪个热点都没有用，周围的国内 AP 会前赴后继地出卖你
 
 ~~Only Apple Can Do~~
 
 ## 关闭 WiFi
 
-那么只要把 WiFi 关掉走有线，就能让 `countryd` 一个物理信号都获取不了，只能根据 GeoIP 判断。
+只要把 WiFi 关掉走有线，就能让 `countryd` 一个物理信号都获取不了，只能根据 GeoIP 判断
 
-我用的是 iPhone USB 网络共享，加上 Mac 上的全局日本代理。链路如下：手机 USB 网络共享，Mac 开启全局代理，保持 WiFi 关闭。再去看 `countryd`，GeoIP 终于变成了日本：
+我用的是 iPhone USB 网络共享，加上 Mac 上的全局日本代理，WiFi 保持关闭。再去看 `countryd`，GeoIP 终于变成了日本：
 
 ```
 "CACHE: Geo IP country code changing", "from":"CN", "to":"JP, priority = 5 (GeoIP)"
 ```
 
-但 overall 估算还是 CN。排查后发现，关 WiFi 不会主动发一个「清除」事件，`countryd` 把 WiFi 关闭前最后一次获取到的 `WiFiAP=CN` 缓存到了磁盘，每次重启都会从缓存中获取，由于优先级最高，导致 GeoIP 无法生效。
+但 overall 估算还是 CN。排查后发现，关 WiFi 不会主动发一个「清除」事件，`countryd` 把 WiFi 关闭前最后一次获取到的 `WiFiAP=CN` 缓存到了磁盘，每次重启都会从缓存中获取，由于优先级最高，导致 GeoIP 无法生效
 
 那就删除缓存：
 
