@@ -97,7 +97,27 @@ export default defineNuxtConfig({
 			// memo 的 id 是 22 位 nanoid，撞不上 _shell 这个名字。
 			// /media 配了 ssr:false（见 routeRules），crawler 不会渲染它，显式登记才能生成
 			// 那个纯客户端壳（/media/index.html）。路径是静态的，直接命中该文件，无需像碎语那样重写。
-			routes: ['/travels', ...travelRoutes, '/memos/_shell', '/media'],
+			routes: ['/', '/travels', ...travelRoutes, '/memos/_shell', '/media'],
+
+			/**
+			 * 以下两条是从 `nuxt generate` 切到 `nuxt build` 之后必须自己补上的。
+			 *
+			 * `nuxt generate` 做的事其实是 `prerender: true`，它会命中 nitro 的 static preset，
+			 * 而那个 preset 同时设了 `static: true` 和 `crawlLinks: true`
+			 * （见 nitropack/dist/presets/_static/preset.mjs）。切到 `nuxt build` 后走的是
+			 * vercel preset，两样都没了：
+			 *
+			 *   1. crawlLinks 掉回 nitro 的默认值 false，爬虫不再顺着链接铺开；
+			 *   2. 更隐蔽的是 static 也变成 false，于是 nuxt/dist/index.mjs 里那段
+			 *      「static 为真时把首页塞进预渲染队列当种子」直接 return —— 队列会连起点都没有。
+			 *
+			 * 所以 crawlLinks 要显式打开，`/` 也要显式登记（即上面 routes 的第一项）。
+			 * 少任何一条，文章页都会退化成按需 SSR：首字节变慢，函数调用量从几乎为零变成每次访问一次。
+			 *
+			 * 本项目需要服务端，只是为了 /api/og 这一个端点（碎语的链接预览卡要用它代取外站元数据）。
+			 * 页面该静态的还是静态的，别被 `nuxt build` 这个名字误导。
+			 */
+			crawlLinks: true,
 		},
 
 		/**
@@ -142,6 +162,15 @@ export default defineNuxtConfig({
 	// @keep-sorted
 	routeRules: {
 		...mapValues(redirectList, to => ({ redirect: { to, statusCode: 308 as const } })),
+		/**
+		 * 碎语链接预览卡的取数端点（见 server/api/og.get.ts），全站唯一的运行时函数。
+		 *
+		 * 与 /api/stats 相反，这条**不能**预渲染 —— 它得按 query 现抓。此处只声明这件事，
+		 * Cache-Control 交给 handler 自己设：成功与失败该缓存多久并不一样，
+		 * 而 routeRules 的 headers 是在 handler 之前跑的中间件（nitropack 的
+		 * runtime/internal/route-rules.mjs），写在这儿也会被 handler 覆盖，徒增两处真相。
+		 */
+		'/api/og': { prerender: false },
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
 		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		'/favicon.ico': { redirect: { to: blogConfig.favicon } },

@@ -31,7 +31,7 @@ const { data, status, error } = useLazyAsyncData(
 		const raw = await $fetch<Memo>(`${API}/${id.value}`)
 		return {
 			memo: parseMemo(raw),
-			// 纯文本仅供 title / description，正文该渲染的还是 memo.html
+			// 纯文本仅供 title / description，正文该渲染的还是 memo.blocks
 			summary: toMemoPlainText(raw.content),
 		}
 	},

@@ -55,8 +55,15 @@ const openLightbox = useLightbox()
 		</div>
 	</div>
 
-	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div v-if="html" class="memo-content" v-html="html" />
+	<!-- 正文按块渲染：独占一行的裸链接被切成 link 块换成预览卡，其余照旧走 v-html。
+		切块规则见 utils/memo.ts 的 splitMemoLinks -->
+	<div v-if="blocks.length" class="memo-content">
+		<template v-for="block, index in blocks" :key="index">
+			<!-- eslint-disable-next-line vue/no-v-html -->
+			<div v-if="block.type === 'html'" class="rich-text" v-html="block.html" />
+			<MemoLinkCard v-else :url="block.url" />
+		</template>
+	</div>
 
 	<div v-if="images.length" class="memo-images">
 		<div v-for="src in images" :key="src" class="img-item">
@@ -181,53 +188,59 @@ const openLightbox = useLightbox()
 	line-height: 1.6;
 	color: var(--c-text-2);
 
-	:deep(p) {
-		margin: 0.3em 0;
-	}
-
-	:deep(a) {
-		color: var(--c-primary);
-
-		&:hover {
-			text-decoration: underline;
+	// 以下这些是给 marked 渲染出来的正文用的，故一律收在 .rich-text 之下。
+	// 摊在 .memo-content 上会连坐 MemoLinkCard —— 它的根就是个 <a>，
+	// 会被 :deep(a) 染成主色、hover 时整张卡的文字都加上下划线。
+	// 且父组件那条选择器还比卡片自己的样式更specific，在子组件里盖不掉
+	:deep(.rich-text) {
+		p {
+			margin: 0.3em 0;
 		}
-	}
 
-	:deep(code) {
-		padding: 0.1em 0.3em;
-		border-radius: 0.3em;
-		background-color: var(--c-bg-2);
-		font-family: var(--font-monospace);
-		font-size: 0.9em;
-	}
-
-	:deep(pre) {
-		overflow: auto;
-		padding: 0.6em 0.8em;
-		border-radius: 0.5em;
-		background-color: var(--c-bg-2);
-		font-size: 0.85em;
-
-		> code {
-			padding: 0;
-			background: none;
-		}
-	}
-
-	:deep(blockquote) {
-		margin: 0.4em 0;
-		padding: 0.2em 0.6em;
-		border-inline-start: 3px solid var(--c-border);
-		color: var(--c-text-2);
-	}
-
-	:deep(:where(ul, ol)) {
-		margin: 0.3em 0;
-		padding-inline-start: 1.5em;
-		list-style: revert;
-
-		> li::marker {
+		a {
 			color: var(--c-primary);
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		code {
+			padding: 0.1em 0.3em;
+			border-radius: 0.3em;
+			background-color: var(--c-bg-2);
+			font-family: var(--font-monospace);
+			font-size: 0.9em;
+		}
+
+		pre {
+			overflow: auto;
+			padding: 0.6em 0.8em;
+			border-radius: 0.5em;
+			background-color: var(--c-bg-2);
+			font-size: 0.85em;
+
+			> code {
+				padding: 0;
+				background: none;
+			}
+		}
+
+		blockquote {
+			margin: 0.4em 0;
+			padding: 0.2em 0.6em;
+			border-inline-start: 3px solid var(--c-border);
+			color: var(--c-text-2);
+		}
+
+		:where(ul, ol) {
+			margin: 0.3em 0;
+			padding-inline-start: 1.5em;
+			list-style: revert;
+
+			> li::marker {
+				color: var(--c-primary);
+			}
 		}
 	}
 }

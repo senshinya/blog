@@ -122,6 +122,19 @@ export function getFavicon(domain: string, options?: FaviconOptions) {
 	return `https://unavatar.webp.se/${provider}/${domain}?w=${size}`
 }
 
+/**
+ * 碎语链接卡上那格 og:image 的取图地址。
+ *
+ * 站点给 og:image 放的多是 1200×630、几百 KB 的大图，而卡片上那格缩略图不过百来像素宽。
+ * 一屏二十条碎语要是全下原图，代价离谱。@nuxt/image 的 provider 在 Vercel 上是整个关掉的
+ * （见 nuxt.config 的 image 段），指望不上，故借 wsrv 在它那头缩好再回来。
+ *
+ * 顺带解决防盗链：wsrv 去取图时不带 Referer，而不少站点的 og:image 直连会吃 403。
+ */
+export function getOgImgUrl(src: string, width: number) {
+	return `${services.weserv}${encodeURIComponent(src)}&w=${width}&output=webp`
+}
+
 export function getImgUrl(src: string, service?: ImgService | true) {
 	if (!service)
 		return src
