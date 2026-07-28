@@ -5,54 +5,63 @@ const API = 'https://memos.shinya.click/api/v1/memos'
 
 const route = useRoute()
 const appConfig = useAppConfig()
+// 取数 handler 里要用，得在 setup 阶段先抓住（理由见下面 404 那段）
+const nuxtApp = useNuxtApp()
 
 const id = computed(() => String(route.params.id))
 
 /**
- * 单条碎语的固定链接页。
- *
- * 静态托管上 /memos/<id> 并没有对应的 HTML 文件 —— 靠平台的 200 重写，把预渲染出来的
- * /memos/_shell 顶到任意 /memos/* 上（Netlify 见 public/_redirects，Vercel 见 nuxt.config
- * 的 nitro.vercel）。所以这个页面在构建期只会以 id="_shell" 渲染一次，且必须渲染成
- * 与客户端首帧一模一样的加载态：DOM 对得上，水合才不会错位。
- *
- * 推论：加载态里不能出现 id、也不能出现任何与具体某条碎语有关的内容。
- *
- * server: false 同时也是碎语一贯的取数方式 —— 构建期取数会让页面永远停在上次部署的快照。
+ * 单条碎语的固定链接页。按需服务端渲染，产物由 Vercel 的 ISR 缓存（见 nuxt.config 的
+ * routeRules '/memos/**'）。取数必须在服务端跑完，下面 useSeoMeta 那几行才有内容可写 ——
+ * 爬虫不跑 JS，客户端再漂亮的 head 它也看不见。
  *
  * key 用定值 + watch，而不是「随 id 变化的响应式 key」（useAsyncData 本身是支持后者的）：
  * 本项目开了 experimental.extractAsyncDataHandlers，它把传进来的第一个函数一律当作 handler
  * 抽进独立 chunk，于是响应式 key 会被换成一个返回 Promise 的懒加载包装函数，
  * 运行期直接抛 “key must be a non-empty string”。
+ *
+ * 仍用 lazy 版：lazy 只影响客户端导航（从列表点进来时不挂起 Suspense，先换页再显示加载态），
+ * 服务端那一遍照样 await（nuxt/app/composables/asyncData 里 onServerPrefetch(() => promise)）。
  */
 const { data, status, error } = useLazyAsyncData(
 	'memo-detail',
 	async () => {
-		const raw = await $fetch<Memo>(`${API}/${id.value}`)
+		const raw = await $fetch<Memo>(`${API}/${id.value}`).catch((err) => {
+			/**
+			 * 删掉的、拼错的 id，接口回 404，此处翻成页面的 404（与 travels/[slug] 一致）。
+			 * 两处讲究，少哪个都会退回「200 + 一句加载失败」，对爬虫而言等于这条碎语存在：
+			 *
+			 * 1. 在 handler 里当场处理，而不是在外面 watch(error)。SSR 下 Vue 的 watch 回调
+			 *    根本不会跑 —— doWatch 见 isInSSRComponentSetup 就直接返回 NOOP，
+			 *    只有 immediate 会同步触发一次，而那一刻还没开始取数。
+			 *
+			 * 2. 套一层 runWithContext。这个回调是在 await 之后的微任务里跑的，Nuxt 的
+			 *    上下文已经断了（experimental.asyncContext 没开，服务端不走 AsyncLocalStorage），
+			 *    裸调 showError 会在它内部的 useNuxtApp() 上抛出来 —— 而 showError 的
+			 *    catch 分支正是「把错误 throw 出去」，于是这个 404 反被 useAsyncData
+			 *    收进 error.value，成了一次普通的取数失败，HTTP 状态码仍是 200。
+			 */
+			if (err?.statusCode === 404) {
+				nuxtApp.runWithContext(() => showError(createError({
+					statusCode: 404,
+					statusMessage: '碎语不存在',
+					fatal: true,
+				})))
+			}
+			throw err
+		})
 		return {
 			memo: parseMemo(raw),
 			// 纯文本仅供 title / description，正文该渲染的还是 memo.blocks
 			summary: toMemoPlainText(raw.content),
 		}
 	},
-	{ server: false, watch: [id] },
+	{ watch: [id] },
 )
 
-// server: false 时服务端压根不取数，status 停在 idle 而非 pending。
-// 漏掉 idle 会让预渲染的壳落到「加载失败」分支上
+// 服务端渲染那一遍数据已经就位，走不到加载态；这里管的是客户端从列表点进来的那段空窗。
+// idle 也算上：lazy 的首次取数被推迟到 onBeforeMount，此前 status 停在 idle
 const loading = computed(() => status.value === 'idle' || status.value === 'pending')
-
-// 重写规则把所有 /memos/* 都收下了，删掉的、拼错的 id 一样返回 200 + 这个壳，
-// 「不存在」只能等接口回话才知道，故 404 在此处补上（与 travels/[slug] 的处理一致）
-watch(error, (err) => {
-	if (err?.statusCode === 404) {
-		showError(createError({
-			statusCode: 404,
-			statusMessage: '碎语不存在',
-			fatal: true,
-		}))
-	}
-})
 
 /**
  * canonical 与 og:url 得自己来 —— seo 模块生成的那份是**小写**的。
@@ -76,6 +85,13 @@ useSeoMeta({
 	title: () => data.value ? (data.value.summary.slice(0, 30) || '图片') : '碎语',
 	description: () => data.value?.summary || `${appConfig.title}的碎碎念。`,
 	ogUrl: canonical,
+	ogType: 'article',
+	// 碎语多是随手截图，首图即分享卡的主图（Memos 存的是图床绝对地址，直接可用）。
+	// 纯文字的那些退回头像，免得卡片上空着一块 —— 各家 IM 对没有 og:image 的链接
+	// 收缩得很厉害，有张图才展得开
+	ogImage: () => data.value?.memo.images[0] || appConfig.author.avatar,
+	// 有真图才铺大图；退回头像时用 summary，免得一张方形头像被拉成横幅
+	twitterCard: () => data.value?.memo.images.length ? 'summary_large_image' : 'summary',
 })
 </script>
 

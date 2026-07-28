@@ -88,16 +88,12 @@ export default defineNuxtConfig({
 			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳。
 			// 显式登记：列表页 + 每篇详情页，漏链也不会静默不生成。
 			//
-			// /memos/_shell 是碎语详情页的 SPA 壳。碎语是运行时数据（构建期取数只会拿到
-			// 上次部署的快照），所以 /memos/<id> 无法在构建期枚举，静态产物里也就没有对应的
-			// HTML 文件。办法是预渲染一个「加载态」的壳，再由各平台把 /memos/* 的请求 200 重写到
-			// 它身上（Netlify 见 public/_redirects，Vercel 见下方 vercel.config.routes），
-			// 剩下的交给客户端路由。
+			// 碎语详情页不在此列：碎语是运行时数据，构建期无从枚举 id，
+			// 改由 ISR 按需渲染（见 routeRules 的 '/memos/**'）。
 			//
-			// memo 的 id 是 22 位 nanoid，撞不上 _shell 这个名字。
 			// /media 配了 ssr:false（见 routeRules），crawler 不会渲染它，显式登记才能生成
-			// 那个纯客户端壳（/media/index.html）。路径是静态的，直接命中该文件，无需像碎语那样重写。
-			routes: ['/', '/travels', ...travelRoutes, '/memos/_shell', '/media'],
+			// 那个纯客户端壳（/media/index.html）。路径是静态的，直接命中该文件。
+			routes: ['/', '/travels', ...travelRoutes, '/media'],
 
 			/**
 			 * 以下两条是从 `nuxt generate` 切到 `nuxt build` 之后必须自己补上的。
@@ -138,15 +134,6 @@ export default defineNuxtConfig({
 				routes: [
 					// giscus 接口的同源代理，见 app/composables/useGiscusCount.ts
 					{ src: '/giscus-api/(.*)', dest: 'https://giscus.app/api/$1' },
-					/**
-					 * 碎语详情页的 SPA 回退：把 /memos/<id> 重写到预渲染出来的壳上，
-					 * 由客户端路由接管（见 nitro.prerender.routes 的说明）。
-					 *
-					 * 用 (.+) 而非 (.*)：后者会连 /memos/ 本身一起吞掉，把列表页顶成详情页的壳。
-					 * 这条排在 handle: filesystem 之前，故 dest 改写后仍会回到文件系统去取
-					 * memos/_shell 那个产物；/memos（列表页）不带尾斜杠，压根不匹配。
-					 */
-					{ src: '/memos/(.+)', dest: '/memos/_shell' },
 					// 自定义 giscus 主题 CSS：方向相反，是 giscus 的 iframe 跨域来取我们的文件。
 					// continue: true —— 只挂头，不截断路由，让请求继续走到静态文件
 					{
@@ -202,18 +189,28 @@ export default defineNuxtConfig({
 		 */
 		'/media': { ssr: false },
 		/**
-		 * 碎语详情页的壳必须是**纯客户端**的，不能被服务端渲染 —— 这是整套 SPA 回退的关键。
+		 * 碎语详情页：按需服务端渲染，产物交给 Vercel 的 ISR 缓存。
 		 *
-		 * 任何经服务端渲染的页面，payload 里都会带上它被渲染时的路径（nuxt/app/nuxt.ts 中
-		 * `payload.path = ssrContext.url`）。而水合时 Nuxt 的路由插件**优先采信这个路径**，
-		 * 而不是地址栏（pages/runtime/plugins/router.ts 的 createCurrentLocation：
-		 * 二者不一致时取 renderedPath）。于是壳被重写到 /memos/<id> 上之后，
-		 * 路由会当场跳回 /memos/_shell，页面转头去取一条叫 "_shell" 的碎语。
+		 * 碎语是运行时数据，构建期无从枚举 id，所以这页曾经是个纯客户端的 SPA 壳
+		 * （预渲染 /memos/_shell，再由平台把 /memos/* 200 重写到它身上）。代价是分享出去
+		 * 只有一具空壳：爬虫不跑 JS，拿到的 <title> 连模板变量都没被替换，og:* 一个不剩。
+		 * 页面级的 useSeoMeta 从未在服务端跑过。
 		 *
-		 * ssr: false 之后这个壳压根不经服务端渲染，payload 里没有 path，
-		 * 路由只能照地址栏办事 —— 这才是我们要的。顺带也不再有水合不匹配可言。
+		 * 改走 SSR 之后：HTML 里就有正文首句和首图，不存在的 id 也能回真 404 而非 200 + 壳。
+		 * 本项目为 /api/og 已经带着一个运行时函数（见 server/api/og.get.ts），这里是搭它的便车。
+		 *
+		 * 必须是 '**' 而不是 '*'：开了 isr 的路由，renderer 会把水合用的 payload 拆出去单放
+		 * （_PAYLOAD_EXTRACTION = routeOptions.isr || routeOptions.cache），页面因此还要再取一次
+		 * /memos/<id>/_payload.json。而 vercel preset 把 '*' 译成 [^/]*，跨不过那个斜杠，
+		 * 这一取就漏出 ISR、次次落到函数上 —— HTML 命中缓存，payload 每次现算。
+		 *
+		 * '**' 顺带吃下 /memos 列表页倒是无妨：Vercel 的路由表里 handle: filesystem 排在
+		 * ISR 规则之前，列表页有预渲染好的 index.html 顶着，走不到这条。
+		 *
+		 * 600 秒是缓存窗口，也是编辑一条旧碎语后线上更新的延迟上限。往长了调更省函数调用，
+		 * 但改错别字要等更久。
 		 */
-		'/memos/_shell': { ssr: false },
+		'/memos/**': { isr: 600 },
 		'/subscriptions.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 	},
 
@@ -398,9 +395,4 @@ ${packageJson.homepage}
 		defaultLocale: blogConfig.language,
 	},
 
-	sitemap: {
-		// _shell 是碎语详情页的 SPA 壳（见 nitro.prerender.routes），不是一个可读的页面。
-		// 它只因为被预渲染才会被 sitemap 收录，得手动摘出去。
-		exclude: ['/memos/_shell'],
-	},
 })
