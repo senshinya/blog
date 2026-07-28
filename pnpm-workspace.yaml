@@ -10,50 +10,50 @@ allowBuilds:
 catalogs:
   content:
     '@bikariya/shiki': ^0.0.8
-    '@nuxt/content': ^3.14.0
-    '@nuxtjs/seo': ^5.3.0
-    '@shikijs/colorized-brackets': ^4.2.0
-    '@shikijs/transformers': ^4.2.0
+    '@nuxt/content': ^3.15.2
+    '@nuxtjs/seo': ^5.3.6
+    '@shikijs/colorized-brackets': ^4.3.1
+    '@shikijs/transformers': ^4.3.1
     '@types/hast': ^3.0.4
     '@types/mdast': ^4.0.4
-    abcjs: ^6.6.3
+    abcjs: ^6.6.4
     minimark: 0.2.0
     nuxt-llms: ^0.2.0
     plain-shiki: ^0.3.2
     rehype-katex: ^7.0.1
     remark-math: ^6.0.0
     remark-reading-time: ^2.1.0
-    shiki: ^4.2.0
+    shiki: ^4.3.1
     unist-util-visit: ^5.1.0
     vfile: ^6.0.3
     zod: ^4.4.3
   framework:
     '@zinkawaii/tsconfig': ^0.1.0
     ci-info: ^4.4.0
-    nuxt: ^4.4.8
+    nuxt: ^4.5.1
     pinia: ^3.0.4
     sass-embedded: ^1.100.0
     typescript: ^6.0.3
     unrun: ^0.3.1
     unplugin-yaml: ^4.2.1
-    vue: ^3.5.38
-    vue-router: ^5.1.0
+    vue: ^3.5.40
+    vue-router: ^5.2.0
   quality:
-    '@antfu/eslint-config': ^9.0.0
+    '@antfu/eslint-config': ^9.2.0
     '@nuxt/a11y': 1.0.0-alpha.1
-    '@nuxt/hints': ^1.1.3
+    '@nuxt/hints': ^1.1.4
     '@zinkawaii/stylelint-config': ^0.4.1
     cspell: ^10.0.1
-    eslint: ^10.5.0
-    stylelint: ^17.13.0
+    eslint: ^10.8.0
+    stylelint: ^17.14.1
   ui:
     '@bikariya/image-viewer': ^0.0.8
     '@bikariya/modals': ^0.0.8
     '@iconify-json/catppuccin': ^1.2.17
     '@iconify-json/line-md': ^1.2.16
     '@iconify-json/ri': ^1.2.10
-    '@iconify-json/simple-icons': ^1.2.86
-    '@nuxt/icon': ^2.2.3
+    '@iconify-json/simple-icons': ^1.2.92
+    '@nuxt/icon': ^2.3.1
     '@nuxt/image': ^2.0.0
     '@nuxtjs/color-mode': ^4.0.1
     embla-carousel-autoplay: ^8.6.0
@@ -62,19 +62,19 @@ catalogs:
     maplibre-gl: ^5.24.0
     vue-tippy: ^6.7.1
   util:
-    '@clack/prompts': ^1.6.0
+    '@clack/prompts': ^1.7.0
     '@pinia/nuxt': ^0.11.3
     '@vueuse/core': ^14.3.0
     '@vueuse/nuxt': ^14.3.0
     '@vueuse/router': ^14.3.0
-    es-toolkit: ^1.48.1
-    fast-xml-builder: ^1.2.0
+    es-toolkit: ^1.50.0
+    fast-xml-builder: ^1.3.0
     minisearch: ^7.2.0
     oxc-minify: ^0.137.0
-    p-limit: ^7.3.0
+    p-limit: ^7.3.1
     parse-domain: ^8.3.1
     rimraf: ^6.1.3
-    site-config-stack: ^4.1.0
+    site-config-stack: ^4.1.2
     strip-ansi: ^7.2.0
     temporal-polyfill: ^1.0.1
     yaml: ^2.9.0
@@ -86,6 +86,10 @@ overrides:
   # 修复 esbuild dev server 路径穿越（GHSA-g7r4-m6w7-qqqr，仅 Windows），抬到已修复版
   esbuild: '>=0.28.1'
   nuxtseo-layer-devtools: link:__unneeded__
+  # 修复 libvips 一系列图像解析漏洞（GHSA-f88m-g3jw-g9cj），抬到已修复版。
+  # ipx 和 nuxt-og-image 的范围卡在 ^0.34，靠它们自己升不动；而 0.35 本来就在树里
+  # （nuxt-seo-utils 带的），统一到一个版本顺带也省一份二进制。
+  sharp: '>=0.35.0'
 
 patchedDependencies:
   # 图片支持配置 1.5x 像素密度
