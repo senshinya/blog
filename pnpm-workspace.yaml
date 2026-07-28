@@ -82,7 +82,18 @@ catalogs:
 engineStrict: true
 
 overrides:
-  '@dxup/nuxt': ^0.5.3
+  # 钉死 0.5.3，勿放开成 ^：0.5.4 的具名布局插槽在客户端导航时会整个丢掉。
+  # 它把注册插槽改成了 `slots.value ??= (onScopeDispose(() => slots.value = null), value)`，
+  # 而路由切换时 Vue 先跑新页面的 setup、后卸载旧页面：轮到新页面注册时 slots.value
+  # 还是旧页面的，??= 短路，连带右侧的 onScopeDispose 也没登记上；随后旧页面卸载，
+  # 它自己那个 disposer 把 slots.value 清成 null —— 侧栏（文章目录等）就此空掉。
+  # 直接打开或刷新则没有「旧页面」，slots.value 是 null，赋值照常，故只在点进去时复现。
+  '@dxup/nuxt': 0.5.3
+  # 修复花括号展开可撑爆内存（CVE-2026-13149 / GHSA #105），抬到已修复版。
+  # 公告的影响范围是 <= 5.0.7，没有下限，minimatch 5/9 拖着的那份 2.x 也在其中，
+  # 而修复只出在 5.0.8，故只能跨大版本压上去。这个包的 API 只有一个 expand()，
+  # major 抬的是 node engine，压得动。
+  brace-expansion: '>=5.0.8'
   # 修复 esbuild dev server 路径穿越（GHSA-g7r4-m6w7-qqqr，仅 Windows），抬到已修复版
   esbuild: '>=0.28.1'
   nuxtseo-layer-devtools: link:__unneeded__
