@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Temporal } from 'temporal-polyfill'
+import blogConfig from '~~/blog.config'
 
 const props = withDefaults(defineProps<{
 	icon?: string
@@ -49,9 +50,12 @@ const tooltip = computed(() => mounted.value && zdt.value
 		v-text="toZdtLocaleString(zdt, format)"
 	/>
 
+	<!-- locale 必须显式给：NuxtTime 留空会落到浏览器语言，
+		英文浏览器下相对时间就成了「21 minutes ago」 -->
 	<NuxtTime
 		v-else
 		:datetime="toInstantString(zdt)"
+		:locale="blogConfig.language"
 		:relative
 		:year="zdt.year === today.year ? undefined : '2-digit'"
 		month="long"

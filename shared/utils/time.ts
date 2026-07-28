@@ -71,7 +71,9 @@ export const dateTimeFormat = {
 
 export type dateTimeFormatOptions = keyof typeof dateTimeFormat | Intl.DateTimeFormatOptions
 
+// 语言写死成站点语言：留空会跟着浏览器的 Accept-Language 走，
+// 同一个时间在英文浏览器里变成「07/13/2026」，与满页中文对不上
 export function toZdtLocaleString(date: string | Temporal.ZonedDateTime, format: dateTimeFormatOptions = 'full') {
 	return (typeof date === 'string' ? toZonedTemporal(date) : date)
-		.toLocaleString(undefined, typeof format === 'string' ? dateTimeFormat[format] : format)
+		.toLocaleString(blogConfig.language, typeof format === 'string' ? dateTimeFormat[format] : format)
 }
