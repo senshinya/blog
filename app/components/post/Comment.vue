@@ -171,8 +171,10 @@ onMounted(() => {
 		color: var(--c-text-3);
 	}
 
+	// 防止 a 被 overflow hidden
 	.tk-content {
-		margin-top: 0;
+		margin: -0.2em;
+		padding: 0.2em;
 	}
 
 	.tk-comments-title, .tk-nick {

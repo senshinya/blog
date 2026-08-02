@@ -16,7 +16,7 @@ const { slots } = inject<any>(Symbol.for('dxup:layout-slots')) || {}
 		<slot name="aside" />
 	</BlogAside>
 </div>
-<BlogPanel :has-aside="slots?.aside" />
+<BlogPanel :has-aside="!!slots?.aside" />
 <BikariyaModals />
 </template>
 

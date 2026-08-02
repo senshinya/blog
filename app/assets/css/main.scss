@@ -132,7 +132,8 @@ img {
 	}
 }
 
-.katex-display {
+.katex-display, article > .katex {
+	display: block; // ```math 不会包裹 .katex-display
 	overflow: auto hidden;
 	padding: 1px 0;
 	scrollbar-width: thin;

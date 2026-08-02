@@ -38,7 +38,7 @@ export function getGithubUsername(url?: string) {
 
 export function isExtLink(url?: string) {
 	return url
-		? url.includes(':') || !!isPathFile(url)
+		? url.includes(':') || url.startsWith('//') || !!isPathFile(url)
 		: false
 }
 
