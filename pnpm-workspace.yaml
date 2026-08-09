@@ -53,6 +53,7 @@ catalogs:
     '@iconify-json/line-md': ^1.2.16
     '@iconify-json/ri': ^1.2.10
     '@iconify-json/simple-icons': ^1.2.92
+    '@iconify-json/tabler': ^1.2.38
     '@nuxt/icon': ^2.3.1
     '@nuxt/image': ^2.0.0
     '@nuxtjs/color-mode': ^4.0.1

@@ -35,14 +35,14 @@ export default defineNuxtConfig({
 				{ rel: 'icon', href: blogConfig.favicon },
 				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
 				{ rel: 'preconnect', href: 'https://giscus.app' },
-				{ rel: 'stylesheet', href: 'https://cdnjs.snrat.com/ajax/libs/KaTeX/0.16.44/katex.min.css', media: 'print', onload: 'this.media="all"' },
+				{ rel: 'stylesheet', href: 'https://cdnjs.snrat.com/ajax/libs/KaTeX/0.16.44/katex.min.css' },
 				// "InterVariable", "Inter", "InterDisplay"
-				{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css', media: 'print', onload: 'this.media="all"' },
+				{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
 				// "JetBrains Mono", 思源宋体 "Noto Serif SC"
 				{ rel: 'preconnect', href: 'https://fonts.gstatic.cn', crossorigin: '' },
-				{ rel: 'stylesheet', href: 'https://fonts.googleapis.cn/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Serif+SC:wght@200..900&display=swap', media: 'print', onload: 'this.media="all"' },
+				{ rel: 'stylesheet', href: 'https://fonts.googleapis.cn/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Serif+SC:wght@200..900&display=swap' },
 				// 抖音美好体 "DOUYINSANSBOLD-GB"
-				{ rel: 'stylesheet', href: 'https://fonts.bytedance.com/dfd/api/v1/css?family=DOUYINSANSBOLD-GB&display=swap', media: 'print', onload: 'this.media="all"' },
+				{ rel: 'stylesheet', href: 'https://fonts.bytedance.com/dfd/api/v1/css?family=DOUYINSANSBOLD-GB&display=swap' },
 			],
 			templateParams: {
 				separator: '|',
