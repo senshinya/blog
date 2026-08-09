@@ -50,6 +50,13 @@ export default [
 				avatar: 'https://image.windomoi.com/images/2026/05/web-app-manifest-512x512-39607f7704e056579f0a44802f3c22b7.png',
 				icon: getFavicon('https://windomoi.com'),
 			},
+			{
+				author: 'MingBlog',
+				desc: '记录日常生活、城市影像、旅行与观察，以及认真看过、读过和听过的作品',
+				link: 'https://mingblog.site',
+				avatar: 'https://mingblog.site/icons/icon-512.png',
+				icon: getFavicon('https://mingblog.site'),
+			},
 		],
 	},
 ] satisfies FeedGroup[]
