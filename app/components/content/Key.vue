@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useEventListener } from '@vueuse/core'
+import { useEventListener, useMounted } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 const props = withDefaults(defineProps<{
@@ -24,12 +24,16 @@ const emit = defineEmits<{
 	press: []
 }>()
 
-const isMac = computed(() => /mac ?os/i.test(navigator?.userAgent))
+// 页面是预渲染的，HTML 对所有访客共享，SSR 猜不到访客的系统；
+// 水合首帧必须与 SSR 输出一致，挂载后才按 navigator 切换 Mac 键位，
+// 否则 Mac 客户端每页都会 hydration mismatch（Ctrl+K vs ⌘K）
+const mounted = useMounted()
+const isMac = computed(() => mounted.value && /mac ?os/i.test(navigator.userAgent))
 const useSymbol = computed(() => isMac.value ? props.icon !== false : props.icon)
 const keyJoiner = computed(() => useSymbol.value ? '' : '+')
 
 // @keep-sorted
-const displayMap = {
+const displayMap = computed(() => ({
 	' ': 'Space',
 	'ArrowDown': '↓',
 	'ArrowLeft': '←',
@@ -39,10 +43,10 @@ const displayMap = {
 	'Delete': 'Del',
 	'Escape': 'Esc',
 	'Meta': isMac.value ? 'Cmd' : 'Win',
-}
+}))
 
 // @keep-sorted
-const symbolMap = {
+const symbolMap = computed(() => ({
 	' ': '␣',
 	'Alt': '⌥',
 	'Backspace': '⌫',
@@ -54,15 +58,15 @@ const symbolMap = {
 	'Shift': '⇧',
 	'Tab': '⇥',
 	'Win': '⊞',
-}
+}))
 
 function normalizeCodeDisplay(code?: string) {
 	if (!code)
 		return ''
-	if (useSymbol.value && code in symbolMap)
-		return symbolMap[code as keyof typeof symbolMap]
-	if (code in displayMap)
-		return displayMap[code as keyof typeof displayMap]
+	if (useSymbol.value && code in symbolMap.value)
+		return symbolMap.value[code as keyof typeof symbolMap.value]
+	if (code in displayMap.value)
+		return displayMap.value[code as keyof typeof displayMap.value]
 	return code
 }
 
@@ -131,11 +135,9 @@ useEventListener('blur', () => {
 </script>
 
 <template>
-<UtilHydrateSafe>
-	<kbd :class="{ active }" @click.stop="emit('press')">
-		<slot>{{ codeDisplay }}</slot>
-	</kbd>
-</UtilHydrateSafe>
+<kbd :class="{ active }" @click.stop="emit('press')">
+	<slot>{{ codeDisplay }}</slot>
+</kbd>
 </template>
 
 <style lang="scss" scoped>

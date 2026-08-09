@@ -1,0 +1,18 @@
+diff --git a/dist/runtime/layouts.mjs b/dist/runtime/layouts.mjs
+index 9d581e0014a0b3901a3900972c5921b5966ffa62..ae40d387ee55cd56d6804b7e235beaa9b2953144 100644
+--- a/dist/runtime/layouts.mjs
++++ b/dist/runtime/layouts.mjs
+@@ -25,7 +25,12 @@ const LayoutSlot = defineComponent({
+ 	setup(props, ctx) {
+ 		const { slots, ready } = inject(injectionKey);
+ 		const render = () => slots.value[props.name]?.(ctx.attrs);
+-		if (import.meta.server && !slots.value[props.name]) return ready.then(() => render);
++		// 上游只在服务端等待页面注册插槽内容；客户端水合首帧时页面（异步组件）
++		// 还没跑到 LayoutSlotsForward.set()，插槽会先按空渲染成注释占位，
++		// 与 SSR 输出（有内容的 fragment）不一致 —— 每页一条 hydration mismatch，
++		// 且侧栏 DOM 被拆掉重建。放宽到两端一致：没内容就等 ready，
++		// 本站所有页面都有 #aside 模板（都会调 set()），不会悬空。
++		if (!slots.value[props.name]) return ready.then(() => render);
+ 		return render;
+ 	}
+ });

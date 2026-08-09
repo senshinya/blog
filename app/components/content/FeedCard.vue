@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import type { FeedEntry } from '~/types/feed'
-// eslint-disable-next-line unused-imports/no-unused-imports -- 模板里用着（Temporal.PlainDate），该规则看不见 <template>
-import { Temporal } from 'temporal-polyfill'
 
 const props = defineProps<FeedEntry>()
 
@@ -78,8 +76,10 @@ function getInspectStyle(src: string): CSSProperties {
 			/>
 		</div>
 		<div class="desc-content">
+			<!-- locale 不钉死会各按各的来：服务端 Node 默认 en-US，
+				中文浏览器是 YYYY/MM/DD，水合必然 mismatch -->
 			<div v-if="date" class="date">
-				{{ Temporal.PlainDate.from(date).toLocaleString() }}
+				{{ toZdtLocaleString(date, 'date') }}
 			</div>
 
 			<p>{{ error ?? desc }}</p>

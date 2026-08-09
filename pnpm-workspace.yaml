@@ -103,6 +103,9 @@ overrides:
   sharp: '>=0.35.0'
 
 patchedDependencies:
+  # LayoutSlot 客户端水合首帧也等待页面注册插槽内容（上游只在服务端等），
+  # 否则侧栏先渲染成空占位，与 SSR 输出不一致，每页一条 hydration mismatch
+  '@dxup/nuxt@0.5.3': patches/@dxup__nuxt@0.5.3.patch
   # 图片支持配置 1.5x 像素密度
   '@nuxt/image': patches/@nuxt__image.patch
   # remark ts 插件使用 unrun 运行
@@ -113,3 +116,5 @@ patchedDependencies:
   plain-shiki: patches/plain-shiki.patch
 
 shamefullyHoist: true
+catalog:
+  marked: ^18.0.7
