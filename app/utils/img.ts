@@ -119,7 +119,9 @@ interface FaviconOptions {
 // https://docs.webp.se/public-services/unavatar/
 export function getFavicon(domain: string, options?: FaviconOptions) {
 	const { provider = 'google', size = 32 } = options || {}
-	return `https://unavatar.webp.se/${provider}/${domain}?w=${size}`
+	// unavatar 的路径段只认裸域名，塞完整 URL 会直接 500
+	const host = domain.includes('://') ? new URL(domain).host : domain
+	return `https://unavatar.webp.se/${provider}/${host}?w=${size}`
 }
 
 /**
