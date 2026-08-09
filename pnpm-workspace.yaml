@@ -94,9 +94,13 @@ overrides:
   # 公告的影响范围是 <= 5.0.7，没有下限，minimatch 5/9 拖着的那份 2.x 也在其中，
   # 而修复只出在 5.0.8，故只能跨大版本压上去。这个包的 API 只有一个 expand()，
   # major 抬的是 node engine，压得动。
-  brace-expansion: '>=5.0.8'
+  # 后续 GHSA-rgw5-rvv9-x895 又披露 >=4.0.0 <5.0.9 的正则回溯问题，floor 抬到 5.0.9。
+  brace-expansion: '>=5.0.9'
   # 修复 esbuild dev server 路径穿越（GHSA-g7r4-m6w7-qqqr，仅 Windows），抬到已修复版
   esbuild: '>=0.28.1'
+  # 修复 GHSA-2v37-7h3g-55p8，抬到已修复版。postcss 的 ^3.3.16 本来够得到，
+  # 但 pnpm update 不动传递依赖，只能压。锁在 3.x：nanoid 5 起是 ESM-only，postcss 用不了
+  nanoid: ^3.3.17
   nuxtseo-layer-devtools: link:__unneeded__
   # 修复 libvips 一系列图像解析漏洞（GHSA-f88m-g3jw-g9cj），抬到已修复版。
   # ipx 和 nuxt-og-image 的范围卡在 ^0.34，靠它们自己升不动；而 0.35 本来就在树里
