@@ -22,6 +22,8 @@ export interface TravelDay {
 export interface Travel {
 	/** 与文件名、URL 一致：app/travels/<slug>.yaml → /travels/<slug> */
 	slug: string
+	/** 开发环境可见；生产环境从列表、详情与预渲染中排除 */
+	draft?: boolean
 	title: string
 	subtitle: string
 	/** 用于 <title> 与列表页的完整标题 */

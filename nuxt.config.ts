@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import { arch, env, version as nodeVersion, platform } from 'node:process'
 import { pathToFileURL } from 'node:url'
@@ -6,6 +6,7 @@ import { name as ciName, CLOUDFLARE_PAGES, GITHUB_ACTIONS, NETLIFY, VERCEL } fro
 import { mapValues } from 'es-toolkit/object'
 import { pascalCase } from 'es-toolkit/string'
 import { Temporal } from 'temporal-polyfill'
+import { isTravelDraftSource } from './app/travels/draft'
 import blogConfig from './blog.config'
 import packageJson from './package.json'
 import redirectList from './redirects.json'
@@ -14,10 +15,13 @@ function pluginPath(path: string) {
 	return pathToFileURL(resolve(`./remark-plugins/${path}.ts`)).href
 }
 
-// 游记数据是 app/travels/*.yaml。加载 nuxt.config 的 jiti 不认 yaml，配置期读不到内容，
-// 所以从文件名推路由 —— 文件名即 slug，这条约定由迁移脚本和 app/travels/index.ts 共同保证。
-const travelRoutes = readdirSync(resolve('./app/travels'))
+// 游记数据是 app/travels/*.yaml。加载 nuxt.config 的 jiti 不认 yaml import，
+// 所以从文件名推路由，并直接读取文本中的顶层 `draft: true` 来排除草稿。
+// 文件名即 slug，这条约定由迁移脚本和 app/travels/index.ts 共同保证。
+const travelDirectory = resolve('./app/travels')
+const travelRoutes = readdirSync(travelDirectory)
 	.filter(file => file.endsWith('.yaml'))
+	.filter(file => !isTravelDraftSource(readFileSync(resolve(travelDirectory, file), 'utf8')))
 	.map(file => `/travels/${basename(file, '.yaml')}`)
 
 // 此处配置无需修改
