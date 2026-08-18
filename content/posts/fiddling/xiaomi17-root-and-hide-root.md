@@ -30,6 +30,8 @@ tags: ["折腾", "root", "bootloader"]
 
 rom 方面，酷安比较活跃的，做 17 系列澎湃官改 rom 的主要有两位，[江南](https://www.coolapk.com/u/25341491)和[毒蛇](https://www.coolapk.com/u/35810773)，两位都是高中生，现在的年轻人真强啊。我最终选择了[毒蛇的官改包](https://www.coolapk.com/feed/70200384?s=YTgxYmJmMWIyMTY3NjVnNmE4MzIzODJ6a1651)，自带 root，附带各种系统精简和第三方内核，调度调教的很好，流畅且省电，并且似乎 bug 相对较少。刷入也很简单，重启进入 bootloader 后即可一键刷入。
 
+随后就是按部就班的安装 KernelSU、LSPosed、Zygisk Next 等框架。
+
 root 后的系统，最麻烦的地方就是会被各种应用检测，尤其是银行 app 和支付 app，一旦检测到有 root 或者其他对系统的修改，就会降级（如禁止指纹）甚至直接拒绝服务，所以需要通过各种模块隐藏 root。
 
 酷安或其他玩机社区，对隐藏 root 和解锁 bl 众说纷纭，其间夹杂着各种过期教程，更令找到一份完美的隐藏方式变得尤为困难。经过一番摸索，终归得以实现。
@@ -43,9 +45,26 @@ root 后的系统，最麻烦的地方就是会被各种应用检测，尤其是
 - [Tricky Addon Enhanced](https://github.com/Enginex0/tricky-addon-enhanced)：自动化 TEE 的证书生成流程
 ::
 
-模块的具体使用不再过多阐述，按照教程即可
+模块按照顺序刷入后重启
 
-完成后银行等 app 全部正常运行，微信支付宝等的指纹支付也可正常运行
+HMA-OSS 刷入后会有一个单独的 app，对需要隐藏 root 和无障碍等状态的 app 启用隐藏，并开启模板，设置四个应用预设（无障碍应用、检测器应用、Root 管理器/Root 应用和 LSPosed/Xposed 模块）以及两个设置预设（无障碍功能、开发者选项）。开启了隐藏的 app 便无法感知到系统安装了敏感应用或开启了敏感功能，即可绕过检测
+
+接着运行一下 KernelSU 中 Integrity Box 模板的启动按钮，会随机挑选一个 Google 设备做伪装，TEESimulator-RS 则无需额外设置即可生效
+
+Zygisk-Next 模块设置中的“排除列表策略”需要选择“仅换换挂载”
+
+可以下载一个 [Hunter APP](https://github.com/w296488320/HunterUpdate) 用以检测 root 和相关伪装是否到位
+
+::github{repo="w296488320/HunterUpdate"}
+::
+
+如遇 System Patch 不一致相关的错误，是因为 Integrity Box 用于伪装的设备系统的安全补丁与设备实际的安全补丁不一致，设备实际的安全补丁/安全更新可以在系统设置中查看。修改方法也很简单，在 TEESimulator-RS 的模块设置中，点击右上角三个点-设置安全补丁，勾上高级，将三个参数设置为设备实际的安全补丁日期。如我的设备是 2026-07-01，那么 System 设置为 202607，Boot 和 Vendor 都设置为 2026-07-01。完成后保存
+
+如遇 Found hole in prop area: u:object_r:bootloader_prop:s0 一类的错误，则是因为设备实际的启动哈希值与用于伪装的设备的启动哈希值不一致。设备的启动哈希值可以在密钥认证这个 app 中获取（app 可以在酷安找到），复制出 BootHash 后粘贴到 Integrity Box - 修复异常 Boot Hash 后重启（复制不出来可以截图识屏）
+
+如遇其他问题，还可以尝试 Integrity Box - 修复模式，能解决一些边缘小问题
+
+完成后银行等 app 全部正常运行，微信支付宝等的指纹支付也可正常运行，Hunter 检测全绿
 
 另外还可以通过 [Yumebox](https://github.com/YumeYucca/YumeBox) 作为代理软件，赋予 root 权限后即可启动 tun 网络接口，而非通过系统的 vpn 服务，即可避免第三方应用检测
 
