@@ -38,7 +38,7 @@ root 后的系统，最麻烦的地方就是会被各种应用检测，尤其是
 ::card-list
 - [Magic Mount](https://github.com/Tools-cx-app/meta-magic_mount-rs)，核心框架
 - [HMA-OSS](https://github.com/frknkrc44/HMA-OSS)，用于隐藏 app 列表以及隐藏无障碍
-- [Integrity Box](https://github.com/MeowDump/Integrity-Box)，用于将机器伪装为 google 官方机器以通过 google play 检测
+- [PlayIntegrityFix](https://github.com/KOWX712/PlayIntegrityFix)，用于将机器伪装为 google 官方机器以通过 google play 检测
 - [TEESimulator-RS](https://github.com/Enginex0/TEESimulator-RS)，生成安卓证书以通过硬件密钥认证
 - [Tricky Addon Enhanced](https://github.com/Enginex0/tricky-addon-enhanced)：自动化 TEE 的证书生成流程
 ::
