@@ -221,7 +221,14 @@ const shortcut = computed(() => import.meta.client && /mac/i.test(navigator.plat
 	<div class="composer-foot-wrap">
 		<div class="composer-foot">
 			<div class="composer-foot-in">
-				<button type="button" class="cbtn cbtn-plain" @click="togglePreview">
+				<!-- previewing 时这颗在手机上也要留着：那时 textarea 是 hidden 的，
+					把它藏了就退不回编辑态 -->
+				<button
+					type="button"
+					class="cbtn cbtn-plain cbtn-preview"
+					:class="{ previewing }"
+					@click="togglePreview"
+				>
 					{{ previewing ? '继续写' : '预览' }}
 				</button>
 

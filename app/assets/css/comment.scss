@@ -227,6 +227,7 @@
 		margin-inline-start: auto;
 	}
 
+
 	// 工具条里的控件共用一套：h32 全圆角，按下叠一层 15% 蒙版。
 	// Reddit 的按钮没有 scale 变换，这里也不加
 	.cbtn {
@@ -334,6 +335,29 @@
 			&:active > .tick {
 				box-shadow: none;
 			}
+		}
+	}
+
+	// 手机上这一行只留订阅开关和动作按钮，挤在同一行：左边勾选，右边取消/发表。
+	// 预览是锦上添花的，先让位 —— 手机上写 Markdown 本来就少，而三颗药丸各占一行
+	// 会把回复框拉得比正文还高
+	@media (max-width: $breakpoint-phone) {
+		// 正在预览时必须留着：那时 textarea 是 hidden 的，藏了就退不回编辑态
+		.cbtn-preview:not(.previewing) {
+			display: none;
+		}
+
+		// 撑开用的空元素在这里是多余的：动作按钮自己有 margin-inline-start: auto，
+		// 留着它只是白占一个 gap —— 而这一行就差那几像素
+		.composer-foot-in > .spacer {
+			display: none;
+		}
+
+		// 少了预览这颗，订阅开关成了行首，收掉药丸的横向留白让它贴左。
+		// 也是匀宽度：375px 下一层回复的版心只有 249px，
+		// 订阅 + 取消 + 发表要挤进去，按原样是差 2px 就要换行的
+		.subscribe {
+			padding-inline: 4px;
 		}
 	}
 
@@ -687,15 +711,22 @@
 		--rail: color-mix(in srgb, var(--c-text-3) 45%, var(--surface));
 	}
 
-	// 有回复时，从头像下沿垂一条线。终点由脚本写入 --rail-cut，
-	// 让它停在最后一条回复的弯头上而不是拖一条尾巴。
+	// 有回复时，从头像下沿垂一条线，一路画到这条评论的底 —— 长度是死的，不去量。
+	// 收口交给最后一条回复：它自带一块底色补丁（.branchline），把压在自己身上的
+	// 那一段擦掉，线就正好断在弯头的起点上。Reddit 也是这么做的。
+	//
+	// 之前用脚本量出 --rail-cut 来截断，量的是「父级底边到最后一条回复顶边」，
+	// 这两个矩形分属两个元素，而每条评论都有各自延迟的 float-in（transform:
+	// translateY(10%)），getBoundingClientRect 把位移一起算了进去：动画期间量到的
+	// 顶边偏低，截短量就偏小，线便探出弯头一截；探出多少 = 那条回复高度的 10%，
+	// 所以每处长短还不一样。ResizeObserver 只盯尺寸不盯位移，动画结束也不会回来纠正。
 	.comment.has-replies::after {
 		content: "";
 		position: absolute;
 
 		// 半像素：1px 的线居中于 2rem 的槽，左沿就在 15.5。弯头的左边框必须落在
 		// 同一个亚像素上，两段的抗锯齿才一致，接缝才看不出来。
-		inset-block: 2.4rem var(--rail-cut, 0);
+		inset-block: 2.4rem 0;
 		inset-inline-start: calc(1rem - 0.5px);
 		width: 1px;
 		background: var(--rail);
