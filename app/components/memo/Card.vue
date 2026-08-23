@@ -51,8 +51,19 @@ const page = ref<ThreadPage | null>(null)
  */
 let resolving: Promise<void> | undefined
 
+/**
+ * 手上最新的 reaction 状态。
+ *
+ * 不直接往 page 上写：这一条可能还没落库（服务端回 page: null），
+ * 那时根本没有对象可写，点完的 reaction 就没处存 —— 表现为鼠标一移开页脚又缩回去，
+ * 非得刷新一次才常驻。
+ */
+const reacted = ref<{ reactions: Record<string, number>, viewer_reactions: string[] }>()
+
 function onPage(p: ThreadPage | null) {
 	page.value = p
+	// 线程带回来的是权威的，本地那份让位
+	reacted.value = undefined
 	// 展开时线程已经把权威状态带回来了，那一发就不必再打
 	resolving ??= Promise.resolve()
 }
@@ -66,6 +77,10 @@ function resolvePage() {
 	return resolving
 }
 
+// 三处来源，越新越优先：刚点的 > 线程带回的 > 批量计数拿到的
+const reactions = computed(() => reacted.value?.reactions ?? page.value?.reactions ?? count.value.reactions)
+const viewerReactions = computed(() => reacted.value?.viewer_reactions ?? page.value?.viewer_reactions)
+
 /**
  * 零互动的碎语不留页脚的高度。这类占了列表的绝大多数，留一条空条等于每张卡片
  * 底下白挂一截；鼠标移上来才长出来。
@@ -75,7 +90,7 @@ function resolvePage() {
  */
 const hasFoot = computed(() => expanded.value
 	|| count.value.comments > 0
-	|| Object.keys(count.value.reactions).length > 0)
+	|| Object.keys(reactions.value).length > 0)
 
 const hovered = useElementHover(cardEl)
 // 查 (hover: none) 而不是 (hover: hover)：媒体查询在服务端一律为 false，
@@ -124,6 +139,7 @@ function open() {
 }
 
 function onReaction(payload: { reactions: Record<string, number>, viewer_reactions: string[] }) {
+	reacted.value = payload
 	if (page.value) {
 		page.value.reactions = payload.reactions
 		page.value.viewer_reactions = payload.viewer_reactions
@@ -146,8 +162,8 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 					target-type="page"
 					:page-key
 					:title="summary"
-					:reactions="page?.reactions ?? count.reactions"
-					:viewer-reactions="page?.viewer_reactions"
+					:reactions
+					:viewer-reactions="viewerReactions"
 					:resolve="resolvePage"
 					@update="onReaction"
 				/>

@@ -79,7 +79,22 @@ export default function useCommentCounts(key: MaybeRefOrGetter<string | undefine
 	})
 }
 
-/** 发表评论、点 reaction 之后让对应卡片的数字跟上，无需整页刷新 */
-export function invalidateCommentCount(key: string) {
-	cache.delete(key)
+/**
+ * 发表 / 删除评论后就地改数。
+ *
+ * 早先这里是把缓存项删掉、指望下次再取，但入队只发生在 key 变化时 ——
+ * 删完没人再问，那张卡片的数字直接掉成 0，连带页脚（靠 reaction 数决定显不显）
+ * 在鼠标移开后又缩回去，非得刷新一次才恢复。
+ */
+export function bumpCommentCount(key: string, delta: number) {
+	const hit = cache.get(key)
+	if (hit)
+		cache.set(key, { ...hit, comments: Math.max(0, hit.comments + delta) })
+}
+
+/** 点完 reaction 把这一份写回缓存，卡片收起再展开、路由来回切也还在 */
+export function patchCommentReactions(key: string, reactions: Record<string, number>) {
+	const hit = cache.get(key)
+	if (hit)
+		cache.set(key, { ...hit, reactions })
 }

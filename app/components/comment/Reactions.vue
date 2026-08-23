@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { CommentError } from '~/composables/useCommentApi'
 
+/** 服务端每次都回整份，故本地也一律整份地换，不做增量拼接 */
+interface ReactionState {
+	reactions: Record<string, number>
+	viewer_reactions: string[]
+}
+
 /**
  * 一排 reaction chip，页面级和评论级共用。
  *
@@ -34,7 +40,7 @@ const props = withDefaults(defineProps<{
 }>(), { settled: true })
 
 const emit = defineEmits<{
-	update: [payload: { reactions: Record<string, number>, viewer_reactions: string[] }]
+	update: [payload: ReactionState]
 }>()
 
 const api = useCommentApi()
@@ -43,7 +49,6 @@ const { user, ready, login } = session
 
 const root = useTemplateRef('root')
 const picking = ref(false)
-const busy = ref(false)
 
 /**
  * 展开的那一排。收起时给空数组，而不是 v-if 掉整组 —— TransitionGroup 得一直挂着，
@@ -51,12 +56,67 @@ const busy = ref(false)
  */
 const tray = computed(() => picking.value ? REACTIONS : [])
 
-const chips = computed(() => toReactionChips(props.reactions, props.viewerReactions))
-const mine = computed(() => new Set(props.viewerReactions ?? []))
+/** 在途请求数。样式先行之后，它决定谁有资格把服务端那份权威快照写回来 */
+let pending = 0
+/** 同一个 target 上的请求排队发：PUT 和 DELETE 撞在一起，服务端按哪个算是不定的 */
+let chain: Promise<void> = Promise.resolve()
+
+/**
+ * 乐观层：点下去那一刻先写这里，等服务端回话再写回权威值。
+ *
+ * 不能只靠 emit 出去等 props 回来 —— props 要等父组件重渲染才更新，隔了一拍，
+ * 连点两下时第二下会读到第一下之前的状态，把「加」算成「减」。
+ */
+const local = ref<ReactionState>()
+
+const view = computed<ReactionState>(() => local.value ?? {
+	reactions: props.reactions ?? {},
+	viewer_reactions: props.viewerReactions ?? [],
+})
+
+/**
+ * 上游换了数据（线程重取、卡片首次问到权威状态）就以它为准。
+ * 有请求在途时不让 —— 那份快照里没有刚点上去的那几个。
+ */
+watch(() => [props.reactions, props.viewerReactions], () => {
+	if (!pending)
+		local.value = undefined
+})
+
+const chips = computed(() => toReactionChips(view.value.reactions, view.value.viewer_reactions))
+const mine = computed(() => new Set(view.value.viewer_reactions))
 
 const body = computed(() => props.targetType === 'comment'
 	? { target_type: 'comment', target_id: props.targetId }
 	: { target_type: 'page', key: props.pageKey, title: props.title })
+
+/**
+ * 翻一个 emoji：加就 +1 并记名，减就 -1 并抹掉。
+ * 纯函数，且再翻一次正好复原 —— 失败回滚用的也是它。
+ */
+function flip(base: ReactionState, key: string): ReactionState {
+	const on = base.viewer_reactions.includes(key)
+	const reactions = { ...base.reactions }
+	const next = (reactions[key] ?? 0) + (on ? -1 : 1)
+	if (next > 0)
+		reactions[key] = next
+	else
+		delete reactions[key]
+	return {
+		reactions,
+		viewer_reactions: on
+			? base.viewer_reactions.filter(e => e !== key)
+			: [...base.viewer_reactions, key],
+	}
+}
+
+/** 落到本地、抛给宿主、顺手把列表卡片那份缓存的数字也带上 */
+function commit(next: ReactionState) {
+	local.value = next
+	emit('update', next)
+	if (props.targetType === 'page' && props.pageKey)
+		patchCommentReactions(props.pageKey, next.reactions)
+}
 
 /** 未登录 / 会话过期：先把这一下记下来再跳，登录回来接着做完 */
 function goLogin(emojiKey: string) {
@@ -69,40 +129,56 @@ function goLogin(emojiKey: string) {
 	login(returnToNearest(root.value))
 }
 
+/**
+ * 点下去那一刻就得知道登没登录 —— 等到那时再问，问出「没登录」时样式已经做上了。
+ * 全站共用一发（useCommentSession 里是模块级的在途 promise），
+ * 一页几十张碎语卡片也只问一次。
+ */
+onMounted(() => session.load())
+
 async function toggle(emojiKey: string) {
-	if (busy.value)
+	// 已经问出结果、确实没登录：直接跳。先把样式做上再跳走，看起来像点坏了
+	if (ready.value && !user.value) {
+		goLogin(emojiKey)
 		return
-	busy.value = true
-	try {
-		// /api/me 可能还在路上：那一刻 user 是 null，但这不等于「没登录」。
-		// load() 会把在途的那一发 await 出来，问出结果之后再判空
-		await session.load()
-		if (!user.value) {
-			goLogin(emojiKey)
-			return
+	}
+
+	// 收起的碎语卡片手里只有 /api/pages/counts 那份数字，没有 viewer_reactions，
+	// 不知道这一下是加还是减，先斩后奏就可能把「取消」画成「添加」。
+	// 但一个 reaction 都没有的页面不必问 —— 那必然是加，而这是绝大多数碎语的情形
+	if (props.resolve && !props.viewerReactions && Object.keys(view.value.reactions).length) {
+		await props.resolve()
+		await nextTick()
+	}
+
+	// 样式立刻就上，请求随后再发
+	const adding = !view.value.viewer_reactions.includes(emojiKey)
+	commit(flip(view.value, emojiKey))
+	picking.value = false
+
+	pending++
+	chain = chain.then(async () => {
+		try {
+			const res = await api.request<ReactionState>('/api/reactions', {
+				method: adding ? 'PUT' : 'DELETE',
+				body: { ...body.value, emoji: emojiKey },
+			})
+			// 只剩自己在途时才写回：这份快照里没有别的请求刚乐观加上去的那几个
+			if (pending === 1)
+				commit(res)
 		}
-		// 先问清楚这一下是加还是减；nextTick 是等 props 把新状态刷进 mine
-		if (props.resolve && !props.viewerReactions) {
-			await props.resolve()
-			await nextTick()
+		catch (err) {
+			// 撤回刚才那一下。按当前状态再翻一次，而不是整片盖回旧快照 ——
+			// 这中间可能还点了别的 emoji，盖回去会把它们一起抹掉。
+			// 失败本身不弹东西打断阅读：数字自己缩回去就是反馈
+			commit(flip(view.value, emojiKey))
+			if (CommentError.from(err).code === 'unauthorized')
+				goLogin(emojiKey)
 		}
-		const res = await api.request<{ reactions: Record<string, number>, viewer_reactions: string[] }>(
-			'/api/reactions',
-			{ method: mine.value.has(emojiKey) ? 'DELETE' : 'PUT', body: { ...body.value, emoji: emojiKey } },
-		)
-		emit('update', res)
-		if (props.targetType === 'page' && props.pageKey)
-			invalidateCommentCount(props.pageKey)
-	}
-	catch (err) {
-		// reaction 失败无需打断阅读，静默即可 —— 数字没变本身就是反馈
-		if (CommentError.from(err).code === 'unauthorized')
-			goLogin(emojiKey)
-	}
-	finally {
-		busy.value = false
-		picking.value = false
-	}
+		finally {
+			pending--
+		}
+	})
 }
 
 /**

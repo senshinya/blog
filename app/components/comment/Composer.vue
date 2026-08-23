@@ -80,6 +80,12 @@ function startCooldown(seconds: number) {
 			clearInterval(ticking)
 	}, 1000)
 }
+
+/** 这条根本没发成，服务端那边的限速窗口就没开始，别让人对着倒数干等 */
+function stopCooldown() {
+	clearInterval(ticking)
+	cooldown.value = 0
+}
 onScopeDispose(() => clearInterval(ticking))
 
 /**
@@ -115,11 +121,28 @@ async function submit() {
 		return
 	sending.value = true
 	error.value = undefined
+
+	/**
+	 * 先当作发出去了：清空、收起、开始倒数、把卡片上的数字加一。
+	 *
+	 * 正文在这之后就只能从这份草稿里取了 —— text 已经空了。
+	 * 编辑不清空：那个框里的字就是当前正文，清掉等于当场把内容抹了。
+	 */
+	const draft = text.value
+	const posting = !isEdit.value
+	if (posting) {
+		text.value = ''
+		previewing.value = false
+		startCooldown(POST_COOLDOWN)
+		// 列表页那些卡片上的数字得跟着变
+		bumpCommentCount(props.pageKey, 1)
+	}
+
 	try {
 		const comment = isEdit.value
 			? await api.request<Comment>(`/api/comments/${props.editId}`, {
 					method: 'PATCH',
-					body: { body_md: text.value },
+					body: { body_md: draft },
 				})
 			: await api.request<Comment>('/api/comments', {
 					method: 'POST',
@@ -127,25 +150,29 @@ async function submit() {
 						key: props.pageKey,
 						title: props.title ?? '',
 						parent_id: props.parentId,
-						body_md: text.value,
+						body_md: draft,
 						subscribe_page: subscribe.value,
 					},
 				})
 
-		if (!isEdit.value) {
-			text.value = ''
-			previewing.value = false
-			startCooldown(POST_COOLDOWN)
-			// 列表页那些卡片上的数字得跟着变
-			invalidateCommentCount(props.pageKey)
-		}
 		emit('submitted', comment)
 	}
 	catch (err) {
 		const e = CommentError.from(err)
 		error.value = e
-		if (e.code === 'rate_limited')
+		if (posting) {
+			bumpCommentCount(props.pageKey, -1)
+			// 原文放回去，除非这会儿人已经在写下一条了
+			if (!text.value)
+				text.value = draft
+			if (e.code === 'rate_limited')
+				startCooldown(e.retryAfter ?? POST_COOLDOWN)
+			else
+				stopCooldown()
+		}
+		else if (e.code === 'rate_limited') {
 			startCooldown(e.retryAfter ?? POST_COOLDOWN)
+		}
 	}
 	finally {
 		sending.value = false

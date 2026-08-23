@@ -181,6 +181,15 @@ function onRemoved(id: number) {
 	nextTick(layout)
 }
 
+/** 删除请求失败：把墓碑换回原样那条，计数也补回来 */
+function onRestored(comment: Comment) {
+	if (!thread.value)
+		return
+	thread.value.comments = thread.value.comments.map(c => c.id === comment.id ? comment : c)
+	thread.value.total_comments += 1
+	nextTick(layout)
+}
+
 function onPageReaction(payload: { reactions: Record<string, number>, viewer_reactions: string[] }) {
 	if (thread.value?.page) {
 		thread.value.page.reactions = payload.reactions
@@ -317,6 +326,7 @@ watch(tree, () => nextTick(layout))
 			@inserted="onInserted"
 			@patched="onPatched"
 			@removed="onRemoved"
+			@restored="onRestored"
 		/>
 	</ol>
 

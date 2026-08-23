@@ -24,6 +24,8 @@ const emit = defineEmits<{
 	inserted: [comment: Comment]
 	patched: [comment: Comment]
 	removed: [id: number]
+	/** 删除没成，把原样那条放回去 */
+	restored: [comment: Comment]
 }>()
 
 const api = useCommentApi()
@@ -80,17 +82,24 @@ async function remove() {
 		setTimeout(() => (confirmingDelete.value = false), 4000)
 		return
 	}
+	confirmingDelete.value = false
+
+	// 先按删掉渲染：服务端是软删除，这里留的墓碑和它一致。
+	// 锚点要在 emit 之前取 —— 那之后这条就只剩一行「已删除」，prose 连同 id 都没了
+	const snapshot: Comment = { ...node.value }
+	const back = returnToNearest(proseEl.value)
+	emit('removed', snapshot.id)
+	bumpCommentCount(props.pageKey, -1)
+
 	try {
-		await api.request(`/api/comments/${node.value.id}`, { method: 'DELETE' })
-		emit('removed', node.value.id)
-		invalidateCommentCount(props.pageKey)
+		await api.request(`/api/comments/${snapshot.id}`, { method: 'DELETE' })
 	}
 	catch (err) {
+		// 原样放回去。那条重新出现本身就是「没删掉」的反馈
+		emit('restored', snapshot)
+		bumpCommentCount(props.pageKey, 1)
 		if (CommentError.from(err).code === 'unauthorized')
-			login(returnToNearest(proseEl.value))
-	}
-	finally {
-		confirmingDelete.value = false
+			login(back)
 	}
 }
 
@@ -233,6 +242,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			@inserted="emit('inserted', $event)"
 			@patched="emit('patched', $event)"
 			@removed="emit('removed', $event)"
+			@restored="emit('restored', $event)"
 			@changed="emit('changed')"
 		/>
 
