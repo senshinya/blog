@@ -204,8 +204,12 @@
 		}
 	}
 
+	// 窄到一行放不下就换行，而不是把每颗药丸压扁 —— 嵌套回复在 375px 下版心只有
+	// 267px，一行要 313px。此前是靠 flex-shrink 硬挤，「预览」两个字被压成上下两行、
+	// 药丸从 32px 撑到 40px，那排控件就散了
 	.composer-foot-in {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: 4px;
 		padding: 0 8px 8px;
@@ -213,6 +217,14 @@
 		> .spacer {
 			flex: 1;
 		}
+	}
+
+	// 一行放得下时 .spacer 已经把它顶到最右，auto 不多做什么；
+	// 换了行则由它接手，让这一组仍然靠右，不至于掉到第二行左端
+	.composer-actions {
+		display: flex;
+		gap: 4px;
+		margin-inline-start: auto;
 	}
 
 	// 工具条里的控件共用一套：h32 全圆角，按下叠一层 15% 蒙版。
@@ -226,6 +238,9 @@
 		border-radius: 999px;
 		background-color: transparent;
 		font-size: 0.8125rem;
+
+		// 药丸是固定高度的，字一折行就顶破它。宁可整行换行，也不让字在药丸里折
+		white-space: nowrap;
 		transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 
 		&:active {

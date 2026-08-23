@@ -246,24 +246,27 @@ const shortcut = computed(() => import.meta.client && /mac/i.test(navigator.plat
 					{{ length }} / {{ BODY_MAX }}
 				</span>
 
-				<button
-					v-if="parentId != null || isEdit"
-					type="button"
-					class="cbtn cbtn-secondary"
-					@click="emit('cancel')"
-				>
-					取消
-				</button>
+				<!-- 取消和发表捆成一组：窄到要换行时，这两颗得一起走且仍然靠右 -->
+				<div class="composer-actions">
+					<button
+						v-if="parentId != null || isEdit"
+						type="button"
+						class="cbtn cbtn-secondary"
+						@click="emit('cancel')"
+					>
+						取消
+					</button>
 
-				<button
-					type="button"
-					class="cbtn cbtn-primary"
-					:disabled="!canSend"
-					:title="`${shortcut} 发送`"
-					@click="submit"
-				>
-					{{ isEdit ? '保存' : '发表' }}
-				</button>
+					<button
+						type="button"
+						class="cbtn cbtn-primary"
+						:disabled="!canSend"
+						:title="`${shortcut} 发送`"
+						@click="submit"
+					>
+						{{ isEdit ? '保存' : '发表' }}
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
