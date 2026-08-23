@@ -57,6 +57,13 @@ export default [
 				avatar: 'https://mingblog.site/icons/icon-512.png',
 				icon: getFavicon('https://mingblog.site'),
 			},
+			{
+				author: 'CBDT的小站',
+				desc: '漂泊在互联网一角的牢无一只',
+				link: 'https://www.weitao-jiang.cn',
+				avatar: 'https://www.weitao-jiang.cn/images/avatar.jpg',
+				icon: getFavicon('https://www.weitao-jiang.cn'),
+			},
 		],
 	},
 ] satisfies FeedGroup[]
