@@ -153,6 +153,57 @@
 		}
 	}
 
+	// 回复框的进出场。此前只有框内的工具条和自增高有动画，框自己是硬生生蹦出来的，
+	// 一整块 44px 凭空出现，底下的回复被顶开时看着像跳了一帧。
+	// 高度同样走 0fr → 1fr，缓动与工具条那一下取同一条，免得一个框上两段动画各走各的
+	.composer-slot {
+		display: grid;
+		grid-template-rows: 1fr;
+	}
+
+	.composer-slot-in {
+		overflow: hidden;
+
+		// grid item 默认 min-height: auto，撑着内容不肯缩，0fr 那一行就压不下去
+		min-height: 0;
+	}
+
+	.composer-enter-active,
+	.composer-leave-active {
+		transition:
+			grid-template-rows 0.26s cubic-bezier(0.32, 0.72, 0, 1),
+			margin-block-start 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+
+		> .composer-slot-in {
+			transition: opacity 0.2s ease, translate 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+		}
+	}
+
+	.composer-enter-from,
+	.composer-leave-to {
+		// 光把高度压到 0 还不够：.comment-body 是 flex + gap，那 0.4rem 的缝在高度为 0 时
+		// 照样占位，于是展开的第一帧先硬跳 6px 再开始长。负 margin 把它一并收掉，
+		// 且跟着一起过渡 —— 间距是和框一起长出来的，不是先蹦出来等着
+		grid-template-rows: 0fr;
+		margin-block-start: -0.4rem;
+
+		> .composer-slot-in {
+			opacity: 0;
+			translate: 0 -5px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.composer-enter-active,
+		.composer-leave-active {
+			transition: none;
+
+			> .composer-slot-in {
+				transition: none;
+			}
+		}
+	}
+
 	.composer-foot-in {
 		display: flex;
 		align-items: center;
@@ -567,6 +618,13 @@
 		// 此刻父级恰好满足上面的选择器。没有这个延迟，父级动作行会闪一下再消失。
 		// 消失方向不延迟（延迟只写在这条规则里）。
 		transition-delay: 0.12s;
+		translate: 0;
+	}
+
+	// 回复框开着时这一行常驻：正在对这条评论说话，控件却随鼠标移开就消失，
+	// 想取消或改成编辑还得先把鼠标挪回去，把它们重新唤出来
+	.comment.replying > .comment-body > .comment-foot .ghost {
+		opacity: 1;
 		translate: 0;
 	}
 

@@ -129,6 +129,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 		'collapsed': collapsed,
 		'deleted': node.deleted,
 		'focused': isFocused,
+		'replying': replying,
 	}"
 	:style="{ '--delay': `${Math.min(index ?? 0, 8) * 0.04}s` }"
 >
@@ -214,17 +215,23 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 					</button>
 				</div>
 
-				<CommentComposer
-					v-if="replying"
-					:page-key="pageKey"
-					:title
-					:parent-id="node.id"
-					:subscribed="pageSubscribed"
-					:placeholder="`回复 ${node.user?.name || node.user?.login}`"
-					autofocus
-					@submitted="onReplied"
-					@cancel="replying = false"
-				/>
+				<!-- 外层跑 0fr → 1fr 的高度，内层负责裁切与位移，和工具条长出来那一下同一套 -->
+				<Transition name="composer">
+					<div v-if="replying" class="composer-slot">
+						<div class="composer-slot-in">
+							<CommentComposer
+								:page-key="pageKey"
+								:title
+								:parent-id="node.id"
+								:subscribed="pageSubscribed"
+								:placeholder="`回复 ${node.user?.name || node.user?.login}`"
+								autofocus
+								@submitted="onReplied"
+								@cancel="replying = false"
+							/>
+						</div>
+					</div>
+				</Transition>
 			</template>
 		</div>
 	</template>
