@@ -52,7 +52,7 @@ else {
 
 	<PostFooter v-bind="post" />
 	<PostSurround />
-	<PostComment />
+	<PostComment :title="post.title" />
 </template>
 
 <ZError

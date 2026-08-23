@@ -117,7 +117,7 @@ export default defineAppConfig({
 				{ icon: 'tabler:bubble-text', text: '碎语', url: '/memos' },
 				{ icon: 'tabler:movie', text: '娱乐', url: '/media' },
 				{ icon: 'tabler:archive', text: '归档', url: '/archive' },
-				{ icon: 'tabler:link', text: '友链', url: '/link' },
+				{ icon: 'tabler:link', text: '友链', url: '/friends' },
 			],
 		},
 	] satisfies Nav,

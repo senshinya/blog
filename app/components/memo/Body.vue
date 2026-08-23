@@ -9,22 +9,11 @@ import type { ParsedMemo } from '~/utils/memo'
  */
 const props = defineProps<ParsedMemo & {
 	/**
-	 * 详情页模式。与列表卡片的差别只在时间戳：
-	 * - 卡片：相对时间（「昨天」）挤在名字底下，点它进详情页；
-	 * - 详情页：仿 X 的做法，完整时间落到正文左下角单独一行 —— 版面宽裕，
-	 *   而且既然已经进来了，就该看到确切时刻，也不必再链回自己。
+	 * 详情页模式：不渲染名字底下那个相对时间 —— 既然已经进来了，就不必再链回自己。
+	 * 完整时刻由详情页自己摆（在反馈行的右端，见 pages/memos/[id].vue）。
 	 */
 	detail?: boolean
 }>()
-
-/** 详情页那行时间：给到分钟。zh-CN 下形如「2026年7月13日 18:05」 */
-const DETAIL_TIME = {
-	year: 'numeric',
-	month: 'long',
-	day: 'numeric',
-	hour: '2-digit',
-	minute: '2-digit',
-} satisfies Intl.DateTimeFormatOptions
 
 const appConfig = useAppConfig()
 const openLightbox = useLightbox()
@@ -77,8 +66,6 @@ const openLightbox = useLightbox()
 			<Icon name="tabler:hash" />{{ tag }}
 		</span>
 	</div>
-
-	<UtilDate v-if="detail" class="timestamp" :date="createTime" :format="DETAIL_TIME" />
 </div>
 </template>
 
@@ -124,16 +111,6 @@ const openLightbox = useLightbox()
 .date-link:hover > .date {
 	text-decoration: underline;
 	color: var(--c-primary);
-}
-
-// 详情页的完整时间：正文左下角单独一行（X 的做法）。
-// 与头部那个相对时间同一档字重字色 —— 它只是元数据，不该压过正文。
-// 额外顶开半格：它是正文的落款，不该紧贴着最后一行字
-.timestamp {
-	margin-block-start: 0.5rem;
-	font-family: var(--font-monospace);
-	font-size: 0.8rem;
-	color: var(--c-text-3);
 }
 
 .memo-images {

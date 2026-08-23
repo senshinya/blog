@@ -145,7 +145,7 @@ export function toMemoPlainText(content: string) {
 export function parseMemo(memo: Memo): ParsedMemo {
 	const { text, images } = splitMemoImages(memo.content)
 	return {
-		// name 是 memos/<uid>，uid 才是稳定标识：详情页路由和 giscus 的 term 都用它
+		// name 是 memos/<uid>，uid 才是稳定标识：详情页路由和评论的 page key 都用它
 		id: memo.name.split('/').pop() ?? memo.name,
 		blocks: splitMemoLinks(text).map(segment => segment.type === 'link'
 			? segment

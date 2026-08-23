@@ -50,7 +50,7 @@ function fetchOg(url: string) {
  * 取某个链接的 Open Graph 元数据，供碎语的链接预览卡使用。
  *
  * 只在链接滚进视口时才发请求 —— 一屏二十条碎语，开屏就把每个外链都打一遍
- * 既慢又浪费（同 useGiscusCount 的考虑）。
+ * 既慢又浪费。
  */
 export default function useOgData(url: MaybeRefOrGetter<string>, visible: MaybeRefOrGetter<boolean>) {
 	const og = ref<OgData>(EMPTY)

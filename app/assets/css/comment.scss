@@ -1,0 +1,1047 @@
+// 自建评论区（blog-comment）的样式。
+// 放全局而不是 SFC 的 scoped：评论正文是服务端渲染好的 HTML，用 v-html 插进来，
+// scoped 的属性选择器够不到那些节点；且 .comment 是递归组件，多层嵌套的导轨
+// 选择器写在一处才看得清。所有规则都收在 .z-comment 下，不会漏到别处。
+
+:root {
+	// 编辑器的描边/填充阶梯，照抄 Reddit：纯黑（浅色）或纯白（深色）加透明度。
+	// 混的是 --c-text-1，所以一套值同时覆盖两个主题，不用写两份。
+	--rc-ring: color-mix(in srgb, var(--c-text-1) 20%, transparent); // Reddit #00000033
+	--rc-ring-on: color-mix(in srgb, var(--c-text-1) 50%, transparent); // Reddit #0000007F
+	--rc-fill: color-mix(in srgb, var(--c-text-1) 8%, transparent);
+	--rc-fill-hover: color-mix(in srgb, var(--c-text-1) 12%, transparent);
+	--rc-pressed: color-mix(in srgb, var(--c-text-1) 15%, transparent); // Reddit #00000026
+}
+
+.z-comment {
+	// --surface = 评论区脚下的底色。折叠钮要用它盖住导线、长正文的渐隐要淡入它。
+	// 评论直接落在页面底上，故默认取 --c-bg-1；若哪天塞进一张卡片里，
+	// 只需在容器上重新声明一次 --surface。
+	--surface: var(--c-bg-1);
+
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+
+	// ── 区块骨架 ──────────────────────────────────────────────
+	.comment-head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+
+		> h3 {
+			font-size: 1.25rem;
+			color: var(--c-text);
+		}
+	}
+
+	// 排序切换：文字按钮，不做成 chip，避免和 reaction 抢注意力
+	.sort {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.8125rem;
+		color: var(--c-text-3);
+
+		> button {
+			padding: 2px 0;
+			border-bottom: 1px solid transparent;
+			transition: color 0.2s;
+
+			&:hover {
+				color: var(--c-primary);
+			}
+
+			&[aria-pressed="true"] {
+				border-bottom-color: var(--c-primary);
+				color: var(--c-text-1);
+			}
+		}
+
+		> .sep {
+			opacity: 0.5;
+		}
+	}
+
+	// 排序行：Reddit 把它放在编辑框和列表之间，不放在标题右边。
+	// .z-comment 是 flex 列且 gap:1rem，margin 只补差额 ——
+	// 编辑框 →(gap 16)→ 排序行 →(gap 16 + margin 16 = 32)→ 列表，和 Reddit 实测一致
+	.sort-row {
+		display: flex;
+		align-items: center;
+		height: 32px;
+		margin-block-end: 1rem;
+	}
+
+	// ── 编辑器 ────────────────────────────────────────────────
+	// 照着 Reddit 的 composer 量的：圆角等于半高（收起时是一颗真 pill），
+	// 闲置没有自己的底色 —— 框里就是页面底色，靠一根透明度描边立住。
+	// 工具条聚焦才从 0 高度长出来。
+	.composer {
+		border: 1px solid var(--rc-ring);
+		border-radius: 21px;
+		background-color: transparent;
+		transition: border-color 0.22s ease;
+		cursor: text;
+
+		// Reddit 的收起态没有 hover 规则（class 里只有 focus-within:），这里照办
+		&:focus-within {
+			border-color: var(--rc-ring-on);
+			cursor: auto;
+		}
+
+		> textarea {
+			display: block;
+			overflow: hidden; // 高度交给 JS，不出原生滚动条和拖拽手柄
+			width: 100%;
+			max-height: 20em;
+			padding: 8px 16px;
+			outline: none;
+			font-size: 0.9375rem;
+			line-height: 1.75;
+			color: var(--c-text-1);
+			resize: none;
+
+			&::placeholder {
+				color: var(--c-text-3);
+			}
+		}
+
+		// 预览：直接套 .prose，和发出去之后逐像素一致
+		> .composer-preview {
+			padding: 8px 16px;
+		}
+
+		// 输入框和预览面板共用同一个最小高度：一行行高 + 上下 padding。
+		// 不写这条，切到预览时空内容只剩 padding，整个框会从 44 塌到 18。
+		// 写成同一条声明是为了让两边严格相等 —— 自增高用的 scrollHeight 是整数，
+		// 各写各的会差半个像素。
+		> textarea,
+		> .composer-preview {
+			min-height: calc(1.75em + 16px);
+		}
+	}
+
+	// 展开动画：0fr → 1fr 把工具条长出来，配一点上浮和渐显。
+	// 注意 transition 里写的是 translate 而不是 transform ——
+	// translate 是独立属性，transform 覆盖不到它，写错会在收起首帧闪一下
+	.composer-foot-wrap {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+	}
+
+	.composer-foot {
+		overflow: hidden;
+		opacity: 0;
+		transition: opacity 0.2s ease, translate 0.26s cubic-bezier(0.32, 0.72, 0, 1);
+		translate: 0 -5px;
+	}
+
+	.composer:focus-within,
+	.composer.has-text {
+		.composer-foot-wrap {
+			grid-template-rows: 1fr;
+		}
+
+		.composer-foot {
+			opacity: 1;
+			transition-delay: 0.06s;
+			translate: 0;
+		}
+	}
+
+	.composer-foot-in {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 0 8px 8px;
+
+		> .spacer {
+			flex: 1;
+		}
+	}
+
+	// 工具条里的控件共用一套：h32 全圆角，按下叠一层 15% 蒙版。
+	// Reddit 的按钮没有 scale 变换，这里也不加
+	.cbtn {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		height: 32px;
+		padding: 0 12px;
+		border-radius: 999px;
+		background-color: transparent;
+		font-size: 0.8125rem;
+		transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+
+		&:active {
+			box-shadow: inset 0 0 0 100px var(--rc-pressed);
+		}
+	}
+
+	// plain：透明起步，hover 才填出一颗药丸 —— Reddit 的图标按钮就是这样
+	.cbtn-plain {
+		color: var(--c-text-3);
+
+		&:hover, &:focus-visible {
+			background-color: var(--rc-fill-hover);
+			color: var(--c-text-2);
+		}
+	}
+
+	.cbtn-secondary {
+		background-color: var(--rc-fill);
+		color: var(--c-text-1);
+
+		&:hover, &:focus-visible {
+			background-color: var(--rc-fill-hover);
+		}
+	}
+
+	.cbtn-primary {
+		background-color: var(--c-primary);
+		color: hsl(var(--hue-theme) 0% 100%);
+
+		// hover 是底色 × 0.75 向黑：Reddit 实测 rgb(0,82,72) → rgb(0,62,54)，62/82 = 54/72 = 0.75
+		&:hover:not(:disabled), &:focus-visible:not(:disabled) {
+			background-color: color-mix(in srgb, var(--c-primary) 75%, #000);
+		}
+
+		// 空内容时降到半透明，让页面底色透上来 —— 和 Reddit 的暗态 Comment 同一个意思
+		&:disabled {
+			background-color: color-mix(in srgb, var(--c-primary) 45%, transparent);
+			color: var(--c-bg);
+
+			&:active {
+				box-shadow: none;
+			}
+		}
+	}
+
+	// 字数只在逼近上限时才出现：写到两三百字时那个数字不携带信息
+	.counter {
+		margin-inline: 8px;
+		font-family: var(--font-monospace);
+		font-size: 0.6875rem;
+		font-variant-numeric: tabular-nums;
+		color: var(--c-text-3);
+
+		&.warn {
+			color: var(--c-warning);
+		}
+	}
+
+	// 订阅开关：自绘 13px 勾选框。原生 checkbox 的系统蓝会是这一屏上的第三种蓝
+	.subscribe {
+		> .tick {
+			position: relative;
+			width: 13px;
+			height: 13px;
+			border-radius: 3px;
+			box-shadow: inset 0 0 0 1px currentcolor;
+			transition: background-color 0.2s, box-shadow 0.2s;
+		}
+
+		&[aria-pressed="true"] {
+			color: var(--c-text-2);
+
+			> .tick {
+				box-shadow: none;
+				background-color: var(--c-primary);
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset-block-start: 2.5px;
+					inset-inline-start: 5px;
+					width: 2px;
+					height: 6px;
+					border: solid var(--c-bg);
+					border-width: 0 1.5px 1.5px 0;
+					rotate: 45deg;
+				}
+			}
+
+			&:active > .tick {
+				box-shadow: none;
+			}
+		}
+	}
+
+	// 限速提示：不是红色报错，是一句人话 + 倒数
+	.ratelimit {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+		color: var(--c-warning);
+
+		> .sec {
+			font-family: var(--font-monospace);
+			font-variant-numeric: tabular-nums;
+		}
+	}
+
+	// 字段级错误：贴着控件，不是顶部一条通用横幅
+	.field-error {
+		padding: 0 0.875rem 0.625rem;
+		font-size: 0.75rem;
+		color: var(--c-error);
+	}
+
+	// 未登录：一条横幅，不是一个空的大编辑框
+	.signin {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 44px;
+		padding: 5px 8px 5px 20px;
+		border: 1px solid var(--rc-ring);
+		border-radius: 21px;
+		font-size: 0.875rem;
+		color: var(--c-text-2);
+		transition: border-color 0.2s;
+
+		&:hover {
+			border-color: var(--rc-ring-on);
+		}
+
+		> .grow {
+			margin-inline-start: auto;
+		}
+	}
+
+	.btn-github {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 5px 14px;
+		border: 1px solid var(--c-border);
+		border-radius: 2em;
+		font-size: 0.8125rem;
+		color: var(--c-text-1);
+		transition: all 0.2s;
+
+		&:hover {
+			border-color: var(--c-primary);
+			background-color: var(--c-primary-soft);
+			color: var(--c-primary);
+		}
+
+		&:active {
+			transform: scale(0.96);
+		}
+	}
+
+	// ── 列表 ──────────────────────────────────────────────────
+	// 条目不是卡片，列表也不套边框环。在真实文章上量过：一篇 30 条评论的区块
+	// 有 7000px+ 高，1px 的环永远看不到上下边，只在正文两侧各拖一条淡线，
+	// 跟回复引导线抢戏。去掉之后评论直接落在页面底上、和正文左右对齐。分组交给 gap。
+	.comment-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.comment {
+		display: grid;
+		grid-template-columns: 2rem 1fr;
+		gap: 0.75rem;
+		position: relative;
+		animation: float-in 0.3s backwards;
+		animation-delay: var(--delay, 0s);
+		scroll-margin-top: 2rem;
+
+		@media (prefers-reduced-motion: reduce) {
+			animation: none;
+		}
+	}
+
+	.avatar {
+		// 定位起来才能压住弯头：弯头是绝对定位的伪元素，会盖过普通流里的头像。
+		// 两者 z-index 都是 auto，按 DOM 顺序绘制，头像在 ::before 之后就赢了。
+		// 弯头横段特意扎进头像 8px，靠头像盖住，边缘才不会露缝。
+		position: relative;
+		overflow: hidden;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		box-shadow: 0 0 0 1px var(--c-bg-soft);
+		background-color: var(--c-bg-2);
+
+		> img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	// 显式占第 2 列：收起时头像会 display:none，不指定的话 body 会被网格自动
+	// 排到第一列去，整条评论挤成一条 2rem 宽的竖串。
+	.comment-body {
+		display: flex;
+		flex-direction: column;
+		grid-column: 2;
+		gap: 0.4rem;
+		min-width: 0;
+	}
+
+	.byline {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+		color: var(--c-text-3);
+
+		> .name {
+			font-size: 0.8125rem;
+			font-weight: 500;
+			color: var(--c-text-1);
+
+			&:hover {
+				color: var(--c-primary);
+			}
+		}
+
+		// UtilDate 渲染出来是 span，不是 time
+		> time, > .date {
+			font-variant-numeric: tabular-nums;
+		}
+
+		> .edited {
+			font-style: italic;
+		}
+	}
+
+	// 站长标记：描边而非实心，和 chip 同一种材质
+	.tag-owner {
+		padding: 1px 7px;
+		border: 1px solid var(--c-primary);
+		border-radius: 2em;
+		font-size: 0.625rem;
+		line-height: 1.5;
+		color: var(--c-primary);
+	}
+
+	// ── 评论正文：article.scss 的缩排版本 ─────────────────────
+	.prose {
+		font-size: 0.9375rem;
+		line-height: 1.75;
+		color: var(--c-text-1);
+
+		> * + * {
+			margin-top: 0.65em;
+		}
+
+		a {
+			text-decoration: underline;
+			text-decoration-thickness: 1px;
+			text-underline-offset: 0.2em;
+			color: var(--c-primary);
+
+			&:hover {
+				background-color: var(--c-primary-soft);
+			}
+		}
+
+		// 和正文同一种纸：strong 用那条渐变下划线，不是加粗
+		strong {
+			background: linear-gradient(var(--c-primary-soft), var(--c-primary-soft)) no-repeat center bottom / 100% 30%;
+			font-weight: 600;
+		}
+
+		del {
+			opacity: 0.5;
+		}
+
+		code {
+			padding: 0.1em 0.35em;
+			border-radius: 4px;
+			background-color: var(--c-bg-2);
+			font-size: 0.875em;
+		}
+
+		pre {
+			overflow-x: auto;
+			padding: 0.75rem 0.875rem;
+			border-radius: 6px;
+			background-color: var(--c-bg-2);
+			font-size: 0.8125rem;
+			line-height: 1.6;
+
+			> code {
+				padding: 0;
+				background: none;
+				font-size: 1em;
+			}
+		}
+
+		blockquote {
+			padding: 0.2rem 0.8rem;
+			border-inline-start: 4px solid var(--c-border);
+			border-radius: 4px;
+			background-color: var(--c-bg-2);
+			font-size: 0.9em;
+		}
+
+		ul, ol {
+			padding-inline-start: 1.4em;
+			list-style: revert;
+		}
+
+		ol {
+			list-style-type: decimal;
+		}
+
+		li {
+			&::marker {
+				color: var(--c-primary);
+			}
+
+			& + li {
+				margin-top: 0.2em;
+			}
+		}
+
+		table {
+			border-collapse: collapse;
+			font-size: 0.875em;
+		}
+
+		th, td {
+			padding: 0.3em 0.6em;
+			border: 1px solid var(--c-border);
+		}
+
+		hr {
+			margin: 1.2em 0;
+			border-top: 0.3em dashed var(--c-border);
+		}
+
+		img {
+			border-radius: 6px;
+		}
+	}
+
+	// ── 交互行 ────────────────────────────────────────────────
+	.comment-foot,
+	.reactions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 5px;
+		font-size: 0.75rem;
+	}
+
+	// 次要动作平时隐身，沿用 memo 卡片的 ghost 语汇
+	.ghost {
+		opacity: 0;
+
+		// 过渡里必须写 translate 而不是 transform —— translate 是独立的变换属性，
+		// transition: transform 盖不到它，位移会瞬间跳 2px 而透明度在渐变，看着就是抖一下
+		transition: opacity 0.2s, translate 0.2s, border-color 0.2s, color 0.2s, background-color 0.2s;
+		translate: 0 2px;
+
+		&:focus-visible {
+			opacity: 1;
+			transition-delay: 0s; // 键盘聚焦要立刻可见，不吃下面那 0.12s
+			translate: 0;
+		}
+	}
+
+	// :not(:has(.comment:hover)) —— 只点亮鼠标真正落在的那一条。
+	// 没有它，祖先链上每个 .comment 都处于 :hover，父评论的动作行会跟着冒出来。
+	// 末段是后代而非直接子选择器：reaction 那排被 CommentReactions 包了一层 .reactions，
+	// 加反应的 ＋ 在第三层。写成 > 会够不着它，那颗按钮就永远停在 opacity: 0。
+	// 嵌套评论不会被误伤 —— .replies 是 .comment-body 的兄弟，不在它里面。
+	.comment:hover:not(:has(.comment:hover)) > .comment-body > .comment-foot .ghost {
+		opacity: 1;
+
+		// 出现晚一点：鼠标从子评论移出时，必然先短暂落在父评论身上，
+		// 此刻父级恰好满足上面的选择器。没有这个延迟，父级动作行会闪一下再消失。
+		// 消失方向不延迟（延迟只写在这条规则里）。
+		transition-delay: 0.12s;
+		translate: 0;
+	}
+
+	@media (hover: none) {
+		// 触屏无 hover，入口再淡也得常驻，否则等于不存在
+		.ghost {
+			opacity: 0.45;
+			translate: 0;
+		}
+	}
+
+	.act {
+		padding: 2px 6px;
+		border-radius: 2em;
+		line-height: 1.5;
+		color: var(--c-text-3);
+
+		// opacity 和 translate 必须一起列上：这条规则排在 .ghost 之后，
+		// 只写 color 会把 .ghost 的过渡列表整个盖掉 —— 于是加反应的 ＋ 是淡入 + 上浮，
+		// 而回复/编辑/删除是硬切，同一排控件两种出场方式
+		transition: opacity 0.2s, translate 0.2s, color 0.2s;
+
+		&:hover {
+			color: var(--c-primary);
+		}
+
+		&.danger:hover {
+			color: var(--c-error);
+		}
+	}
+
+	// ── 线程导轨 ──────────────────────────────────────────────
+	// 导线从头像正下方垂下来，用圆角弯头接进子评论的头像，线上挂折叠钮。
+	// 比「整块左边一条竖线」多说了两件事：这条线是从谁身上长出来的，
+	// 以及这棵子树可以收起来。
+
+	// 导线颜色不能用 --c-border：在真实页面上量过，它对底色只有 1.35:1（暗）
+	// 和 1.18:1（浅），两个主题下都等于没画。
+
+	// 另外，混进 --surface 而不是 transparent：导线必须是**不透明**的。父导线在子评论
+	// 整个高度上连续，而弯头的直线段正好叠在它上面 —— 半透明色叠两层，不透明度
+	// 从 0.45 涨到 0.70，接缝处会明显发白。混进底色得到同样的视觉颜色，
+	// 但重叠不再累加。Reddit 的线也是纯色。
+	.comment {
+		--rail: color-mix(in srgb, var(--c-text-3) 45%, var(--surface));
+	}
+
+	// 有回复时，从头像下沿垂一条线。终点由脚本写入 --rail-cut，
+	// 让它停在最后一条回复的弯头上而不是拖一条尾巴。
+	.comment.has-replies::after {
+		content: "";
+		position: absolute;
+
+		// 半像素：1px 的线居中于 2rem 的槽，左沿就在 15.5。弯头的左边框必须落在
+		// 同一个亚像素上，两段的抗锯齿才一致，接缝才看不出来。
+		inset-block: 2.4rem var(--rail-cut, 0);
+		inset-inline-start: calc(1rem - 0.5px);
+		width: 1px;
+		background: var(--rail);
+	}
+
+	// 子评论的弯头，几何照抄 Reddit（它的槽宽和头像也是 32/32，可以直接对齐）：
+	// 半径 12 < 高度 16，所以弧之前留了 4px 的垂直直线段 —— 导线和弯头在这段
+	// 重叠的直线上交接，而不是在曲率最大的切点上，接缝才不显形。
+	// 横段一直伸到 24.5px，会扎进头像 8px 藏在下面，头像圆边再怎么抗锯齿也不露缝。
+	.replies > .comment::before {
+		content: "";
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-start: calc(-1rem - 0.5px);
+		width: calc(1.5rem + 0.5px);
+		height: 1rem;
+		border-block-end: 1px solid var(--rail);
+		border-inline-start: 1px solid var(--rail);
+		border-end-start-radius: 12px;
+	}
+
+	.replies {
+		display: flex;
+		flex-direction: column;
+		grid-column: 1 / -1;
+		gap: 1.25rem;
+		margin-top: 1.25rem;
+		padding-inline-start: 2rem;
+	}
+
+	// 折叠钮：坐在导线上，底色盖住线，读起来就是「线在这里可以掐断」。
+	// 描边环是必须的 —— 没有它就只是导线上一个色块，看不出能点。
+	.collapse {
+		display: grid;
+		place-content: center;
+		position: absolute;
+
+		// 纵向与动作行同心 —— 量过 Reddit，折叠钮和「回复/奖励/共享」那一行
+		// 的中线是重合的。动作行的 y 随正文高度变，只能由脚本写入。
+		inset-block-start: var(--collapse-y, 2.05rem);
+		inset-inline-start: calc(1rem - 0.5rem);
+		width: 1rem;
+		height: 1rem;
+		border-radius: 50%;
+		box-shadow: 0 0 0 1px var(--rail);
+		background-color: var(--surface);
+		font-size: 0.75rem;
+		line-height: 1;
+		color: var(--c-text-2);
+		transition: all 0.2s;
+
+		// 导线是 .comment::after，在盒树里排在这个按钮后面，默认会盖在它上面。
+		// 抬一层，圆点才能真的把线掐断。
+		z-index: 1;
+
+		&:hover {
+			box-shadow: 0 0 0 1px var(--c-primary);
+			background-color: var(--c-primary-soft);
+			color: var(--c-primary);
+		}
+	}
+
+	// 加减号统一：整数像素定位。1px 笔画要在 16px 盒子里居中得偏移 7.5px，
+	// 落在半像素上就发虚，而且横竖两笔虚的程度不一样、看着粗细不均。
+	// 改成 2px 笔画 + 整数偏移，中心精确落在 (8, 8)，两根笔一样实。
+	.collapse::before,
+	.comment.collapsed > .collapse::after,
+	.more-item .plus::before,
+	.more-item .plus::after {
+		content: "";
+		position: absolute;
+		border-radius: 1px;
+		background-color: currentcolor;
+	}
+
+	.collapse::before,
+	.more-item .plus::before {
+		inset-block-start: 7px;
+		inset-inline-start: 4px;
+		width: 8px;
+		height: 2px;
+	}
+
+	.comment.collapsed > .collapse::after,
+	.more-item .plus::after {
+		inset-block-start: 4px;
+		inset-inline-start: 7px;
+		width: 2px;
+		height: 8px;
+	}
+
+	// 收起后：正文和整棵子树都不见，只留一行摘要
+	.comment.collapsed {
+		> .comment-body > :not(.byline),
+		> .replies {
+			display: none;
+		}
+
+		// 收起后整条缩成一行：头像让位，折叠钮提到首行占住 gutter，
+		// 否则按钮还停在 2.05rem 上、掉进下一条评论的头像位。
+		> .avatar {
+			display: none;
+		}
+
+		> .collapse {
+			inset-block-start: 0.15rem;
+		}
+
+		&::after {
+			display: none;
+		}
+
+		> .comment-body > .byline::after {
+			content: "已收起 " attr(data-n) " 条";
+			font-size: 0.6875rem;
+			color: var(--c-text-3);
+		}
+	}
+
+	// 「另外 N 条回复」与子评论同级：⊕ 占住子头像的位置，同样接一个弯头。
+	// 量过 Reddit —— 它的 ⊕ 中心比父头像中心右移整整一个缩进级（33px），
+	// 也就是子头像该在的中心。
+	.more-item {
+		align-items: center;
+		min-height: 2rem;
+
+		.plus {
+			display: grid;
+			place-content: center;
+			justify-self: center;
+			position: relative;
+			width: 1rem;
+			height: 1rem;
+			border-radius: 50%;
+			box-shadow: 0 0 0 1px var(--rail);
+			background-color: var(--surface);
+			color: var(--c-text-2);
+			transition: all 0.2s;
+			z-index: 1;
+		}
+
+		.more-replies {
+			justify-self: start;
+			font-size: 0.75rem;
+			color: var(--c-text-3);
+			transition: color 0.2s;
+		}
+
+		&:hover {
+			.more-replies {
+				color: var(--c-primary);
+			}
+
+			.plus {
+				box-shadow: 0 0 0 1px var(--c-primary);
+				background-color: var(--c-primary-soft);
+				color: var(--c-primary);
+			}
+		}
+	}
+
+	// ── 超长正文折叠 ──────────────────────────────────────────
+	// 真实评论里大量读者直接粘贴代码却不加围栏，渲染成 <br> 堆叠的正文，
+	// 一条评论能占两屏半。giscus 时代这被 iframe 的滚动条掩盖了，自渲染就摊开在
+	// 页面上。实测 MYDB 7 那篇加折叠后从 10170px 降到 7111px。
+	.clip {
+		position: relative;
+
+		&.on {
+			> .prose {
+				overflow: hidden;
+				max-height: 22em;
+			}
+
+			&::after {
+				content: "";
+				position: absolute;
+				inset-inline: 0;
+				bottom: 0;
+				height: 5em;
+				background: linear-gradient(transparent, var(--surface));
+				pointer-events: none;
+			}
+		}
+	}
+
+	// 纯文字，不做成描边胶囊 —— 那样会和 reaction chip 撞成同一类控件
+	.more {
+		align-self: flex-start;
+		margin-top: 0.15rem;
+		padding: 2px 0;
+		font-size: 0.75rem;
+		color: var(--c-primary);
+		transition: opacity 0.2s;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	// ── 页面级 reaction：属于文章，不属于对话 ──────────────────
+	.page-react {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.6rem;
+		padding-bottom: 1.25rem;
+		border-bottom: 1px solid var(--c-border);
+
+		> .lb {
+			font-size: 0.8125rem;
+			color: var(--c-text-2);
+		}
+
+		// 靠右。窄屏下这一行会换行，那时它独占一行的右端，仍然不与控件挤在一起
+		> .aside {
+			margin-inline-start: auto;
+		}
+	}
+
+	// ── 邮件深链落点 ──────────────────────────────────────────
+	.comment.focused > .comment-body {
+		border-radius: 0.3rem;
+		animation: comment-highlight 3s;
+	}
+
+	.focus-bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.6rem 0.875rem;
+		border-radius: 8px;
+		background-color: var(--c-primary-soft);
+		font-size: 0.8125rem;
+		color: var(--c-text-1);
+
+		> .grow {
+			margin-inline-start: auto;
+		}
+
+		> button {
+			font-weight: 500;
+			color: var(--c-primary);
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	// ── 已删除占位 ────────────────────────────────────────────
+	.comment.deleted > .comment-body {
+		padding: 0.4rem 0.75rem;
+		border: 1px dashed var(--c-border);
+		border-radius: 6px;
+		font-size: 0.8125rem;
+		color: var(--c-text-3);
+	}
+
+	// ── 空 / 加载 / 出错 ──────────────────────────────────────
+	.state {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 2.5rem 1rem;
+		text-align: center;
+
+		> .big {
+			font-size: 0.9375rem;
+			color: var(--c-text-2);
+		}
+
+		> .small {
+			font-size: 0.8125rem;
+			color: var(--c-text-3);
+		}
+
+		&.error > .big {
+			color: var(--c-error);
+		}
+	}
+
+	.skeleton {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding: 1.25rem 0;
+	}
+
+	.sk-row {
+		display: grid;
+		grid-template-columns: 2rem 1fr;
+		gap: 0.75rem;
+	}
+
+	.sk {
+		border-radius: 4px;
+		background: linear-gradient(90deg, var(--c-bg-2) 25%, var(--c-bg-3) 50%, var(--c-bg-2) 75%) 0 0 / 200% 100%;
+		animation: comment-shimmer 1.4s infinite linear;
+
+		@media (prefers-reduced-motion: reduce) {
+			animation: none;
+		}
+	}
+
+	.sk-avatar {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+	}
+
+	.sk-lines {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+
+		> .sk {
+			height: 0.55rem;
+		}
+	}
+}
+
+// CommentReactions 自带的作用域。它既出现在评论区里，也出现在碎语卡片的页脚上，
+// 所以这套样式不能收在 .z-comment 下 —— 那样卡片页脚里的 chip 会掉光描边。
+// chip 本身完全沿用 memo/Card.vue 的既有样式。
+.c-reactions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 5px;
+	font-size: 0.75rem;
+
+	.chip {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding: 2px 8px;
+		border: 1px solid var(--c-border);
+		border-radius: 2em;
+		line-height: 1.5;
+		color: var(--c-text-3);
+		transition: all 0.2s;
+
+		&:hover, &:focus-visible {
+			border-color: var(--c-primary);
+			background-color: var(--c-primary-soft);
+			color: var(--c-primary);
+		}
+
+		&:active {
+			transform: scale(0.94);
+		}
+
+		// 已参与 = 实心。这是 giscus 没做好的一件事：你点没点过看不出来
+		&.on {
+			border-color: var(--c-primary);
+			background-color: var(--c-primary-soft);
+			color: var(--c-primary);
+		}
+
+		> .num {
+			font-family: var(--font-monospace);
+			font-size: 0.6875rem;
+			font-variant-numeric: tabular-nums;
+		}
+
+		> .emoji {
+			font-size: 0.8125rem;
+			line-height: 1;
+		}
+	}
+
+	// 展开那八个：一起蹦出来太突兀，按顺序错开一点点。
+	// 收拢靠 max-width / padding / 负 margin 一起归零，让 chip 在流里真的缩掉，
+	// 后面的「＋」自然跟着滑 —— 用 position: absolute 把它们抽出流的话，
+	// 这排是 flex-wrap 的，抽出去的那几个会叠到行首。
+	.chip.pick-enter-active,
+	.chip.pick-leave-active {
+		max-width: 3rem;
+		transition:
+			max-width 0.18s,
+			margin-inline-start 0.18s,
+			padding-inline 0.18s,
+			opacity 0.18s,
+			scale 0.18s;
+		transition-delay: calc(var(--i) * 0.022s);
+	}
+
+	.chip.pick-enter-from,
+	.chip.pick-leave-to {
+		opacity: 0;
+		max-width: 0;
+
+		// 抵掉 flex 的 gap，收起时不留下八段空隙
+		margin-inline-start: -5px;
+		padding-inline: 0;
+		scale: 0.7;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.chip.pick-enter-active,
+		.chip.pick-leave-active {
+			transition: none;
+		}
+	}
+}
+
+// 名字带前缀：article.scss 里已有一个全局的 highlight，两者的动画内容不同
+@keyframes comment-highlight {
+	50% {
+		box-shadow: 0 0 0 6px var(--c-primary-soft);
+		background-color: var(--c-primary-soft);
+	}
+}
+
+@keyframes comment-shimmer {
+	to {
+		background-position: -200% 0;
+	}
+}

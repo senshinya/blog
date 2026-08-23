@@ -9,7 +9,7 @@
 const props = defineProps<{ url: string }>()
 
 const cardEl = useTemplateRef('card')
-// 视口内才去抓，同 MemoCard 里 giscus 计数的处理
+// 视口内才去抓：外站元数据要经 /api/og 代取，一页 20 条全拉没必要
 const visible = useElementVisibility(cardEl)
 const og = useOgData(() => props.url, visible)
 

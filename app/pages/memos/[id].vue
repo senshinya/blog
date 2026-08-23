@@ -3,6 +3,15 @@ import type { Memo } from '~/utils/memo'
 
 const API = 'https://memos.shinya.click/api/v1/memos'
 
+/** 落款那行时间：给到分钟。zh-CN 下形如「2026年7月13日 18:05」 */
+const DETAIL_TIME = {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+	hour: '2-digit',
+	minute: '2-digit',
+} satisfies Intl.DateTimeFormatOptions
+
 const route = useRoute()
 const appConfig = useAppConfig()
 // 取数 handler 里要用，得在 setup 阶段先抓住（理由见下面 404 那段）
@@ -119,15 +128,21 @@ useSeoMeta({
 	<article v-else-if="data" class="memo">
 		<MemoBody v-bind="data.memo" detail />
 
-		<hr class="divider">
-
-		<!-- 与列表卡片同一个 term，故进的是同一条讨论线程，历史评论不断 -->
-		<UtilGiscus
-			mapping="specific"
-			:term="`memo/${data.memo.id}`"
-			:category="appConfig.giscus.memoCategory"
-			:category-id="appConfig.giscus.memoCategoryId"
-		/>
+		<!--
+			page key 用 /memos/<id>，与列表卡片取计数的 key 是同一个，
+			故卡片上的数字和这里的线程永远一致。
+			标题没有，用正文首句 —— 站长面板和通知邮件里要靠它认出是哪条碎语。
+		-->
+		<CommentSection
+			reactions
+			reaction-label="给这条 memo 一个反馈"
+			:page-key="`/memos/${data.memo.id}`"
+			:title="data.summary.slice(0, 60)"
+		>
+			<template #react-aside>
+				<UtilDate class="timestamp" :date="data.memo.createTime" :format="DETAIL_TIME" />
+			</template>
+		</CommentSection>
 	</article>
 </div>
 </template>
@@ -163,17 +178,16 @@ useSeoMeta({
 // 正文与评论是两件事，但都在这一页上，故用一道细线划开 ——
 // 颜色取卡片描边那档，是这套界面里最轻的一级结构线。
 // 时间是正文的落款，与线贴得近些；线与评论之间反而要留出换气的余地
-.divider {
-	width: 100%;
-	height: 0;
-	margin: 0.5rem 0 0;
-	border: none;
-	border-top: 1px solid var(--c-bg-soft);
+// 正文与反馈行之间没有分隔线了，靠这段留白划界，故比原先多给一点
+:deep(.z-comment) {
+	margin-block-start: 1.5rem;
 }
 
-// giscus 自带的 margin: 1em 0 叠在上面的间距里偏挤，收到 1rem 由这里统一说了算
-:deep(.giscus) {
-	margin-block-start: 1rem;
+// 与正文头部那个相对时间同一档字重字色 —— 它只是元数据，不该压过正文
+.timestamp {
+	font-family: var(--font-monospace);
+	font-size: 0.8rem;
+	color: var(--c-text-3);
 }
 
 .tip {

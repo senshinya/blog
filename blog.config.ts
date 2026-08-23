@@ -71,34 +71,25 @@ const blogConfig = {
 		imgProxy: 'https://api-bgm-tv.shinya.click/',
 	},
 
+	/**
+	 * 自建评论服务 blog-comment（https://github.com/senshinya/blog-comment）。
+	 *
+	 * 页面 key 就是路由路径，与 giscus 时代的 pathname 映射一致，
+	 * 历史评论由服务端的 import 任务按同一套 key 导入，故线程不断。
+	 *
+	 * 全站是 SSG，浏览器直接打这个域名，跨站带 cookie ——
+	 * 服务端的 SITE_ORIGIN 必须包含本站地址，否则所有写操作会被 403。
+	 */
+	comment: {
+		api: 'https://comment.shinya.click',
+	},
+
 	/** 博客 Atom 订阅源 */
 	feed: {
 		/** 订阅源最大文章数量 */
 		limit: 50,
 		/** 订阅源是否启用XSLT样式 */
 		enableStyle: true,
-	},
-
-	/** Giscus 评论系统，沿用旧站配置，mapping 为 pathname 且新旧站 URL 一致，故历史评论线程不断 */
-	giscus: {
-		repo: 'senshinya/blog',
-		repoId: 'R_kgDOLAV3QQ',
-		/** 文章评论 */
-		category: 'Announcements',
-		categoryId: 'DIC_kwDOLAV3Qc4CcKlC',
-		/**
-		 * 碎语评论单独一个分类：一条 memo 一个 Discussion，
-		 * 混进 Announcements 会把 42 篇文章的评论冲垮。
-		 * 分类需在 GitHub 仓库里手动创建（类型选 Announcements，只允许 giscus bot 建 Discussion）。
-		 */
-		memoCategory: 'Memos',
-		memoCategoryId: 'DIC_kwDOLAV3Qc4DBF_E',
-		mapping: 'pathname',
-		strict: '0',
-		reactionsEnabled: '1',
-		emitMetadata: '0',
-		inputPosition: 'top',
-		lang: 'zh-CN',
 	},
 
 	/** 向 <head> 中添加脚本 */

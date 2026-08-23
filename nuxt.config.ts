@@ -39,7 +39,8 @@ export default defineNuxtConfig({
 			link: [
 				{ rel: 'icon', href: blogConfig.favicon },
 				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
-				{ rel: 'preconnect', href: 'https://giscus.app' },
+				// 首屏就要打这个域名取会话和线程，提前把 TLS 握完
+				{ rel: 'preconnect', href: blogConfig.comment.api, crossorigin: '' },
 				{ rel: 'stylesheet', href: 'https://cdnjs.snrat.com/ajax/libs/KaTeX/0.16.44/katex.min.css' },
 				// "InterVariable", "Inter", "InterDisplay"
 				{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
@@ -71,6 +72,7 @@ export default defineNuxtConfig({
 		'@/assets/css/animation.scss',
 		'@/assets/css/article.scss',
 		'@/assets/css/color.scss',
+		'@/assets/css/comment.scss',
 		'@/assets/css/font.scss',
 		// .css 而非 .scss：里头的 round(down, …) 会被 Sass 自带的单参 round() 顶掉
 		'@/assets/css/lqip.css',
@@ -120,35 +122,6 @@ export default defineNuxtConfig({
 			 */
 			crawlLinks: true,
 		},
-
-		/**
-		 * Vercel 专用。部署在 Netlify 时这段是惰性的（vercel preset 不跑就不读）。
-		 *
-		 * 与 Netlify 那边同样的两件事，只是换了个平台的表达方式：
-		 * public/_redirects 和 netlify.toml 到了 Vercel 全是废纸 —— 前者还会被当成
-		 * 普通静态文件公开发布出去，语义完全无效。
-		 *
-		 * 写在这里而不是 vercel.json：SSG 下 nitro 走 Vercel 的 Build Output API，
-		 * 直接产出 .vercel/output/config.json 来定义路由。而 nitro 的 generateBuildConfig 是
-		 *   defu(nitro.options.vercel?.config, { version: 3, routes: [...] })
-		 * defu 对数组是拼接、且用户的项在前，所以这里的规则会落到 config.json 的 routes 最顶端，
-		 * 稳稳排在任何兜底之前。vercel.json 与 Build Output API 的交互我没验证过，不赌。
-		 */
-		vercel: {
-			config: {
-				routes: [
-					// giscus 接口的同源代理，见 app/composables/useGiscusCount.ts
-					{ src: '/giscus-api/(.*)', dest: 'https://giscus.app/api/$1' },
-					// 自定义 giscus 主题 CSS：方向相反，是 giscus 的 iframe 跨域来取我们的文件。
-					// continue: true —— 只挂头，不截断路由，让请求继续走到静态文件
-					{
-						src: '/giscus/(.*)',
-						headers: { 'Access-Control-Allow-Origin': 'https://giscus.app' },
-						continue: true,
-					},
-				],
-			},
-		},
 	},
 
 	// @keep-sorted
@@ -166,24 +139,6 @@ export default defineNuxtConfig({
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
 		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		'/favicon.ico': { redirect: { to: blogConfig.favicon } },
-		/**
-		 * giscus 接口的同源代理（碎语的 reaction 数走它，见 composables/useGiscusCount）。
-		 *
-		 * 不能让浏览器直接去 fetch giscus.app —— 那个接口对任何 Origin 都硬编码返回
-		 * `Access-Control-Allow-Origin: https://giscus.app`，不回显请求方，
-		 * 也就是压根不打算被第三方站点跨域调用（它只服务自己的 iframe）。
-		 * 于是浏览器必拦，reaction 永远读不出来。
-		 *
-		 * 绕开的办法不是去调 CORS 响应头（方向反了，那是我们发给别人的头），
-		 * 而是把请求收回同源：前端打 /giscus-api/*，由服务端转发到 giscus.app/api/*。
-		 * 同源请求根本不触发 CORS 检查。
-		 *
-		 * 这份只在 dev 下生效 —— 生产走 SSG（netlify-static preset），没有服务端，
-		 * nitro 会把 proxy 规则丢弃。生产的那条在 netlify.toml 里，两处要一起改。
-		 *
-		 * 路径避开 /giscus/*：那个留给自定义主题 CSS（见 netlify.toml），撞上会被代理劫持。
-		 */
-		'/giscus-api/**': { proxy: 'https://giscus.app/api/**' },
 		/**
 		 * 娱乐页的筛选状态写在 URL query（?category=&status=）。若预渲染，产物是不带 query 的
 		 * /media，payload.path 也就是 /media；水合时路由优先采信这个 renderedPath 而非地址栏
@@ -336,6 +291,15 @@ ${packageJson.homepage}
 				ctx.content.path = permalink
 			else if (blogConfig.article.hidePostPrefix && path?.startsWith('/posts/'))
 				ctx.content.path = path.slice('/posts'.length)
+		},
+	},
+
+	hints: {
+		features: {
+			// 这层给每个被 import 的组件套一层 setup 包装，撞上递归组件（CommentItem
+			// 自引用）时拿到的是环里尚未求值的模块，dev 的 SSR 直接 500。
+			// 只关这一项，hydration / web-vitals 那些提示照旧。
+			lazyLoad: false,
 		},
 	},
 
