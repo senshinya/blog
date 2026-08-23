@@ -133,6 +133,13 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	}"
 	:style="{ '--delay': `${Math.min(index ?? 0, 8) * 0.04}s` }"
 >
+	<!--
+		导线收口。父导线是一路画到底的，靠最后一条回复拿一块底色把压在自己身上的
+		那段擦掉，线就断在弯头起点上。只有 :last-child 会显示（见 comment.scss），
+		所以这里无条件挂着，不必让子组件知道自己排第几。
+	-->
+	<span class="branchline" aria-hidden="true" />
+
 	<!-- 已删除只剩一行占位：线程的形状要留着，否则下面的回复会变成孤儿 -->
 	<template v-if="node.deleted">
 		<div class="comment-body">
@@ -259,6 +266,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			（Reddit 那个同名控件语义不同 —— 它是「服务端还没给」。）
 		-->
 		<li v-if="folded" class="comment more-item">
+			<span class="branchline" aria-hidden="true" />
 			<span class="plus" aria-hidden="true" />
 			<button type="button" class="more-replies" @click="expandedReplies = true">
 				另外 {{ folded }} 条回复

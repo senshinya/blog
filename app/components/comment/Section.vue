@@ -122,32 +122,26 @@ function setOrder(next: 'asc' | 'desc') {
 }
 
 // ── 导轨几何 ──────────────────────────────────────────────────
-// 折叠钮要和动作行同心，导线要停在最后一条回复的弯头上。两者都依赖正文的真实高度，
-// 只能等排版落定后量。CSS 里读的是 --collapse-y 和 --rail-cut。
+// 只剩折叠钮要量：它得和动作行同心，而动作行的 y 随正文高度变。CSS 里读 --collapse-y。
+//
+// 导线在哪儿收口不在这儿算了 —— 那要跨两个元素取矩形（父级底边、最后一条回复顶边），
+// 而每条评论各有一段带延迟的 float-in，getBoundingClientRect 把 transform 的位移一起
+// 算进去，动画期间量出来的距离必然偏小，线就探出弯头一截。现在交给 CSS：导线画到底，
+// 最后一条回复拿一块底色补丁擦掉盖住自己的那段（.branchline）。
 const REM = 16
-/** 导线收在最后一条回复的顶端 —— 那正是弧的起点。收在头像中线会让它贴着弧多探出一截 */
-const JUNCTION = 0
 
 function layout() {
 	root.value?.querySelectorAll<HTMLElement>('.comment.has-replies').forEach((c) => {
-		const box = c.getBoundingClientRect()
-
 		const foot = c.querySelector<HTMLElement>(':scope > .comment-body > .comment-foot')
 		if (foot && !c.classList.contains('collapsed')) {
+			// 两个矩形同在一条评论里，float-in 的位移是共同的，相减正好抵掉
+			const box = c.getBoundingClientRect()
 			const f = foot.getBoundingClientRect()
 			c.style.setProperty('--collapse-y', `${Math.round(f.top - box.top + (f.height - REM) / 2)}px`)
 		}
 		else {
 			c.style.removeProperty('--collapse-y')
 		}
-
-		const last = c.querySelector(':scope > .replies')?.lastElementChild
-		if (!last || c.classList.contains('collapsed')) {
-			c.style.removeProperty('--rail-cut')
-			return
-		}
-		const cut = box.bottom - (last.getBoundingClientRect().top + JUNCTION)
-		c.style.setProperty('--rail-cut', `${Math.max(0, Math.round(cut))}px`)
 	})
 }
 
