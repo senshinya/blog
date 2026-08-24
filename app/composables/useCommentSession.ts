@@ -19,6 +19,14 @@ import type { Me } from '~/utils/comment'
  */
 let inflight: Promise<void> | undefined
 
+export async function performCommentLogout(
+	request: () => Promise<unknown>,
+	clear: () => void,
+) {
+	await request()
+	clear()
+}
+
 export default function useCommentSession() {
 	const api = useCommentApi()
 	const me = useState<Me | null>('comment:me', () => null)
@@ -58,8 +66,12 @@ export default function useCommentSession() {
 	}
 
 	async function logout() {
-		await api.request('/auth/logout', { method: 'POST' }).catch(() => {})
-		me.value = { user: null }
+		await performCommentLogout(
+			() => api.request('/auth/logout', { method: 'POST' }),
+			() => {
+				me.value = { user: null }
+			},
+		)
 	}
 
 	/** 「回复时邮件通知我」是账号级开关，与单页订阅是两件事 */
