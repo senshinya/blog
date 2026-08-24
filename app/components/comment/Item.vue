@@ -104,13 +104,13 @@ async function remove() {
 			signal: request.controller.signal,
 		})
 		if (!sessionScope.current(request))
-			session.invalidateData()
+			session.invalidateData(props.pageKey)
 	}
 	catch (err) {
 		// 公开计数不带会话，失败时始终要收回乐观更新。
 		bumpCommentCount(props.pageKey, 1)
 		if (!sessionScope.current(request)) {
-			session.invalidateData()
+			session.invalidateData(props.pageKey)
 			return
 		}
 		// 原样放回去。那条重新出现本身就是「没删掉」的反馈

@@ -19,6 +19,22 @@ import type { Me } from '~/utils/comment'
  */
 let inflight: Promise<void> | undefined
 let logoutInflight: Promise<void> | undefined
+const pendingDataInvalidations = new Set<string>()
+
+export function invalidateCommentData(
+	revisions: { value: Record<string, number> },
+	pageKey: string,
+) {
+	if (pendingDataInvalidations.has(pageKey))
+		return false
+	pendingDataInvalidations.add(pageKey)
+	revisions.value = {
+		...revisions.value,
+		[pageKey]: (revisions.value[pageKey] ?? 0) + 1,
+	}
+	queueMicrotask(() => pendingDataInvalidations.delete(pageKey))
+	return true
+}
 
 export function performCommentLogout(
 	request: () => Promise<unknown>,
@@ -41,8 +57,8 @@ export default function useCommentSession() {
 	const status = useState<'idle' | 'pending' | 'ready' | 'error'>('comment:me:status', () => 'idle')
 	/** 成功登出才递增：所有会话相关投影据此同时失效。 */
 	const epoch = useState<number>('comment:session-epoch', () => 0)
-	/** 旧组件里的写请求结算后递增，让仍挂载的线程重取公开权威状态。 */
-	const dataRevision = useState<number>('comment:data-revision', () => 0)
+	/** 旧组件里的写请求结算后按页面递增，让对应线程重取公开权威状态。 */
+	const dataRevisions = useState<Record<string, number>>('comment:data-revisions', () => ({}))
 
 	const user = computed(() => me.value?.user ?? null)
 	const isOwner = computed(() => me.value?.is_owner === true)
@@ -105,8 +121,8 @@ export default function useCommentSession() {
 			me.value = next
 	}
 
-	function invalidateData() {
-		dataRevision.value += 1
+	function invalidateData(pageKey: string) {
+		invalidateCommentData(dataRevisions, pageKey)
 	}
 
 	return {
@@ -117,7 +133,7 @@ export default function useCommentSession() {
 		ready,
 		status,
 		epoch,
-		dataRevision,
+		dataRevisions,
 		load,
 		login,
 		logout,

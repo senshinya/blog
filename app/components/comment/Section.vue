@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CommentSessionRequest } from '~/composables/useCommentSessionScope'
 import type { Comment, Thread, ThreadPage } from '~/utils/comment'
 
 /**
@@ -33,13 +34,14 @@ const emit = defineEmits<{ page: [page: ThreadPage | null] }>()
 const route = useRoute()
 const api = useCommentApi()
 const session = useCommentSession()
-const { user, ready: sessionReady, epoch: sessionEpoch, dataRevision } = session
+const { user, ready: sessionReady, epoch: sessionEpoch, dataRevisions } = session
 const sessionScope = useCommentSessionScope(sessionEpoch)
 const identity = computed(() => user.value ? commentSessionIdentity(user.value) : null)
 const sessionKey = computed(() => `${sessionEpoch.value}:${user.value?.id ?? 'anonymous'}`)
 const { pending: loggingOut, failed: logoutFailed, logout } = useCommentLogout(session.logout)
 
 const key = computed(() => props.pageKey ?? commentPageKey(route.path))
+const dataRevision = computed(() => dataRevisions.value[key.value] ?? 0)
 
 /**
  * 文章页和碎语详情页各只有一个评论区，用固定的 #comment 供目录和邮件链接落点。
@@ -60,6 +62,22 @@ const focusId = ref<number>()
 const focusMode = ref(false)
 /** 只让最后一次线程请求落地；登出时旧的鉴权响应不能重新写回页面。 */
 let threadRequestVersion = 0
+let activeThreadRequest: CommentSessionRequest | undefined
+
+function startThreadRequest() {
+	if (activeThreadRequest) {
+		activeThreadRequest.controller.abort()
+		sessionScope.finish(activeThreadRequest)
+	}
+	activeThreadRequest = sessionScope.start()
+	return activeThreadRequest
+}
+
+function finishThreadRequest(request: CommentSessionRequest) {
+	sessionScope.finish(request)
+	if (activeThreadRequest === request)
+		activeThreadRequest = undefined
+}
 
 const tree = computed(() => buildCommentTree(thread.value?.comments ?? []))
 const total = computed(() => thread.value?.total_comments ?? 0)
@@ -67,7 +85,7 @@ const pageSubscribed = computed(() => thread.value?.page?.viewer_subscribed ?? t
 
 async function loadThread() {
 	const version = ++threadRequestVersion
-	const request = sessionScope.start()
+	const request = startThreadRequest()
 	status.value = 'pending'
 	try {
 		const next = await api.request<Thread>('/api/pages/thread', {
@@ -87,14 +105,14 @@ async function loadThread() {
 		status.value = 'error'
 	}
 	finally {
-		sessionScope.finish(request)
+		finishThreadRequest(request)
 	}
 }
 
 /** 邮件里的地址是 /posts/xxx#comment-43 */
 async function loadFocus(id: number) {
 	const version = ++threadRequestVersion
-	const request = sessionScope.start()
+	const request = startThreadRequest()
 	status.value = 'pending'
 	try {
 		const next = await api.request<Thread>('/api/pages/thread/focus', {
@@ -119,7 +137,7 @@ async function loadFocus(id: number) {
 		await loadThread()
 	}
 	finally {
-		sessionScope.finish(request)
+		finishThreadRequest(request)
 	}
 }
 
@@ -128,7 +146,7 @@ async function loadMore() {
 	if (!cursor || loadingMore.value)
 		return
 	const version = threadRequestVersion
-	const request = sessionScope.start()
+	const request = startThreadRequest()
 	loadingMore.value = true
 	try {
 		const next = await api.request<Thread>('/api/pages/thread', {
@@ -145,7 +163,7 @@ async function loadMore() {
 		}
 	}
 	finally {
-		sessionScope.finish(request)
+		finishThreadRequest(request)
 		loadingMore.value = false
 	}
 }

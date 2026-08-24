@@ -58,3 +58,17 @@ test('shares one logout request across comment session consumers', async () => {
 	await Promise.all([first, second])
 	assert.equal(clears, 1)
 })
+
+test('coalesces comment data invalidation per page key', async () => {
+	const { invalidateCommentData } = await import('./useCommentSession.ts')
+	const revisions = { value: {} as Record<string, number> }
+
+	assert.equal(invalidateCommentData(revisions, '/memos/1'), true)
+	assert.equal(invalidateCommentData(revisions, '/memos/1'), false)
+	assert.equal(invalidateCommentData(revisions, '/memos/2'), true)
+	assert.deepEqual(revisions.value, { '/memos/1': 1, '/memos/2': 1 })
+
+	await Promise.resolve()
+	assert.equal(invalidateCommentData(revisions, '/memos/1'), true)
+	assert.equal(revisions.value['/memos/1'], 2)
+})

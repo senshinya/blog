@@ -173,7 +173,7 @@ async function submit() {
 		if (sessionScope.current(request))
 			emit('submitted', comment)
 		else
-			session.invalidateData()
+			session.invalidateData(props.pageKey)
 	}
 	catch (err) {
 		const e = CommentError.from(err)
@@ -181,7 +181,7 @@ async function submit() {
 			// 明确失败后收回乐观计数；其余都是已卸载组件的本地状态。
 			if (posting)
 				bumpCommentCount(props.pageKey, -1)
-			session.invalidateData()
+			session.invalidateData(props.pageKey)
 			return
 		}
 		error.value = e

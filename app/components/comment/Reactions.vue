@@ -167,7 +167,8 @@ async function toggle(emojiKey: string) {
 		const request = sessionScope.start(started, false)
 		try {
 			if (!sessionScope.current(request)) {
-				session.invalidateData()
+				if (props.pageKey)
+					session.invalidateData(props.pageKey)
 				return
 			}
 			const res = await api.request<ReactionState>('/api/reactions', {
@@ -179,7 +180,8 @@ async function toggle(emojiKey: string) {
 			if (props.targetType === 'page' && props.pageKey)
 				patchCommentReactions(props.pageKey, res.reactions)
 			if (!sessionScope.current(request)) {
-				session.invalidateData()
+				if (props.pageKey)
+					session.invalidateData(props.pageKey)
 				return
 			}
 			// 只剩自己在途时才写回：这份快照里没有别的请求刚乐观加上去的那几个
@@ -188,7 +190,8 @@ async function toggle(emojiKey: string) {
 		}
 		catch (err) {
 			if (!sessionScope.current(request)) {
-				session.invalidateData()
+				if (props.pageKey)
+					session.invalidateData(props.pageKey)
 				return
 			}
 			// 撤回刚才那一下。按当前状态再翻一次，而不是整片盖回旧快照 ——
