@@ -29,3 +29,32 @@ test('keeps the local comment session when logout fails', async () => {
 
 	assert.equal(cleared, false)
 })
+
+test('shares one logout request across comment session consumers', async () => {
+	const { performCommentLogout } = await import('./useCommentSession.ts')
+	let requests = 0
+	let clears = 0
+	let resolveRequest!: () => void
+	const request = new Promise<void>((resolve) => {
+		resolveRequest = resolve
+	})
+
+	const first = performCommentLogout(() => {
+		requests += 1
+		return request
+	}, () => {
+		clears += 1
+	})
+	const second = performCommentLogout(() => {
+		requests += 1
+		return request
+	}, () => {
+		clears += 1
+	})
+
+	await Promise.resolve()
+	assert.equal(requests, 1)
+	resolveRequest()
+	await Promise.all([first, second])
+	assert.equal(clears, 1)
+})

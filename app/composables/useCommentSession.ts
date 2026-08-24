@@ -18,13 +18,21 @@ import type { Me } from '~/utils/comment'
  * undefined，故不存在跨请求串状态的问题。（同 useCommentCounts 的模块级队列。）
  */
 let inflight: Promise<void> | undefined
+let logoutInflight: Promise<void> | undefined
 
-export async function performCommentLogout(
+export function performCommentLogout(
 	request: () => Promise<unknown>,
 	clear: () => void,
 ) {
-	await request()
-	clear()
+	// 页面上可能同时展开多个评论区。登出必须共享同一发请求，否则两个按钮
+	// 在响应回来前各点一次，就会重复 POST，并让后到的失败覆盖先到的成功。
+	logoutInflight ??= Promise.resolve()
+		.then(request)
+		.then(() => clear())
+		.finally(() => {
+			logoutInflight = undefined
+		})
+	return logoutInflight
 }
 
 export default function useCommentSession() {

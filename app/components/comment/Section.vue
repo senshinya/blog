@@ -35,6 +35,7 @@ const api = useCommentApi()
 const session = useCommentSession()
 const { user, ready: sessionReady } = session
 const identity = computed(() => user.value ? commentSessionIdentity(user.value) : null)
+const sessionKey = computed(() => user.value ? `user:${user.value.id}` : 'anonymous')
 const { pending: loggingOut, failed: logoutFailed, logout } = useCommentLogout(session.logout)
 
 const key = computed(() => props.pageKey ?? commentPageKey(route.path))
@@ -56,40 +57,56 @@ const order = ref<'asc' | 'desc'>('asc')
 /** 邮件深链：只渲染目标那一棵子树，直到用户主动要全部 */
 const focusId = ref<number>()
 const focusMode = ref(false)
+/** 只让最后一次线程请求落地；登出时旧的鉴权响应不能重新写回页面。 */
+let threadRequestVersion = 0
 
 const tree = computed(() => buildCommentTree(thread.value?.comments ?? []))
 const total = computed(() => thread.value?.total_comments ?? 0)
 const pageSubscribed = computed(() => thread.value?.page?.viewer_subscribed ?? true)
 
 async function loadThread() {
+	const version = ++threadRequestVersion
 	status.value = 'pending'
 	try {
-		thread.value = await api.request<Thread>('/api/pages/thread', {
+		const next = await api.request<Thread>('/api/pages/thread', {
 			query: { key: key.value, order: order.value, limit: 50 },
 		})
+		if (version !== threadRequestVersion)
+			return
+		thread.value = next
 		focusMode.value = false
 		status.value = 'ready'
 		emit('page', thread.value.page)
 	}
 	catch {
+		if (version !== threadRequestVersion)
+			return
 		status.value = 'error'
 	}
 }
 
 /** 邮件里的地址是 /posts/xxx#comment-43 */
 async function loadFocus(id: number) {
+	const version = ++threadRequestVersion
 	status.value = 'pending'
 	try {
-		thread.value = await api.request<Thread>('/api/pages/thread/focus', {
+		const next = await api.request<Thread>('/api/pages/thread/focus', {
 			query: { key: key.value, comment_id: id },
 		})
+		if (version !== threadRequestVersion)
+			return
+		thread.value = next
 		focusMode.value = true
 		status.value = 'ready'
 		emit('page', thread.value.page)
 		await nextTick()
+		if (version !== threadRequestVersion)
+			return
 		document.getElementById(`comment-${id}`)?.scrollIntoView({ block: 'center' })
 	}
 	catch {
+		if (version !== threadRequestVersion)
+			return
 		// 那条被删了或不在本页，退回普通视图，别让链接变成死路
 		await loadThread()
 	}
@@ -99,11 +116,14 @@ async function loadMore() {
 	const cursor = thread.value?.next_cursor
 	if (!cursor || loadingMore.value)
 		return
+	const version = threadRequestVersion
 	loadingMore.value = true
 	try {
 		const next = await api.request<Thread>('/api/pages/thread', {
 			query: { key: key.value, order: order.value, limit: 50, cursor },
 		})
+		if (version !== threadRequestVersion)
+			return
 		thread.value = {
 			...next,
 			page: next.page ?? thread.value?.page ?? null,
@@ -217,6 +237,17 @@ onMounted(() => {
 })
 
 watch(tree, () => nextTick(layout))
+
+watch(user, (next, previous) => {
+	if (previous && !next) {
+		// 先抹掉带 can_edit / viewer_reactions 的旧投影，再以匿名会话重取。
+		// sessionKey 同时会重建子组件，丢弃尚未落地的本地编辑与 reaction 状态。
+		thread.value = undefined
+		focusMode.value = false
+		emit('page', null)
+		void loadThread()
+	}
+})
 </script>
 
 <template>
@@ -226,6 +257,7 @@ watch(tree, () => nextTick(layout))
 	<div v-if="reactions" class="page-react">
 		<span class="lb">{{ reactionLabel }}</span>
 		<CommentReactions
+			:key="sessionKey"
 			target-type="page"
 			:page-key="key"
 			:title
@@ -265,7 +297,7 @@ watch(tree, () => nextTick(layout))
 					<img
 						class="session-avatar"
 						:src="user.avatar_url"
-						:alt="`${identity.name} 的头像`"
+						alt=""
 						width="28"
 						height="28"
 					>
@@ -332,7 +364,7 @@ watch(tree, () => nextTick(layout))
 		<span class="small">来做第一个</span>
 	</div>
 
-	<ol v-else ref="list" class="comment-list">
+	<ol v-else :key="sessionKey" ref="list" class="comment-list">
 		<CommentItem
 			v-for="(node, i) in tree"
 			:key="node.id"
