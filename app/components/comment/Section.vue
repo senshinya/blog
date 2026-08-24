@@ -39,6 +39,19 @@ const sessionScope = useCommentSessionScope(sessionEpoch)
 const identity = computed(() => user.value ? commentSessionIdentity(user.value) : null)
 const sessionKey = computed(() => `${sessionEpoch.value}:${user.value?.id ?? 'anonymous'}`)
 const { pending: loggingOut, failed: logoutFailed, logout } = useCommentLogout(session.logout)
+const sessionAccount = useTemplateRef('sessionAccount')
+const sessionTrigger = useTemplateRef<HTMLButtonElement>('sessionTrigger')
+const sessionMenuId = useId()
+const {
+	open: sessionMenuOpen,
+	toggle: toggleSessionMenu,
+	close: closeSessionMenu,
+	onKeydown: onSessionMenuKeydown,
+	onFocusout: onSessionMenuFocusout,
+} = useCommentSessionMenu(() => sessionTrigger.value?.focus())
+
+onClickOutside(sessionAccount, closeSessionMenu)
+watch(() => user.value?.id, closeSessionMenu)
 
 const key = computed(() => props.pageKey ?? commentPageKey(route.path))
 const dataRevision = computed(() => dataRevisions.value[key.value] ?? 0)
@@ -344,24 +357,63 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 
 		<div v-else-if="user && identity" key="signed-in" class="session-user">
 			<div class="session-identity">
-				<UtilLink :to="identity.profile" class="session-identity-link">
-					<img
-						class="session-avatar"
-						:src="user.avatar_url"
-						alt=""
-						width="28"
-						height="28"
+				<div
+					ref="sessionAccount"
+					class="session-account"
+					@keydown="onSessionMenuKeydown"
+					@focusout="onSessionMenuFocusout"
+				>
+					<button
+						ref="sessionTrigger"
+						type="button"
+						class="session-trigger"
+						:aria-expanded="sessionMenuOpen"
+						:aria-controls="sessionMenuId"
+						@click="toggleSessionMenu"
 					>
-					<span class="session-name">{{ identity.name }}</span>
-				</UtilLink>
+						<img
+							class="session-avatar"
+							:src="user.avatar_url"
+							alt=""
+							width="28"
+							height="28"
+						>
+						<span class="session-name">{{ identity.name }}</span>
+						<Icon
+							name="tabler:chevron-down"
+							class="session-chevron"
+							:class="{ open: sessionMenuOpen }"
+							aria-hidden="true"
+						/>
+					</button>
+
+					<Transition name="session-menu">
+						<div v-if="sessionMenuOpen" :id="sessionMenuId" class="session-menu">
+							<UtilLink :to="identity.profile" class="session-menu-item" @click="closeSessionMenu">
+								<Icon name="tabler:external-link" aria-hidden="true" />
+								<span>查看 GitHub 主页</span>
+							</UtilLink>
+							<span class="session-menu-divider" aria-hidden="true" />
+							<button
+								type="button"
+								class="session-menu-item session-menu-logout"
+								:disabled="loggingOut"
+								@click="logout"
+							>
+								<Icon name="tabler:logout" aria-hidden="true" />
+								<span>{{ loggingOut ? '退出中…' : '退出登录' }}</span>
+							</button>
+						</div>
+					</Transition>
+				</div>
 				<span v-if="!logoutFailed" class="session-source">已通过 GitHub 登录</span>
-				<span v-else class="session-error session-error-desktop" aria-live="polite">退出失败，请重试</span>
-				<span class="session-grow" />
-				<button type="button" class="session-logout" :disabled="loggingOut" @click="logout">
-					{{ loggingOut ? '退出中…' : '退出登录' }}
-				</button>
+				<span
+					class="session-status"
+					:class="{ 'session-error': logoutFailed }"
+					aria-live="polite"
+					v-text="logoutFailed ? '退出失败，请重试' : ''"
+				/>
 			</div>
-			<span v-if="logoutFailed" class="session-error session-error-mobile" aria-live="polite">退出失败，请重试</span>
 
 			<CommentComposer
 				:page-key="key"

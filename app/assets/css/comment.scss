@@ -382,7 +382,8 @@
 		color: var(--c-error);
 	}
 
-	// 已登录：像一行署名落在编辑器上方。身份是主角，登出退到低对比动作。
+	// 已登录：头像和署名是一个 disclosure。低频的主页、登出动作藏在下拉层里，
+	// 不再占据编辑器上方的主布局。
 	.session-user {
 		display: flex;
 		flex-direction: column;
@@ -400,19 +401,40 @@
 		font-size: 0.8125rem;
 	}
 
-	.session-identity-link {
+	.session-account {
+		flex: 0 1 auto;
+		position: relative;
+		min-width: 0;
+	}
+
+	.session-trigger {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
 		min-width: 0;
 		min-height: 40px;
+		max-width: 100%;
+		padding: 0 6px 0 0;
 		border-radius: 2em;
+		background-color: transparent;
 		color: var(--c-text-1);
+		transition: background-color 0.16s ease, color 0.16s ease, scale 0.12s ease;
 		touch-action: manipulation;
 
 		&:focus-visible {
 			outline: 2px solid var(--c-primary);
 			outline-offset: 2px;
+		}
+	}
+
+	.session-chevron {
+		flex: none;
+		font-size: 0.875rem;
+		color: var(--c-text-3);
+		transition: color 0.16s ease, rotate 0.16s ease;
+
+		&.open {
+			rotate: 180deg;
 		}
 	}
 
@@ -438,35 +460,54 @@
 		transition: color 0.16s ease;
 	}
 
+	.session-status,
 	.session-source {
 		flex: none;
+	}
+
+	.session-source {
 		color: var(--c-text-2);
 	}
 
-	.session-grow {
-		flex: 1;
-		min-width: 0;
+	.session-menu {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		inset-inline-start: 0;
+		top: calc(100% + 4px);
+		width: max-content;
+		min-width: 11rem;
+		max-width: min(15rem, calc(100vw - 2rem));
+		padding: 4px;
+		border: 1px solid var(--c-border);
+		border-radius: 8px;
+		box-shadow: var(--box-shadow-2), var(--box-shadow-3);
+		background-color: var(--ld-bg-card);
+		transform-origin: top left;
+		z-index: 10;
 	}
 
-	.session-logout {
-		flex: none;
-		min-width: 72px;
+	.session-menu-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
 		min-height: 40px;
-		padding-inline: 8px;
-		border-radius: 2em;
+		padding-inline: 10px;
+		border-radius: 6px;
 		background-color: transparent;
-		font-size: 0.75rem;
-		color: var(--c-text-2);
-		transition: background-color 0.16s ease, color 0.16s ease, opacity 0.16s ease, scale 0.12s ease;
+		font-size: 0.8125rem;
+		line-height: 1.25;
+		white-space: nowrap;
+		text-align: start;
+		text-decoration: none;
+		color: var(--c-text-1);
+		transition: background-color 0.16s ease, color 0.16s ease, opacity 0.16s ease;
 		touch-action: manipulation;
 
 		&:focus-visible {
 			outline: 2px solid var(--c-primary);
-			outline-offset: 2px;
-		}
-
-		&:active:not(:disabled) {
-			scale: 0.96;
+			outline-offset: -2px;
 		}
 
 		&:disabled {
@@ -475,27 +516,41 @@
 		}
 	}
 
+	.session-menu-divider {
+		display: block;
+		height: 1px;
+		margin: 3px 8px;
+		background-color: var(--c-border);
+	}
+
 	.session-error {
 		font-size: 0.75rem;
+		white-space: nowrap;
 		color: color-mix(in srgb, var(--c-error) 70%, var(--c-text-1));
 	}
 
-	.session-error-mobile {
-		display: none;
-	}
-
 	@media (hover: hover) {
-		.session-identity-link:hover {
+		.session-trigger:hover {
+			background-color: var(--rc-fill);
 			color: var(--c-primary);
 
 			> .session-avatar {
 				box-shadow: inset 0 0 0 1px var(--c-primary);
 			}
+
+			> .session-chevron {
+				color: var(--c-primary);
+			}
 		}
 
-		.session-logout:hover:not(:disabled) {
+		.session-menu-item:hover:not(:disabled) {
 			background-color: var(--rc-fill-hover);
 			color: var(--c-primary);
+		}
+
+		.session-menu-logout:hover:not(:disabled) {
+			background-color: var(--c-error-soft);
+			color: var(--c-text-1);
 		}
 	}
 
@@ -509,8 +564,21 @@
 		opacity: 0;
 	}
 
+	.session-menu-enter-active,
+	.session-menu-leave-active {
+		transition: opacity 0.16s ease, translate 0.16s ease, scale 0.16s ease;
+	}
+
+	.session-menu-enter-from,
+	.session-menu-leave-to {
+		opacity: 0;
+		scale: 0.98;
+		translate: 0 -4px;
+	}
+
 	@media (max-width: $breakpoint-phone) {
-		.session-identity-link {
+		.session-account,
+		.session-trigger {
 			flex-shrink: 1;
 		}
 
@@ -518,26 +586,19 @@
 			max-width: none;
 		}
 
-		.session-source,
-		.session-error-desktop {
+		.session-source {
 			display: none;
-		}
-
-		.session-error-mobile {
-			display: block;
-			margin: -0.25rem 0 0 38px;
-		}
-
-		.session-logout {
-			min-width: 64px;
-			padding-inline: 4px;
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.session-avatar,
 		.session-name,
-		.session-logout,
+		.session-trigger,
+		.session-chevron,
+		.session-menu-item,
+		.session-menu-enter-active,
+		.session-menu-leave-active,
 		.comment-session-enter-active,
 		.comment-session-leave-active {
 			transition: none;
