@@ -63,12 +63,20 @@ const focusMode = ref(false)
 /** 只让最后一次线程请求落地；登出时旧的鉴权响应不能重新写回页面。 */
 let threadRequestVersion = 0
 let activeThreadRequest: CommentSessionRequest | undefined
+let activeMoreRequest: CommentSessionRequest | undefined
+
+function abortRequest(request: CommentSessionRequest | undefined) {
+	if (!request)
+		return
+	request.controller.abort()
+	sessionScope.finish(request)
+}
 
 function startThreadRequest() {
-	if (activeThreadRequest) {
-		activeThreadRequest.controller.abort()
-		sessionScope.finish(activeThreadRequest)
-	}
+	abortRequest(activeThreadRequest)
+	abortRequest(activeMoreRequest)
+	activeMoreRequest = undefined
+	loadingMore.value = false
 	activeThreadRequest = sessionScope.start()
 	return activeThreadRequest
 }
@@ -77,6 +85,18 @@ function finishThreadRequest(request: CommentSessionRequest) {
 	sessionScope.finish(request)
 	if (activeThreadRequest === request)
 		activeThreadRequest = undefined
+}
+
+function startMoreRequest() {
+	abortRequest(activeMoreRequest)
+	activeMoreRequest = sessionScope.start()
+	return activeMoreRequest
+}
+
+function finishMoreRequest(request: CommentSessionRequest) {
+	sessionScope.finish(request)
+	if (activeMoreRequest === request)
+		activeMoreRequest = undefined
 }
 
 const tree = computed(() => buildCommentTree(thread.value?.comments ?? []))
@@ -143,10 +163,10 @@ async function loadFocus(id: number) {
 
 async function loadMore() {
 	const cursor = thread.value?.next_cursor
-	if (!cursor || loadingMore.value)
+	if (!canLoadMoreComments(status.value, cursor, loadingMore.value))
 		return
 	const version = threadRequestVersion
-	const request = startThreadRequest()
+	const request = startMoreRequest()
 	loadingMore.value = true
 	try {
 		const next = await api.request<Thread>('/api/pages/thread', {
@@ -163,7 +183,7 @@ async function loadMore() {
 		}
 	}
 	finally {
-		finishThreadRequest(request)
+		finishMoreRequest(request)
 		loadingMore.value = false
 	}
 }
@@ -413,7 +433,7 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 	</ol>
 
 	<button
-		v-if="thread?.next_cursor && !focusMode"
+		v-if="status === 'ready' && thread?.next_cursor && !focusMode"
 		type="button"
 		class="more"
 		:disabled="loadingMore"

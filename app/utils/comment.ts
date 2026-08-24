@@ -94,6 +94,14 @@ export function commentSessionIdentity(user: NonNullable<Me['user']>) {
 	}
 }
 
+export function canLoadMoreComments(
+	status: 'idle' | 'pending' | 'ready' | 'error',
+	cursor: string | null | undefined,
+	loading: boolean,
+) {
+	return status === 'ready' && Boolean(cursor) && !loading
+}
+
 /** 树形渲染用：把扁平数组按 parent_id 接起来 */
 export interface CommentTree extends Comment {
 	children: CommentTree[]

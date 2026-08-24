@@ -30,3 +30,12 @@ test('falls back to the GitHub login when the display name is empty', async () =
 
 	assert.equal(identity.name, 'senshinya')
 })
+
+test('allows comment pagination only from a settled thread', async () => {
+	const { canLoadMoreComments } = await import('./comment.ts')
+
+	assert.equal(canLoadMoreComments('pending', 'cursor', false), false)
+	assert.equal(canLoadMoreComments('ready', null, false), false)
+	assert.equal(canLoadMoreComments('ready', 'cursor', true), false)
+	assert.equal(canLoadMoreComments('ready', 'cursor', false), true)
+})
