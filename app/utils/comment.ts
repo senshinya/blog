@@ -87,6 +87,13 @@ export interface Me {
 	ban_reason?: string | null
 }
 
+export function commentSessionIdentity(user: NonNullable<Me['user']>) {
+	return {
+		name: user.name || user.login,
+		profile: `https://github.com/${user.login}`,
+	}
+}
+
 /** 树形渲染用：把扁平数组按 parent_id 接起来 */
 export interface CommentTree extends Comment {
 	children: CommentTree[]

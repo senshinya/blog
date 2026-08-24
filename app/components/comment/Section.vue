@@ -34,6 +34,8 @@ const route = useRoute()
 const api = useCommentApi()
 const session = useCommentSession()
 const { user, ready: sessionReady } = session
+const identity = computed(() => user.value ? commentSessionIdentity(user.value) : null)
+const { pending: loggingOut, failed: logoutFailed, logout } = useCommentLogout(session.logout)
 
 const key = computed(() => props.pageKey ?? commentPageKey(route.path))
 
@@ -247,22 +249,45 @@ watch(tree, () => nextTick(layout))
 	</div>
 
 	<!-- 未登录是一条横幅，不是一个大空框：空编辑框对没打算评论的人是纯粹的视觉负担 -->
-	<div v-if="sessionReady && !user" class="signin">
-		<span>用 GitHub 账号参与讨论</span>
-		<span class="grow" />
-		<button type="button" class="btn-github" @click="session.login(returnToNearest(root))">
-			<Icon name="tabler:brand-github" />
-			登录
-		</button>
-	</div>
+	<Transition name="comment-session" mode="out-in">
+		<div v-if="sessionReady && !user" key="anonymous" class="signin">
+			<span>用 GitHub 账号参与讨论</span>
+			<span class="grow" />
+			<button type="button" class="btn-github" @click="session.login(returnToNearest(root))">
+				<Icon name="tabler:brand-github" />
+				登录
+			</button>
+		</div>
 
-	<CommentComposer
-		v-else-if="user"
-		:page-key="key"
-		:title
-		:subscribed="pageSubscribed"
-		@submitted="onInserted"
-	/>
+		<div v-else-if="user && identity" key="signed-in" class="session-user">
+			<div class="session-identity">
+				<UtilLink :to="identity.profile" class="session-identity-link">
+					<img
+						class="session-avatar"
+						:src="user.avatar_url"
+						:alt="`${identity.name} 的头像`"
+						width="28"
+						height="28"
+					>
+					<span class="session-name">{{ identity.name }}</span>
+				</UtilLink>
+				<span v-if="!logoutFailed" class="session-source">已通过 GitHub 登录</span>
+				<span v-else class="session-error session-error-desktop" aria-live="polite">退出失败，请重试</span>
+				<span class="session-grow" />
+				<button type="button" class="session-logout" :disabled="loggingOut" @click="logout">
+					{{ loggingOut ? '退出中…' : '退出登录' }}
+				</button>
+			</div>
+			<span v-if="logoutFailed" class="session-error session-error-mobile" aria-live="polite">退出失败，请重试</span>
+
+			<CommentComposer
+				:page-key="key"
+				:title
+				:subscribed="pageSubscribed"
+				@submitted="onInserted"
+			/>
+		</div>
+	</Transition>
 
 	<!-- 邮件点进来时只渲染目标那一棵子树 -->
 	<div v-if="focusMode" class="focus-bar">
