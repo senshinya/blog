@@ -32,7 +32,8 @@ const emit = defineEmits<{
 }>()
 
 const api = useCommentApi()
-const { epoch: sessionEpoch } = useCommentSession()
+const session = useCommentSession()
+const { epoch: sessionEpoch } = session
 const sessionScope = useCommentSessionScope(sessionEpoch)
 
 const box = useTemplateRef('box')
@@ -129,7 +130,8 @@ async function togglePreview() {
 async function submit() {
 	if (!canSend.value)
 		return
-	const request = sessionScope.start()
+	// 写请求不能随组件卸载 abort：客户端断开不代表服务端事务没有提交。
+	const request = sessionScope.start(sessionScope.capture(), false)
 	sending.value = true
 	error.value = undefined
 
@@ -170,13 +172,16 @@ async function submit() {
 
 		if (sessionScope.current(request))
 			emit('submitted', comment)
+		else
+			session.invalidateData()
 	}
 	catch (err) {
 		const e = CommentError.from(err)
 		if (!sessionScope.current(request)) {
-			// POST 的乐观计数必须在取消时收回；其余都是已卸载组件的本地状态。
+			// 明确失败后收回乐观计数；其余都是已卸载组件的本地状态。
 			if (posting)
 				bumpCommentCount(props.pageKey, -1)
+			session.invalidateData()
 			return
 		}
 		error.value = e

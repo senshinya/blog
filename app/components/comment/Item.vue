@@ -88,7 +88,8 @@ async function remove() {
 		return
 	}
 	confirmingDelete.value = false
-	const request = sessionScope.start()
+	// DELETE 必须等明确结果；abort 响应无法证明服务端没有完成软删除。
+	const request = sessionScope.start(sessionScope.capture(), false)
 
 	// 先按删掉渲染：服务端是软删除，这里留的墓碑和它一致。
 	// 锚点要在 emit 之前取 —— 那之后这条就只剩一行「已删除」，prose 连同 id 都没了
@@ -102,12 +103,16 @@ async function remove() {
 			method: 'DELETE',
 			signal: request.controller.signal,
 		})
+		if (!sessionScope.current(request))
+			session.invalidateData()
 	}
 	catch (err) {
 		// 公开计数不带会话，失败时始终要收回乐观更新。
 		bumpCommentCount(props.pageKey, 1)
-		if (!sessionScope.current(request))
+		if (!sessionScope.current(request)) {
+			session.invalidateData()
 			return
+		}
 		// 原样放回去。那条重新出现本身就是「没删掉」的反馈
 		emit('restored', snapshot)
 		if (CommentError.from(err).code === 'unauthorized')

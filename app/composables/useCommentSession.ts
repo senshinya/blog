@@ -41,6 +41,8 @@ export default function useCommentSession() {
 	const status = useState<'idle' | 'pending' | 'ready' | 'error'>('comment:me:status', () => 'idle')
 	/** 成功登出才递增：所有会话相关投影据此同时失效。 */
 	const epoch = useState<number>('comment:session-epoch', () => 0)
+	/** 旧组件里的写请求结算后递增，让仍挂载的线程重取公开权威状态。 */
+	const dataRevision = useState<number>('comment:data-revision', () => 0)
 
 	const user = computed(() => me.value?.user ?? null)
 	const isOwner = computed(() => me.value?.is_owner === true)
@@ -103,5 +105,23 @@ export default function useCommentSession() {
 			me.value = next
 	}
 
-	return { me, user, isOwner, banned, ready, status, epoch, load, login, logout, setNotifyReplies }
+	function invalidateData() {
+		dataRevision.value += 1
+	}
+
+	return {
+		me,
+		user,
+		isOwner,
+		banned,
+		ready,
+		status,
+		epoch,
+		dataRevision,
+		load,
+		login,
+		logout,
+		setNotifyReplies,
+		invalidateData,
+	}
 }

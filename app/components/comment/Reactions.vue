@@ -111,12 +111,11 @@ function flip(base: ReactionState, key: string): ReactionState {
 	}
 }
 
-/** 落到本地、抛给宿主、顺手把列表卡片那份缓存的数字也带上 */
-function commit(next: ReactionState) {
+/** 乐观状态先只落本地；publish 只在服务端结算后把权威值抛给宿主。 */
+function commit(next: ReactionState, publish = true) {
 	local.value = next
-	emit('update', next)
-	if (props.targetType === 'page' && props.pageKey)
-		patchCommentReactions(props.pageKey, next.reactions)
+	if (publish)
+		emit('update', next)
 }
 
 /** 未登录 / 会话过期：先把这一下记下来再跳，登录回来接着做完 */
@@ -159,33 +158,43 @@ async function toggle(emojiKey: string) {
 
 	// 样式立刻就上，请求随后再发
 	const adding = !view.value.viewer_reactions.includes(emojiKey)
-	commit(flip(view.value, emojiKey))
+	commit(flip(view.value, emojiKey), false)
 	picking.value = false
 
 	pending++
 	chain = chain.then(async () => {
-		const request = sessionScope.start(started)
+		// PUT/DELETE 即使页面离开也要等明确结果；abort 不能证明服务端没有落库。
+		const request = sessionScope.start(started, false)
 		try {
-			if (!sessionScope.current(request))
+			if (!sessionScope.current(request)) {
+				session.invalidateData()
 				return
+			}
 			const res = await api.request<ReactionState>('/api/reactions', {
 				method: adding ? 'PUT' : 'DELETE',
 				body: { ...body.value, emoji: emojiKey },
 				signal: request.controller.signal,
 			})
-			if (!sessionScope.current(request))
+			// 共享缓存只接收服务端权威值，不写乐观状态；即使会话已变，这份公开计数仍有效。
+			if (props.targetType === 'page' && props.pageKey)
+				patchCommentReactions(props.pageKey, res.reactions)
+			if (!sessionScope.current(request)) {
+				session.invalidateData()
 				return
+			}
 			// 只剩自己在途时才写回：这份快照里没有别的请求刚乐观加上去的那几个
 			if (pending === 1)
 				commit(res)
 		}
 		catch (err) {
-			if (!sessionScope.current(request))
+			if (!sessionScope.current(request)) {
+				session.invalidateData()
 				return
+			}
 			// 撤回刚才那一下。按当前状态再翻一次，而不是整片盖回旧快照 ——
 			// 这中间可能还点了别的 emoji，盖回去会把它们一起抹掉。
 			// 失败本身不弹东西打断阅读：数字自己缩回去就是反馈
-			commit(flip(view.value, emojiKey))
+			commit(flip(view.value, emojiKey), pending === 1)
 			if (CommentError.from(err).code === 'unauthorized')
 				goLogin(emojiKey, started)
 		}

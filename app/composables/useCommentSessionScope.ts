@@ -9,8 +9,8 @@ export interface CommentSessionRequest {
 /**
  * 把会话相关请求绑到当前组件和登录代次。
  *
- * 登出或组件卸载会立即中止还在途的请求；即便底层请求来不及取消，调用方也能用
- * current() 拒绝旧响应，避免把上一位访客的权限投影重新写回页面。
+ * 只读请求默认会在登出或组件卸载时中止；写请求须以 abortOnInvalidate=false 启动，
+ * 等服务端给出明确结果。两者都可用 current() 拒绝旧会话 UI 回写。
  */
 export default function useCommentSessionScope(epoch: Readonly<Ref<number>>) {
 	let active = true
@@ -32,11 +32,11 @@ export default function useCommentSessionScope(epoch: Readonly<Ref<number>>) {
 		return epoch.value
 	}
 
-	function start(started = capture()): CommentSessionRequest {
+	function start(started = capture(), abortOnInvalidate = true): CommentSessionRequest {
 		const controller = new AbortController()
-		if (active && started === epoch.value)
+		if (active && started === epoch.value && abortOnInvalidate)
 			requests.add(controller)
-		else
+		else if ((!active || started !== epoch.value) && abortOnInvalidate)
 			controller.abort()
 		return { epoch: started, controller }
 	}

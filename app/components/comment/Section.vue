@@ -33,7 +33,7 @@ const emit = defineEmits<{ page: [page: ThreadPage | null] }>()
 const route = useRoute()
 const api = useCommentApi()
 const session = useCommentSession()
-const { user, ready: sessionReady, epoch: sessionEpoch } = session
+const { user, ready: sessionReady, epoch: sessionEpoch, dataRevision } = session
 const sessionScope = useCommentSessionScope(sessionEpoch)
 const identity = computed(() => user.value ? commentSessionIdentity(user.value) : null)
 const sessionKey = computed(() => `${sessionEpoch.value}:${user.value?.id ?? 'anonymous'}`)
@@ -259,6 +259,8 @@ watch(sessionEpoch, () => {
 	focusMode.value = false
 	void loadThread()
 }, { flush: 'sync' })
+
+watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 </script>
 
 <template>

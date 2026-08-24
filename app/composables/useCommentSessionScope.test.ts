@@ -31,3 +31,19 @@ test('invalidates and aborts requests when the consumer is disposed', async () =
 	assert.equal(guard.current(request), false)
 	assert.equal(request.controller.signal.aborted, true)
 })
+
+test('invalidates mutations without aborting an uncertain server transaction', async () => {
+	const { default: useCommentSessionScope } = await import('./useCommentSessionScope.ts')
+	const epoch = ref(0)
+	const scope = effectScope()
+	const guard = scope.run(() => useCommentSessionScope(epoch))!
+	const request = guard.start(guard.capture(), false)
+
+	epoch.value += 1
+	await nextTick()
+
+	assert.equal(guard.current(request), false)
+	assert.equal(request.controller.signal.aborted, false)
+	scope.stop()
+	assert.equal(request.controller.signal.aborted, false)
+})
