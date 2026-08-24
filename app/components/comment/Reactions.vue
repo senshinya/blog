@@ -45,7 +45,8 @@ const emit = defineEmits<{
 
 const api = useCommentApi()
 const session = useCommentSession()
-const { user, ready, login } = session
+const { user, ready, login, epoch: sessionEpoch } = session
+const sessionScope = useCommentSessionScope(sessionEpoch)
 
 const root = useTemplateRef('root')
 const picking = ref(false)
@@ -119,7 +120,9 @@ function commit(next: ReactionState) {
 }
 
 /** 未登录 / 会话过期：先把这一下记下来再跳，登录回来接着做完 */
-function goLogin(emojiKey: string) {
+function goLogin(emojiKey: string, started = sessionScope.capture()) {
+	if (!sessionScope.current(started))
+		return
 	stashPendingReaction({
 		targetType: props.targetType,
 		targetId: props.targetId,
@@ -137,9 +140,10 @@ function goLogin(emojiKey: string) {
 onMounted(() => session.load())
 
 async function toggle(emojiKey: string) {
+	const started = sessionScope.capture()
 	// 已经问出结果、确实没登录：直接跳。先把样式做上再跳走，看起来像点坏了
 	if (ready.value && !user.value) {
-		goLogin(emojiKey)
+		goLogin(emojiKey, started)
 		return
 	}
 
@@ -149,6 +153,8 @@ async function toggle(emojiKey: string) {
 	if (props.resolve && !props.viewerReactions && Object.keys(view.value.reactions).length) {
 		await props.resolve()
 		await nextTick()
+		if (!sessionScope.current(started))
+			return
 	}
 
 	// 样式立刻就上，请求随后再发
@@ -158,24 +164,33 @@ async function toggle(emojiKey: string) {
 
 	pending++
 	chain = chain.then(async () => {
+		const request = sessionScope.start(started)
 		try {
+			if (!sessionScope.current(request))
+				return
 			const res = await api.request<ReactionState>('/api/reactions', {
 				method: adding ? 'PUT' : 'DELETE',
 				body: { ...body.value, emoji: emojiKey },
+				signal: request.controller.signal,
 			})
+			if (!sessionScope.current(request))
+				return
 			// 只剩自己在途时才写回：这份快照里没有别的请求刚乐观加上去的那几个
 			if (pending === 1)
 				commit(res)
 		}
 		catch (err) {
+			if (!sessionScope.current(request))
+				return
 			// 撤回刚才那一下。按当前状态再翻一次，而不是整片盖回旧快照 ——
 			// 这中间可能还点了别的 emoji，盖回去会把它们一起抹掉。
 			// 失败本身不弹东西打断阅读：数字自己缩回去就是反馈
 			commit(flip(view.value, emojiKey))
 			if (CommentError.from(err).code === 'unauthorized')
-				goLogin(emojiKey)
+				goLogin(emojiKey, started)
 		}
 		finally {
+			sessionScope.finish(request)
 			pending--
 		}
 	})

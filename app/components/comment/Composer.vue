@@ -32,6 +32,8 @@ const emit = defineEmits<{
 }>()
 
 const api = useCommentApi()
+const { epoch: sessionEpoch } = useCommentSession()
+const sessionScope = useCommentSessionScope(sessionEpoch)
 
 const box = useTemplateRef('box')
 const input = useTemplateRef('input')
@@ -103,22 +105,31 @@ async function togglePreview() {
 	}
 	if (!length.value)
 		return
+	const request = sessionScope.start()
 	try {
 		const res = await api.request<{ body_html: string }>('/api/comments/preview', {
 			method: 'POST',
 			body: { body_md: text.value },
+			signal: request.controller.signal,
 		})
+		if (!sessionScope.current(request))
+			return
 		preview.value = res.body_html
 		previewing.value = true
 	}
 	catch (err) {
-		error.value = CommentError.from(err)
+		if (sessionScope.current(request))
+			error.value = CommentError.from(err)
+	}
+	finally {
+		sessionScope.finish(request)
 	}
 }
 
 async function submit() {
 	if (!canSend.value)
 		return
+	const request = sessionScope.start()
 	sending.value = true
 	error.value = undefined
 
@@ -143,6 +154,7 @@ async function submit() {
 			? await api.request<Comment>(`/api/comments/${props.editId}`, {
 					method: 'PATCH',
 					body: { body_md: draft },
+					signal: request.controller.signal,
 				})
 			: await api.request<Comment>('/api/comments', {
 					method: 'POST',
@@ -153,12 +165,20 @@ async function submit() {
 						body_md: draft,
 						subscribe_page: subscribe.value,
 					},
+					signal: request.controller.signal,
 				})
 
-		emit('submitted', comment)
+		if (sessionScope.current(request))
+			emit('submitted', comment)
 	}
 	catch (err) {
 		const e = CommentError.from(err)
+		if (!sessionScope.current(request)) {
+			// POST 的乐观计数必须在取消时收回；其余都是已卸载组件的本地状态。
+			if (posting)
+				bumpCommentCount(props.pageKey, -1)
+			return
+		}
 		error.value = e
 		if (posting) {
 			bumpCommentCount(props.pageKey, -1)
@@ -175,7 +195,9 @@ async function submit() {
 		}
 	}
 	finally {
-		sending.value = false
+		sessionScope.finish(request)
+		if (sessionScope.current(request))
+			sending.value = false
 	}
 }
 

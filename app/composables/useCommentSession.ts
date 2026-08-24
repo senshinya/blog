@@ -39,6 +39,8 @@ export default function useCommentSession() {
 	const api = useCommentApi()
 	const me = useState<Me | null>('comment:me', () => null)
 	const status = useState<'idle' | 'pending' | 'ready' | 'error'>('comment:me:status', () => 'idle')
+	/** 成功登出才递增：所有会话相关投影据此同时失效。 */
+	const epoch = useState<number>('comment:session-epoch', () => 0)
 
 	const user = computed(() => me.value?.user ?? null)
 	const isOwner = computed(() => me.value?.is_owner === true)
@@ -53,13 +55,19 @@ export default function useCommentSession() {
 			inflight = undefined
 		// 问过一次就不再问：promise 结算后仍然留着，后来的 await 立即返回
 		inflight ??= (async () => {
+			const started = epoch.value
 			status.value = 'pending'
 			try {
 				// 匿名访客也是 200，回 { user: null }，故这里不该有 401 分支
-				me.value = await api.request<Me>('/api/me')
+				const next = await api.request<Me>('/api/me')
+				if (epoch.value !== started)
+					return
+				me.value = next
 				status.value = 'ready'
 			}
 			catch {
+				if (epoch.value !== started)
+					return
 				// 评论服务挂了不该让文章页跟着报错，按未登录处理
 				me.value = null
 				status.value = 'error'
@@ -78,18 +86,22 @@ export default function useCommentSession() {
 			() => api.request('/auth/logout', { method: 'POST' }),
 			() => {
 				me.value = { user: null }
+				status.value = 'ready'
+				epoch.value += 1
 			},
 		)
 	}
 
 	/** 「回复时邮件通知我」是账号级开关，与单页订阅是两件事 */
 	async function setNotifyReplies(on: boolean) {
+		const started = epoch.value
 		const next = await api.request<Me>('/api/me', {
 			method: 'PATCH',
 			body: { notify_replies: on },
 		})
-		me.value = next
+		if (epoch.value === started)
+			me.value = next
 	}
 
-	return { me, user, isOwner, banned, ready, status, load, login, logout, setNotifyReplies }
+	return { me, user, isOwner, banned, ready, status, epoch, load, login, logout, setNotifyReplies }
 }

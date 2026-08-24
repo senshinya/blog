@@ -33,9 +33,10 @@ const emit = defineEmits<{ page: [page: ThreadPage | null] }>()
 const route = useRoute()
 const api = useCommentApi()
 const session = useCommentSession()
-const { user, ready: sessionReady } = session
+const { user, ready: sessionReady, epoch: sessionEpoch } = session
+const sessionScope = useCommentSessionScope(sessionEpoch)
 const identity = computed(() => user.value ? commentSessionIdentity(user.value) : null)
-const sessionKey = computed(() => user.value ? `user:${user.value.id}` : 'anonymous')
+const sessionKey = computed(() => `${sessionEpoch.value}:${user.value?.id ?? 'anonymous'}`)
 const { pending: loggingOut, failed: logoutFailed, logout } = useCommentLogout(session.logout)
 
 const key = computed(() => props.pageKey ?? commentPageKey(route.path))
@@ -66,12 +67,14 @@ const pageSubscribed = computed(() => thread.value?.page?.viewer_subscribed ?? t
 
 async function loadThread() {
 	const version = ++threadRequestVersion
+	const request = sessionScope.start()
 	status.value = 'pending'
 	try {
 		const next = await api.request<Thread>('/api/pages/thread', {
 			query: { key: key.value, order: order.value, limit: 50 },
+			signal: request.controller.signal,
 		})
-		if (version !== threadRequestVersion)
+		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
 		thread.value = next
 		focusMode.value = false
@@ -79,36 +82,44 @@ async function loadThread() {
 		emit('page', thread.value.page)
 	}
 	catch {
-		if (version !== threadRequestVersion)
+		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
 		status.value = 'error'
+	}
+	finally {
+		sessionScope.finish(request)
 	}
 }
 
 /** 邮件里的地址是 /posts/xxx#comment-43 */
 async function loadFocus(id: number) {
 	const version = ++threadRequestVersion
+	const request = sessionScope.start()
 	status.value = 'pending'
 	try {
 		const next = await api.request<Thread>('/api/pages/thread/focus', {
 			query: { key: key.value, comment_id: id },
+			signal: request.controller.signal,
 		})
-		if (version !== threadRequestVersion)
+		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
 		thread.value = next
 		focusMode.value = true
 		status.value = 'ready'
 		emit('page', thread.value.page)
 		await nextTick()
-		if (version !== threadRequestVersion)
+		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
 		document.getElementById(`comment-${id}`)?.scrollIntoView({ block: 'center' })
 	}
 	catch {
-		if (version !== threadRequestVersion)
+		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
 		// 那条被删了或不在本页，退回普通视图，别让链接变成死路
 		await loadThread()
+	}
+	finally {
+		sessionScope.finish(request)
 	}
 }
 
@@ -117,12 +128,14 @@ async function loadMore() {
 	if (!cursor || loadingMore.value)
 		return
 	const version = threadRequestVersion
+	const request = sessionScope.start()
 	loadingMore.value = true
 	try {
 		const next = await api.request<Thread>('/api/pages/thread', {
 			query: { key: key.value, order: order.value, limit: 50, cursor },
+			signal: request.controller.signal,
 		})
-		if (version !== threadRequestVersion)
+		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
 		thread.value = {
 			...next,
@@ -132,6 +145,7 @@ async function loadMore() {
 		}
 	}
 	finally {
+		sessionScope.finish(request)
 		loadingMore.value = false
 	}
 }
@@ -238,16 +252,13 @@ onMounted(() => {
 
 watch(tree, () => nextTick(layout))
 
-watch(user, (next, previous) => {
-	if (previous && !next) {
-		// 先抹掉带 can_edit / viewer_reactions 的旧投影，再以匿名会话重取。
-		// sessionKey 同时会重建子组件，丢弃尚未落地的本地编辑与 reaction 状态。
-		thread.value = undefined
-		focusMode.value = false
-		emit('page', null)
-		void loadThread()
-	}
-})
+watch(sessionEpoch, () => {
+	// 先抹掉带 can_edit / viewer_reactions 的旧投影，再以匿名会话重取。
+	// sessionKey 同时会重建子组件，丢弃尚未落地的本地编辑与 reaction 状态。
+	thread.value = undefined
+	focusMode.value = false
+	void loadThread()
+}, { flush: 'sync' })
 </script>
 
 <template>

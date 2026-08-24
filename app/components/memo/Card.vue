@@ -10,6 +10,10 @@ import type { ParsedMemo } from '~/utils/memo'
 const props = defineProps<ParsedMemo>()
 
 const api = useCommentApi()
+const session = useCommentSession()
+const { user, epoch: sessionEpoch } = session
+const sessionScope = useCommentSessionScope(sessionEpoch)
+const sessionKey = computed(() => `${sessionEpoch.value}:${user.value?.id ?? 'anonymous'}`)
 const cardEl = useTemplateRef('card')
 
 /**
@@ -69,13 +73,30 @@ function onPage(p: ThreadPage | null) {
 }
 
 function resolvePage() {
-	resolving ??= api.request<Thread>('/api/pages/thread', {
+	if (resolving)
+		return resolving
+	const request = sessionScope.start()
+	resolving = api.request<Thread>('/api/pages/thread', {
 		query: { key: pageKey.value, limit: 1 },
+		signal: request.controller.signal,
 	})
-		.then((t) => { page.value = t.page })
-		.catch(() => { resolving = undefined })
+		.then((t) => {
+			if (sessionScope.current(request))
+				page.value = t.page
+		})
+		.catch(() => {
+			if (sessionScope.current(request))
+				resolving = undefined
+		})
+		.finally(() => sessionScope.finish(request))
 	return resolving
 }
+
+watch(sessionEpoch, () => {
+	page.value = null
+	reacted.value = undefined
+	resolving = undefined
+}, { flush: 'sync' })
 
 // 三处来源，越新越优先：刚点的 > 线程带回的 > 批量计数拿到的
 const reactions = computed(() => reacted.value?.reactions ?? page.value?.reactions ?? count.value.reactions)
@@ -159,6 +180,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			<footer class="memo-foot">
 				<!-- 收起也能点：表情是轻量互动，不该逼人先把整个评论区拉开 -->
 				<CommentReactions
+					:key="sessionKey"
 					target-type="page"
 					:page-key
 					:title="summary"

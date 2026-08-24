@@ -29,7 +29,9 @@ const emit = defineEmits<{
 }>()
 
 const api = useCommentApi()
-const { user, login } = useCommentSession()
+const session = useCommentSession()
+const { user, login, epoch: sessionEpoch } = session
+const sessionScope = useCommentSessionScope(sessionEpoch)
 
 const collapsed = ref(false)
 const replying = ref(false)
@@ -45,6 +47,8 @@ const proseEl = useTemplateRef('prose')
 const node = computed(() => props.node)
 const owner = computed(() => node.value.user?.is_owner)
 const isFocused = computed(() => props.focusId === node.value.id)
+let confirmationTimer: ReturnType<typeof setTimeout> | undefined
+onScopeDispose(() => clearTimeout(confirmationTimer))
 
 /** 收起时那行「已收起 N 条」数的是整棵子树 */
 function countDescendants(n: CommentTree): number {
@@ -79,10 +83,12 @@ watch(() => node.value.body_html, () => nextTick(measure))
 async function remove() {
 	if (!confirmingDelete.value) {
 		confirmingDelete.value = true
-		setTimeout(() => (confirmingDelete.value = false), 4000)
+		clearTimeout(confirmationTimer)
+		confirmationTimer = setTimeout(() => (confirmingDelete.value = false), 4000)
 		return
 	}
 	confirmingDelete.value = false
+	const request = sessionScope.start()
 
 	// 先按删掉渲染：服务端是软删除，这里留的墓碑和它一致。
 	// 锚点要在 emit 之前取 —— 那之后这条就只剩一行「已删除」，prose 连同 id 都没了
@@ -92,28 +98,43 @@ async function remove() {
 	bumpCommentCount(props.pageKey, -1)
 
 	try {
-		await api.request(`/api/comments/${snapshot.id}`, { method: 'DELETE' })
+		await api.request(`/api/comments/${snapshot.id}`, {
+			method: 'DELETE',
+			signal: request.controller.signal,
+		})
 	}
 	catch (err) {
+		// 公开计数不带会话，失败时始终要收回乐观更新。
+		bumpCommentCount(props.pageKey, 1)
+		if (!sessionScope.current(request))
+			return
 		// 原样放回去。那条重新出现本身就是「没删掉」的反馈
 		emit('restored', snapshot)
-		bumpCommentCount(props.pageKey, 1)
 		if (CommentError.from(err).code === 'unauthorized')
 			login(back)
+	}
+	finally {
+		sessionScope.finish(request)
 	}
 }
 
 function onReplied(comment: Comment) {
+	if (!sessionScope.current(sessionScope.capture()))
+		return
 	replying.value = false
 	emit('inserted', comment)
 }
 
 function onEdited(comment: Comment) {
+	if (!sessionScope.current(sessionScope.capture()))
+		return
 	editing.value = false
 	emit('patched', comment)
 }
 
 function onReaction(payload: { reactions: Record<string, number>, viewer_reactions: string[] }) {
+	if (!sessionScope.current(sessionScope.capture()))
+		return
 	// 就地改，不为一次表态重取整条线程
 	node.value.reactions = payload.reactions
 	node.value.viewer_reactions = payload.viewer_reactions
