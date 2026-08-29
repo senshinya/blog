@@ -57,4 +57,3 @@
 - 新增 `app/components/media/CardSkeleton.vue`。
 - 修改 `app/pages/media/index.vue`。
 - 新增与该加载分支对应的测试文件；具体位置随现有 Node 测试约定确定。
-

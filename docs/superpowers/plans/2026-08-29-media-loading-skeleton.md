@@ -254,4 +254,3 @@ Start `pnpm dev`, open `/media`, throttle or intercept the Bangumi collection re
 Run: `git diff HEAD^ --check && git show --stat --oneline HEAD`
 
 Expected: no whitespace errors; only the planned media loading files changed in the implementation commit.
-
