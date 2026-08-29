@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 
 const pagePath = new URL('./index.vue', import.meta.url)
+const cardPath = new URL('../../components/media/Card.vue', import.meta.url)
 const skeletonPath = new URL('../../components/media/CardSkeleton.vue', import.meta.url)
 
 test('renders eight accessible media card placeholders during full-page loading', async () => {
@@ -23,4 +24,14 @@ test('keeps media skeleton motion optional', async () => {
 
 	assert.match(skeleton, /@media \(prefers-reduced-motion: reduce\)/)
 	assert.match(skeleton, /animation: none/)
+})
+
+test('does not replay the card entrance animation after skeletons resolve', async () => {
+	const [page, card] = await Promise.all([
+		readFile(pagePath, 'utf8'),
+		readFile(cardPath, 'utf8'),
+	])
+
+	assert.doesNotMatch(card, /animation:\s*float-in/)
+	assert.match(page, /<TransitionGroup[^>]+name="float-in"/)
 })

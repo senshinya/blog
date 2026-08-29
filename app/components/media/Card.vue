@@ -79,7 +79,6 @@ const summary = computed(() => subject.value.short_summary?.trim() || '')
 	background-color: var(--c-bg-3);
 	color: var(--c-text-3);
 	transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-	animation: float-in 0.2s var(--delay) backwards;
 
 	&:hover {
 		border-color: var(--c-primary);
