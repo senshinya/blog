@@ -21,3 +21,9 @@ test('memo card prefers the freshest personal reaction state', async () => {
 	assert.match(card, /reacted\.value\?\.viewer_reactions \?\? page\.value\?\.viewer_reactions \?\? props\.viewerReactions/)
 	assert.doesNotMatch(card, /<MemoBody v-bind="props"/)
 })
+
+test('keeps the reaction border clear of the animated tail clip', async () => {
+	const card = await readFile(cardPath, 'utf8')
+
+	assert.match(card, /\.tail-in\s*\{[^}]*padding-bottom:\s*1px;/)
+})

@@ -253,6 +253,9 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	flex-direction: column;
 	gap: 0.5rem;
 	padding-top: 0.5rem;
+
+	// 给 overflow 裁切边界留一个完整像素，避免 reaction 的圆角底边被抗锯齿削薄
+	padding-bottom: 1px;
 }
 
 .memo-foot {
