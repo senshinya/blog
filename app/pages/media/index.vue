@@ -179,9 +179,16 @@ watch([categoryKey, statusKey], reload)
 	<!-- 整页报错只在「一条都没加载出来」时顶替内容；「加载更多」失败不清空已有列表 -->
 	<ZError v-if="error && !items.length" :message="`加载失败：${error.message}`" />
 
-	<p v-else-if="loading" class="media-tip">
-		加载中...
-	</p>
+	<template v-else-if="loading">
+		<span class="media-loading-status" role="status">
+			正在加载娱乐收藏
+		</span>
+		<ol class="media-grid" aria-hidden="true">
+			<li v-for="index in 8" :key="index">
+				<MediaCardSkeleton />
+			</li>
+		</ol>
+	</template>
 
 	<p v-else-if="!items.length" class="media-tip">
 		这个分类还没有收藏
@@ -332,6 +339,15 @@ watch([categoryKey, statusKey], reload)
 	display: flex;
 	justify-content: center;
 	margin: 2rem 0;
+}
+
+.media-loading-status {
+	position: absolute;
+	overflow: hidden;
+	width: 1px;
+	height: 1px;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 
 .media-tip {
