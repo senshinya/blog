@@ -7,7 +7,7 @@ import type { ParsedMemo } from '~/utils/memo'
  *
  * 详情页（pages/memos/[id]）渲染的是同一条正文，但评论常驻、没有折叠控件。
  */
-const props = defineProps<ParsedMemo>()
+const props = defineProps<ParsedMemo & { viewerReactions?: string[] }>()
 
 const api = useCommentApi()
 const session = useCommentSession()
@@ -47,7 +47,7 @@ const expanded = ref(false)
 const page = ref<ThreadPage | null>(null)
 
 /**
- * 卡片收起时手里只有 /api/pages/counts 的数字，没有 viewer_reactions。
+ * 批量私人投影还没返回时，卡片手里只有 /api/pages/counts 的数字。
  * 真要动手之前先问一次权威状态 —— 否则「取消」会被做成「添加」。
  *
  * 只在第一次点 chip 时打这一发，且只打一次：一屏二十张卡片，谁也不该为了
@@ -98,9 +98,9 @@ watch(sessionEpoch, () => {
 	resolving = undefined
 }, { flush: 'sync' })
 
-// 三处来源，越新越优先：刚点的 > 线程带回的 > 批量计数拿到的
+// 三处来源，越新越优先：刚点的 > 线程带回的 > 列表批量拿到的私人投影
 const reactions = computed(() => reacted.value?.reactions ?? page.value?.reactions ?? count.value.reactions)
-const viewerReactions = computed(() => reacted.value?.viewer_reactions ?? page.value?.viewer_reactions)
+const viewerReactions = computed(() => reacted.value?.viewer_reactions ?? page.value?.viewer_reactions ?? props.viewerReactions)
 
 /**
  * 零互动的碎语不留页脚的高度。这类占了列表的绝大多数，留一条空条等于每张卡片
@@ -171,7 +171,14 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 <template>
 <!-- id 供侧栏 widget 的 /memos#<id> 深链跳转 -->
 <li :id ref="card" class="memo">
-	<MemoBody v-bind="props" />
+	<MemoBody
+		:id="props.id"
+		:blocks="props.blocks"
+		:images="props.images"
+		:create-time="props.createTime"
+		:pinned="props.pinned"
+		:tags="props.tags"
+	/>
 
 	<!-- 页脚和评论区一起装在这个高度可变的容器里，任何一处变化都走同一条过渡。
 		始终渲染而不是 v-if：要能量到高度，才有得从 0 过渡过去 -->

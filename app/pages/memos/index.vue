@@ -53,6 +53,8 @@ async function loadMore() {
 }
 
 const parsedMemos = computed(() => memos.value.map(parseMemo))
+const pageKeys = computed(() => parsedMemos.value.map(memo => `/memos/${memo.id}`))
+const viewerReactions = usePageViewerReactions(pageKeys)
 </script>
 
 <template>
@@ -90,6 +92,7 @@ const parsedMemos = computed(() => memos.value.map(parseMemo))
 				v-for="memo, index in parsedMemos"
 				:key="memo.id"
 				v-bind="memo"
+				:viewer-reactions="viewerReactions[`/memos/${memo.id}`]"
 				:style="getFixedDelay(index * 0.05)"
 			/>
 		</ol>
