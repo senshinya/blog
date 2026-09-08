@@ -27,7 +27,7 @@ const subtitle = computed(() => data.value?.license?.spdx_id ?? data.value?.lang
 </script>
 
 <template>
-<UtilLink :to="`https://github.com/${repo}`" class="github-card card" :title="repo">
+<UtilLink :to="`https://github.com/${repo}`" class="github-card card upraise" :title="repo">
 	<NuxtImg
 		v-if="data?.owner.avatar_url"
 		class="github-avatar"
