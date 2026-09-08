@@ -97,6 +97,16 @@ const blogConfig = {
 		// 自己部署的 Umami 统计服务
 		{ 'src': 'https://umami.shinya.click/script.js', 'data-website-id': '8d38f911-1c17-4c6f-85b0-381d25bfea33', 'defer': true },
 	],
+
+	/** 文章统计配置 */
+	stats: {
+		/**
+		 * 统计范围，匹配 content 下不含扩展名的路径（stem）；空数组统计全部内容
+		 * 使用 SQL LIKE 语法：% 匹配任意长度字符，_ 匹配单个字符
+		 * 多个范围取并集，如 ['posts/%', 'book/%']
+		 */
+		includePaths: [] as string[],
+	},
 }
 
 /** 用于生成 OPML 和友链页面配置 */

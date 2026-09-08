@@ -28,7 +28,7 @@ const emit = defineEmits<{
 // 水合首帧必须与 SSR 输出一致，挂载后才按 navigator 切换 Mac 键位，
 // 否则 Mac 客户端每页都会 hydration mismatch（Ctrl+K vs ⌘K）
 const mounted = useMounted()
-const isMac = computed(() => mounted.value && /mac ?os/i.test(navigator.userAgent))
+const isMac = computed(() => mounted.value && /mac ?os/i.test(navigator?.userAgent))
 const useSymbol = computed(() => isMac.value ? props.icon !== false : props.icon)
 const keyJoiner = computed(() => useSymbol.value ? '' : '+')
 

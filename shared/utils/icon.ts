@@ -85,6 +85,7 @@ const mainDomainIcons: Record<string, string> = {
 // @keep-sorted
 export const domainIcons: Record<string, string> = {
 	'developer.mozilla.org': 'simple-icons:mdnwebdocs',
+	'h5.qzone.qq.com': 'simple-icons:qzone',
 	'mp.weixin.qq.com': 'ri:wechat-fill',
 }
 
@@ -186,6 +187,7 @@ const ext2lang: Record<string, string> = {
 	'md': 'catppuccin:markdown',
 	'mdc': 'catppuccin:markdown',
 	'mdx': 'catppuccin:markdown',
+	'mermaid': 'catppuccin:mermaid',
 	'mmd': 'catppuccin:mermaid',
 	'powershell': 'catppuccin:powershell',
 	'ps': 'catppuccin:powershell',
