@@ -1,0 +1,34 @@
+/// 侧栏底部的分段胶囊控件。ThemeToggle 与 LangToggle 共用外观。
+@mixin segmented-pill {
+	display: flex;
+	gap: 3px;
+	width: fit-content;
+	margin: 0 auto;
+	padding: 2px;
+	border: 1px solid var(--c-border);
+	border-radius: 1rem;
+	background-color: var(--c-bg-2);
+
+	> button {
+		padding: 4px 1rem;
+		border-radius: 1rem;
+		transition: all 0.1s;
+
+		&:hover:not(:disabled) {
+			background-color: var(--c-bg-soft);
+			color: var(--c-text-1);
+		}
+
+		&.active {
+			box-shadow: var(--box-shadow-2);
+			background-color: var(--ld-bg-card);
+			color: var(--c-text-1);
+			cursor: auto;
+		}
+
+		&:disabled {
+			opacity: 0.35;
+			cursor: not-allowed;
+		}
+	}
+}
