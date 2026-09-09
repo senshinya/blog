@@ -153,7 +153,7 @@ const zh = {
 			description: '{site}的碎碎念，一些来不及写成文章的短想法。',
 			syncNotice: '来不及写成文章的短想法，同步自 {link}',
 			loadError: '碎语加载失败：{message}',
-			loading: '加载中...',
+			loading: '加载中…',
 			loadingMore: '加载中',
 			loadMore: '加载更多',
 			count: '共 {n} 条，没有更多了',

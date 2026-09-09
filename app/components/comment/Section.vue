@@ -431,7 +431,7 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 		<span>{{ $t('comment.focusContext') }}</span>
 		<span class="grow" />
 		<button type="button" @click="loadThread()">
-			{{ $t('comment.viewAll', { n: total }) }}
+			{{ $t('comment.viewAll', { n: total }, total) }}
 		</button>
 	</div>
 

@@ -37,7 +37,7 @@ const copyFields = computed(() => [
 </template>
 
 <div class="mobile-only">
-	<BlogHeader to="/" :suffix="$t('page.friends.title')" tag="h1" />
+	<BlogHeader to="/" tag="h1" />
 </div>
 
 <FeedGroup
