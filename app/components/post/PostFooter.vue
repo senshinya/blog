@@ -25,7 +25,7 @@ const appConfig = useAppConfig()
 		</section>
 	</DefineTemplate>
 
-	<ReuseTemplate v-if="references" title="参考链接">
+	<ReuseTemplate v-if="references" :title="$t('post.references')">
 		<ul>
 			<li v-for="{ title, link }, i in references" :key="i">
 				<ProseA :href="link || ''">
@@ -35,14 +35,15 @@ const appConfig = useAppConfig()
 		</ul>
 	</ReuseTemplate>
 
-	<ReuseTemplate :title="meta?.slots?.copyright?.props?.title as string || '许可协议'">
+	<ReuseTemplate :title="meta?.slots?.copyright?.props?.title as string || $t('post.license')">
 		<ContentRenderer v-if="meta?.slots?.copyright" :value="meta?.slots?.copyright" />
-		<p v-else>
-			本文采用 <ProseA :href="appConfig.copyright.url">
-				{{ appConfig.copyright.name }}
-			</ProseA>
-			许可协议，转载请注明出处。
-		</p>
+		<i18n-t v-else keypath="post.licenseNotice" tag="p">
+			<template #link>
+				<ProseA :href="appConfig.copyright.url">
+					{{ appConfig.copyright.name }}
+				</ProseA>
+			</template>
+		</i18n-t>
 	</ReuseTemplate>
 </div>
 </template>

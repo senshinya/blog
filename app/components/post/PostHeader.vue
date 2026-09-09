@@ -23,7 +23,7 @@ const { copy, copied } = useCopy(shareText)
 			<Icon v-show="false" name="tabler:check" />
 			<ZButton
 				:icon="copied ? 'tabler:check' : 'tabler:share'"
-				text="文字分享"
+				:text="$t('post.share')"
 				@click="copy()"
 			/>
 		</div>
@@ -32,7 +32,7 @@ const { copy, copied } = useCopy(shareText)
 			<UtilDate
 				v-if="date"
 				v-tip
-				:tip-transform="d => `创建于${d}`"
+				:tip-transform="d => $t('post.createdAt', { date: d })"
 				:date
 				icon="tabler:pencil-minus"
 			/>
@@ -44,7 +44,7 @@ const { copy, copied } = useCopy(shareText)
 
 			<span>
 				<Icon name="tabler:pilcrow" />
-				{{ formatNumber(readingTime?.words) }} 字
+				{{ $t('post.words', { n: formatNumber(readingTime?.words) }) }}
 			</span>
 		</div>
 	</div>

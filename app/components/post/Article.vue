@@ -30,7 +30,7 @@ defineProps<ArticleProps>()
 
 			<span v-if="readingTime?.words" class="article-words">
 				<Icon name="tabler:pilcrow" />
-				{{ formatNumber(readingTime?.words) }}字
+				{{ $t('post.words', { n: formatNumber(readingTime?.words) }) }}
 			</span>
 		</div>
 	</article>

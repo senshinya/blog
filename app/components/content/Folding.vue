@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-<details>
+<details :style="{ '--label-expand': JSON.stringify($t('content.expand')), '--label-collapse': JSON.stringify($t('content.collapse')) }">
 	<summary>
 		<slot name="title">
 			{{ title }}
@@ -31,7 +31,7 @@ details {
 			color: currentcolor;
 
 			&::before {
-				content: "收起";
+				content: var(--label-collapse);
 			}
 		}
 	}
@@ -48,7 +48,7 @@ details {
 		}
 
 		&::before {
-			content: "展开";
+			content: var(--label-expand);
 			float: right;
 			float: inline-end;
 			opacity: 0.5;

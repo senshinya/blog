@@ -5,10 +5,12 @@ const slots = defineSlots<{
 
 const timelineRegex = /^\{(?<caption>.*)\}$/
 
+const { t } = useI18n()
+
 function render() {
 	const slotContent = slots.default()
 	if (!slotContent)
-		return <span>时间线为空</span>
+		return <span>{t('content.timelineEmpty')}</span>
 
 	return slotContent.map((node: VNode) => {
 		// WARN: 此处使用了非标准的 v-slot:default

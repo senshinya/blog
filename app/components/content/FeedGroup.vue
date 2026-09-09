@@ -36,7 +36,7 @@ if (import.meta.dev) {
 		<button
 			v-if="props.shuffle"
 			role="button"
-			title="点击随机排序，按住修饰键点击可取消随机排序"
+			:title="$t('content.shuffleTip')"
 			@click="unshuffleEntries"
 			@click.exact="shuffleEntries"
 			v-text="name"

@@ -45,7 +45,7 @@ const subtitle = computed(() => data.value?.license?.spdx_id ?? data.value?.lang
 		</div>
 
 		<div class="github-desc">
-			{{ data?.description ?? '暂无描述' }}
+			{{ data?.description ?? $t('content.noDescription') }}
 		</div>
 
 		<div v-if="data" class="github-meta">

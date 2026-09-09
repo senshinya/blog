@@ -25,7 +25,7 @@ onMounted(async () => {
 <code ref="code" :class="{ copyable: copy }">
 	<template v-if="!language || !highlighted">{{ code }}</template>
 	<Icon v-if="copy" v-show="false" name="tabler:check" />
-	<button v-if="copy" type="button" class="copy-button" aria-label="复制" @click="copyCode()">
+	<button v-if="copy" type="button" class="copy-button" :aria-label="$t('content.copy')" @click="copyCode()">
 		<Icon :name="copied ? 'tabler:check' : 'tabler:copy'" />
 	</button>
 </code>

@@ -40,7 +40,7 @@ function getInspectStyle(src: string): CSSProperties {
 		rel="noopener"
 		:data-error="error"
 	>
-		<div class="avatar" :title="feed ? undefined : '无订阅源'">
+		<div class="avatar" :title="feed ? undefined : $t('content.noFeed')">
 			<ClientOnly v-if="isInspect">
 				<span style="position: absolute; left: 100%; white-space: nowrap;" v-text="title" />
 				<NuxtImg :src="icon" :title="icon" :style="getInspectStyle(icon)" />

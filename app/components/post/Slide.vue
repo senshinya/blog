@@ -31,10 +31,10 @@ useEventListener(carouselEl, 'wheel', (e) => {
 <template>
 <div class="z-slide">
 	<div class="z-slide-header">
-		<span class="title text-creative">精选文章</span>
+		<span class="title text-creative">{{ $t('post.slideTitle') }}</span>
 		<div class="at-slide-hover">
 			<Icon name="tabler:mouse" />
-			按住 Shift 横向滚动
+			{{ $t('post.scrollHint') }}
 		</div>
 	</div>
 
@@ -64,7 +64,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 
 		<ZButton
 			class="carousel-action prev at-slide-hover"
-			aria-label="上一页"
+			:aria-label="$t('post.prevSlide')"
 			icon="tabler:chevron-left"
 			tabindex="-1"
 			@click="carouselApi?.scrollPrev()"
@@ -72,7 +72,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 
 		<ZButton
 			class="carousel-action next at-slide-hover"
-			aria-label="下一页"
+			:aria-label="$t('post.nextSlide')"
 			icon="tabler:chevron-right"
 			tabindex="-1"
 			@click="carouselApi?.scrollNext()"
