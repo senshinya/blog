@@ -38,7 +38,7 @@ const en: MessageSchema = {
 		createdAt: 'Created on {date}',
 		words: '{n} words',
 		surroundNext: 'A new story is on its way',
-		surroundEnd: 'This is the end of the blog',
+		surroundEnd: 'You\'ve reached the end of the blog',
 		allCategories: 'All categories',
 		slideTitle: 'Featured posts',
 		scrollHint: 'Hold Shift to scroll horizontally',
@@ -59,7 +59,7 @@ const en: MessageSchema = {
 		noDescription: 'No description yet',
 		shuffleTip: 'Click to shuffle. Hold a modifier key and click to restore order.',
 		mermaidDiagram: 'Mermaid diagram',
-		mermaidError: 'Diagram render failed — view details',
+		mermaidError: 'Diagram render failed - view details',
 		alert: {
 			tip: 'Tip',
 			info: 'Info',
