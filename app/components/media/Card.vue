@@ -54,7 +54,7 @@ const summary = computed(() => subject.value.short_summary?.trim() || '')
 				<Icon name="tabler:star" />{{ score }}
 			</span>
 			<span v-if="myRate" class="bgm-rate">
-				<Icon name="tabler:star-filled" />我的 {{ myRate }}
+				<Icon name="tabler:star-filled" />{{ $t('media.myRate', { n: myRate }) }}
 			</span>
 		</div>
 

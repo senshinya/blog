@@ -2,10 +2,11 @@
 import travels from '~/travels'
 
 const appConfig = useAppConfig()
+const { t } = useI18n()
 
 useSeoMeta({
-	title: '游记',
-	description: `${appConfig.title}的旅行记录：走过的地方、拍下的照片，和当时的心情。`,
+	title: () => t('page.travels.title'),
+	description: () => t('page.travels.description', { site: appConfig.title }),
 })
 
 const items = computed(() => travels.map(travel => ({
@@ -26,10 +27,10 @@ const items = computed(() => travels.map(travel => ({
 <div class="travels proper-height">
 	<header class="travels-header">
 		<h1 class="text-creative">
-			游记
+			{{ $t('page.travels.title') }}
 		</h1>
 		<p class="travels-desc">
-			走过的地方，和当时拍下的照片。
+			{{ $t('page.travels.tagline') }}
 		</p>
 	</header>
 
@@ -60,8 +61,8 @@ const items = computed(() => travels.map(travel => ({
 					</p>
 					<p class="travel-meta">
 						<span><Icon name="tabler:calendar" /> {{ travel.published }}</span>
-						<span><Icon name="tabler:route" /> {{ travel.totaldays }} 天</span>
-						<span><Icon name="tabler:photo" /> {{ travel.photoCount }} 张</span>
+						<span><Icon name="tabler:route" /> {{ $t('page.travels.dayCount', { n: travel.totaldays }) }}</span>
+						<span><Icon name="tabler:photo" /> {{ $t('page.travels.photoCount', { n: travel.photoCount }) }}</span>
 					</p>
 				</article>
 			</NuxtLink>

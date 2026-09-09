@@ -3,6 +3,7 @@ import { myFeed } from '~~/blog.config'
 import feeds from '~/feeds'
 
 const appConfig = useAppConfig()
+const { t } = useI18n()
 
 const { data: postLink } = await useAsyncData(
 	'content:/friends',
@@ -10,18 +11,18 @@ const { data: postLink } = await useAsyncData(
 )
 
 useSeoMeta({
-	title: '友链',
+	title: () => t('page.friends.title'),
 	ogType: 'profile',
-	description: `${appConfig.title}的友链页面，收集了添加他为友链的网站和他订阅的网站列表。`,
+	description: () => t('page.friends.description', { site: appConfig.title }),
 })
 
-const copyFields = {
-	博主: myFeed.author,
-	标题: myFeed.title,
-	介绍: myFeed.desc,
-	网址: myFeed.link,
-	头像: myFeed.avatar,
-}
+const copyFields = computed(() => [
+	{ id: 'author', prompt: t('page.friends.author'), code: myFeed.author },
+	{ id: 'blogTitle', prompt: t('page.friends.blogTitle'), code: myFeed.title },
+	{ id: 'blogDesc', prompt: t('page.friends.blogDesc'), code: myFeed.desc },
+	{ id: 'blogUrl', prompt: t('page.friends.blogUrl'), code: myFeed.link },
+	{ id: 'avatar', prompt: t('page.friends.avatar'), code: myFeed.avatar },
+])
 </script>
 
 <template>
@@ -36,7 +37,7 @@ const copyFields = {
 </template>
 
 <div class="mobile-only">
-	<BlogHeader to="/" suffix="友链" tag="h1" />
+	<BlogHeader to="/" :suffix="$t('page.friends.title')" tag="h1" />
 </div>
 
 <FeedGroup
@@ -46,11 +47,11 @@ const copyFields = {
 	:shuffle="appConfig.link.randomInGroup"
 />
 
-<Tab :tabs="['我的博客信息', '申请友链']" center>
+<Tab :tabs="[$t('page.friends.myInfo'), $t('page.friends.apply')]" center>
 	<template #tab1>
 		<div class="friends-tab">
 			<FeedCard v-bind="myFeed" />
-			<Copy v-for="(code, prompt) in copyFields" :key="prompt" :prompt :code />
+			<Copy v-for="field in copyFields" :key="field.id" :prompt="field.prompt" :code="field.code" />
 		</div>
 	</template>
 	<template #tab2>
@@ -60,12 +61,12 @@ const copyFields = {
 			class="article"
 		/>
 		<p v-else class="text-center">
-			可于 friends.md 配置友链补充说明。
+			{{ $t('page.friends.applyNotice') }}
 		</p>
 	</template>
 </Tab>
 
-<PostComment title="友链" :reactions="false" />
+<PostComment :title="$t('page.friends.title')" :reactions="false" />
 </template>
 
 <style lang="scss" scoped>

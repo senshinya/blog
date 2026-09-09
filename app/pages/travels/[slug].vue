@@ -5,13 +5,14 @@ definePageMeta({
 	layout: false,
 })
 
+const { t } = useI18n()
 const route = useRoute()
 const found = getTravelBySlug(route.params.slug as string)
 
 if (!found) {
 	throw createError({
 		statusCode: 404,
-		statusMessage: '游记不存在',
+		statusMessage: t('page.travels.notFound'),
 		fatal: true,
 	})
 }
@@ -190,7 +191,7 @@ function startsNewDay(index: number) {
 <div ref="scroller" class="travel" :class="{ 'viewer-open': viewerOpen }">
 	<NuxtLink class="travel-back" to="/travels">
 		<Icon name="tabler:arrow-left" />
-		游记
+		{{ $t('page.travels.title') }}
 	</NuxtLink>
 
 	<div class="travel-body" :class="{ 'map-collapsed': mapCollapsed }">
@@ -200,7 +201,7 @@ function startsNewDay(index: number) {
 			</ClientOnly>
 			<button
 				class="travel-map-toggle mobile-only"
-				:aria-label="mapCollapsed ? '展开地图' : '收起地图'"
+				:aria-label="mapCollapsed ? $t('page.travels.expandMap') : $t('page.travels.collapseMap')"
 				@click="mapCollapsed = !mapCollapsed"
 			>
 				<Icon :name="mapCollapsed ? 'tabler:map' : 'tabler:chevron-up'" />
@@ -216,7 +217,7 @@ function startsNewDay(index: number) {
 			>
 				<div class="travel-cover-text">
 					<p class="travel-cover-badge">
-						旅行日记
+						{{ $t('page.travels.coverBadge') }}
 					</p>
 					<h1 class="travel-cover-title">
 						{{ travel.title }}
@@ -228,8 +229,8 @@ function startsNewDay(index: number) {
 						{{ travel.description }}
 					</p>
 					<p class="travel-cover-meta">
-						<span><Icon name="tabler:route" /> {{ travel.totaldays }} 天行程</span>
-						<span><Icon name="tabler:photo" /> {{ photoCount }} 张照片</span>
+						<span><Icon name="tabler:route" /> {{ $t('page.travels.tripDays', { n: travel.totaldays }) }}</span>
+						<span><Icon name="tabler:photo" /> {{ $t('page.travels.tripPhotos', { n: photoCount }) }}</span>
 						<span><Icon name="tabler:calendar" /> {{ travel.published }}</span>
 					</p>
 				</div>
@@ -276,10 +277,10 @@ function startsNewDay(index: number) {
 			<!-- 结束屏 -->
 			<section class="travel-screen travel-end">
 				<p class="travel-end-mark">
-					—— 完 ——
+					{{ $t('page.travels.theEnd') }}
 				</p>
 				<NuxtLink class="travel-end-link" to="/travels">
-					回到游记列表
+					{{ $t('page.travels.backToList') }}
 				</NuxtLink>
 			</section>
 		</main>
@@ -294,7 +295,7 @@ function startsNewDay(index: number) {
 				@touchstart.passive="onViewerTouchStart"
 				@touchend.passive="onViewerTouchEnd"
 			>
-				<button class="travel-viewer-close" aria-label="关闭大图" @click="closeViewer">
+				<button class="travel-viewer-close" :aria-label="$t('page.travels.closeViewer')" @click="closeViewer">
 					<Icon name="tabler:x" />
 				</button>
 
@@ -328,7 +329,7 @@ function startsNewDay(index: number) {
 
 				<div class="travel-viewer-bar">
 					<button
-						aria-label="上一张"
+						:aria-label="$t('page.travels.prevPhoto')"
 						:disabled="viewerIndex === 0"
 						@click="stepPhoto(-1)"
 					>
@@ -338,7 +339,7 @@ function startsNewDay(index: number) {
 						{{ viewerIndex + 1 }} / {{ viewerPhotos.length }}
 					</span>
 					<button
-						aria-label="下一张"
+						:aria-label="$t('page.travels.nextPhoto')"
 						:disabled="viewerIndex === viewerPhotos.length - 1"
 						@click="stepPhoto(1)"
 					>

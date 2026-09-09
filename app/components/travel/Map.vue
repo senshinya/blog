@@ -278,7 +278,7 @@ watch(() => colorMode.value, () => {
 	<div ref="container" class="travel-map" />
 	<p v-if="failed" class="travel-map-failed">
 		<Icon name="tabler:map-off" />
-		这个浏览器没法渲染地图（缺少 WebGL），照片和游记正文不受影响。
+		{{ $t('page.travels.mapUnavailable') }}
 	</p>
 </div>
 </template>
