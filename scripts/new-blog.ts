@@ -19,7 +19,7 @@ const usePermalink = blogConfig.article.useRandomPremalink
 const now = Temporal.Now.plainDateTimeISO()
 const dateStr = now.toLocaleString('sv')
 
-const dir = join('content', 'posts', now.year.toString())
+const dir = join('content', 'zh', 'posts', now.year.toString())
 
 if (!fs.existsSync(dir))
 	fs.mkdirSync(dir, { recursive: true })
