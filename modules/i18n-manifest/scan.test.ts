@@ -34,6 +34,7 @@ test('maps each route path to the locales that have it', async () => {
 		travelsDir: travels,
 		locales: ['zh', 'en', 'ja'],
 		isDev: false,
+		hidePostPrefix: true,
 	})
 	assert.deepEqual(manifest['/daily/gastritis'], ['en', 'zh'])
 	assert.deepEqual(manifest['/friends'], ['zh'])
@@ -43,15 +44,43 @@ test('maps each route path to the locales that have it', async () => {
 test('strips the /posts prefix from article paths', async () => {
 	const { scanLocaleTrees } = await import('./scan.ts')
 	const { content, travels } = fixture()
-	const manifest = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false })
+	const manifest = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false, hidePostPrefix: true })
 	assert.equal(Object.keys(manifest).some(k => k.startsWith('/posts/')), false)
+})
+
+test('keeps the /posts prefix when hidePostPrefix is false', async () => {
+	const { scanLocaleTrees } = await import('./scan.ts')
+	const { content, travels } = fixture()
+	const manifest = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false, hidePostPrefix: false })
+	assert.deepEqual(manifest['/posts/daily/gastritis'], ['en', 'zh'])
+})
+
+test('uses the frontmatter permalink instead of the derived path', async () => {
+	const { scanLocaleTrees } = await import('./scan.ts')
+	const { content, travels } = fixture()
+	writeFileSync(join(content, 'zh/posts/daily/custom.md'), '---\ntitle: 自定义链接\npermalink: /custom/path\n---\n')
+	const manifest = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false, hidePostPrefix: true })
+	assert.deepEqual(manifest['/custom/path'], ['zh'])
+	assert.equal(manifest['/daily/custom'], undefined)
+})
+
+test('does not mistake a body line that looks like permalink for frontmatter', async () => {
+	const { scanLocaleTrees } = await import('./scan.ts')
+	const { content, travels } = fixture()
+	writeFileSync(
+		join(content, 'zh/posts/daily/not-permalink.md'),
+		'---\ntitle: 正文里有 permalink\n---\n\n介绍：\npermalink: /not-this\n结束。\n',
+	)
+	const manifest = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false, hidePostPrefix: true })
+	assert.deepEqual(manifest['/daily/not-permalink'], ['zh'])
+	assert.equal(manifest['/not-this'], undefined)
 })
 
 test('excludes draft travels outside development', async () => {
 	const { scanLocaleTrees } = await import('./scan.ts')
 	const { content, travels } = fixture()
-	const prod = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false })
+	const prod = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false, hidePostPrefix: true })
 	assert.equal(prod['/travels/secret-202601'], undefined)
-	const dev = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: true })
+	const dev = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: true, hidePostPrefix: true })
 	assert.deepEqual(dev['/travels/secret-202601'], ['zh'])
 })

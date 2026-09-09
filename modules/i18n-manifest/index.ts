@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { addTemplate, addTypeTemplate, defineNuxtModule } from '@nuxt/kit'
+import blogConfig from '../../blog.config'
 import { scanLocaleTrees, toPrerenderRoutes } from './scan.ts'
 
 export interface ModuleOptions {
@@ -15,6 +16,7 @@ export default defineNuxtModule<ModuleOptions>({
 			travelsDir: resolve(nuxt.options.rootDir, 'app/travels'),
 			locales: options.locales,
 			isDev: nuxt.options.dev,
+			hidePostPrefix: blogConfig.article.hidePostPrefix,
 		})
 
 		const prerenderRoutes = toPrerenderRoutes(manifest, options.defaultLocale)
