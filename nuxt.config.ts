@@ -240,6 +240,7 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'nuxt-llms',
 		'unplugin-yaml/nuxt',
+		['~~/modules/i18n-manifest', { locales: ['zh', 'en', 'ja'], defaultLocale: 'zh' }],
 	],
 
 	colorMode: {
@@ -310,17 +311,6 @@ ${packageJson.homepage}
 		},
 	},
 
-	icon: {
-		customCollections: [
-			{ prefix: 'zi', dir: './app/assets/icons' },
-		],
-		clientBundle: {
-			scan: {
-				globInclude: ['**\/*.{vue,jsx,tsx,ts,md,mdc,mdx}'],
-			},
-		},
-	},
-
 	i18n: {
 		locales: blogConfig.locales,
 		defaultLocale: 'zh',
@@ -330,6 +320,17 @@ ${packageJson.homepage}
 		detectBrowserLanguage: false,
 		lazy: true,
 		langDir: 'locales/',
+	},
+
+	icon: {
+		customCollections: [
+			{ prefix: 'zi', dir: './app/assets/icons' },
+		],
+		clientBundle: {
+			scan: {
+				globInclude: ['**\/*.{vue,jsx,tsx,ts,md,mdc,mdx}'],
+			},
+		},
 	},
 
 	image: {
