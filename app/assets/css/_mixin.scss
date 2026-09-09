@@ -14,7 +14,7 @@
 		border-radius: 1rem;
 		transition: all 0.1s;
 
-		&:hover:not(:disabled) {
+		&:hover:not([aria-disabled='true']) {
 			background-color: var(--c-bg-soft);
 			color: var(--c-text-1);
 		}
@@ -26,7 +26,7 @@
 			cursor: auto;
 		}
 
-		&:disabled {
+		&[aria-disabled='true'] {
 			opacity: 0.35;
 			cursor: not-allowed;
 		}

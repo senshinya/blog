@@ -93,13 +93,14 @@ const blogConfig = {
 	},
 
 	/**
-	 * 三语言定义。name 是语言切换器上的按钮标签，用各语言自称，
-	 * 任何语言环境下都是这个形态，故不进词条表。
+	 * 三语言定义。name 是语言切换器上的按钮标签，label 是该语言的完整自称
+	 * （用于 aria-label 与 tooltip），两者都用各语言自称，任何语言环境下都是
+	 * 这个形态，故不进词条表。
 	 */
 	locales: [
-		{ code: 'zh', language: 'zh-CN', name: '中', file: 'zh.ts' },
-		{ code: 'en', language: 'en-US', name: 'En', file: 'en.ts' },
-		{ code: 'ja', language: 'ja-JP', name: 'あ', file: 'ja.ts' },
+		{ code: 'zh', language: 'zh-CN', name: '中', label: '简体中文', file: 'zh.ts' },
+		{ code: 'en', language: 'en-US', name: 'En', label: 'English', file: 'en.ts' },
+		{ code: 'ja', language: 'ja-JP', name: 'あ', label: '日本語', file: 'ja.ts' },
 	],
 
 	/** 向 <head> 中添加脚本 */

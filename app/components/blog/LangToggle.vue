@@ -23,6 +23,9 @@ const available = computed(() => {
 })
 
 function choose(code: string) {
+	// aria-disabled 不像原生 disabled 那样拦截点击，得自己挡
+	if (!available.value.includes(code))
+		return
 	persist(code)
 	const path = switchLocalePath(code)
 	// 路由无法在目标语言解析时（例如 404 页）返回空串，此时只记偏好不跳转
@@ -36,10 +39,10 @@ function choose(code: string) {
 	<button
 		v-for="locale in blogConfig.locales"
 		:key="locale.code"
-		v-tip="available.includes(locale.code) ? locale.language : $t('lang.unavailable')"
-		:aria-label="locale.language"
+		v-tip="available.includes(locale.code) ? locale.label : $t('lang.unavailable')"
+		:aria-disabled="!available.includes(locale.code)"
+		:aria-label="locale.label"
 		:class="{ active: current === locale.code }"
-		:disabled="!available.includes(locale.code)"
 		:lang="locale.code"
 		@click="choose(locale.code)"
 	>
