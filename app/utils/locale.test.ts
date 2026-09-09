@@ -28,6 +28,13 @@ test('splits the locale prefix off a path', async () => {
 	assert.deepEqual(stripLocale('/', LOCALES, 'zh'), { locale: 'zh', basePath: '/' })
 })
 
+test('normalizes a trailing slash on basePath, but keeps the root path as /', async () => {
+	const { stripLocale } = await import('./locale.ts')
+	// 外部进站的旧链接、搜索引擎结果或手输 URL 可能带尾斜杠
+	assert.deepEqual(stripLocale('/daily/foo/', LOCALES, 'zh'), { locale: 'zh', basePath: '/daily/foo' })
+	assert.deepEqual(stripLocale('/ja/', LOCALES, 'zh'), { locale: 'ja', basePath: '/' })
+})
+
 test('takes the default locale from the argument, not from the array order', async () => {
 	const { stripLocale } = await import('./locale.ts')
 	// locales 数组的顺序是切换器按钮顺序，不能用来推默认语言

@@ -13,6 +13,20 @@ export interface DecideInput {
 }
 
 /**
+ * 去掉 basePath 尾部斜杠，但根路径本身保持为 '/'。
+ *
+ * @nuxtjs/i18n 默认 trailingSlash: false，站内链接不带尾斜杠，但外部进站
+ * 的 URL（旧链接、搜索引擎、手输）可能带尾斜杠，例如 /daily/foo/。不归一化
+ * 的话 basePath 是 /daily/foo/，清单里的 key 却是 /daily/foo，查不到就被
+ * 当成「所有语言都有」，把读者跳去一个不存在的页面。
+ */
+function normalizeBasePath(basePath: string) {
+	if (basePath === '/')
+		return basePath
+	return basePath.replace(/\/+$/, '') || '/'
+}
+
+/**
  * 把路径拆成语言码与不带前缀的基准路径。无前缀即默认语言。
  *
  * defaultLocale 显式传入，不从 locales[0] 推断 —— 那个数组的顺序
@@ -23,9 +37,9 @@ export function stripLocale(path: string, locales: readonly string[], defaultLoc
 	const head = match?.[1]
 	if (head && locales.includes(head)) {
 		const rest = path.slice(head.length + 1)
-		return { locale: head, basePath: rest || '/' }
+		return { locale: head, basePath: normalizeBasePath(rest || '/') }
 	}
-	return { locale: defaultLocale, basePath: path }
+	return { locale: defaultLocale, basePath: normalizeBasePath(path) }
 }
 
 /**
