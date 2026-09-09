@@ -1,8 +1,9 @@
 <script setup lang="ts">
 const appConfig = useAppConfig()
+const { t } = useI18n()
 useSeoMeta({
-	title: '预览',
-	description: `${appConfig.title}的文章预览。`,
+	title: () => t('page.preview.title'),
+	description: () => t('page.preview.description', { site: appConfig.title }),
 })
 const { data: listRaw } = await useAsyncData('previews:index', () => getArticleIndexOptions('previews/%'), { default: () => [] })
 const { listSorted } = useArticleSort(listRaw)
@@ -21,16 +22,16 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 <div class="preview">
 	<div class="preview-header">
 		<h1>
-			<UtilLink class="mobile-only" to="/" title="返回首页">
+			<UtilLink class="mobile-only" to="/" :title="$t('page.preview.backHome')">
 				<Icon name="tabler:chevron-left" />
-			</UtilLink>预览
+			</UtilLink>{{ $t('page.preview.title') }}
 		</h1>
 		<PostFilter
 			v-model:category="category"
 			:categories
 		/>
 	</div>
-	<p>勇敢的人探索世界。这里是一些还未发布的文章。</p>
+	<p>{{ $t('page.preview.tagline') }}</p>
 
 	<menu class="proper-height">
 		<PostArticle

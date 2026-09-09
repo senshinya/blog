@@ -29,21 +29,21 @@ const { height: contentHeight } = useElementSize(contentEl)
 </script>
 
 <template>
-<BlogWidget card title="碎语">
+<BlogWidget card :title="$t('widget.memos.title')">
 	<template #action>
 		<UtilLink to="/memos" class="more">
-			全部<Icon name="tabler:chevron-right" />
+			{{ $t('widget.memos.viewAll') }}<Icon name="tabler:chevron-right" />
 		</UtilLink>
 	</template>
 
 	<div class="expander" :style="contentHeight ? { height: `${contentHeight}px` } : undefined">
 		<div ref="content">
 			<p v-if="loading" class="tip">
-				加载中...
+				{{ $t('widget.memos.loading') }}
 			</p>
 
 			<p v-else-if="!memos.length" class="tip">
-				还没有碎语
+				{{ $t('widget.memos.empty') }}
 			</p>
 
 			<ol v-else class="feed">
@@ -54,7 +54,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 
 						<!-- 纯图碎语没有文字，给个占位免得只剩一个孤零零的日期 -->
 						<p class="text">
-							{{ memo.text || '[图片]' }}
+							{{ memo.text || $t('widget.memos.imagePlaceholder') }}
 						</p>
 					</UtilLink>
 				</li>

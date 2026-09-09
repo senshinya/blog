@@ -2,6 +2,7 @@
 import { orderBy } from 'es-toolkit/array'
 
 const appConfig = useAppConfig()
+const { t } = useI18n()
 useSeoMeta({
 	description: appConfig.description,
 	ogImage: appConfig.author.avatar,
@@ -16,7 +17,7 @@ watch(category, () => {
 	page.value = 1
 })
 
-useSeoMeta({ title: () => (page.value > 1 ? `第${page.value}页` : '') })
+useSeoMeta({ title: () => (page.value > 1 ? t('ui.pagination.page', { n: page.value }) : '') })
 
 const listRecommended = computed(() => orderBy(
 	listRaw.value.filter(item => item.recommend !== null),
@@ -58,7 +59,7 @@ const { data: previewCount } = useAsyncData(
 		<ZSecret>
 			<UtilLink v-if="previewCount" to="/preview" class="preview-entrance">
 				<Icon name="tabler:shield-lock" />
-				查看预览文章
+				{{ $t('page.home.previewLink') }}
 			</UtilLink>
 		</ZSecret>
 	</PostFilter>

@@ -202,6 +202,97 @@ const ja: MessageSchema = {
 			blogUrl: 'URL',
 			avatar: 'アバター',
 		},
+		archive: {
+			title: 'アーカイブ',
+			description: '{site}の全記事アーカイブ。',
+			densityToggle: '密度調整',
+			age: '歳',
+			postCount: '{n}件',
+			spacing: '間隔',
+			columns: '列数',
+		},
+		home: {
+			previewLink: 'プレビュー記事を見る',
+		},
+		preview: {
+			title: 'プレビュー',
+			description: '{site}の記事プレビュー。',
+			backHome: 'ホームへ戻る',
+			tagline: '勇者は世界を旅する。ここにあるのはまだ公開していない記事です。',
+		},
+		notFound: {
+			title: 'コンテンツが空か、ページが存在しません',
+		},
+	},
+	error: {
+		backHome: 'ホームに戻る',
+		ignore: '無視して続行',
+	},
+	widget: {
+		notFound: '{name}が見つかりません',
+		blogStats: {
+			title: 'ブログ統計',
+			duration: '運営期間',
+			launchedTip: 'ブログは{date}に開設',
+			lastUpdate: '最終更新',
+			buildPrefix: 'ビルド日時',
+			wordCountFiltered: '記事の文字数',
+			wordCountTotal: '総文字数',
+			fetchError: 'データの取得に失敗しました',
+			yearlyLine: '{year}年：{posts}件、{words}文字',
+			wordCount: '約7万',
+		},
+		blogTech: {
+			title: '技術情報',
+			ciPlatform: 'CI基盤',
+			imageStorage: '画像ストレージ',
+			license: 'ソフトウェアライセンス',
+			contentLicense: '記事のライセンス',
+			canonicalDomain: '正規ドメイン',
+			buildInfo: 'ビルド情報',
+		},
+		blogLog: {
+			title: '更新履歴',
+			commentMigration: 'コメントシステムを giscus から自前システムに移行',
+			contentMigration: 'Nuxt 4 + Nuxt Content v3 に移行、コンテンツは Markdown に回帰',
+			stackRewrite: 'SvelteKit + PocketBase で作り直し、管理画面も自前で構築',
+			firstPost: '最初の記事を公開',
+		},
+		toc: {
+			title: '目次',
+			backToTop: '先頭に戻る',
+			comments: 'コメント',
+			empty: '目次はありません',
+		},
+		memos: {
+			title: 'つぶやき',
+			viewAll: 'すべて見る',
+			loading: '読み込み中...',
+			empty: 'まだつぶやきがありません',
+			imagePlaceholder: '[画像]',
+		},
+	},
+	search: {
+		placeholder: '入力して検索',
+		noResults: '結果なし',
+		navigate: '移動',
+		select: '決定',
+		close: '閉じる',
+	},
+	ui: {
+		pagination: {
+			page: '{n}ページ目',
+			pageOf: '{page}/{totalPages}ページ',
+			prev: '前のページ',
+			next: '次のページ',
+		},
+		expand: {
+			expandLabel: '{name}を展開する',
+			collapseLabel: '{name}を折りたたむ',
+		},
+		lightbox: {
+			close: 'ライトボックスを閉じる',
+		},
 	},
 }
 

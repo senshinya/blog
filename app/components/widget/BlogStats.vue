@@ -3,6 +3,7 @@ import { UtilDate } from '#components'
 
 const appConfig = useAppConfig()
 const runtimeConfig = useRuntimeConfig()
+const { t } = useI18n()
 
 // 响应头不正确时，stats.value 可能会是字符串，首次属性访问可能为 undefined
 const { data: stats } = useFetch('/api/stats')
@@ -10,30 +11,30 @@ const { data: stats } = useFetch('/api/stats')
 const yearlyTip = computed(() => Object
 	.entries(stats.value?.annual || {})
 	.reverse()
-	.map(([year, item]) => `${year}年：${item.posts}篇，${formatNumber(item.words)}字`)
-	.join('\n') || '数据获取失败',
+	.map(([year, item]) => t('widget.blogStats.yearlyLine', { year, posts: item.posts, words: formatNumber(item.words) }, item.posts))
+	.join('\n') || t('widget.blogStats.fetchError'),
 )
 
-const blogStats = [{
-	label: '运营时长',
+const blogStats = computed(() => [{
+	label: t('widget.blogStats.duration'),
 	value: timeElapse(appConfig.timeEstablished),
-	tip: `博客于${appConfig.timeEstablished}上线`,
+	tip: t('widget.blogStats.launchedTip', { date: appConfig.timeEstablished }),
 }, {
-	label: '上次更新',
+	label: t('widget.blogStats.lastUpdate'),
 	value: () => h(UtilDate, {
 		date: runtimeConfig.public.buildTime,
 		relative: true,
-		tipPrefix: '构建于',
+		tipPrefix: t('widget.blogStats.buildPrefix'),
 	}),
 }, {
-	label: appConfig.stats.includePaths.length ? '文章字数' : '总字数',
+	label: appConfig.stats.includePaths.length ? t('widget.blogStats.wordCountFiltered') : t('widget.blogStats.wordCountTotal'),
 	value: computed(() => formatNumber(stats.value?.total?.words) || '--'),
 	tip: yearlyTip,
-}]
+}])
 </script>
 
 <template>
-<BlogWidget card title="博客统计">
+<BlogWidget card :title="$t('widget.blogStats.title')">
 	<ZDlGroup :items="blogStats" size="small" />
 </BlogWidget>
 </template>

@@ -6,6 +6,7 @@ import { Icon } from '#components'
 
 const appConfig = useAppConfig()
 const { public: { arch, ci, nodeVersion, platform } } = useRuntimeConfig()
+const { t } = useI18n()
 
 const ciPlatform = computed(() => {
 	const iconName = ciIcons[ci]
@@ -24,11 +25,11 @@ const packages = merge(...Object.values(pnpmWorkspace.catalogs))
 const [pm, pmVersion] = packageManager.split('@') as [string, string]
 
 const service = computed(() => ([
-	...ci ? [{ label: '构建平台', value: ciPlatform }] : [],
-	{ label: '图片存储', value: () => [h(Icon, { name: 'devicon:cloudflare' }), ' R2'] },
-	{ label: '软件协议', value: 'MIT' },
-	{ label: '文章许可', value: appConfig.copyright.abbr },
-	{ label: '规范域名', value: getDomain(appConfig.url) },
+	...ci ? [{ label: t('widget.blogTech.ciPlatform'), value: ciPlatform }] : [],
+	{ label: t('widget.blogTech.imageStorage'), value: () => [h(Icon, { name: 'devicon:cloudflare' }), ' R2'] },
+	{ label: t('widget.blogTech.license'), value: 'MIT' },
+	{ label: t('widget.blogTech.contentLicense'), value: appConfig.copyright.abbr },
+	{ label: t('widget.blogTech.canonicalDomain'), value: getDomain(appConfig.url) },
 ]))
 
 const techstack = computed(() => ([
@@ -46,9 +47,9 @@ const expand = ref(false)
 </script>
 
 <template>
-<BlogWidget card grayscale title="技术信息">
+<BlogWidget card grayscale :title="$t('widget.blogTech.title')">
 	<ZDlGroup :items="service" />
-	<ZExpand v-model="expand" in-place name="构建信息">
+	<ZExpand v-model="expand" in-place :name="$t('widget.blogTech.buildInfo')">
 		<ZDlGroup size="small" :items="techstack" />
 	</ZExpand>
 </BlogWidget>

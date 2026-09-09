@@ -58,6 +58,6 @@ else {
 <ZError
 	v-else
 	icon="line-md:document-delete-twotone"
-	title="内容为空或页面不存在"
+	:title="$t('page.notFound.title')"
 />
 </template>

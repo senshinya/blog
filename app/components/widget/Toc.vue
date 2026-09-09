@@ -19,17 +19,17 @@ function hasHeading(tocTree: TocLink, heading?: string): boolean {
 <template>
 <BlogWidget
 	ref="toc"
-	title="文章目录"
+	:title="$t('widget.toc.title')"
 	shrink
 	:style="{ minHeight: `clamp(4rem, ${tocOffsets.length}rem, 20rem)` }"
 >
 	<template #action>
 		<!-- use <a> for anchor -->
-		<a href="#main-content" aria-label="返回开头">
+		<a href="#main-content" :aria-label="$t('widget.toc.backToTop')">
 			<Icon name="tabler:arrow-bar-to-up" />
 		</a>
 
-		<a href="#comment" aria-label="评论区">
+		<a href="#comment" :aria-label="$t('widget.toc.comments')">
 			<Icon name="tabler:message-dots" />
 		</a>
 	</template>
@@ -58,7 +58,7 @@ function hasHeading(tocTree: TocLink, heading?: string): boolean {
 		:toc-tree="toc.links"
 	/>
 	<p v-else class="no-toc">
-		暂无目录信息
+		{{ $t('widget.toc.empty') }}
 	</p>
 </BlogWidget>
 </template>

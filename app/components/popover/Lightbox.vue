@@ -31,7 +31,7 @@ defineEmits<{
 		</span>
 		<button
 			class="close"
-			aria-label="关闭灯箱"
+			:aria-label="$t('ui.lightbox.close')"
 			@click="$emit('close')"
 		>
 			<Icon name="tabler:x" />

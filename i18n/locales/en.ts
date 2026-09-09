@@ -202,6 +202,97 @@ const en: MessageSchema = {
 			blogUrl: 'URL',
 			avatar: 'Avatar',
 		},
+		archive: {
+			title: 'Archive',
+			description: '{site}\'s complete post archive.',
+			densityToggle: 'Adjust density',
+			age: 'yo',
+			postCount: '{n} post | {n} posts',
+			spacing: 'Spacing',
+			columns: 'Columns',
+		},
+		home: {
+			previewLink: 'View preview posts',
+		},
+		preview: {
+			title: 'Preview',
+			description: '{site}\'s post previews.',
+			backHome: 'Back to home',
+			tagline: 'The brave explore the world. These are posts that haven\'t been published yet.',
+		},
+		notFound: {
+			title: 'This content is missing, or the page doesn\'t exist',
+		},
+	},
+	error: {
+		backHome: 'Back to home',
+		ignore: 'Try to continue',
+	},
+	widget: {
+		notFound: '{name} doesn\'t exist',
+		blogStats: {
+			title: 'Blog Stats',
+			duration: 'Running for',
+			launchedTip: 'The blog launched on {date}',
+			lastUpdate: 'Last updated',
+			buildPrefix: 'Built at',
+			wordCountFiltered: 'Post word count',
+			wordCountTotal: 'Total word count',
+			fetchError: 'Failed to load stats',
+			yearlyLine: '{year}: {posts} post, {words} words | {year}: {posts} posts, {words} words',
+			wordCount: 'About 70k',
+		},
+		blogTech: {
+			title: 'Tech Info',
+			ciPlatform: 'CI Platform',
+			imageStorage: 'Image Storage',
+			license: 'License',
+			contentLicense: 'Content License',
+			canonicalDomain: 'Canonical Domain',
+			buildInfo: 'Build Info',
+		},
+		blogLog: {
+			title: 'Changelog',
+			commentMigration: 'Migrated the comment system from giscus to a self-hosted one',
+			contentMigration: 'Migrated to Nuxt 4 + Nuxt Content v3; content moved back to Markdown',
+			stackRewrite: 'Rebuilt on SvelteKit + PocketBase with a self-hosted CMS',
+			firstPost: 'Published the first post',
+		},
+		toc: {
+			title: 'Table of Contents',
+			backToTop: 'Back to top',
+			comments: 'Comments',
+			empty: 'No table of contents',
+		},
+		memos: {
+			title: 'Memos',
+			viewAll: 'View all',
+			loading: 'Loading...',
+			empty: 'No memos yet',
+			imagePlaceholder: '[Image]',
+		},
+	},
+	search: {
+		placeholder: 'Type to search',
+		noResults: 'No results',
+		navigate: 'Navigate',
+		select: 'Select',
+		close: 'Close',
+	},
+	ui: {
+		pagination: {
+			page: 'Page {n}',
+			pageOf: 'Page {page} of {totalPages}',
+			prev: 'Previous page',
+			next: 'Next page',
+		},
+		expand: {
+			expandLabel: 'Expand {name}',
+			collapseLabel: 'Collapse {name}',
+		},
+		lightbox: {
+			close: 'Close lightbox',
+		},
 	},
 }
 

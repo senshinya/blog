@@ -100,7 +100,7 @@ function openActiveItem() {
 				type="search"
 				incremental
 				class="search-input"
-				placeholder="键入开始搜索"
+				:placeholder="$t('search.placeholder')"
 				@keydown.up.prevent
 				@keydown.down.prevent
 			>
@@ -108,7 +108,7 @@ function openActiveItem() {
 
 		<TransitionGroup name="expand">
 			<div v-if="debouncedWord && status === 'success' && !result.length" class="no-result">
-				无结果
+				{{ $t('search.noResults') }}
 			</div>
 
 			<menu
@@ -129,11 +129,11 @@ function openActiveItem() {
 			<div v-if="result.length" class="tip" @click="searchInput?.focus()">
 				<Key code="ArrowUp" prevent @press="updateActiveIndex(activeIndex - 1, true)" />
 				<Key code="ArrowDown" prevent @press="updateActiveIndex(activeIndex + 1, true)" />
-				切换&emsp;
+				{{ $t('search.navigate') }}&emsp;
 				<Key code="Enter" icon @press="openActiveItem" />
-				选择&emsp;
+				{{ $t('search.select') }}&emsp;
 				<Key code="Escape" :icon="false" @press="$emit('close')" />
-				关闭
+				{{ $t('search.close') }}
 			</div>
 		</TransitionGroup>
 	</div>

@@ -5,9 +5,10 @@ import { sumBy } from 'es-toolkit/math'
 import { mapValues } from 'es-toolkit/object'
 
 const appConfig = useAppConfig()
+const { t } = useI18n()
 useSeoMeta({
-	title: '归档',
-	description: `${appConfig.title}的所有文章归档。`,
+	title: () => t('page.archive.title'),
+	description: () => t('page.archive.description', { site: appConfig.title }),
 })
 const birthYear = computed(() => appConfig.component.stats.birthYear)
 const showTuning = ref(false)
@@ -66,7 +67,7 @@ function getArticleYear(article: ArticleProps) {
 		<ZSecret>
 			<ZToggle
 				v-model="showTuning"
-				label="密度调节"
+				:label="$t('page.archive.densityToggle')"
 			/>
 		</ZSecret>
 	</PostFilter>
@@ -88,12 +89,12 @@ function getArticleYear(article: ArticleProps) {
 
 			<div v-if="birthYear" class="archive-age">
 				<span>{{ Number(year) - birthYear }}</span>
-				<span class="age-label">岁</span>
+				<span class="age-label">{{ $t('page.archive.age') }}</span>
 			</div>
 
 			<div class="archive-info">
-				<span>{{ yearlyWordCount[year] }}字</span>
-				<span>{{ yearGroup?.length }}篇</span>
+				<span>{{ $t('post.words', { n: yearlyWordCount[year] }) }}</span>
+				<span>{{ $t('page.archive.postCount', { n: yearGroup?.length }, yearGroup?.length ?? 0) }}</span>
 			</div>
 		</div>
 
@@ -112,7 +113,7 @@ function getArticleYear(article: ArticleProps) {
 	<div v-if="showTuning" ref="tuning-panel" class="archive-tuning card">
 		<ZSlider
 			v-model="spacing"
-			label="间距"
+			:label="$t('page.archive.spacing')"
 			:spring-min="-0.4"
 			:spring-max="0.1"
 			:list="['-0.3', '0']"
@@ -123,7 +124,7 @@ function getArticleYear(article: ArticleProps) {
 
 		<ZSlider
 			v-model="column"
-			label="列数"
+			:label="$t('page.archive.columns')"
 			min="1"
 			max="8"
 		/>

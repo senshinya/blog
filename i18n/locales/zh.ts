@@ -204,6 +204,97 @@ const zh = {
 			blogUrl: '网址',
 			avatar: '头像',
 		},
+		archive: {
+			title: '归档',
+			description: '{site}的所有文章归档。',
+			densityToggle: '密度调节',
+			age: '岁',
+			postCount: '{n}篇',
+			spacing: '间距',
+			columns: '列数',
+		},
+		home: {
+			previewLink: '查看预览文章',
+		},
+		preview: {
+			title: '预览',
+			description: '{site}的文章预览。',
+			backHome: '返回首页',
+			tagline: '勇敢的人探索世界。这里是一些还未发布的文章。',
+		},
+		notFound: {
+			title: '内容为空或页面不存在',
+		},
+	},
+	error: {
+		backHome: '返回主页',
+		ignore: '尝试忽略',
+	},
+	widget: {
+		notFound: '{name} 不存在',
+		blogStats: {
+			title: '博客统计',
+			duration: '运营时长',
+			launchedTip: '博客于{date}上线',
+			lastUpdate: '上次更新',
+			buildPrefix: '构建于',
+			wordCountFiltered: '文章字数',
+			wordCountTotal: '总字数',
+			fetchError: '数据获取失败',
+			yearlyLine: '{year}年：{posts}篇，{words}字',
+			wordCount: '约7万',
+		},
+		blogTech: {
+			title: '技术信息',
+			ciPlatform: '构建平台',
+			imageStorage: '图片存储',
+			license: '软件协议',
+			contentLicense: '文章许可',
+			canonicalDomain: '规范域名',
+			buildInfo: '构建信息',
+		},
+		blogLog: {
+			title: '更新日志',
+			commentMigration: '评论系统从 giscus 迁移至自建系统',
+			contentMigration: '迁移到 Nuxt 4 + Nuxt Content v3，内容回归 Markdown',
+			stackRewrite: '重构为 SvelteKit + PocketBase，自建后台 CMS',
+			firstPost: '发布第一篇文章',
+		},
+		toc: {
+			title: '文章目录',
+			backToTop: '返回开头',
+			comments: '评论区',
+			empty: '暂无目录信息',
+		},
+		memos: {
+			title: '碎语',
+			viewAll: '全部',
+			loading: '加载中...',
+			empty: '还没有碎语',
+			imagePlaceholder: '[图片]',
+		},
+	},
+	search: {
+		placeholder: '键入开始搜索',
+		noResults: '无结果',
+		navigate: '切换',
+		select: '选择',
+		close: '关闭',
+	},
+	ui: {
+		pagination: {
+			page: '第{n}页',
+			pageOf: '第{page}页，共{totalPages}页',
+			prev: '上一页',
+			next: '下一页',
+		},
+		expand: {
+			expandLabel: '展开{name}',
+			collapseLabel: '收起{name}',
+		},
+		lightbox: {
+			close: '关闭灯箱',
+		},
 	},
 }
 

@@ -17,7 +17,7 @@ const expand = defineModel<boolean>()
 
 	<button class="toggle-btn" :class="{ 'in-place': inPlace }" @click="expand = !expand">
 		<Icon class="toggle-icon" :class="{ expand }" name="tabler:chevrons-down" />
-		<span>{{ `${expand ? '收起' : '展开'}${name}` }}</span>
+		<span>{{ expand ? $t('ui.expand.collapseLabel', { name }) : $t('ui.expand.expandLabel', { name }) }}</span>
 	</button>
 </div>
 </template>
