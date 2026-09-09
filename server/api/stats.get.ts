@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 
 	const existedPaths = new Set<string>()
 
-	const query = queryCollection(event, 'content')
+	const query = queryCollection(event, 'content_zh')
 	if (blogConfig.stats.includePaths.length) {
 		query.orWhere(group => blogConfig.stats.includePaths.reduce(
 			(group, path) => group.where('stem', 'LIKE', path),

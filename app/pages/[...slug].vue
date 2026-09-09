@@ -3,7 +3,7 @@ const route = useRoute()
 
 const { data: post } = await useAsyncData(
 	`content:${route.path}`,
-	() => queryCollection('content').path(route.path).first(),
+	() => queryCollection('content_zh').path(route.path).first(),
 )
 
 const excerpt = computed(() => post.value?.description || '')

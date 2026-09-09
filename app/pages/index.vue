@@ -26,7 +26,7 @@ const listRecommended = computed(() => orderBy(
 
 const { data: previewCount } = useAsyncData(
 	'previews:count',
-	() => queryCollection('content').where('stem', 'LIKE', 'previews/%').count(),
+	() => queryCollection('content_zh').where('stem', 'LIKE', 'previews/%').count(),
 )
 </script>
 

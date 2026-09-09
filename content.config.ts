@@ -53,13 +53,16 @@ const articleSchema = z.object({
 	}),
 }) satisfies z.ZodType<ArticleSchema>
 
-export const collections = {
-	content: defineCollection({
-		source: { include: 'zh/**', prefix: '' },
+export const LOCALES = ['zh', 'en', 'ja'] as const
+export type Locale = typeof LOCALES[number]
+
+function makeCollection(locale: Locale) {
+	return defineCollection({
+		source: { include: `${locale}/**`, prefix: '' },
 		type: 'page',
 		schema: articleSchema.extend({
 			sitemap: defineSitemapSchema({
-				name: 'content',
+				name: `content_${locale}`,
 				onUrl: (url, entry) => {
 					const lastmod = (entry.published || entry.date) as string | undefined
 					if (lastmod)
@@ -68,5 +71,11 @@ export const collections = {
 				z,
 			}),
 		}),
-	}),
+	})
+}
+
+export const collections = {
+	content_zh: makeCollection('zh'),
+	content_en: makeCollection('en'),
+	content_ja: makeCollection('ja'),
 }

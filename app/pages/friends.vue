@@ -6,7 +6,7 @@ const appConfig = useAppConfig()
 
 const { data: postLink } = await useAsyncData(
 	'content:/friends',
-	() => queryCollection('content').path('/friends').first(),
+	() => queryCollection('content_zh').path('/friends').first(),
 )
 
 useSeoMeta({

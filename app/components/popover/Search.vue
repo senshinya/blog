@@ -12,7 +12,7 @@ const segmenter = Intl.Segmenter && new Intl.Segmenter(appConfig.language, { gra
 // await useAsyncData() 会阻塞渲染
 const { data, status } = await useLazyAsyncData(
 	'search',
-	() => queryCollectionSearchSections('content', {
+	() => queryCollectionSearchSections('content_zh', {
 		ignoredTags: ['pre'],
 	}),
 )

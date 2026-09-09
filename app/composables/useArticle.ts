@@ -24,7 +24,7 @@ export function useArticle(path?: MaybeRefOrGetter<string | undefined>) {
  * @todo 支持分页/分类筛选
  */
 export function getArticleIndexOptions(path = 'posts/%') {
-	return queryCollection('content')
+	return queryCollection('content_zh')
 		.where('stem', 'LIKE', path)
 		.select('categories', 'date', 'description', 'image', 'path', 'readingTime', 'recommend', 'tags', 'title', 'type')
 		.all()
