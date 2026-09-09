@@ -130,7 +130,7 @@ const en: MessageSchema = {
 	media: {
 		category: {
 			anime: 'Anime',
-			real: 'Shows',
+			real: 'Live Action',
 			game: 'Games',
 		},
 		status: {
@@ -143,7 +143,7 @@ const en: MessageSchema = {
 			real: '{n} shows total',
 			game: '{n} games total',
 		},
-		myRate: 'Mine {n}',
+		myRate: 'Mine: {n}',
 	},
 	page: {
 		memos: {
@@ -183,7 +183,7 @@ const en: MessageSchema = {
 			title: 'Media',
 			description: 'Anime, shows, and games {site} has enjoyed, synced from Bangumi.',
 			syncNotice: 'Anime watched, shows seen, and games played, synced from {link}',
-			loading: 'Loading your media collection',
+			loading: 'Loading media collection',
 			empty: 'Nothing collected in this category yet',
 			loadError: 'Failed to load: {message}',
 			loadingMore: 'Loading',
@@ -194,7 +194,7 @@ const en: MessageSchema = {
 			title: 'Friends',
 			description: '{site}\'s friends page, listing sites added as friends and sites it follows.',
 			myInfo: 'My Blog Info',
-			apply: 'Apply to Be Friends',
+			apply: 'Request a link',
 			applyNotice: 'Additional notes can be configured in friends.md.',
 			author: 'Blogger',
 			blogTitle: 'Title',

@@ -143,7 +143,7 @@ const ja: MessageSchema = {
 			real: '全{n}作品',
 			game: '全{n}本',
 		},
-		myRate: '自己評価 {n}',
+		myRate: 'マイ評価 {n}',
 	},
 	page: {
 		memos: {
