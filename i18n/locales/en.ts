@@ -236,7 +236,6 @@ const en: MessageSchema = {
 			duration: 'Running for',
 			launchedTip: 'The blog launched on {date}',
 			lastUpdate: 'Last updated',
-			buildPrefix: 'Built at',
 			wordCountFiltered: 'Post word count',
 			wordCountTotal: 'Total word count',
 			fetchError: 'Failed to load stats',

@@ -24,7 +24,6 @@ const blogStats = computed(() => [{
 	value: () => h(UtilDate, {
 		date: runtimeConfig.public.buildTime,
 		relative: true,
-		tipPrefix: t('widget.blogStats.buildPrefix'),
 	}),
 }, {
 	label: appConfig.stats.includePaths.length ? t('widget.blogStats.wordCountFiltered') : t('widget.blogStats.wordCountTotal'),

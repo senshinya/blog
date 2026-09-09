@@ -238,7 +238,6 @@ const zh = {
 			duration: '运营时长',
 			launchedTip: '博客于{date}上线',
 			lastUpdate: '上次更新',
-			buildPrefix: '构建于',
 			wordCountFiltered: '文章字数',
 			wordCountTotal: '总字数',
 			fetchError: '数据获取失败',

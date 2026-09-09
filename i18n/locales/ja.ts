@@ -236,7 +236,6 @@ const ja: MessageSchema = {
 			duration: '運営期間',
 			launchedTip: 'ブログは{date}に開設',
 			lastUpdate: '最終更新',
-			buildPrefix: 'ビルド日時',
 			wordCountFiltered: '記事の文字数',
 			wordCountTotal: '総文字数',
 			fetchError: 'データの取得に失敗しました',
