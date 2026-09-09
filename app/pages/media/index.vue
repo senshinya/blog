@@ -166,7 +166,7 @@ watch([categoryKey, statusKey], reload)
 			</button>
 
 			<span v-if="!loading && !error && total" class="filter-count">
-				{{ $t(`media.total.${categoryKey}`, { n: total }) }}
+				{{ $t(`media.total.${categoryKey}`, { n: total }, total) }}
 			</span>
 		</div>
 

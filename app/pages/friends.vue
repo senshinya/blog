@@ -42,7 +42,7 @@ const copyFields = computed(() => [
 
 <FeedGroup
 	v-for="group in feeds"
-	:key="group.name"
+	:key="group.name ?? group.nameKey"
 	v-bind="group"
 	:shuffle="appConfig.link.randomInGroup"
 />

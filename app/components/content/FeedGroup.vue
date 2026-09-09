@@ -4,7 +4,11 @@ import { shuffle } from 'es-toolkit/array'
 
 const props = defineProps<FeedGroup & { shuffle?: boolean }>()
 const route = useRoute()
+const { t } = useI18n()
 const entries = ref(props.entries)
+
+// name 与 nameKey 互斥，见 ~/types/feed；判断用 !== undefined，理由同 resolveNavText（~/utils/nav）
+const groupName = computed(() => props.nameKey !== undefined ? t(props.nameKey) : props.name)
 
 // 友链浮现随机延迟
 function getCardDelay(feed: FeedEntry) {
@@ -39,9 +43,9 @@ if (import.meta.dev) {
 			:title="$t('content.shuffleTip')"
 			@click="unshuffleEntries"
 			@click.exact="shuffleEntries"
-			v-text="name"
+			v-text="groupName"
 		/>
-		<span v-else v-text="name" />
+		<span v-else v-text="groupName" />
 	</h3>
 	<p class="feed-desc" v-text="desc" />
 

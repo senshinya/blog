@@ -140,8 +140,8 @@ const en: MessageSchema = {
 		},
 		total: {
 			anime: '{n} anime total',
-			real: '{n} shows total',
-			game: '{n} games total',
+			real: '{n} Live Action title total | {n} Live Action titles total',
+			game: '{n} game total | {n} games total',
 		},
 		myRate: 'Mine: {n}',
 	},
@@ -193,6 +193,7 @@ const en: MessageSchema = {
 		friends: {
 			title: 'Friends',
 			description: '{site}\'s friends page, listing sites added as friends and sites it follows.',
+			groupTitle: 'Friends',
 			myInfo: 'My Blog Info',
 			apply: 'Request a link',
 			applyNotice: 'Additional notes can be configured in friends.md.',

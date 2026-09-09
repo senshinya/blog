@@ -25,11 +25,23 @@ export interface FeedEntry {
 	error?: string
 }
 
-export interface FeedGroup {
-	/** 分组名 */
-	name: string
+interface FeedGroupBase {
 	/** 描述 */
 	desc?: string
 	/** 友链列表 */
 	entries: FeedEntry[]
 }
+
+/**
+ * name 与 nameKey 互斥，同 NavItem 的 text/textKey（定义见 ~/types/nav）：分组名若是
+ * 不进词条表的字面量（比如未来按人名分组）用 name；需要按语言切换的界面文案
+ * （比如当前唯一一组的通用标题「友链」）用 nameKey，交给 $t() 渲染。feeds.ts 被
+ * 友链检测 CLI 用相对路径直接导入，运行在 Nuxt/i18n 上下文之外，nameKey 在那里
+ * 只是个惰性字符串，真正的翻译发生在渲染它的 FeedGroup.vue 里。
+ */
+export type FeedGroupName = (
+	| { name: string, nameKey?: never }
+	| { nameKey: string, name?: never }
+)
+
+export type FeedGroup = FeedGroupBase & FeedGroupName

@@ -193,6 +193,7 @@ const ja: MessageSchema = {
 		friends: {
 			title: 'リンク集',
 			description: '{site}のリンク集ページ。リンク集に登録したサイトと、購読しているサイトをまとめています。',
+			groupTitle: 'リンク集',
 			myInfo: '自分のブログ情報',
 			apply: 'リンク申請',
 			applyNotice: 'friends.md で補足説明を設定できます。',
