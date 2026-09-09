@@ -22,7 +22,7 @@ const ja: MessageSchema = {
 		},
 	},
 	footer: {
-		explore: '探索',
+		explore: 'リンク',
 		social: 'SNS',
 		info: '情報',
 		atom: 'Atomフィード',
