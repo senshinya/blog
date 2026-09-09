@@ -18,8 +18,8 @@ onMounted(() => mounted.value = true)
 	<button
 		v-for="(themeData, themeName) in appConfig.themes"
 		:key="themeName"
-		v-tip="themeData.tip"
-		:aria-label="themeData.tip"
+		v-tip="$t(themeData.tipKey)"
+		:aria-label="$t(themeData.tipKey)"
 		:class="{ active: mounted && colorMode.preference === themeName }"
 		@click="colorMode.preference = themeName"
 	>
