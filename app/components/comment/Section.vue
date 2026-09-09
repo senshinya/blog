@@ -22,7 +22,6 @@ const props = withDefaults(defineProps<{
 }>(), {
 	heading: false,
 	reactions: false,
-	reactionLabel: '读完了？给这篇文章一个反馈',
 })
 
 /**
@@ -30,6 +29,9 @@ const props = withDefaults(defineProps<{
  * 在评论区里再画一行，故需要拿到权威的 reactions / viewer_reactions。
  */
 const emit = defineEmits<{ page: [page: ThreadPage | null] }>()
+
+const { t } = useI18n()
+const reactionLabel = computed(() => props.reactionLabel || t('comment.feedbackPrompt'))
 
 const route = useRoute()
 const api = useCommentApi()
@@ -340,18 +342,18 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 
 	<div v-if="heading" class="comment-head">
 		<h3 class="text-creative">
-			评论区
+			{{ $t('comment.heading') }}
 		</h3>
 	</div>
 
 	<!-- 未登录是一条横幅，不是一个大空框：空编辑框对没打算评论的人是纯粹的视觉负担 -->
 	<Transition name="comment-session" mode="out-in">
 		<div v-if="sessionReady && !user" key="anonymous" class="signin">
-			<span>用 GitHub 账号参与讨论</span>
+			<span>{{ $t('comment.signInPrompt') }}</span>
 			<span class="grow" />
 			<button type="button" class="btn-github" @click="session.login(returnToNearest(root))">
 				<Icon name="tabler:brand-github" />
-				登录
+				{{ $t('comment.login') }}
 			</button>
 		</div>
 
@@ -391,7 +393,7 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 						<div v-if="sessionMenuOpen" :id="sessionMenuId" class="session-menu">
 							<UtilLink :to="identity.profile" class="session-menu-item" @click="closeSessionMenu">
 								<Icon name="tabler:external-link" aria-hidden="true" />
-								<span>查看 GitHub 主页</span>
+								<span>{{ $t('comment.viewProfile') }}</span>
 							</UtilLink>
 							<span class="session-menu-divider" aria-hidden="true" />
 							<button
@@ -401,17 +403,17 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 								@click="logout"
 							>
 								<Icon name="tabler:logout" aria-hidden="true" />
-								<span>{{ loggingOut ? '退出中…' : '退出登录' }}</span>
+								<span>{{ loggingOut ? $t('comment.loggingOut') : $t('comment.logout') }}</span>
 							</button>
 						</div>
 					</Transition>
 				</div>
-				<span v-if="!logoutFailed" class="session-source">已通过 GitHub 登录</span>
+				<span v-if="!logoutFailed" class="session-source">{{ $t('comment.signedInVia') }}</span>
 				<span
 					class="session-status"
 					:class="{ 'session-error': logoutFailed }"
 					aria-live="polite"
-					v-text="logoutFailed ? '退出失败，请重试' : ''"
+					v-text="logoutFailed ? $t('comment.logoutFailed') : ''"
 				/>
 			</div>
 
@@ -426,21 +428,21 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 
 	<!-- 邮件点进来时只渲染目标那一棵子树 -->
 	<div v-if="focusMode" class="focus-bar">
-		<span>正在查看单条回复的上下文</span>
+		<span>{{ $t('comment.focusContext') }}</span>
 		<span class="grow" />
 		<button type="button" @click="loadThread()">
-			查看全部 {{ total }} 条评论
+			{{ $t('comment.viewAll', { n: total }) }}
 		</button>
 	</div>
 
 	<div v-else-if="total" class="sort-row">
 		<div class="sort">
 			<button type="button" :aria-pressed="order === 'asc'" @click="setOrder('asc')">
-				最早
+				{{ $t('comment.oldest') }}
 			</button>
 			<span class="sep">/</span>
 			<button type="button" :aria-pressed="order === 'desc'" @click="setOrder('desc')">
-				最新
+				{{ $t('comment.newest') }}
 			</button>
 		</div>
 	</div>
@@ -455,16 +457,16 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 	</div>
 
 	<div v-else-if="status === 'error'" class="state error">
-		<span class="big">评论加载失败</span>
-		<span class="small">服务暂时没有响应</span>
+		<span class="big">{{ $t('comment.loadError') }}</span>
+		<span class="small">{{ $t('comment.loadErrorHint') }}</span>
 		<button type="button" class="btn-github" @click="loadThread()">
-			重试
+			{{ $t('comment.retry') }}
 		</button>
 	</div>
 
 	<div v-else-if="!tree.length" class="state">
-		<span class="big">还没有人说话</span>
-		<span class="small">来做第一个</span>
+		<span class="big">{{ $t('comment.empty') }}</span>
+		<span class="small">{{ $t('comment.emptyHint') }}</span>
 	</div>
 
 	<ol v-else :key="sessionKey" ref="list" class="comment-list">
@@ -491,7 +493,7 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 		:disabled="loadingMore"
 		@click="loadMore()"
 	>
-		{{ loadingMore ? '加载中…' : '加载更早的评论' }}
+		{{ loadingMore ? $t('comment.loading') : $t('comment.loadMore') }}
 	</button>
 </section>
 </template>

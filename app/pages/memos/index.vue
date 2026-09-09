@@ -10,9 +10,10 @@ const API = 'https://memos.shinya.click/api/v1/memos'
 const PAGE_SIZE = 20
 
 const appConfig = useAppConfig()
+const { t } = useI18n()
 useSeoMeta({
-	title: '碎语',
-	description: `${appConfig.title}的碎碎念，一些来不及写成文章的短想法。`,
+	title: () => t('page.memos.title'),
+	description: () => t('page.memos.description', { site: appConfig.title }),
 })
 
 const memos = ref<Memo[]>([])
@@ -70,20 +71,21 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 <div class="memos proper-height">
 	<header class="memos-header">
 		<h1 class="text-creative">
-			碎语
+			{{ $t('page.memos.title') }}
 		</h1>
-		<p class="memos-desc">
-			来不及写成文章的短想法，同步自
-			<UtilLink to="https://memos.shinya.click">
-				Memos
-			</UtilLink>
-		</p>
+		<i18n-t keypath="page.memos.syncNotice" tag="p" class="memos-desc">
+			<template #link>
+				<UtilLink to="https://memos.shinya.click">
+					Memos
+				</UtilLink>
+			</template>
+		</i18n-t>
 	</header>
 
-	<ZError v-if="error" :message="`碎语加载失败：${error.message}`" />
+	<ZError v-if="error" :message="$t('page.memos.loadError', { message: error.message })" />
 
 	<p v-else-if="loading" class="memos-tip">
-		加载中...
+		{{ $t('page.memos.loading') }}
 	</p>
 
 	<template v-else>
@@ -101,11 +103,11 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 			<ZButton
 				v-if="nextPageToken"
 				:icon="loadingMore ? 'line-md:loading-loop' : 'tabler:chevron-down'"
-				:text="loadingMore ? '加载中' : '加载更多'"
+				:text="loadingMore ? $t('page.memos.loadingMore') : $t('page.memos.loadMore')"
 				@click="loadMore"
 			/>
 			<p v-else class="memos-tip">
-				共 {{ memos.length }} 条，没有更多了
+				{{ $t('page.memos.count', { n: memos.length }) }}
 			</p>
 		</div>
 	</template>

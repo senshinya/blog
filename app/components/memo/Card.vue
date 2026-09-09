@@ -200,11 +200,11 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 				<!-- 评论数是只读数据，用图标+数字，刻意不做成 chip，以免和上面的控件混淆 -->
 				<button
 					class="comments"
-					:aria-label="expanded ? '收起评论' : '展开评论'"
+					:aria-label="expanded ? $t('memo.collapseComments') : $t('memo.expandComments')"
 					@click="expanded ? expanded = false : open()"
 				>
 					<Icon :name="expanded ? 'tabler:chevron-up' : 'tabler:message-circle'" />
-					<span>{{ expanded ? '收起' : (count.comments || '评论') }}</span>
+					<span>{{ expanded ? $t('memo.collapse') : (count.comments || $t('memo.comments')) }}</span>
 				</button>
 			</footer>
 

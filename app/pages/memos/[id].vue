@@ -16,6 +16,7 @@ const route = useRoute()
 const appConfig = useAppConfig()
 // 取数 handler 里要用，得在 setup 阶段先抓住（理由见下面 404 那段）
 const nuxtApp = useNuxtApp()
+const { t } = useI18n()
 
 const id = computed(() => String(route.params.id))
 
@@ -53,7 +54,7 @@ const { data, status, error } = useLazyAsyncData(
 			if (err?.statusCode === 404) {
 				nuxtApp.runWithContext(() => showError(createError({
 					statusCode: 404,
-					statusMessage: '碎语不存在',
+					statusMessage: t('page.memos.notFound'),
 					fatal: true,
 				})))
 			}
@@ -91,8 +92,8 @@ useHead({
 useSeoMeta({
 	// 碎语没有标题，用正文首句代替。中英混排按字数截断本就难看，
 	// 但 title 是纯文本，没有 line-clamp 可用，只能按字数来
-	title: () => data.value ? (data.value.summary.slice(0, 30) || '图片') : '碎语',
-	description: () => data.value?.summary || `${appConfig.title}的碎碎念。`,
+	title: () => data.value ? (data.value.summary.slice(0, 30) || t('page.memos.image')) : t('page.memos.title'),
+	description: () => data.value?.summary || t('page.memos.detailDescription', { site: appConfig.title }),
 	ogUrl: canonical,
 	ogType: 'article',
 	// 碎语多是随手截图，首图即分享卡的主图（Memos 存的是图床绝对地址，直接可用）。
@@ -115,14 +116,14 @@ useSeoMeta({
 <div class="memo-detail proper-height">
 	<UtilLink to="/memos" class="back">
 		<Icon name="tabler:chevron-left" />
-		<span>碎语</span>
+		<span>{{ $t('nav.memos') }}</span>
 	</UtilLink>
 
 	<!-- 404 已交给 showError，走到这里的是网络错误一类 -->
-	<ZError v-if="error" :message="`碎语加载失败：${error.message}`" />
+	<ZError v-if="error" :message="$t('page.memos.loadError', { message: error.message })" />
 
 	<p v-else-if="loading" class="tip">
-		加载中...
+		{{ $t('page.memos.loading') }}
 	</p>
 
 	<article v-else-if="data" class="memo">
@@ -135,7 +136,7 @@ useSeoMeta({
 		-->
 		<CommentSection
 			reactions
-			reaction-label="给这条 memo 一个反馈"
+			:reaction-label="$t('page.memos.feedbackPrompt')"
 			:page-key="`/memos/${data.memo.id}`"
 			:title="data.summary.slice(0, 60)"
 		>
