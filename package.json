@@ -35,6 +35,7 @@
     "@nuxt/icon": "catalog:ui",
     "@nuxt/image": "catalog:ui",
     "@nuxtjs/color-mode": "catalog:ui",
+    "@nuxtjs/i18n": "catalog:content",
     "@nuxtjs/seo": "catalog:content",
     "@pinia/nuxt": "catalog:util",
     "@shikijs/colorized-brackets": "catalog:content",

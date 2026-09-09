@@ -234,6 +234,7 @@ export default defineNuxtConfig({
 		'@nuxt/icon',
 		'@nuxt/image',
 		'@nuxtjs/color-mode',
+		'@nuxtjs/i18n',
 		'@nuxtjs/seo',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
@@ -318,6 +319,17 @@ ${packageJson.homepage}
 				globInclude: ['**\/*.{vue,jsx,tsx,ts,md,mdc,mdx}'],
 			},
 		},
+	},
+
+	i18n: {
+		locales: blogConfig.locales,
+		defaultLocale: 'zh',
+		strategy: 'prefix_except_default',
+		// 关掉自带检测：它只在入口判一次且不认识清单，与 01.locale-preference
+		// 中间件是竞争关系，同时开会双重跳转。
+		detectBrowserLanguage: false,
+		lazy: true,
+		langDir: 'locales/',
 	},
 
 	image: {

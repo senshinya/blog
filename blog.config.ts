@@ -92,6 +92,16 @@ const blogConfig = {
 		enableStyle: true,
 	},
 
+	/**
+	 * 三语言定义。name 是语言切换器上的按钮标签，用各语言自称，
+	 * 任何语言环境下都是这个形态，故不进词条表。
+	 */
+	locales: [
+		{ code: 'zh', language: 'zh-CN', name: '中', file: 'zh.ts' },
+		{ code: 'en', language: 'en-US', name: 'En', file: 'en.ts' },
+		{ code: 'ja', language: 'ja-JP', name: 'あ', file: 'ja.ts' },
+	],
+
 	/** 向 <head> 中添加脚本 */
 	scripts: [
 		// 自己部署的 Umami 统计服务

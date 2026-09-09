@@ -11,6 +11,7 @@ catalogs:
   content:
     '@bikariya/shiki': ^0.0.8
     '@nuxt/content': ^3.16.0
+    '@nuxtjs/i18n': ^10.6.0
     '@nuxtjs/seo': ^5.3.14
     '@shikijs/colorized-brackets': ^4.4.3
     '@shikijs/transformers': ^4.4.3
