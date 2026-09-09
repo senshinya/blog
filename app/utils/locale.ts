@@ -1,0 +1,79 @@
+export type Manifest = Record<string, string[]>
+
+export interface DecideInput {
+	/** 当前路由路径，含可能的语言前缀 */
+	path: string
+	/** cookie 里记住的偏好，没有则 undefined */
+	stored?: string
+	/** navigator.languages，按优先级排列 */
+	browser: readonly string[]
+	manifest: Manifest
+	locales: readonly string[]
+	defaultLocale: string
+}
+
+/**
+ * 把路径拆成语言码与不带前缀的基准路径。无前缀即默认语言。
+ *
+ * defaultLocale 显式传入，不从 locales[0] 推断 —— 那个数组的顺序
+ * 同时是语言切换器的按钮顺序，会被重排。
+ */
+export function stripLocale(path: string, locales: readonly string[], defaultLocale: string) {
+	const match = /^\/([^/]+)(?=\/|$)/.exec(path)
+	const head = match?.[1]
+	if (head && locales.includes(head)) {
+		const rest = path.slice(head.length + 1)
+		return { locale: head, basePath: rest || '/' }
+	}
+	return { locale: defaultLocale, basePath: path }
+}
+
+/**
+ * 解析偏好语言：cookie 优先，其次浏览器语言列表，允许 ja-JP → ja。
+ *
+ * 与「是否跳转」解耦，独立导出 —— 中间件在缺译文而不跳转时也要固化这个值。
+ */
+export function resolvePreferred(
+	stored: string | undefined,
+	browser: readonly string[],
+	locales: readonly string[],
+) {
+	if (stored && locales.includes(stored))
+		return stored
+	for (const tag of browser) {
+		const base = tag.toLowerCase().split('-')[0]!
+		const hit = locales.find(l => l === base)
+		if (hit)
+			return hit
+	}
+	return undefined
+}
+
+function buildPath(basePath: string, locale: string, defaultLocale: string) {
+	if (locale === defaultLocale)
+		return basePath
+	return basePath === '/' ? `/${locale}` : `/${locale}${basePath}`
+}
+
+/**
+ * 返回应当跳转到的路径，undefined 表示留在原地。
+ *
+ * 留在原地的三种情形：没有可用偏好、偏好与当前语言一致、当前页没有偏好语言的译文。
+ * 清单里查不到的路径视为所有语言都有 —— 那是应用页面（/archive 等），
+ * i18n 会为每个语言生成。
+ */
+export function decideLocale({ path, stored, browser, manifest, locales, defaultLocale }: DecideInput) {
+	const preferred = resolvePreferred(stored, browser, locales)
+	if (!preferred)
+		return undefined
+
+	const { locale: current, basePath } = stripLocale(path, locales, defaultLocale)
+	if (preferred === current)
+		return undefined
+
+	const available = manifest[basePath]
+	if (available && !available.includes(preferred))
+		return undefined
+
+	return buildPath(basePath, preferred, defaultLocale)
+}
