@@ -248,6 +248,16 @@ const en: MessageSchema = {
 			fetchError: 'Failed to load stats',
 			yearlyLine: '{year}: {posts} post, {words} words | {year}: {posts} posts, {words} words',
 			wordCount: 'About 70k',
+			justNow: 'Just now',
+			units: {
+				century: '{n} century | {n} centuries',
+				year: '{n} year | {n} years',
+				month: '{n} month | {n} months',
+				day: '{n} day | {n} days',
+				hour: '{n} hour | {n} hours',
+				minute: '{n} minute | {n} minutes',
+				second: '{n} second | {n} seconds',
+			},
 		},
 		blogTech: {
 			title: 'Tech Info',

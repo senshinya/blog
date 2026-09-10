@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import type { FeedEntry } from '~/types/feed'
+import blogConfig from '~~/blog.config'
 
 const props = defineProps<FeedEntry>()
 
 const appConfig = useAppConfig()
 const route = useRoute()
 const isInspect = computed(() => import.meta.dev && route.query.inspect !== undefined)
+
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 
 const title = computed(() => props.title ?? props.sitenick ?? props.author)
 const domainTip = computed(() => getDomainType(getMainDomain(props.link, true)))
@@ -77,9 +82,10 @@ function getInspectStyle(src: string): CSSProperties {
 		</div>
 		<div class="desc-content">
 			<!-- locale 不钉死会各按各的来：服务端 Node 默认 en-US，
-				中文浏览器是 YYYY/MM/DD，水合必然 mismatch -->
+				中文浏览器是 YYYY/MM/DD，水合必然 mismatch —— 显式传当前语言，
+				而不是浏览器/Node 环境默认值 -->
 			<div v-if="date" class="date">
-				{{ toZdtLocaleString(date, 'date') }}
+				{{ toZdtLocaleString(date, 'date', currentLanguage) }}
 			</div>
 
 			<p>{{ error ?? desc }}</p>

@@ -15,6 +15,10 @@ const props = withDefaults(defineProps<{
 	tipTransform: String,
 })
 
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
+
 const today = Temporal.Now.plainDateISO()
 const zdt = computed(() => {
 	try {
@@ -32,7 +36,7 @@ const relative = computed(() => props.absolute || !zdt.value
 
 const mounted = useMounted()
 const tooltip = computed(() => mounted.value && zdt.value
-	? props.tipTransform(toZdtLocaleString(zdt.value, props.tipFormat))
+	? props.tipTransform(toZdtLocaleString(zdt.value, props.tipFormat, currentLanguage.value))
 	: props.date as string,
 )
 </script>
@@ -47,7 +51,7 @@ const tooltip = computed(() => mounted.value && zdt.value
 	<time
 		v-else-if="format"
 		:datetime="toInstantString(zdt)"
-		v-text="toZdtLocaleString(zdt, format)"
+		v-text="toZdtLocaleString(zdt, format, currentLanguage)"
 	/>
 
 	<!-- locale 必须显式给：NuxtTime 留空会落到浏览器语言，
@@ -55,7 +59,7 @@ const tooltip = computed(() => mounted.value && zdt.value
 	<NuxtTime
 		v-else
 		:datetime="toInstantString(zdt)"
-		:locale="blogConfig.language"
+		:locale="currentLanguage"
 		:relative
 		:year="zdt.year === today.year ? undefined : '2-digit'"
 		month="long"

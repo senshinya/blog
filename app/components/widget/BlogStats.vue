@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import blogConfig from '~~/blog.config'
 import { UtilDate } from '#components'
 
 const appConfig = useAppConfig()
 const runtimeConfig = useRuntimeConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 
 // 响应头不正确时，stats.value 可能会是字符串，首次属性访问可能为 undefined
 const { data: stats } = useFetch('/api/stats')
@@ -17,7 +20,7 @@ const yearlyTip = computed(() => Object
 
 const blogStats = computed(() => [{
 	label: t('widget.blogStats.duration'),
-	value: timeElapse(appConfig.timeEstablished),
+	value: timeElapse(appConfig.timeEstablished, t, currentLanguage.value),
 	tip: t('widget.blogStats.launchedTip', { date: appConfig.timeEstablished }),
 }, {
 	label: t('widget.blogStats.lastUpdate'),

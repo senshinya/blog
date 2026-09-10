@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import type { ModalEmits, ModalProps } from '#modals'
 import MiniSearch from 'minisearch'
+import blogConfig from '~~/blog.config'
 
 const props = defineProps<ModalProps>()
 
 defineEmits<ModalEmits>()
 
-const appConfig = useAppConfig()
-const segmenter = Intl.Segmenter && new Intl.Segmenter(appConfig.language, { granularity: 'word' })
+// appConfig 上从来没有 language 字段——之前这里恒为 undefined，Segmenter
+// 实际跟的是运行环境（浏览器/Node）的默认 locale，不是站点语言，
+// 中文分词因此一直没真正钉死过。这里改用 blogConfig.locales 换算当前语言。
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
+const segmenter = Intl.Segmenter && new Intl.Segmenter(currentLanguage.value, { granularity: 'word' })
 
 const collection = useContentCollection()
 

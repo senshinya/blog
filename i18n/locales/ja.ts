@@ -248,6 +248,16 @@ const ja: MessageSchema = {
 			fetchError: 'データの取得に失敗しました',
 			yearlyLine: '{year}年：{posts}件、{words}文字',
 			wordCount: '約7万',
+			justNow: 'たった今',
+			units: {
+				century: '{n}世紀',
+				year: '{n}年',
+				month: '{n}か月',
+				day: '{n}日',
+				hour: '{n}時間',
+				minute: '{n}分',
+				second: '{n}秒',
+			},
 		},
 		blogTech: {
 			title: '技術情報',

@@ -250,6 +250,16 @@ const zh = {
 			fetchError: '数据获取失败',
 			yearlyLine: '{year}年：{posts}篇，{words}字',
 			wordCount: '约7万',
+			justNow: '刚刚',
+			units: {
+				century: '{n}世纪',
+				year: '{n}年',
+				month: '{n}个月',
+				day: '{n}天',
+				hour: '{n}小时',
+				minute: '{n}分',
+				second: '{n}秒',
+			},
 		},
 		blogTech: {
 			title: '技术信息',
