@@ -9,6 +9,21 @@ import blogConfig from './blog.config'
 import packageJson from './package.json'
 import redirectList from './redirects.json'
 
+const localePrefixes = ['', ...blogConfig.locales.filter(l => l.code !== 'zh').map(l => `/${l.code}`)]
+
+/**
+ * 把按路径写死的 routeRules 按语言展开。加了语言前缀之后，
+ * 只写 '/media' 会漏掉 /en/media 与 /ja/media —— 那两个会退回默认行为，
+ * 失败得很安静（/media 依赖 ssr:false 才能让首帧读到 route.query）。
+ */
+function localizeRules<T extends Record<string, unknown>>(rules: T) {
+	return Object.fromEntries(
+		Object.entries(rules).flatMap(([path, rule]) =>
+			localePrefixes.map(prefix => [`${prefix}${path}`, rule] as const),
+		),
+	) as Record<string, T[keyof T]>
+}
+
 function pluginPath(path: string) {
 	return pathToFileURL(resolve(`./remark-plugins/${path}.ts`)).href
 }
@@ -92,7 +107,7 @@ export default defineNuxtConfig({
 			//
 			// /media 配了 ssr:false（见 routeRules），crawler 不会渲染它，显式登记才能生成
 			// 那个纯客户端壳（/media/index.html）。路径是静态的，直接命中该文件。
-			routes: ['/', '/travels', '/media'],
+			routes: ['/', '/travels', ...localePrefixes.map(prefix => `${prefix}/media`)],
 
 			/**
 			 * 以下两条是从 `nuxt generate` 切到 `nuxt build` 之后必须自己补上的。
@@ -131,39 +146,41 @@ export default defineNuxtConfig({
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
 		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		'/favicon.ico': { redirect: { to: blogConfig.favicon } },
-		/**
-		 * 娱乐页的筛选状态写在 URL query（?category=&status=）。若预渲染，产物是不带 query 的
-		 * /media，payload.path 也就是 /media；水合时路由优先采信这个 renderedPath 而非地址栏
-		 * （同 /memos/_shell 的坑，且 Nuxt 还会 replaceState 到 renderedPath，把地址栏 query 也抹掉），
-		 * 于是深链 /media?category=game 首帧 query 为空，会先按默认(番剧·在看)取一次数、落定后再取一次。
-		 * ssr:false 让本页纯客户端渲染，产物无 path，route.query 从首帧即照地址栏，深链首取即正确。
-		 * 配合 nitro.prerender.routes 里登记 /media，生成可 200 直达的客户端壳。
-		 */
-		'/media': { ssr: false },
-		/**
-		 * 碎语详情页：按需服务端渲染，产物交给 Vercel 的 ISR 缓存。
-		 *
-		 * 碎语是运行时数据，构建期无从枚举 id，所以这页曾经是个纯客户端的 SPA 壳
-		 * （预渲染 /memos/_shell，再由平台把 /memos/* 200 重写到它身上）。代价是分享出去
-		 * 只有一具空壳：爬虫不跑 JS，拿到的 <title> 连模板变量都没被替换，og:* 一个不剩。
-		 * 页面级的 useSeoMeta 从未在服务端跑过。
-		 *
-		 * 改走 SSR 之后：HTML 里就有正文首句和首图，不存在的 id 也能回真 404 而非 200 + 壳。
-		 * 本项目为 /api/og 已经带着一个运行时函数（见 server/api/og.get.ts），这里是搭它的便车。
-		 *
-		 * 必须是 '**' 而不是 '*'：开了 isr 的路由，renderer 会把水合用的 payload 拆出去单放
-		 * （_PAYLOAD_EXTRACTION = routeOptions.isr || routeOptions.cache），页面因此还要再取一次
-		 * /memos/<id>/_payload.json。而 vercel preset 把 '*' 译成 [^/]*，跨不过那个斜杠，
-		 * 这一取就漏出 ISR、次次落到函数上 —— HTML 命中缓存，payload 每次现算。
-		 *
-		 * '**' 顺带吃下 /memos 列表页倒是无妨：Vercel 的路由表里 handle: filesystem 排在
-		 * ISR 规则之前，列表页有预渲染好的 index.html 顶着，走不到这条。
-		 *
-		 * 600 秒是缓存窗口，也是编辑一条旧碎语后线上更新的延迟上限。往长了调更省函数调用，
-		 * 但改错别字要等更久。
-		 */
-		'/memos/**': { isr: 600 },
 		'/subscriptions.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
+		...localizeRules({
+			/**
+			 * 娱乐页的筛选状态写在 URL query（?category=&status=）。若预渲染，产物是不带 query 的
+			 * /media，payload.path 也就是 /media；水合时路由优先采信这个 renderedPath 而非地址栏
+			 * （同 /memos/_shell 的坑，且 Nuxt 还会 replaceState 到 renderedPath，把地址栏 query 也抹掉），
+			 * 于是深链 /media?category=game 首帧 query 为空，会先按默认(番剧·在看)取一次数、落定后再取一次。
+			 * ssr:false 让本页纯客户端渲染，产物无 path，route.query 从首帧即照地址栏，深链首取即正确。
+			 * 配合 nitro.prerender.routes 里登记 /media，生成可 200 直达的客户端壳。
+			 */
+			'/media': { ssr: false },
+			/**
+			 * 碎语详情页：按需服务端渲染，产物交给 Vercel 的 ISR 缓存。
+			 *
+			 * 碎语是运行时数据，构建期无从枚举 id，所以这页曾经是个纯客户端的 SPA 壳
+			 * （预渲染 /memos/_shell，再由平台把 /memos/* 200 重写到它身上）。代价是分享出去
+			 * 只有一具空壳：爬虫不跑 JS，拿到的 <title> 连模板变量都没被替换，og:* 一个不剩。
+			 * 页面级的 useSeoMeta 从未在服务端跑过。
+			 *
+			 * 改走 SSR 之后：HTML 里就有正文首句和首图，不存在的 id 也能回真 404 而非 200 + 壳。
+			 * 本项目为 /api/og 已经带着一个运行时函数（见 server/api/og.get.ts），这里是搭它的便车。
+			 *
+			 * 必须是 '**' 而不是 '*'：开了 isr 的路由，renderer 会把水合用的 payload 拆出去单放
+			 * （_PAYLOAD_EXTRACTION = routeOptions.isr || routeOptions.cache），页面因此还要再取一次
+			 * /memos/<id>/_payload.json。而 vercel preset 把 '*' 译成 [^/]*，跨不过那个斜杠，
+			 * 这一取就漏出 ISR、次次落到函数上 —— HTML 命中缓存，payload 每次现算。
+			 *
+			 * '**' 顺带吃下 /memos 列表页倒是无妨：Vercel 的路由表里 handle: filesystem 排在
+			 * ISR 规则之前，列表页有预渲染好的 index.html 顶着，走不到这条。
+			 *
+			 * 600 秒是缓存窗口，也是编辑一条旧碎语后线上更新的延迟上限。往长了调更省函数调用，
+			 * 但改错别字要等更久。
+			 */
+			'/memos/**': { isr: 600 },
+		}),
 	},
 
 	runtimeConfig: {
