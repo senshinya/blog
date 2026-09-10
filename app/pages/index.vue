@@ -5,7 +5,7 @@ import { buildPath, resolveContentPath } from '~/utils/locale'
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
 useSeoMeta({
-	description: appConfig.description,
+	description: () => t('site.description'),
 	ogImage: appConfig.author.avatar,
 })
 

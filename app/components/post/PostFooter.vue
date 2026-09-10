@@ -7,8 +7,6 @@ defineProps<ArticleProps>()
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 	title: string
 }>({ inheritAttrs: false })
-
-const appConfig = useAppConfig()
 </script>
 
 <template>
@@ -39,8 +37,8 @@ const appConfig = useAppConfig()
 		<ContentRenderer v-if="meta?.slots?.copyright" :value="meta?.slots?.copyright" />
 		<i18n-t v-else keypath="post.licenseNotice" tag="p">
 			<template #link>
-				<ProseA :href="appConfig.copyright.url">
-					{{ appConfig.copyright.name }}
+				<ProseA :href="$t('post.licenseUrl')">
+					{{ $t('post.licenseName') }}
 				</ProseA>
 			</template>
 		</i18n-t>

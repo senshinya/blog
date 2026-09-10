@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
+import blogConfig from '~~/blog.config'
 import { buildPath } from '~/utils/locale'
 
 defineOptions({ inheritAttrs: false })
@@ -7,6 +8,8 @@ const props = defineProps<ArticleProps>()
 
 const appConfig = useAppConfig()
 const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 
 const coverFilter = computed(() => props.meta?.coverFilter || (props.meta?.coverDim && 'brightness(0.75)') || undefined)
 
@@ -51,7 +54,7 @@ const { copy, copied } = useCopy(shareText)
 
 			<span>
 				<Icon name="tabler:pilcrow" />
-				{{ $t('post.words', { n: formatNumber(readingTime?.words) }) }}
+				{{ $t('post.words', { n: formatNumber(readingTime?.words, currentLanguage) }) }}
 			</span>
 		</div>
 	</div>

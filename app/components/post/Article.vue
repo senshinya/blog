@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
+import blogConfig from '~~/blog.config'
 
 defineProps<ArticleProps>()
+
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 </script>
 
 <template>
@@ -30,7 +35,7 @@ defineProps<ArticleProps>()
 
 			<span v-if="readingTime?.words" class="article-words">
 				<Icon name="tabler:pilcrow" />
-				{{ $t('post.words', { n: formatNumber(readingTime?.words) }) }}
+				{{ $t('post.words', { n: formatNumber(readingTime?.words, currentLanguage) }) }}
 			</span>
 		</div>
 	</article>

@@ -14,7 +14,7 @@ const { data: stats } = useFetch('/api/stats')
 const yearlyTip = computed(() => Object
 	.entries(stats.value?.annual || {})
 	.reverse()
-	.map(([year, item]) => t('widget.blogStats.yearlyLine', { year, posts: item.posts, words: formatNumber(item.words) }, item.posts))
+	.map(([year, item]) => t('widget.blogStats.yearlyLine', { year, posts: item.posts, words: formatNumber(item.words, currentLanguage.value) }, item.posts))
 	.join('\n') || t('widget.blogStats.fetchError'),
 )
 
@@ -30,7 +30,7 @@ const blogStats = computed(() => [{
 	}),
 }, {
 	label: appConfig.stats.includePaths.length ? t('widget.blogStats.wordCountFiltered') : t('widget.blogStats.wordCountTotal'),
-	value: computed(() => formatNumber(stats.value?.total?.words) || '--'),
+	value: computed(() => formatNumber(stats.value?.total?.words, currentLanguage.value) || '--'),
 	tip: yearlyTip,
 }])
 </script>

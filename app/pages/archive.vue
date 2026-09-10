@@ -3,10 +3,13 @@ import type { ArticleProps } from '~/types/article'
 import { groupBy } from 'es-toolkit/array'
 import { sumBy } from 'es-toolkit/math'
 import { mapValues } from 'es-toolkit/object'
+import blogConfig from '~~/blog.config'
 import { resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 useSeoMeta({
 	title: () => t('page.archive.title'),
 	description: () => t('page.archive.description', { site: appConfig.title }),
@@ -41,7 +44,7 @@ const listGrouped = computed(() => {
 const yearlyWordCount = computed(() =>
 	mapValues(Object.fromEntries(listGrouped.value), (articles) => {
 		const total = sumBy(articles, a => a.readingTime?.words ?? 0)
-		return formatNumber(total)
+		return formatNumber(total, currentLanguage.value)
 	}),
 )
 

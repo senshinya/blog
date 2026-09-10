@@ -38,7 +38,7 @@ const appConfig = useAppConfig()
 		</component>
 
 		<div class="header-subtitle">
-			{{ appConfig.header.subtitle }}
+			{{ $t('site.subtitle') }}
 		</div>
 	</div>
 </UtilLink>

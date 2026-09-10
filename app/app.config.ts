@@ -95,7 +95,6 @@ export default defineAppConfig({
 		logo: blogConfig.author.avatar,
 		/** 展示标题文本，否则展示纯 Logo */
 		showTitle: true,
-		subtitle: blogConfig.subtitle,
 		emojiTail: ['📄', '🐟', '⌨️', '🍜', '🌙'],
 	},
 
