@@ -24,9 +24,17 @@ export function resolveNavText(item: NavItem, t: Translate): string {
  *
  * 只有 item.localized 为真的站内路径才加前缀（如 /atom.xml → /en/atom.xml）——
  * 外部链接（GitHub、mailto: 等）和默认语言本身都不需要，也不能被误加前缀。
+ *
+ * localized 只是个不受约束的可选字段，写配置时手滑标到外部链接上也不会报错，
+ * 加前缀就会拼出 /en/https://... 这种坏链接，所以这里额外做一道运行时兜底：
+ * 只有以单个 / 开头（且不是 // 开头的协议相对 URL，如 //cdn.example.com/x，
+ * 那也是外链）的字符串才当站内路径处理。这里不能用 isExtLink 判断——
+ * isExtLink('/atom.xml') 本身就是 true（isPathFile 认 .xml 这个扩展名为外链），
+ * 用它当守卫会把本该加前缀的 atom 链接也拦下来，等于撤销了这个函数存在的意义。
  */
 export function resolveNavUrl(item: NavItem, locale: string, defaultLocale = 'zh'): string {
-	return item.localized && locale !== defaultLocale ? `/${locale}${item.url}` : item.url
+	const isLocalPath = item.url.startsWith('/') && !item.url.startsWith('//')
+	return item.localized && isLocalPath && locale !== defaultLocale ? `/${locale}${item.url}` : item.url
 }
 
 /**

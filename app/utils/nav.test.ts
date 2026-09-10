@@ -41,6 +41,66 @@ test('resolveNavText forwards textParams as the second argument to t()', async (
 	assert.deepEqual(mockT.mock.calls[0].arguments, ['footer.theme', params])
 })
 
+test('resolveNavUrl prefixes a localized url with the current non-default locale', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: '/atom.xml', textKey: 'footer.atom', localized: true }, 'en')
+
+	assert.equal(result, '/en/atom.xml')
+})
+
+test('resolveNavUrl returns the bare url when the locale is the default locale', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: '/atom.xml', textKey: 'footer.atom', localized: true }, 'zh')
+
+	assert.equal(result, '/atom.xml')
+})
+
+test('resolveNavUrl leaves an unmarked url unchanged even off the default locale', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: '/archive', textKey: 'nav.archive' }, 'en')
+
+	assert.equal(result, '/archive')
+})
+
+// localized 是个不受类型约束的可选字段：配置里手滑把它标到一条外部链接上，
+// tsc 也不会拦——而这个仓库的任何验证命令都不跑 tsc，类型层面的正确性
+// 形同虚设。下面三个用例锁住运行时兜底：无论 localized 标没标，只要 url
+// 本身不是站内路径，就必须原样返回，绝不能拼出 /en/https://... 这种坏链接。
+test('resolveNavUrl never prefixes an absolute https url, even if marked localized', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: 'https://github.com/senshinya', text: 'GitHub: senshinya', localized: true }, 'en')
+
+	assert.equal(result, 'https://github.com/senshinya')
+})
+
+test('resolveNavUrl never prefixes a mailto url, even if marked localized', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: 'mailto:shinya@example.com', text: 'shinya@example.com', localized: true }, 'en')
+
+	assert.equal(result, 'mailto:shinya@example.com')
+})
+
+test('resolveNavUrl never prefixes a protocol-relative url, even if marked localized', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: '//cdn.example.com/x', text: 'cdn', localized: true }, 'en')
+
+	assert.equal(result, '//cdn.example.com/x')
+})
+
+test('resolveNavUrl honours an explicitly passed defaultLocale', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	const result = resolveNavUrl({ icon: 'x', url: '/atom.xml', textKey: 'footer.atom', localized: true }, 'zh', 'en')
+
+	assert.equal(result, '/zh/atom.xml')
+})
+
 test('resolveNavTitle returns the literal title and never calls t() when titleKey is absent', async (t) => {
 	const { resolveNavTitle } = await import('./nav.ts')
 	const mockT = t.mock.fn(() => 'SHOULD NOT BE USED')
