@@ -9,12 +9,15 @@ defineEmits<ModalEmits>()
 const appConfig = useAppConfig()
 const segmenter = Intl.Segmenter && new Intl.Segmenter(appConfig.language, { granularity: 'word' })
 
+const collection = useContentCollection()
+
 // await useAsyncData() 会阻塞渲染
 const { data, status } = await useLazyAsyncData(
-	'search',
-	() => queryCollectionSearchSections('content_zh', {
+	() => `search:${collection.value}`,
+	() => queryCollectionSearchSections(collection.value, {
 		ignoredTags: ['pre'],
 	}),
+	{ watch: [collection] },
 )
 
 const miniSearch = new MiniSearch({

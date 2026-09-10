@@ -5,9 +5,11 @@ import feeds from '~/feeds'
 const appConfig = useAppConfig()
 const { t } = useI18n()
 
+const collection = useContentCollection()
 const { data: postLink } = await useAsyncData(
-	'content:/friends',
-	() => queryCollection('content_zh').path('/friends').first(),
+	() => `content:/friends:${collection.value}`,
+	() => queryCollection(collection.value).path('/friends').first(),
+	{ watch: [collection] },
 )
 
 useSeoMeta({

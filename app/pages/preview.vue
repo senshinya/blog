@@ -5,7 +5,12 @@ useSeoMeta({
 	title: () => t('page.preview.title'),
 	description: () => t('page.preview.description', { site: appConfig.title }),
 })
-const { data: listRaw } = await useAsyncData('previews:index', () => getArticleIndexOptions('previews/%'), { default: () => [] })
+const collection = useContentCollection()
+const { data: listRaw } = await useAsyncData(
+	() => `previews:index:${collection.value}`,
+	() => getArticleIndexOptions(collection.value, 'previews/%'),
+	{ default: () => [], watch: [collection] },
+)
 const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted)
 </script>

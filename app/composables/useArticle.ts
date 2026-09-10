@@ -1,7 +1,13 @@
-import type { ContentCollectionItem } from '@nuxt/content'
+import type { Collections, ContentCollectionItem } from '@nuxt/content'
 import type { MetaSlotsTree } from '~~/remark-plugins/rehype-meta-slots'
 import type { ArticleProps } from '~/types/article'
 import { orderBy } from 'es-toolkit/array'
+
+/** 当前语言对应的 content collection 名。 */
+export function useContentCollection() {
+	const { locale } = useI18n()
+	return computed(() => `content_${locale.value}` as keyof Collections)
+}
 
 /** 获取已加载的文章内容/元信息 */
 export function useArticle(path?: MaybeRefOrGetter<string | undefined>) {
@@ -23,8 +29,8 @@ export function useArticle(path?: MaybeRefOrGetter<string | undefined>) {
  * @see https://github.com/nuxt/nuxt/issues/14736
  * @todo 支持分页/分类筛选
  */
-export function getArticleIndexOptions(path = 'posts/%') {
-	return queryCollection('content_zh')
+export function getArticleIndexOptions(collection: keyof Collections, path = 'posts/%') {
+	return queryCollection(collection)
 		.where('stem', 'LIKE', path)
 		.select('categories', 'date', 'description', 'image', 'path', 'readingTime', 'recommend', 'tags', 'title', 'type')
 		.all()

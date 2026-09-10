@@ -18,7 +18,12 @@ const column = ref(1)
 const tuningRef = useTemplateRef('tuning-panel')
 useAvoidTarget(tuningRef, showTuning)
 
-const { data: listRaw } = await useAsyncData('posts:index', () => getArticleIndexOptions(), { default: () => [] })
+const collection = useContentCollection()
+const { data: listRaw } = await useAsyncData(
+	() => `posts:index:${collection.value}`,
+	() => getArticleIndexOptions(collection.value),
+	{ default: () => [], watch: [collection] },
+)
 const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted)
 

@@ -8,7 +8,12 @@ useSeoMeta({
 	ogImage: appConfig.author.avatar,
 })
 
-const { data: listRaw } = await useAsyncData('posts:index', () => getArticleIndexOptions(), { default: () => [] })
+const collection = useContentCollection()
+const { data: listRaw } = await useAsyncData(
+	() => `posts:index:${collection.value}`,
+	() => getArticleIndexOptions(collection.value),
+	{ default: () => [], watch: [collection] },
+)
 const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted, { bindQuery: 'category' })
 const { page, totalPages, listPaged } = usePagination(listCategorized, { bindQuery: 'page' })
@@ -26,8 +31,9 @@ const listRecommended = computed(() => orderBy(
 ))
 
 const { data: previewCount } = useAsyncData(
-	'previews:count',
-	() => queryCollection('content_zh').where('stem', 'LIKE', 'previews/%').count(),
+	() => `previews:count:${collection.value}`,
+	() => queryCollection(collection.value).where('stem', 'LIKE', 'previews/%').count(),
+	{ watch: [collection] },
 )
 </script>
 

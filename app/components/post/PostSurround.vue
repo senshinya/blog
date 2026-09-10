@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
+import blogConfig from '~~/blog.config'
+import { stripLocale } from '~/utils/locale'
+
+const LOCALES = blogConfig.locales.map(l => l.code)
 
 const route = useRoute()
+const collection = useContentCollection()
 
 const { data: surrounds } = await useAsyncData(
-	`surround:${route.path}`,
-	() => queryCollectionItemSurroundings('content_zh', route.path, { fields: ['date', 'title', 'type'] })
+	() => `surround:${route.path}`,
+	() => queryCollectionItemSurroundings(
+		collection.value,
+		stripLocale(route.path, LOCALES, 'zh').basePath,
+		{ fields: ['date', 'title', 'type'] },
+	)
 		.order('date', 'ASC')
 		.where('stem', 'LIKE', `posts/%`),
+	{ watch: [collection] },
 )
 
 const [prev = null, next = null] = surrounds.value ?? []

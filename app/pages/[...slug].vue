@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import blogConfig from '~~/blog.config'
+import { stripLocale } from '~/utils/locale'
+
+const LOCALES = blogConfig.locales.map(l => l.code)
+
 const route = useRoute()
+const collection = useContentCollection()
 
 const { data: post } = await useAsyncData(
-	`content:${route.path}`,
-	() => queryCollection('content_zh').path(route.path).first(),
+	() => `content:${route.path}`,
+	() => queryCollection(collection.value).path(stripLocale(route.path, LOCALES, 'zh').basePath).first(),
+	{ watch: [collection] },
 )
 
 const excerpt = computed(() => post.value?.description || '')
