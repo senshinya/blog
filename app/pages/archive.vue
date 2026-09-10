@@ -27,11 +27,11 @@ const collection = useContentCollection()
 const listKey = computed(() => `posts:index:${collection.value}`)
 const { data: listRaw } = await useAsyncData(
 	listKey,
-	() => getArticleIndexOptions(collection.value),
+	() => queryArticleIndex(collection.value),
 	{ default: () => [], watch: [collection] },
 )
 const { listSorted } = useArticleSort(listRaw)
-const { category, categories, listCategorized } = useCategory(listSorted)
+const { category, categories, listCategorized } = useArticleCategory(listSorted)
 
 const listGrouped = computed(() => {
 	// reverse 不是可有可无的：groupBy 的键是 "2021" 这类类整数字符串，JS 会把它们当作数组索引，
@@ -61,13 +61,9 @@ function getArticleYear(article: ArticleProps) {
 
 <template>
 <template #aside>
-	<!-- TransitionGroup 必须在此层：dxup 把布局里的 <slot name="aside"> 编译成 LayoutSlot 组件，
-		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
-	<TransitionGroup name="aside-widget">
-		<WidgetBlogStats key="blog-stats" />
-		<WidgetBlogLog key="blog-log" />
-		<WidgetBlogTech key="blog-tech" />
-	</TransitionGroup>
+	<WidgetBlogStats key="blog-stats" />
+	<WidgetBlogLog key="blog-log" />
+	<WidgetBlogTech key="blog-tech" />
 </template>
 
 <div class="archive proper-height">
@@ -83,43 +79,46 @@ function getArticleYear(article: ArticleProps) {
 		</ZSecret>
 	</PostFilter>
 
-	<section
-		v-for="[year, yearGroup] in listGrouped"
-		:key="year"
-		class="archive-group"
-		:class="{ 'hide-info': column > 1 }"
-		:style="{
-			'--archive-item-gap': `${spacing}em`,
-			'--archive-item-column': column,
-		}"
-	>
-		<div class="archive-title">
-			<h2 class="archive-year">
-				{{ year }}
-			</h2>
+	<UtilListTransition v-slot="{ items }" :items="listGrouped">
+		<section
+			v-for="[year, yearGroup] in items"
+			:key="year"
+			class="archive-group"
+			:class="{ 'hide-info': column > 1 }"
+			:style="{
+				'--archive-item-gap': `${spacing}em`,
+				'--archive-item-column': column,
+			}"
+		>
+			<div class="archive-title" :data-list-key="`year:${year}`">
+				<h2 class="archive-year">
+					{{ year }}
+				</h2>
 
-			<div v-if="birthYear" class="archive-age">
-				<span>{{ Number(year) - birthYear }}</span>
-				<span class="age-label">{{ $t('page.archive.age') }}</span>
+				<div v-if="birthYear" class="archive-age">
+					<span>{{ Number(year) - birthYear }}</span>
+					<span class="age-label">{{ $t('page.archive.age') }}</span>
+				</div>
+
+				<div class="archive-info">
+					<span>{{ $t('post.words', { n: yearlyWordCount[year] }) }}</span>
+					<span>{{ $t('page.archive.postCount', { n: yearGroup?.length }, yearGroup?.length ?? 0) }}</span>
+				</div>
 			</div>
 
-			<div class="archive-info">
-				<span>{{ $t('post.words', { n: yearlyWordCount[year] }) }}</span>
-				<span>{{ $t('page.archive.postCount', { n: yearGroup?.length }, yearGroup?.length ?? 0) }}</span>
-			</div>
-		</div>
-
-		<TransitionGroup tag="menu" class="archive-list" name="float-in">
-			<PostArchive
-				v-for="article, index in yearGroup"
-				:key="article.path"
-				v-bind="article"
-				:to="resolveContentPath(article.path, locale)"
-				:show-category="column < 3"
-				:style="entranceDelay(index * 0.03)"
-			/>
-		</TransitionGroup>
-	</section>
+			<menu class="archive-list">
+				<PostArchive
+					v-for="article, index in yearGroup"
+					:key="article.path"
+					:data-list-key="article.path"
+					v-bind="article"
+					:to="resolveContentPath(article.path, locale)"
+					:show-category="column < 3"
+					:style="entranceDelay(index * 0.03)"
+				/>
+			</menu>
+		</section>
+	</UtilListTransition>
 
 	<div v-if="showTuning" ref="tuning-panel" class="archive-tuning card">
 		<ZSlider
@@ -143,9 +142,9 @@ function getArticleYear(article: ArticleProps) {
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .archive {
-	padding: 1rem; // 防止内部 outline 被 mask
+	padding: 1rem; /* 防止内部 outline 被 mask */
 	mask-image: linear-gradient(#FFF 50%, #FFF7);
 }
 

@@ -30,7 +30,7 @@ const { locale } = useI18n()
 </NuxtLayout>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .app-error {
 	margin: 1rem;
 }

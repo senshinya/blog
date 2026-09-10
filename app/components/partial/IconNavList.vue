@@ -22,7 +22,7 @@ const { locale } = useI18n()
 </menu>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 menu {
 	display: flex;
 	justify-content: center;

@@ -34,6 +34,7 @@ catalogs:
     ci-info: ^4.4.0
     nuxt: ^4.5.2
     pinia: ^4.0.3
+    postcss-nesting: ^14.0.1
     sass-embedded: ^1.104.0
     typescript: ^6.0.3
     unrun: ^0.3.1
@@ -42,15 +43,10 @@ catalogs:
     vue-router: ^5.3.1
   quality:
     '@antfu/eslint-config': ^9.5.1
-    '@nuxt/a11y': 1.0.0-alpha.1
     '@nuxt/hints': ^1.1.4
-    # 不跟上游的 ^0.5.2：它把 stylelint-config-standard-scss 换成了 stylelint-config-standard，
-    # 丢掉 postcss-scss 语法，.scss 被当纯 CSS 解析（@mixin 未知、// 注释 CssSyntaxError）。
-    # 上游正在迁往纯 CSS，本站仍全站 SCSS，迁完之前留在 0.4.x。
-    '@zinkawaii/stylelint-config': ^0.4.1
+    '@zinkawaii/eslint-config-css': ^0.5.4
     cspell: ^10.2.2
     eslint: ^10.10.0
-    stylelint: ^17.15.0
   ui:
     '@bikariya/image-viewer': ^0.0.8
     '@bikariya/modals': ^0.0.8

@@ -3,6 +3,7 @@ import { buildPath, resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 useSeoMeta({
 	title: () => t('page.preview.title'),
 	description: () => t('page.preview.description', { site: appConfig.title }),
@@ -11,26 +12,22 @@ const collection = useContentCollection()
 const listKey = computed(() => `previews:index:${collection.value}`)
 const { data: listRaw } = await useAsyncData(
 	listKey,
-	() => getArticleIndexOptions(collection.value, 'previews/%'),
+	() => queryArticleIndex(collection.value, 'previews/%'),
 	{ default: () => [], watch: [collection] },
 )
 const { listSorted } = useArticleSort(listRaw)
-const { category, categories, listCategorized } = useCategory(listSorted)
+const { category, categories, listCategorized } = useArticleCategory(listSorted)
 </script>
 
 <template>
 <template #aside>
-	<!-- TransitionGroup 必须在此层：dxup 把布局里的 <slot name="aside"> 编译成 LayoutSlot 组件，
-		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
-	<TransitionGroup name="aside-widget">
-		<WidgetBlogLog key="blog-log" />
-	</TransitionGroup>
+	<WidgetBlogLog key="blog-log" />
 </template>
 
 <div class="preview">
 	<div class="preview-header">
 		<h1>
-			<UtilLink class="mobile-only" :to="buildPath('/', locale, 'zh')" :title="$t('page.preview.backHome')">
+			<UtilLink class="hide-above-mobile" :to="buildPath('/', locale, 'zh')" :title="$t('page.preview.backHome')">
 				<Icon name="tabler:chevron-left" />
 			</UtilLink>{{ $t('page.preview.title') }}
 		</h1>
@@ -47,12 +44,13 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 			:key="article.path"
 			v-bind="article"
 			:to="resolveContentPath(article.path, locale)"
+			:style="entranceDelay(0)"
 		/>
 	</menu>
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .preview {
 	margin: 1rem;
 }

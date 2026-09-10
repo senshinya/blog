@@ -38,7 +38,7 @@ if (import.meta.dev) {
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .md-excerpt {
 	opacity: 0.6;
 	margin: 1rem 0.5rem;

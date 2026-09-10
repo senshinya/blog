@@ -5,16 +5,16 @@ import { resolveContentPath, stripLocale } from '~/utils/locale'
 
 const LOCALES = blogConfig.locales.map(l => l.code)
 
-const route = useRoute()
 const { locale } = useI18n()
 const collection = useContentCollection()
+const contentPath = useContentPath()
 
-const dataKey = computed(() => `surround:${route.path}`)
+const dataKey = computed(() => `surround:${contentPath.value}`)
 const { data: surrounds } = await useAsyncData(
 	dataKey,
 	() => queryCollectionItemSurroundings(
 		collection.value,
-		stripLocale(route.path, LOCALES, 'zh').basePath,
+		stripLocale(contentPath.value, LOCALES, 'zh').basePath,
 		{ fields: ['date', 'title', 'type'] },
 	)
 		.order('date', 'ASC')
@@ -22,7 +22,8 @@ const { data: surrounds } = await useAsyncData(
 	{ watch: [collection] },
 )
 
-const [prev = null, next = null] = surrounds.value ?? []
+const prev = computed(() => surrounds.value?.[0] ?? null)
+const next = computed(() => surrounds.value?.[1] ?? null)
 
 const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 	post: ArticleProps | null
@@ -35,7 +36,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 
 <template>
 <DefineTemplate v-slot="{ post, icon, fallbackIcon, fallbackText, alignEnd }">
-	<UtilLink :to="resolveContentPath(post?.path, locale)" class="surround-link" :align-end>
+	<UtilLink :to="resolveContentPath(post?.path, locale)" class="surround-link" :data-transition-key="post?.path" :align-end>
 		<Icon :class="{ 'rtl-flip': post }" :name="post ? icon : fallbackIcon" />
 		<div class="surround-text">
 			<strong class="title" :class="getPostTypeClassName(post?.type)">
@@ -59,7 +60,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .surround-post {
 	contain: layout;
 	display: flex;
@@ -80,7 +81,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 	}
 
 	&[align-end] {
-		// direction: rtl 会导致末尾标点居左
+		/* direction: rtl 会导致末尾标点居左 */
 		flex-direction: row-reverse;
 		margin-inline-start: auto;
 		text-align: end;

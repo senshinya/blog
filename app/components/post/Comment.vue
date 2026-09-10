@@ -17,7 +17,7 @@ withDefaults(defineProps<{
 <CommentSection heading :reactions :title />
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .z-comment {
 	margin: 3rem 1rem;
 }

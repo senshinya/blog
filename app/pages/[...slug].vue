@@ -6,11 +6,12 @@ const LOCALES = blogConfig.locales.map(l => l.code)
 
 const route = useRoute()
 const collection = useContentCollection()
+const contentPath = useContentPath()
 
-const dataKey = computed(() => `content:${route.path}`)
+const dataKey = computed(() => `content:${contentPath.value}`)
 const { data: post } = await useAsyncData(
 	dataKey,
-	() => queryCollection(collection.value).path(stripLocale(route.path, LOCALES, 'zh').basePath).first(),
+	() => queryCollection(collection.value).path(stripLocale(contentPath.value, LOCALES, 'zh').basePath).first(),
 	{ watch: [collection] },
 )
 
@@ -39,20 +40,17 @@ else {
 
 <template>
 <template #aside>
-	<!-- TransitionGroup 必须在此层：dxup 把布局里的 <slot name="aside"> 编译成 LayoutSlot 组件，
-		放在 BlogAside 里只会看到那一个组件 vnode，看不见 widget 的增删 -->
-	<TransitionGroup name="aside-widget">
-		<!-- 更换页面时相同 key 的组件不会更新 -->
-		<component :is="widget.comp" v-for="widget in widgets" :key="widget.name" />
-	</TransitionGroup>
+	<!-- 每篇文章拥有独立的目录状态，沿用布局的原生入场。 -->
+	<component :is="widget.comp" v-for="widget in widgets" :key="`${contentPath}:${widget.name}`" />
 </template>
 
 <template v-if="post">
 	<PostHeader v-bind="post" />
 	<PostExcerpt v-if="excerpt" :excerpt />
-	<!-- 使用 float-in 动画会导致搜索跳转不准确 -->
+	<!-- 正文只淡入，保持 URL 锚点和目录测量的坐标稳定。 -->
 	<ContentRenderer
 		class="article"
+		data-transition-enter
 		:class="getPostTypeClassName(post?.type, { prefix: 'md' })"
 		:value="post"
 		tag="article"

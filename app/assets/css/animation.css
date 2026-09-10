@@ -1,0 +1,356 @@
+:root {
+	--motion-duration: 0.3s;
+	--motion-fade-duration: 0.2s;
+	--motion-exit-duration: 0.1s;
+	--motion-delay: 0.05s;
+	--motion-easing: ease-out;
+	--max-bezier-to-full: cubic-bezier(0.5, 0, 1, 0.5);
+	--max-bezier-to-collapse: cubic-bezier(0, 0.5, 0.5, 1);
+
+	scroll-behavior: smooth;
+}
+
+@keyframes float-in {
+	0% {
+		opacity: 0;
+		transform: translateY(var(--float-distance, 12px));
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.float-in-enter-active,
+.float-in-leave-active {
+	transition: opacity var(--motion-duration) var(--motion-easing), transform var(--motion-duration) var(--motion-easing) !important;
+}
+
+.float-in-enter-from,
+.float-in-leave-to {
+	opacity: 0;
+	transform: translateY(var(--float-distance, 12px));
+}
+
+.float-in-move {
+	transition: transform var(--motion-duration) var(--motion-easing) !important;
+}
+
+.collapse-enter-active,
+.collapse-leave-active {
+	contain: paint;
+	transition: max-height 0.1s;
+}
+
+.collapse-enter-from,
+.collapse-leave-to {
+	max-height: 0;
+	transition-timing-function: var(--max-bezier-to-collapse);
+}
+
+.collapse-enter-to,
+.collapse-leave-from {
+	max-height: 50vh;
+	transition-timing-function: var(--max-bezier-to-full);
+}
+
+@keyframes content-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes widget-in {
+	from {
+		opacity: 0;
+		translate: 0 12px;
+	}
+}
+
+/* 正文只淡入，不移动包含锚点的坐标系，也不改变 sticky/fixed 的包含块。 */
+.article, .post-header {
+	animation: var(--entrance, content-in var(--motion-duration) var(--motion-easing));
+}
+
+#blog-aside > .blog-widget {
+	animation: var(--entrance, widget-in var(--motion-duration) var(--motion-easing) backwards);
+
+	/* 不支持 sibling-index() 时沿用无延迟的基础动画。 */
+	animation-delay: calc((sibling-index() - 1) * var(--motion-delay));
+}
+
+#blog-aside.aside-enter-active > .blog-widget {
+	animation: none;
+}
+
+[data-native-entered] {
+	animation: none !important;
+}
+
+/* View Transition 只移动快照；布局与锚点在捕获新画面前已完成。 */
+:root[data-article-transition] {
+	scroll-behavior: auto;
+
+	[data-transition-enter] {
+		animation: none !important;
+	}
+}
+
+[data-article-source] {
+	view-transition-name: article-hero;
+}
+
+:root[data-article-transition]::view-transition {
+	pointer-events: none;
+}
+
+:root[data-article-transition]::view-transition-group(*) {
+	animation-duration: var(--motion-duration);
+	animation-timing-function: var(--motion-easing);
+}
+
+:root[data-article-transition]::view-transition-group(article-body),
+:root[data-article-transition]::view-transition-group(article-navigation),
+:root[data-article-transition]::view-transition-new(root),
+:root[data-article-transition]::view-transition-new(article-navigation) {
+	animation: none;
+}
+
+:root[data-article-transition]::view-transition-old(root),
+:root[data-article-transition]::view-transition-old(article-navigation) {
+	display: none;
+}
+
+:root[data-article-transition]::view-transition-old(article-body),
+:root[data-article-transition]::view-transition-old(article-aside),
+:root[data-article-transition]::view-transition-old(article-hero) {
+	animation: content-in var(--motion-exit-duration) ease reverse both;
+	mix-blend-mode: normal;
+}
+
+:root[data-article-transition]::view-transition-new(article-body),
+:root[data-article-transition]::view-transition-new(article-aside),
+:root[data-article-transition]::view-transition-new(article-hero) {
+	animation: content-in var(--motion-duration) var(--motion-easing) both;
+	mix-blend-mode: normal;
+}
+
+@keyframes article-radius {
+	from { border-radius: var(--article-radius-from, 0); }
+	to { border-radius: var(--article-radius-to, 0); }
+}
+
+/* 独立于 group 的浏览器几何动画，正向、返回均使用真实元素的圆角。 */
+/* 快照保留默认的 width: 100% / height: auto，避免宽高比不同时缩成贴左的小块。 */
+:root[data-article-transition]::view-transition-image-pair(article-hero) {
+	overflow: clip;
+	border-radius: var(--article-radius-to, 0);
+	animation: article-radius var(--motion-duration) var(--motion-easing) both;
+}
+
+/* WebKit 快照绕过：私有属性仅用于引擎识别，不能检测快照 bug 本身。 */
+@supports (-webkit-nbsp-mode: space) {
+	/* 取消所有子元素的独立快照，保留 root 整页快照。 */
+	:root[data-article-transition] * {
+		view-transition-name: none !important;
+	}
+
+	:root[data-article-transition]::view-transition-old(root) {
+		display: block;
+		animation: content-in var(--motion-fade-duration) ease reverse both;
+		mix-blend-mode: normal;
+		z-index: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		transition: none;
+		scroll-behavior: auto;
+	}
+
+	#blog-sidebar,
+	#blog-aside,
+	.article-card,
+	.article-item,
+	.feed-card,
+	.search-item,
+	.search-results,
+	.article,
+	.post-header,
+	#blog-aside > .blog-widget,
+	.float-in-enter-active,
+	.float-in-leave-active,
+	.float-in-move {
+		transition: none !important;
+		animation: none !important;
+	}
+
+	::view-transition-group(*),
+	::view-transition-image-pair(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
+}
+
+/* 侧栏 widget 换页时的进出场：以顶边为轴展开 / 向上收拢。 */
+/* 用 scaleY 而非 max-height，是因为 max-height 得先猜一个「够大」的值， */
+/* 内容比它矮时缓动会提前跑完，动画尾巴发木。 */
+.aside-widget-enter-active,
+.aside-widget-leave-active {
+	transform-origin: top;
+	transition: transform 0.25s, opacity 0.25s;
+}
+
+.aside-widget-enter-from,
+.aside-widget-leave-to {
+	opacity: 0;
+	transform: scaleY(0);
+}
+
+/* 留在原地的 widget 平滑让位（FLIP），否则会在进出场的瞬间硬跳 */
+.aside-widget-move {
+	transition: transform 0.25s;
+}
+
+
+/* Language motion B: the root and media stay crisp; only translated copy lifts. */
+/* Object-fit none preserves glyph size while the group's layout bounds change. */
+.locale-motion {
+	--entrance: none;
+
+	/* 上游组件的原生入场不能和语言快照同时播放。 */
+	[data-transition-enter], .article, .post-header {
+		animation: none !important;
+	}
+
+	&::view-transition {
+		pointer-events: none;
+	}
+
+	&::view-transition-group(*) {
+		animation-duration: 0.28s;
+		animation-timing-function: cubic-bezier(0.22, 0.68, 0, 1);
+	}
+
+	&::view-transition-old(root) {
+		animation: locale-hide 1ms both;
+	}
+
+	&::view-transition-new(root) {
+		animation: none;
+	}
+
+	&::view-transition-image-pair(.locale-part) {
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	&::view-transition-old(.locale-part),
+	&::view-transition-new(.locale-part) {
+		width: 100%;
+		height: 100%;
+		mix-blend-mode: normal;
+		object-fit: none;
+		object-position: left top;
+	}
+
+	&::view-transition-old(.locale-part) {
+		animation: locale-copy-out 0.143s both;
+	}
+
+	&::view-transition-new(.locale-part) {
+		animation: locale-copy-in 0.22s both;
+	}
+
+	&::view-transition-old(.locale-nav),
+	&::view-transition-new(.locale-nav) {
+		--locale-lift: 2px;
+
+		animation-duration: 0.12s;
+	}
+
+	&::view-transition-old(.locale-heading),
+	&::view-transition-new(.locale-heading) {
+		--locale-lift: 4px;
+	}
+
+	&::view-transition-old(.locale-body),
+	&::view-transition-new(.locale-body) {
+		--locale-lift: 3px;
+	}
+
+	&::view-transition-old(.locale-copy),
+	&::view-transition-new(.locale-copy) {
+		--locale-lift: 6px;
+	}
+
+	&::view-transition-old(.locale-step-1),
+	&::view-transition-new(.locale-step-1) {
+		animation-delay: 18ms;
+	}
+
+	&::view-transition-old(.locale-step-2),
+	&::view-transition-new(.locale-step-2) {
+		animation-delay: 36ms;
+	}
+
+	&::view-transition-old(.locale-label),
+	&::view-transition-new(.locale-label),
+	&::view-transition-old(.locale-metric),
+	&::view-transition-new(.locale-metric) {
+		--locale-lift: 0px;
+
+		animation-duration: 0.12s;
+	}
+
+	&::view-transition-old(.locale-stable),
+	&::view-transition-old(.locale-surface) {
+		animation: locale-hide 1ms both;
+	}
+
+	&::view-transition-new(.locale-stable),
+	&::view-transition-new(.locale-surface) {
+		animation: none;
+	}
+
+	&::view-transition-new(.locale-surface) {
+		object-fit: fill;
+	}
+}
+
+@keyframes locale-hide {
+	to { opacity: 0; }
+}
+
+@keyframes locale-copy-out {
+	to {
+		opacity: 0;
+		transform: translateY(calc(-1 * var(--locale-lift, 0px)));
+	}
+}
+
+@keyframes locale-copy-in {
+	from {
+		opacity: 0;
+		transform: translateY(var(--locale-lift, 0));
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.locale-motion::view-transition-group(*),
+	.locale-motion::view-transition-old(*),
+	.locale-motion::view-transition-new(*) {
+		animation: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.aside-widget-enter-active,
+	.aside-widget-leave-active,
+	.aside-widget-move {
+		transition: none !important;
+	}
+}

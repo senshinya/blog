@@ -19,7 +19,6 @@
 	text-autospace: normal;
 	text-size-adjust: none;
 	color: var(--c-text-1);
-	scroll-behavior: smooth;
 	scroll-padding: 2rem;
 	scrollbar-color: var(--c-text-3) transparent;
 	font-variant-alternates: styleset(open-digits, disambiguation, round-quotes-and-commas);
@@ -31,16 +30,12 @@
 		--transform-start-far: translateX(100%);
 		--transform-end-far: translateX(-100%);
 	}
-
-	@media (prefers-reduced-motion: reduce) {
-		scroll-behavior: auto;
-	}
 }
 
-// 主题淡入淡出放在 body，而不是 :root：:root 拥有文档滚动条，在它身上做
-// background-color 过渡会让 Chrome 在切换配色时把整条滚动条涂成灰色、盖住滚动条，
-// 直到手动滚动一次才恢复（Safari 无此问题）。
-// :root 的底色保持静态（盖住溢出/overscroll 区域），可见的过渡交给铺满视口的 body。
+/* 主题淡入淡出放在 body，而不是 :root：:root 拥有文档滚动条，在它身上做 */
+/* background-color 过渡会让 Chrome 在切换配色时把整条滚动条涂成灰色、盖住滚动条， */
+/* 直到手动滚动一次才恢复（Safari 无此问题）。 */
+/* :root 的底色保持静态（盖住溢出/overscroll 区域），可见的过渡交给铺满视口的 body。 */
 body {
 	min-height: 100dvh;
 	background-color: var(--c-bg-1);
@@ -103,7 +98,7 @@ button, input, textarea {
 	color: currentcolor;
 }
 
-// Iconify 图标复用了此类
+/* Iconify 图标复用了此类 */
 :where(.iconify) {
 	display: inline-block;
 	flex-shrink: 0;
@@ -118,20 +113,18 @@ button, input, textarea {
 .light .iconify[class*="i-catppuccin:"] {
 	filter: invert(0.7) hue-rotate(180deg) saturate(4);
 }
-
-/* stylelint-disable-next-line selector-class-pattern */
 .i-simple-icons\:mdnwebdocs {
 	transform: scale(0.8);
 }
 
-// 图片加载失败 fallback
+/* 图片加载失败 fallback */
 img {
 	contain: paint;
 	display: inline-block;
 
 	&::before {
 		all: initial;
-		content: attr(alt); // Firefox 的 ::before content 仅在 alt 不为空时展示且值为 attr(alt) 无法修改
+		content: attr(alt); /* Firefox 的 ::before content 仅在 alt 不为空时展示且值为 attr(alt) 无法修改 */
 		display: grid;
 		place-content: center;
 		position: absolute;
@@ -146,7 +139,7 @@ img {
 }
 
 .katex-display, article > .katex {
-	display: block; // ```math 不会包裹 .katex-display
+	display: block; /* ```math 不会包裹 .katex-display */
 	overflow: auto hidden;
 	padding: 1px 0;
 	scrollbar-width: thin;
@@ -194,9 +187,9 @@ img {
 	font-style: var(--shiki-light-font-style);
 
 	.dark & {
-		background-color: var(--shiki-dark-bg) !important; /* stylelint-disable-line declaration-no-important */
+		background-color: var(--shiki-dark-bg) !important;
 		font-style: var(--shiki-dark-font-style);
-		color: var(--shiki-dark) !important; /* stylelint-disable-line declaration-no-important */
+		color: var(--shiki-dark) !important;
 	}
 }
 
@@ -224,7 +217,7 @@ img {
 	}
 
 	> .space::before,
-	>.tab::before {
+	> .tab::before {
 		display: inline-block;
 		opacity: 0.3;
 		width: 0;
@@ -237,7 +230,7 @@ img {
 		content: "·";
 	}
 
-	>.tab::before {
+	> .tab::before {
 		content: "⇥";
 	}
 }

@@ -51,7 +51,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .post-footer {
 	--seal-size: 164px;
 
