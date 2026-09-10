@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const appConfig = useAppConfig()
+const { locale } = useI18n()
 </script>
 
 <template>
@@ -9,7 +10,7 @@ const appConfig = useAppConfig()
 			<hgroup class="text-creative" v-text="resolveNavTitle(group, $t)" />
 			<menu>
 				<li v-for="(item, itemIndex) in group.items" :key="itemIndex">
-					<UtilLink :to="item.url">
+					<UtilLink :to="resolveNavUrl(item, locale)">
 						<Icon :name="item.icon" />
 						<span class="nav-text">{{ resolveNavText(item, $t) }}</span>
 					</UtilLink>

@@ -19,6 +19,17 @@ export function resolveNavText(item: NavItem, t: Translate): string {
 }
 
 /**
+ * 同 resolveNavText，BlogSidebar、BlogFooter、IconNavList 三处都要做同一个判断，
+ * 抽成一个函数以免各写一份、后续改判断逻辑要改三处。
+ *
+ * 只有 item.localized 为真的站内路径才加前缀（如 /atom.xml → /en/atom.xml）——
+ * 外部链接（GitHub、mailto: 等）和默认语言本身都不需要，也不能被误加前缀。
+ */
+export function resolveNavUrl(item: NavItem, locale: string, defaultLocale = 'zh'): string {
+	return item.localized && locale !== defaultLocale ? `/${locale}${item.url}` : item.url
+}
+
+/**
  * 同 resolveNavText，用于 NavGroup 的 title/titleKey。参数类型是 NavTitle
  * （NavGroup 的 title/titleKey 那一半），而不是 Pick<NavGroup, 'title' | 'titleKey'>：
  * Pick 不会对联合类型分配，会把两个属性各自摊平成"都能传、都能不传"，

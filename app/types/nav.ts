@@ -2,6 +2,8 @@ interface NavItemBase {
 	icon: string
 	url: string
 	external?: boolean
+	/** url 是否为站内路径，需要在渲染时按当前 locale 加前缀（如 /atom.xml → /en/atom.xml） */
+	localized?: boolean
 }
 
 /**

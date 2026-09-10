@@ -60,7 +60,7 @@ export default defineAppConfig({
 			{ icon: 'tabler:brand-github', text: 'GitHub: senshinya', url: 'https://github.com/senshinya' },
 			{ icon: 'tabler:brand-telegram', text: 'Telegram: senshinya', url: 'https://telegram.me/senshinya' },
 			{ icon: 'tabler:mail', text: blogConfig.author.email, url: `mailto:${blogConfig.author.email}` },
-			{ icon: 'tabler:rss', textKey: 'footer.atom', url: '/atom.xml' },
+			{ icon: 'tabler:rss', textKey: 'footer.atom', url: '/atom.xml', localized: true },
 			{ icon: 'ri:subway-line', textKey: 'footer.travellingsTip', url: 'https://www.travellings.cn/go.html' },
 		] satisfies NavItem[],
 		/** 页脚站点地图 */
@@ -68,7 +68,7 @@ export default defineAppConfig({
 			{
 				titleKey: 'footer.explore',
 				items: [
-					{ icon: 'tabler:rss', textKey: 'footer.atom', url: '/atom.xml' },
+					{ icon: 'tabler:rss', textKey: 'footer.atom', url: '/atom.xml', localized: true },
 					{ icon: 'ri:subway-line', textKey: 'footer.travellings', url: 'https://www.travellings.cn/go.html' },
 				],
 			},

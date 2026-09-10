@@ -2,6 +2,7 @@
 const appConfig = useAppConfig()
 const layoutStore = useLayoutStore()
 const searchStore = useSearchStore()
+const { locale } = useI18n()
 
 const { text } = useTextSelection()
 const debouncedSelection = refDebounced(text)
@@ -32,10 +33,10 @@ const debouncedSelection = refDebounced(text)
 
 			<menu>
 				<li v-for="(item, itemIndex) in group.items" :key="itemIndex">
-					<UtilLink :to="item.url" class="sidebar-nav-item">
+					<UtilLink :to="resolveNavUrl(item, locale)" class="sidebar-nav-item">
 						<Icon :name="item.icon" />
 						<span class="nav-text">{{ resolveNavText(item, $t) }}</span>
-						<Icon v-if="isExtLink(item.url)" class="external-tip" name="tabler:arrow-up-right" />
+						<Icon v-if="isExtLink(resolveNavUrl(item, locale))" class="external-tip" name="tabler:arrow-up-right" />
 					</UtilLink>
 				</li>
 			</menu>
