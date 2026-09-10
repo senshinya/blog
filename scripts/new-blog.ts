@@ -8,9 +8,16 @@ import process from 'node:process'
 import { intro, log, outro, select, spinner, text } from '@clack/prompts'
 import { Temporal } from 'temporal-polyfill'
 import blogConfig from '../blog.config'
+import zhMessages from '../i18n/locales/zh'
 
 function normalize(val: string | symbol | undefined): string | undefined {
 	return typeof val === 'symbol' ? undefined : val?.trim()
+}
+
+// 分类 id 在 category.* 词条表里查中文展示名；自定义分类不在表里，原样吐回去
+// （自定义分类本来就是用户直接输入的中文，不是 id，无需再翻）
+function getCategoryLabel(category: string): string {
+	return zhMessages.category[category as keyof typeof zhMessages.category] ?? category
 }
 
 // #region 读参
@@ -93,7 +100,7 @@ if (fs.existsSync(mdPath)) {
 let category = normalize(await select({
 	message: '请选择分类',
 	options: [
-		...Object.keys(blogConfig.article.categories).map(c => ({ value: c })),
+		...Object.keys(blogConfig.article.categories).map(c => ({ value: c, label: getCategoryLabel(c) })),
 		{ value: '自定义' },
 	],
 }))
@@ -149,7 +156,7 @@ if (type === 'custom') {
 // #region frontmatter
 const frontmatter = {
 	title,
-	description: `讲述关于${title}的故事，并根据${tags?.join('、')}给出${category}。`,
+	description: `讲述关于${title}的故事，并根据${tags?.join('、')}给出${getCategoryLabel(category)}。`,
 	date: dateStr,
 	image: '# 封面图推荐 2:1，不含与标题重复的文字',
 	permalink,

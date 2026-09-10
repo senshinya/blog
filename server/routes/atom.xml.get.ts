@@ -3,6 +3,7 @@ import { pascalCase } from 'es-toolkit/string'
 import XmlBuilder from 'fast-xml-builder'
 import { Temporal } from 'temporal-polyfill'
 import blogConfig from '~~/blog.config'
+import zhMessages from '~~/i18n/locales/zh'
 import packageJson from '~~/package.json'
 import { toZonedTemporal } from '~~/shared/utils/time'
 
@@ -30,6 +31,15 @@ function formatIsoDate(date?: string) {
 
 function getUrl(path: string | undefined) {
 	return new URL(path ?? '', blogConfig.url).toString()
+}
+
+// term 留分类 id（机器可读），label 补上中文展示名给订阅器直接显示 ——
+// 本路由只出 content_zh，故直接从 zh 词条表查名字；后续拆分三语 feed 时，
+// 这里改成按各 feed 的 locale 取对应词条表即可
+function getCategoryLabel(category?: string) {
+	if (!category)
+		return undefined
+	return zhMessages.category[category as keyof typeof zhMessages.category] ?? category
 }
 
 function renderContent(post: ContentCollectionItem) {
@@ -61,7 +71,7 @@ export default defineEventHandler(async (event) => {
 		},
 		link: { $href: getUrl(post.path) },
 		summary: post.description,
-		category: { $term: post.categories?.[0] },
+		category: { $term: post.categories?.[0], $label: getCategoryLabel(post.categories?.[0]) },
 		published: formatIsoDate(post.published ?? post.date),
 	}))
 

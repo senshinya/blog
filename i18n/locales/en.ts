@@ -45,7 +45,7 @@ const en: MessageSchema = {
 		prevSlide: 'Previous slide',
 		nextSlide: 'Next slide',
 	},
-	category: { fiddling: 'Fiddling', projects: 'Projects', notes: 'Notes', daily: 'Daily' },
+	category: { fiddling: 'Tinkering', projects: 'Projects', notes: 'Notes', daily: 'Daily' },
 	content: {
 		copy: 'Copy',
 		copied: 'Copied',
