@@ -37,10 +37,16 @@
 /* 中日共用汉字字形不同（直、骨、今、令 等），日语页面须落到 JP 字库。
    --font-creative 是抖音美好体（GB 字库，无假名覆盖），给它配 JP 兜底。
 
-   :lang(ja) 与上面 :root 的特异度相同（0,1,0），且在文件里更靠后，会同时
-   赢过 :root 里的常规声明和它嵌套的 @media (max-resolution: 1.2dppx) 低分屏
-   兜底 —— 若不在这里重复同一条 media query，日语页面在非视网膜屏幕上会静默
-   丢失那条兜底。这里原样复制一份，保留同样的低分屏行为。 */
+   :lang(ja) 与上面 :root 的特异度相同（0,1,0），且在文件里更靠后，会整体
+   覆盖 :root 的声明，包括它嵌套的 @media (max-resolution: 1.2dppx) 低分屏
+   分支 —— 所以这个分支也必须在这里出现，否则非视网膜屏幕会退回 :root 的
+   低分屏值，日语正文将完全用不上日文字库。
+   注意：低分屏分支只改了 --font-basic 里 JP 字体之外的那部分兜底链
+   （InterVariable → system-ui，避免低分屏下用未充分 hinting 的可变字体），
+   不是"要不要用 JP 字体"的开关 —— JP 字体在两个分支里都必须保留，因此这里
+   是把 --font-basic 非 JP 部分的兜底链换掉，而非照抄 :root 整条值。
+   --font-serif / --font-creative / --font-stroke-free 在 :root 里没有低分屏
+   分支，因此不受影响，无需在 media query 里重复。 */
 :lang(ja) {
 	--font-basic: "Noto Sans JP", "InterVariable", sans-serif;
 	--font-serif: "Noto Serif JP", serif;
@@ -48,6 +54,6 @@
 	--font-stroke-free: "DOUYINSANSBOLD-GB", "Noto Sans JP", "Inter", sans-serif;
 
 	@media (max-resolution: 1.2dppx) {
-		--font-basic: "InterVariable", system-ui, sans-serif;
+		--font-basic: "Noto Sans JP", "InterVariable", system-ui, sans-serif;
 	}
 }
