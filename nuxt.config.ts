@@ -1,12 +1,10 @@
-import { readdirSync, readFileSync } from 'node:fs'
-import { basename, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { arch, env, version as nodeVersion, platform } from 'node:process'
 import { pathToFileURL } from 'node:url'
 import { name as ciName, CLOUDFLARE_PAGES, GITHUB_ACTIONS, NETLIFY, VERCEL } from 'ci-info'
 import { mapValues } from 'es-toolkit/object'
 import { pascalCase } from 'es-toolkit/string'
 import { Temporal } from 'temporal-polyfill'
-import { isTravelDraftSource } from './app/travels/draft'
 import blogConfig from './blog.config'
 import packageJson from './package.json'
 import redirectList from './redirects.json'
@@ -14,15 +12,6 @@ import redirectList from './redirects.json'
 function pluginPath(path: string) {
 	return pathToFileURL(resolve(`./remark-plugins/${path}.ts`)).href
 }
-
-// 游记数据是 app/travels/*.yaml。加载 nuxt.config 的 jiti 不认 yaml import，
-// 所以从文件名推路由，并直接读取文本中的顶层 `draft: true` 来排除草稿。
-// 文件名即 slug，这条约定由迁移脚本和 app/travels/index.ts 共同保证。
-const travelDirectory = resolve('./app/travels')
-const travelRoutes = readdirSync(travelDirectory)
-	.filter(file => file.endsWith('.yaml'))
-	.filter(file => !isTravelDraftSource(readFileSync(resolve(travelDirectory, file), 'utf8')))
-	.map(file => `/travels/${basename(file, '.yaml')}`)
 
 // 此处配置无需修改
 export default defineNuxtConfig({
@@ -93,15 +82,17 @@ export default defineNuxtConfig({
 			// https://github.com/nuxt/content/issues/2378
 			autoSubfolderIndex: CLOUDFLARE_PAGES || GITHUB_ACTIONS || NETLIFY ? false : undefined,
 
-			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳。
-			// 显式登记：列表页 + 每篇详情页，漏链也不会静默不生成。
+			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳，
+			// 这里显式登记列表页。每篇详情页由 modules/i18n-manifest 扫描
+			// app/travels/<locale>/*.yaml 后追加进本数组（见该模块 setup），
+			// 此处不再重复维护。
 			//
 			// 碎语详情页不在此列：碎语是运行时数据，构建期无从枚举 id，
 			// 改由 ISR 按需渲染（见 routeRules 的 '/memos/**'）。
 			//
 			// /media 配了 ssr:false（见 routeRules），crawler 不会渲染它，显式登记才能生成
 			// 那个纯客户端壳（/media/index.html）。路径是静态的，直接命中该文件。
-			routes: ['/', '/travels', ...travelRoutes, '/media'],
+			routes: ['/', '/travels', '/media'],
 
 			/**
 			 * 以下两条是从 `nuxt generate` 切到 `nuxt build` 之后必须自己补上的。

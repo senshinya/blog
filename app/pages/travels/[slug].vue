@@ -5,9 +5,9 @@ definePageMeta({
 	layout: false,
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
-const found = getTravelBySlug(route.params.slug as string)
+const found = getTravelBySlug(locale.value, route.params.slug as string)
 
 if (!found) {
 	throw createError({

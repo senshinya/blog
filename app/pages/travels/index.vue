@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import travels from '~/travels'
+import { getTravels } from '~/travels'
 
 const appConfig = useAppConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 useSeoMeta({
 	title: () => t('page.travels.title'),
 	description: () => t('page.travels.description', { site: appConfig.title }),
 })
 
-const items = computed(() => travels.map(travel => ({
+const travels = computed(() => getTravels(locale.value))
+
+const items = computed(() => travels.value.map(travel => ({
 	...travel,
 	photoCount: travel.days.reduce((sum, day) => sum + day.photos.length, 0),
 })))
