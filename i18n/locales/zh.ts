@@ -238,6 +238,21 @@ const zh = {
 		backHome: '返回主页',
 		ignore: '尝试忽略',
 	},
+	// timeElapse() 用的相对时长词表：独立于 widget，因为它在 shared/ 里
+	// 是全局自动导入的纯函数，widget.blogStats 之外的调用方不该反过来
+	// 借用一个语义不相关的 widget 命名空间
+	time: {
+		justNow: '刚刚',
+		units: {
+			century: '{n}世纪',
+			year: '{n}年',
+			month: '{n}个月',
+			day: '{n}天',
+			hour: '{n}小时',
+			minute: '{n}分',
+			second: '{n}秒',
+		},
+	},
 	widget: {
 		notFound: '{name} 不存在',
 		blogStats: {
@@ -250,16 +265,6 @@ const zh = {
 			fetchError: '数据获取失败',
 			yearlyLine: '{year}年：{posts}篇，{words}字',
 			wordCount: '约7万',
-			justNow: '刚刚',
-			units: {
-				century: '{n}世纪',
-				year: '{n}年',
-				month: '{n}个月',
-				day: '{n}天',
-				hour: '{n}小时',
-				minute: '{n}分',
-				second: '{n}秒',
-			},
 		},
 		blogTech: {
 			title: '技术信息',

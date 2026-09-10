@@ -13,7 +13,10 @@ defineEmits<ModalEmits>()
 const { locale } = useI18n()
 const currentLanguage = computed(() =>
 	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
-const segmenter = Intl.Segmenter && new Intl.Segmenter(currentLanguage.value, { granularity: 'word' })
+// computed 而非普通 const：MiniSearch 的 processTerm 在下面只构造一次，
+// 但闭包里读的是 segmenter.value，每次分词都会重新取值——写成普通 const
+// 会把 segmenter 钉死在挂载那一刻的语言上，语言切换后分词器不再跟随
+const segmenter = computed(() => Intl.Segmenter && new Intl.Segmenter(currentLanguage.value, { granularity: 'word' }))
 
 const collection = useContentCollection()
 
@@ -36,8 +39,8 @@ const miniSearch = new MiniSearch({
 		combineWith: 'AND',
 		boost: { title: 3, titles: 2 },
 	},
-	processTerm: segmenter
-		? term => Array.from(segmenter.segment(term), seg => seg.segment.toLowerCase())
+	processTerm: segmenter.value
+		? term => Array.from(segmenter.value!.segment(term), seg => seg.segment.toLowerCase())
 		: undefined,
 })
 

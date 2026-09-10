@@ -236,6 +236,21 @@ const en: MessageSchema = {
 		backHome: 'Back to home',
 		ignore: 'Try to continue',
 	},
+	// timeElapse() 用的相对时长词表：独立于 widget，因为它在 shared/ 里
+	// 是全局自动导入的纯函数，widget.blogStats 之外的调用方不该反过来
+	// 借用一个语义不相关的 widget 命名空间
+	time: {
+		justNow: 'Just now',
+		units: {
+			century: '{n} century | {n} centuries',
+			year: '{n} year | {n} years',
+			month: '{n} month | {n} months',
+			day: '{n} day | {n} days',
+			hour: '{n} hour | {n} hours',
+			minute: '{n} minute | {n} minutes',
+			second: '{n} second | {n} seconds',
+		},
+	},
 	widget: {
 		notFound: '{name} doesn\'t exist',
 		blogStats: {
@@ -248,16 +263,6 @@ const en: MessageSchema = {
 			fetchError: 'Failed to load stats',
 			yearlyLine: '{year}: {posts} post, {words} words | {year}: {posts} posts, {words} words',
 			wordCount: 'About 70k',
-			justNow: 'Just now',
-			units: {
-				century: '{n} century | {n} centuries',
-				year: '{n} year | {n} years',
-				month: '{n} month | {n} months',
-				day: '{n} day | {n} days',
-				hour: '{n} hour | {n} hours',
-				minute: '{n} minute | {n} minutes',
-				second: '{n} second | {n} seconds',
-			},
 		},
 		blogTech: {
 			title: 'Tech Info',

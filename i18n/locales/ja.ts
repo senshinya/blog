@@ -236,6 +236,21 @@ const ja: MessageSchema = {
 		backHome: 'ホームに戻る',
 		ignore: '無視して続行',
 	},
+	// timeElapse() 用的相对时长词表：独立于 widget，因为它在 shared/ 里
+	// 是全局自动导入的纯函数，widget.blogStats 之外的调用方不该反过来
+	// 借用一个语义不相关的 widget 命名空间
+	time: {
+		justNow: 'たった今',
+		units: {
+			century: '{n}世紀',
+			year: '{n}年',
+			month: '{n}か月',
+			day: '{n}日',
+			hour: '{n}時間',
+			minute: '{n}分',
+			second: '{n}秒',
+		},
+	},
 	widget: {
 		notFound: '{name}が見つかりません',
 		blogStats: {
@@ -248,16 +263,6 @@ const ja: MessageSchema = {
 			fetchError: 'データの取得に失敗しました',
 			yearlyLine: '{year}年：{posts}件、{words}文字',
 			wordCount: '約7万',
-			justNow: 'たった今',
-			units: {
-				century: '{n}世紀',
-				year: '{n}年',
-				month: '{n}か月',
-				day: '{n}日',
-				hour: '{n}時間',
-				minute: '{n}分',
-				second: '{n}秒',
-			},
 		},
 		blogTech: {
 			title: '技術情報',
