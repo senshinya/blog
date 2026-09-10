@@ -7,7 +7,7 @@ import {
 	LazyWidgetBlogTech,
 	LazyWidgetEmpty,
 	LazyWidgetMemos,
-	LazyWidgetToc,
+	WidgetToc,
 } from '#components'
 
 // @keep-sorted
@@ -17,7 +17,8 @@ const rawWidgets = {
 	LazyWidgetBlogTech,
 	LazyWidgetEmpty,
 	LazyWidgetMemos,
-	LazyWidgetToc,
+	// 目录随页面代码加载，避免首次导航时异步占位让 #blog-aside:empty 隐藏整栏。
+	LazyWidgetToc: WidgetToc,
 }
 
 type RawWidgetName = keyof typeof rawWidgets
