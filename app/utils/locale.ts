@@ -63,7 +63,19 @@ export function resolvePreferred(
 	return undefined
 }
 
-function buildPath(basePath: string, locale: string, defaultLocale: string) {
+/**
+ * 把不带前缀的 basePath 拼上目标语言前缀。默认语言不加前缀。
+ *
+ * 根路径要特殊处理：非默认语言的首页是 /en，不是 /en/ —— 本站
+ * trailingSlash: false，若不特殊处理，`/${locale}${basePath}` 在 basePath
+ * 为 '/' 时会拼出带尾斜杠的 /en/，一个实际不存在（404 或被重定向）的 URL。
+ *
+ * 导出给 useLocaleAlternates 复用：它和这里的 decideLocale 都要把 basePath
+ * 拼成同一个目标 URL —— 前者用来发 hreflang，后者用来决定跳转去哪，
+ * 两处拼法一旦分裂，hreflang 就可能指向一个会跳转或 404 的地址，
+ * 这种问题在浏览器里不报错、任何测试都测不出来，必须靠共用同一份实现来保证一致。
+ */
+export function buildPath(basePath: string, locale: string, defaultLocale: string) {
 	if (locale === defaultLocale)
 		return basePath
 	return basePath === '/' ? `/${locale}` : `/${locale}${basePath}`

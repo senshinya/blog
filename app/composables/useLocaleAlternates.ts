@@ -1,6 +1,6 @@
 import blogConfig from '~~/blog.config'
 import { manifest } from '#build/i18n-manifest'
-import { stripLocale } from '~/utils/locale'
+import { buildPath, stripLocale } from '~/utils/locale'
 
 const LOCALES = blogConfig.locales.map(l => l.code)
 
@@ -24,16 +24,7 @@ export function useLocaleAlternates() {
 	useHead(() => {
 		const { basePath } = stripLocale(route.path, LOCALES, 'zh')
 		const available = manifest[basePath] ?? LOCALES
-
-		// 复刻 app/utils/locale.ts 里 buildPath 对根路径的特殊处理：
-		// 根路径的非默认语言页面是 /en，不是 /en/（trailingSlash: false），
-		// 否则首页的 hreflang 会指向一个实际不存在（多了尾斜杠）的 URL。
-		const localizedPath = (code: string) => {
-			if (code === 'zh')
-				return basePath
-			return basePath === '/' ? `/${code}` : `/${code}${basePath}`
-		}
-		const href = (code: string) => new URL(localizedPath(code), blogConfig.url).toString()
+		const href = (code: string) => new URL(buildPath(basePath, code, 'zh'), blogConfig.url).toString()
 
 		return {
 			link: [

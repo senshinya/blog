@@ -91,3 +91,21 @@ test('builds default-locale targets without a prefix', async () => {
 	const { decideLocale } = await import('./locale.ts')
 	assert.equal(decideLocale(input({ path: '/en/daily/gastritis', stored: 'zh' })), '/daily/gastritis')
 })
+
+test('buildPath prefixes the root path without a trailing slash', async () => {
+	const { buildPath } = await import('./locale.ts')
+	// trailingSlash: false —— 非默认语言的首页是 /en，不是 /en/
+	assert.equal(buildPath('/', 'en', 'zh'), '/en')
+	assert.equal(buildPath('/', 'ja', 'zh'), '/ja')
+})
+
+test('buildPath prefixes a non-root path', async () => {
+	const { buildPath } = await import('./locale.ts')
+	assert.equal(buildPath('/daily/gastritis', 'en', 'zh'), '/en/daily/gastritis')
+})
+
+test('buildPath leaves the default locale unprefixed, root path included', async () => {
+	const { buildPath } = await import('./locale.ts')
+	assert.equal(buildPath('/daily/gastritis', 'zh', 'zh'), '/daily/gastritis')
+	assert.equal(buildPath('/', 'zh', 'zh'), '/')
+})
