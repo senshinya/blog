@@ -11,9 +11,10 @@ const segmenter = Intl.Segmenter && new Intl.Segmenter(appConfig.language, { gra
 
 const collection = useContentCollection()
 
+const dataKey = computed(() => `search:${collection.value}`)
 // await useAsyncData() 会阻塞渲染
 const { data, status } = await useLazyAsyncData(
-	() => `search:${collection.value}`,
+	dataKey,
 	() => queryCollectionSearchSections(collection.value, {
 		ignoredTags: ['pre'],
 	}),

@@ -7,8 +7,9 @@ const LOCALES = blogConfig.locales.map(l => l.code)
 const route = useRoute()
 const collection = useContentCollection()
 
+const dataKey = computed(() => `content:${route.path}`)
 const { data: post } = await useAsyncData(
-	() => `content:${route.path}`,
+	dataKey,
 	() => queryCollection(collection.value).path(stripLocale(route.path, LOCALES, 'zh').basePath).first(),
 	{ watch: [collection] },
 )

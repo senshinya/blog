@@ -25,10 +25,11 @@ const id = computed(() => String(route.params.id))
  * routeRules '/memos/**'）。取数必须在服务端跑完，下面 useSeoMeta 那几行才有内容可写 ——
  * 爬虫不跑 JS，客户端再漂亮的 head 它也看不见。
  *
- * key 用定值 + watch，而不是「随 id 变化的响应式 key」（useAsyncData 本身是支持后者的）：
- * 本项目开了 experimental.extractAsyncDataHandlers，它把传进来的第一个函数一律当作 handler
- * 抽进独立 chunk，于是响应式 key 会被换成一个返回 Promise 的懒加载包装函数，
- * 运行期直接抛 “key must be a non-empty string”。
+ * key 用定值 + watch，而不是「随 id 变化的响应式 key」（useAsyncData 本身是支持后者的）。
+ * 真要改成响应式 key，得写成 computed 再传进去，不能就地写 `() => ...`：本项目开了
+ * experimental.extractAsyncDataHandlers，它把参数里第一个函数一律当作 handler 抽进独立
+ * chunk，key 写成函数就会被抽走、换成一个返回 Promise 的懒加载包装函数，运行期直接抛
+ * “key must be a non-empty string”（详见 app/composables/useArticle.ts 的 useContentCollection）。
  *
  * 仍用 lazy 版：lazy 只影响客户端导航（从列表点进来时不挂起 Suspense，先换页再显示加载态），
  * 服务端那一遍照样 await（nuxt/app/composables/asyncData 里 onServerPrefetch(() => promise)）。

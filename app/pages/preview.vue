@@ -6,8 +6,9 @@ useSeoMeta({
 	description: () => t('page.preview.description', { site: appConfig.title }),
 })
 const collection = useContentCollection()
+const listKey = computed(() => `previews:index:${collection.value}`)
 const { data: listRaw } = await useAsyncData(
-	() => `previews:index:${collection.value}`,
+	listKey,
 	() => getArticleIndexOptions(collection.value, 'previews/%'),
 	{ default: () => [], watch: [collection] },
 )

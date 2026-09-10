@@ -6,8 +6,9 @@ const appConfig = useAppConfig()
 const { t } = useI18n()
 
 const collection = useContentCollection()
+const dataKey = computed(() => `content:/friends:${collection.value}`)
 const { data: postLink } = await useAsyncData(
-	() => `content:/friends:${collection.value}`,
+	dataKey,
 	() => queryCollection(collection.value).path('/friends').first(),
 	{ watch: [collection] },
 )

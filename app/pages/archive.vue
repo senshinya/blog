@@ -19,8 +19,9 @@ const tuningRef = useTemplateRef('tuning-panel')
 useAvoidTarget(tuningRef, showTuning)
 
 const collection = useContentCollection()
+const listKey = computed(() => `posts:index:${collection.value}`)
 const { data: listRaw } = await useAsyncData(
-	() => `posts:index:${collection.value}`,
+	listKey,
 	() => getArticleIndexOptions(collection.value),
 	{ default: () => [], watch: [collection] },
 )

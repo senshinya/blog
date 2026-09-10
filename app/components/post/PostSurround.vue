@@ -8,8 +8,9 @@ const LOCALES = blogConfig.locales.map(l => l.code)
 const route = useRoute()
 const collection = useContentCollection()
 
+const dataKey = computed(() => `surround:${route.path}`)
 const { data: surrounds } = await useAsyncData(
-	() => `surround:${route.path}`,
+	dataKey,
 	() => queryCollectionItemSurroundings(
 		collection.value,
 		stripLocale(route.path, LOCALES, 'zh').basePath,

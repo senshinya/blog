@@ -9,8 +9,9 @@ useSeoMeta({
 })
 
 const collection = useContentCollection()
+const listKey = computed(() => `posts:index:${collection.value}`)
 const { data: listRaw } = await useAsyncData(
-	() => `posts:index:${collection.value}`,
+	listKey,
 	() => getArticleIndexOptions(collection.value),
 	{ default: () => [], watch: [collection] },
 )
@@ -30,8 +31,9 @@ const listRecommended = computed(() => orderBy(
 	['desc'],
 ))
 
+const previewCountKey = computed(() => `previews:count:${collection.value}`)
 const { data: previewCount } = useAsyncData(
-	() => `previews:count:${collection.value}`,
+	previewCountKey,
 	() => queryCollection(collection.value).where('stem', 'LIKE', 'previews/%').count(),
 	{ watch: [collection] },
 )
