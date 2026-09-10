@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { resolveContentPath } from '~/utils/locale'
+
 const appConfig = useAppConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 useSeoMeta({
 	title: () => t('page.preview.title'),
 	description: () => t('page.preview.description', { site: appConfig.title }),
@@ -44,7 +46,7 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 			v-for="article in listCategorized"
 			:key="article.path"
 			v-bind="article"
-			:to="article.path"
+			:to="resolveContentPath(article.path, locale)"
 		/>
 	</menu>
 </div>

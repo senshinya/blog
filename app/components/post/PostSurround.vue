@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
 import blogConfig from '~~/blog.config'
-import { stripLocale } from '~/utils/locale'
+import { resolveContentPath, stripLocale } from '~/utils/locale'
 
 const LOCALES = blogConfig.locales.map(l => l.code)
 
 const route = useRoute()
+const { locale } = useI18n()
 const collection = useContentCollection()
 
 const dataKey = computed(() => `surround:${route.path}`)
@@ -34,7 +35,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 
 <template>
 <DefineTemplate v-slot="{ post, icon, fallbackIcon, fallbackText, alignEnd }">
-	<UtilLink :to="post?.path" class="surround-link" :align-end>
+	<UtilLink :to="resolveContentPath(post?.path, locale)" class="surround-link" :align-end>
 		<Icon :class="{ 'rtl-flip': post }" :name="post ? icon : fallbackIcon" />
 		<div class="surround-text">
 			<strong class="title" :class="getPostTypeClassName(post?.type)">

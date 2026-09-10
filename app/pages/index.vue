@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { orderBy } from 'es-toolkit/array'
+import { resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 useSeoMeta({
 	description: appConfig.description,
 	ogImage: appConfig.author.avatar,
@@ -77,7 +78,7 @@ const { data: previewCount } = useAsyncData(
 			v-for="article, index in listPaged"
 			:key="article.path"
 			v-bind="article"
-			:to="article.path"
+			:to="resolveContentPath(article.path, locale)"
 			:style="getFixedDelay(index * 0.05)"
 		/>
 	</TransitionGroup>

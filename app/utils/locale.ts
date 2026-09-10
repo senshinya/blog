@@ -85,6 +85,31 @@ export function buildPath(basePath: string, locale: string, defaultLocale: strin
 }
 
 /**
+ * 把 Content 文档的 path/id 拼上当前语言前缀，用作站内链接的 `:to`。
+ *
+ * content_zh/content_en/content_ja 三个 collection 用 `source: { prefix: '' }` 抹掉了
+ * 各自的语言目录段（见 nuxt.config），同一篇文章在三个 collection 里的 path 完全相同——
+ * 这是特意为了让 stripLocale 反查、queryCollectionItemSurroundings 等按 basePath 查询的
+ * 地方不用关心语言。但也意味着这个 path 不能直接绑给 NuxtLink 当链接用：@nuxtjs/i18n
+ * 不会给普通 <NuxtLink> 自动加前缀（全站唯一在用的路由帮手是 LangToggle 里的
+ * useSwitchLocalePath），直接绑 path 会让英文/日文页面的文章链接全部指向中文版。
+ *
+ * archive.vue、index.vue、PostSurround.vue、SearchItem.vue、PostSlide.vue、preview.vue
+ * 六处都要做同一次拼接，抽成一个函数以免各写一份、复用 buildPath 已验证过的拼接规则
+ * （含根路径的特殊处理）。
+ *
+ * path 允许 undefined：PostSurround 的上一篇/下一篇在文章边界处为空，SearchItem 的
+ * props 也是 Partial<>——原样透传给 UtilLink，按无链接处理。
+ *
+ * 同 buildPath：传入的 path 必须是不带语言前缀的 basePath，传入已带前缀的路径
+ * （如 /en/daily/foo）会拼出错误的 /en/en/daily/foo，调用方需自行保证——这里的调用方
+ * 全部来自 content collection 查询结果或 stem 拼接，从不带前缀，满足这个前提。
+ */
+export function resolveContentPath(path: string | undefined, locale: string, defaultLocale = 'zh') {
+	return path === undefined ? undefined : buildPath(path, locale, defaultLocale)
+}
+
+/**
  * 返回应当跳转到的路径，undefined 表示留在原地。
  *
  * 留在原地的三种情形：没有可用偏好、偏好与当前语言一致、当前页没有偏好语言的译文。

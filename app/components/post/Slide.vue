@@ -3,9 +3,11 @@ import type { ArticleProps } from '~/types/article'
 import Autoplay from 'embla-carousel-autoplay'
 import emblaCarouselVue from 'embla-carousel-vue'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
+import { resolveContentPath } from '~/utils/locale'
 
 defineProps<{ list: ArticleProps[] }>()
 
+const { locale } = useI18n()
 const appConfig = useAppConfig()
 const compConf = computed(() => appConfig.component.slide)
 
@@ -45,7 +47,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 				:key="index"
 				class="slide-item"
 				:title="article.description"
-				:to="article.path"
+				:to="resolveContentPath(article.path, locale)"
 			>
 				<NuxtImg class="cover" :src="article.image" :alt="compConf.showTitle ? '' : article.title" />
 

@@ -109,3 +109,28 @@ test('buildPath leaves the default locale unprefixed, root path included', async
 	assert.equal(buildPath('/daily/gastritis', 'zh', 'zh'), '/daily/gastritis')
 	assert.equal(buildPath('/', 'zh', 'zh'), '/')
 })
+
+test('resolveContentPath leaves the default locale (zh) unprefixed', async () => {
+	const { resolveContentPath } = await import('./locale.ts')
+	assert.equal(resolveContentPath('/daily/gastritis', 'zh'), '/daily/gastritis')
+})
+
+test('resolveContentPath prefixes a non-default locale', async () => {
+	const { resolveContentPath } = await import('./locale.ts')
+	assert.equal(resolveContentPath('/daily/gastritis', 'en'), '/en/daily/gastritis')
+	assert.equal(resolveContentPath('/daily/gastritis', 'ja'), '/ja/daily/gastritis')
+})
+
+test('resolveContentPath passes undefined through untouched', async () => {
+	// PostSurround 的上一篇/下一篇在文章边界处为空，SearchItem 的 props 是 Partial<>
+	const { resolveContentPath } = await import('./locale.ts')
+	assert.equal(resolveContentPath(undefined, 'en'), undefined)
+})
+
+test('resolveContentPath does not guard against a path that already carries a prefix', async () => {
+	// 同 buildPath 的既有约定：basePath 必须是不带语言前缀的，调用方（content collection
+	// 查询结果、stem 拼接）保证这一点，这里不做二次纠正——传入已带前缀的路径会照样
+	// 再拼一层前缀，产生错误但可预期的结果，而不是静默地“看起来对”
+	const { resolveContentPath } = await import('./locale.ts')
+	assert.equal(resolveContentPath('/en/daily/gastritis', 'en'), '/en/en/daily/gastritis')
+})

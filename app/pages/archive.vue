@@ -3,9 +3,10 @@ import type { ArticleProps } from '~/types/article'
 import { groupBy } from 'es-toolkit/array'
 import { sumBy } from 'es-toolkit/math'
 import { mapValues } from 'es-toolkit/object'
+import { resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 useSeoMeta({
 	title: () => t('page.archive.title'),
 	description: () => t('page.archive.description', { site: appConfig.title }),
@@ -109,7 +110,7 @@ function getArticleYear(article: ArticleProps) {
 				v-for="article, index in yearGroup"
 				:key="article.path"
 				v-bind="article"
-				:to="article.path"
+				:to="resolveContentPath(article.path, locale)"
 				:show-category="column < 3"
 				:style="getFixedDelay(index * 0.03)"
 			/>
