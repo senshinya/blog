@@ -17,6 +17,10 @@ useHead({
 // （app/travels/<locale>/*.yaml），是清单驱动 hreflang 最要紧的场景。
 // app.vue 不管走不走布局都会渲染，能覆盖到这一页。
 useLocaleAlternates()
+
+// 同样放在 app.vue：/travels/[slug] 设了 layout: false，放在 layouts/default.vue
+// 里会漏掉这一页的日文字体
+useLocaleFonts()
 </script>
 
 <template>

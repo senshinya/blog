@@ -33,3 +33,21 @@
 		src: local("Noto Serif SC");
 	}
 }
+
+/* 中日共用汉字字形不同（直、骨、今、令 等），日语页面须落到 JP 字库。
+   --font-creative 是抖音美好体（GB 字库，无假名覆盖），给它配 JP 兜底。
+
+   :lang(ja) 与上面 :root 的特异度相同（0,1,0），且在文件里更靠后，会同时
+   赢过 :root 里的常规声明和它嵌套的 @media (max-resolution: 1.2dppx) 低分屏
+   兜底 —— 若不在这里重复同一条 media query，日语页面在非视网膜屏幕上会静默
+   丢失那条兜底。这里原样复制一份，保留同样的低分屏行为。 */
+:lang(ja) {
+	--font-basic: "Noto Sans JP", "InterVariable", sans-serif;
+	--font-serif: "Noto Serif JP", serif;
+	--font-creative: "DOUYINSANSBOLD-GB", "Noto Sans JP", "InterVariable", sans-serif;
+	--font-stroke-free: "DOUYINSANSBOLD-GB", "Noto Sans JP", "Inter", sans-serif;
+
+	@media (max-resolution: 1.2dppx) {
+		--font-basic: "InterVariable", system-ui, sans-serif;
+	}
+}
