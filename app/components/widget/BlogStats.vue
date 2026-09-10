@@ -36,7 +36,32 @@ const blogStats = computed(() => [{
 </script>
 
 <template>
-<BlogWidget card :title="$t('widget.blogStats.title')">
+<BlogWidget class="blog-stats" card :title="$t('widget.blogStats.title')">
 	<ZDlGroup :items="blogStats" size="small" />
 </BlogWidget>
 </template>
+
+<style lang="scss" scoped>
+// Keep the three statistics side by side. Shared rows align values even when
+// translated labels wrap; each text snapshot remains clipped to its own column.
+.blog-stats :deep(.dl-group.small) {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 0 1em;
+
+	> div {
+		display: grid;
+		grid-row: span 2;
+		grid-template-rows: subgrid;
+		min-width: 0;
+		white-space: normal;
+
+		> dt,
+		> dd {
+			overflow: clip;
+			overflow-wrap: anywhere;
+			min-width: 0;
+		}
+	}
+}
+</style>

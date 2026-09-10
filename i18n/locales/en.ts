@@ -7,7 +7,7 @@ const en: MessageSchema = {
 		description: 'A corner of the internet. Shinya\'s personal blog on tinkering, projects, notes and daily life — networking and proxies, self-hosted services, Go and systems internals, and things that somehow ate an entire weekend.',
 		readFull: 'Read the full post',
 	},
-	lang: { unavailable: 'Not available in this language yet' },
+	lang: { switch: 'Switch language', unavailable: 'Not available in this language yet' },
 	nav: {
 		articles: 'Posts',
 		travels: 'Travels',
@@ -18,6 +18,7 @@ const en: MessageSchema = {
 		skipToContent: 'Skip to content',
 	},
 	sidebar: {
+		appearance: 'Appearance',
 		search: 'Search',
 		toggleAside: 'Toggle sidebar',
 		toggleMenu: 'Toggle menu',
@@ -106,6 +107,7 @@ const en: MessageSchema = {
 		collapseThread: 'Collapse this thread',
 		owner: 'Host',
 		edited: 'Edited',
+		machineTranslated: 'Machine translated',
 		deleted: 'This comment has been deleted',
 		avatarAlt: '{name}\'s avatar',
 		readMore: 'Show full comment',
@@ -186,6 +188,13 @@ const en: MessageSchema = {
 			closeViewer: 'Close photo',
 			prevPhoto: 'Previous photo',
 			nextPhoto: 'Next photo',
+			mapControls: {
+				title: 'Map',
+				zoomIn: 'Zoom in',
+				zoomOut: 'Zoom out',
+				attribution: 'Toggle attribution',
+				feedback: 'Map feedback',
+			},
 			mapUnavailable: 'This browser can\'t render the map (WebGL isn\'t available). Photos and the rest of the travel log are unaffected.',
 		},
 		media: {
@@ -278,6 +287,7 @@ const en: MessageSchema = {
 		},
 		blogLog: {
 			title: 'Changelog',
+			multilingual: 'Added Chinese, English and Japanese support, including maps and comments',
 			commentMigration: 'Migrated the comment system from giscus to a self-hosted one',
 			contentMigration: 'Migrated to Nuxt 4 + Nuxt Content v3; content moved back to Markdown',
 			stackRewrite: 'Rebuilt on SvelteKit + PocketBase with a self-hosted CMS',

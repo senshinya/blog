@@ -1,5 +1,20 @@
 <script setup lang="ts">
 const { slots } = inject<any>(Symbol.for('dxup:layout-slots')) || {}
+
+/**
+ * has-aside 必须等挂载后再算，否则同步页面会 hydration mismatch。
+ *
+ * dxup 的 LayoutSlotsForward 在自己的 setup 里往注册表写 slots，而 SSR 是顺序
+ * push：编译出来的布局 render 先 ssrRenderSlot(默认插槽)、之后才求值 BlogPanel
+ * 的 props。页面组件带顶层 await（index/archive/friends/[...slug] 等）时它被推进
+ * promise buffer，求值那一刻注册表还是空的 → 服务端 false；页面是同步组件
+ * （travels/index、memos/index）时当场就渲染完了 → 服务端 true。
+ * 而客户端 render 时子组件尚未创建，注册表首帧恒空 → 恒 false。
+ * 于是那两个同步页面上两端首帧对不上，#blog-panel 的侧栏开关按钮就是那条
+ * node mismatch。用 mounted 把两端首帧一律钉成 false，挂载后 slots 这个
+ * shallowRef 照常响应式，按钮该出现还是出现。
+ */
+const mounted = useMounted()
 </script>
 
 <template>
@@ -16,7 +31,7 @@ const { slots } = inject<any>(Symbol.for('dxup:layout-slots')) || {}
 		<slot name="aside" />
 	</BlogAside>
 </div>
-<BlogPanel :has-aside="!!slots?.aside" />
+<BlogPanel :has-aside="mounted && !!slots?.aside" />
 <BikariyaModals />
 </template>
 

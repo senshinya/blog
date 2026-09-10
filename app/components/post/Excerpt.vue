@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { delay } from 'es-toolkit/promise'
+import { ENTRANCE_SKIP_KEY } from '~/composables/useEntranceDelay'
 
 const props = defineProps<{
 	excerpt: string
 }>()
 
 const appConfig = useAppConfig()
+const localeSwitch = useState<boolean>(ENTRANCE_SKIP_KEY, () => false).value
 
 const excerpt = ref(props.excerpt)
 const caret = ref('')
 
-if (appConfig.component.excerpt?.animation !== false) {
+if (appConfig.component.excerpt?.animation !== false && !localeSwitch) {
 	excerpt.value = ''
 	onMounted(async () => {
 		caret.value = appConfig.component.excerpt?.caret ?? '_'

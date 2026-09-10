@@ -8,6 +8,7 @@ import { resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 const currentLanguage = computed(() =>
 	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 useSeoMeta({
@@ -115,7 +116,7 @@ function getArticleYear(article: ArticleProps) {
 				v-bind="article"
 				:to="resolveContentPath(article.path, locale)"
 				:show-category="column < 3"
-				:style="getFixedDelay(index * 0.03)"
+				:style="entranceDelay(index * 0.03)"
 			/>
 		</TransitionGroup>
 	</section>

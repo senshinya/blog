@@ -1,4 +1,5 @@
 import type { FetchOptions } from 'ofetch'
+import { commentRequestLanguage } from '~/utils/comment'
 
 /**
  * blog-comment 的错误体是统一的：
@@ -60,13 +61,16 @@ export class CommentError extends Error {
  */
 export default function useCommentApi() {
 	const { comment } = useAppConfig()
+	const { locale } = useI18n()
 	const base = comment.api.replace(/\/+$/, '')
 
 	async function request<T>(path: string, opts: FetchOptions = {}): Promise<T> {
+		const lang = commentRequestLanguage(path, locale.value, opts.method)
 		try {
 			return await $fetch<T>(base + path, {
 				credentials: 'include',
 				...opts,
+				...(lang ? { query: { ...opts.query, lang } } : {}),
 			} as FetchOptions) as T
 		}
 		catch (err) {

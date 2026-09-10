@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Map as MapLibreMap, Marker } from 'maplibre-gl'
 import type { TravelPhoto } from '~/types/travel'
+import { getTravelMapLabelField } from '~/utils/travelMapLocale'
 // 样式静态引入：它会跟着本组件的 CSS chunk 走，只有游记详情页会加载。
 // 不用 await import(...css)：Vite 的依赖预打包偶尔会让这条动态 CSS 路径取不到模块。
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -21,21 +22,9 @@ const STYLE = {
 	dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
 }
 
-/**
- * 中文优先的标签。
- *
- * 瓦片里本来就带 name:zh（北京那块能取到「丰镇市」「京台高速」），是 CARTO 的样式没去读它 ——
- * 它把 text-field 写死成 {name_en}（低缩放）和 {name}（高缩放），于是中国地名一路显示成英文。
- * 这里不换底图，只在样式装载后把标签图层的 text-field 重写掉。
- *
- * 退到 name（本地名）而不是直接退到拉丁名：日本地名缺 name:zh 时，「清水寺」比「Kiyomizu-dera」好读。
- * CJK 字形由 MapLibre 的 localIdeographFontFamily（默认 sans-serif）在本地渲染，不向字形服务器要 ——
- * 所以中文标签既不额外耗带宽，也不用配字体。
- */
-const LABEL_FIELD = ['coalesce', ['get', 'name:zh'], ['get', 'name'], ['get', 'name:latin']]
-
 const container = useTemplateRef<HTMLElement>('container')
 const colorMode = useColorMode()
+const { t, locale } = useI18n()
 
 let maplibre: typeof import('maplibre-gl') | undefined
 let map: MapLibreMap | undefined
@@ -50,7 +39,7 @@ function styleUrl() {
 	return colorMode.value === 'dark' ? STYLE.dark : STYLE.light
 }
 
-/** 把当前样式里所有地名标签换成中文优先。样式一换（换肤）就得重放一次 */
+/** 地名跟随博客语言；换肤后也重新应用，不改门牌号等非地名标签。 */
 function localizeLabels() {
 	if (!map)
 		return
@@ -63,12 +52,12 @@ function localizeLabels() {
 		if (!field)
 			continue
 
-		// 只动画地名的图层。门牌号图层的 text-field 是 {housenumber}，跟 name 无关，
-		// 一并重写会让三个 name 字段全取空，门牌号当场消失
+		// 只替换地名的图层。门牌号图层的 text-field 是 {housenumber}，跟 name 无关，
+		// 一并重写会让地名字段全取空，门牌号当场消失
 		if (!JSON.stringify(field).includes('name'))
 			continue
 
-		map.setLayoutProperty(layer.id, 'text-field', LABEL_FIELD)
+		map.setLayoutProperty(layer.id, 'text-field', getTravelMapLabelField(locale.value))
 	}
 }
 
@@ -220,11 +209,19 @@ onMounted(async () => {
 			center: [135.7681, 35.0116], // 京都：首帧兜底，随即被 fitBounds 覆盖
 			zoom: 9,
 			attributionControl: { compact: true },
+			// Locale routes remount this component, including MapLibre's UI controls.
+			locale: {
+				'Map.Title': t('page.travels.mapControls.title'),
+				'NavigationControl.ZoomIn': t('page.travels.mapControls.zoomIn'),
+				'NavigationControl.ZoomOut': t('page.travels.mapControls.zoomOut'),
+				'AttributionControl.ToggleAttribution': t('page.travels.mapControls.attribution'),
+				'AttributionControl.MapFeedback': t('page.travels.mapControls.feedback'),
+			},
 		})
 
 		map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'bottom-right')
+		map.on('style.load', localizeLabels)
 		map.on('load', () => {
-			localizeLabels()
 			ready.value = true
 		})
 	}
@@ -261,15 +258,15 @@ watch(() => props.focus, (photo) => {
 	fitToPhotos()
 })
 
-// 标记是 DOM 覆盖物，不随 setStyle 销毁，故换肤后无需重建。
-// 但图层表会被整份换掉，中文标签得跟着重放 —— styledata 在新样式就位后触发，
-// 用 once 而不是 on：localizeLabels 自己会改 layout，on 会被自己触发的 styledata 打回来，转成死循环
+// style.load handles both the initial style and theme changes. Unlike styledata,
+// it is not triggered by setLayoutProperty, so localization cannot recurse.
 watch(() => colorMode.value, () => {
-	if (!map)
-		return
+	map?.setStyle(styleUrl())
+})
 
-	map.setStyle(styleUrl())
-	map.once('styledata', localizeLabels)
+watch(locale, () => {
+	if (map?.isStyleLoaded())
+		localizeLabels()
 })
 </script>
 

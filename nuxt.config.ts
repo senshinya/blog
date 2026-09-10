@@ -237,7 +237,14 @@ export default defineNuxtConfig({
 		'@bikariya/image-viewer',
 		'@bikariya/modals',
 		'@bikariya/shiki',
-		'@nuxt/a11y',
+		/**
+		 * @nuxt/a11y 的 axe 插件在**非安全上下文**下会整个崩掉：它的 active-tab-tracker
+		 * 调 crypto.randomUUID()，而该 API 仅在 secure context 可用（localhost 算，
+		 * http://192.168.x.x 不算）。它的 try/catch 里 catch 分支又调了同一个函数，
+		 * 所以两条路都抛，应用初始化失败（NUXT_E1005），连带 vue-tippy 不注册、v-tip 解析不了。
+		 * 局域网联调（nuxt dev --host + 用 IP 访问）时用 NUXT_A11Y=0 关掉它。
+		 */
+		['@nuxt/a11y', { enabled: env.NUXT_A11Y !== '0' }],
 		'@nuxt/content',
 		'@nuxt/hints',
 		'@nuxt/icon',

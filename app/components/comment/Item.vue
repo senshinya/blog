@@ -201,6 +201,10 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 				<span v-if="owner" class="tag-owner">{{ $t('comment.owner') }}</span>
 				<UtilDate v-if="node.created_at" class="date" :date="node.created_at" />
 				<span v-if="node.edited_at" class="edited">{{ $t('comment.edited') }}</span>
+				<span v-if="node.is_machine_translated && !editing" class="translation">
+					<Icon name="tabler:language" aria-hidden="true" />
+					{{ $t('comment.machineTranslated') }}
+				</span>
 			</div>
 
 			<template v-if="editing">
@@ -217,7 +221,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			<template v-else>
 				<div class="clip" :class="{ on: clipped }">
 					<!-- eslint-disable-next-line vue/no-v-html -- 服务端渲染并消毒过的 HTML -->
-					<div ref="prose" class="prose" v-html="node.body_html" />
+					<div ref="prose" class="prose" :lang="node.language === 'jp' ? 'ja' : node.language" v-html="node.body_html" />
 				</div>
 				<button
 					v-if="clipped"

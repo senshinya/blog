@@ -34,4 +34,8 @@ export function animateBetweenRects(
 	})
 }
 
+/**
+ * 逐项错峰的 --delay。列表卡片的入场动画请改用 useEntranceDelay()，
+ * 它在这之上多做一件事：切换语言时不播入场（理由见该文件）。
+ */
 export const getFixedDelay = (s: number, fixed = 2) => ({ '--delay': `${s.toFixed(fixed)}s` })

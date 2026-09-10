@@ -235,7 +235,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	// 1px 描边环，比实心卡片轻，条目多时不至于糊成一片
 	border-radius: 8px;
 	box-shadow: 0 0 0 1px var(--c-bg-soft);
-	animation: float-in 0.3s backwards;
+	animation: var(--entrance, float-in 0.3s backwards);
 	animation-delay: var(--delay);
 }
 

@@ -1,3 +1,5 @@
+import { stripLocale } from './locale.ts'
+
 /**
  * 自建评论服务 blog-comment 的类型与纯函数。
  *
@@ -40,6 +42,8 @@ export interface CommentUser {
 	is_owner: boolean
 }
 
+export type CommentLanguage = 'zh' | 'en' | 'jp'
+
 export interface Comment {
 	id: number
 	parent_id: number | null
@@ -49,6 +53,12 @@ export interface Comment {
 	user?: CommentUser
 	body_html?: string
 	body_md?: string
+	/** 公开读取接口才提供；写入响应和删除占位可能不包含翻译信息。 */
+	requested_language?: CommentLanguage
+	language?: CommentLanguage | 'und'
+	source_language?: CommentLanguage | 'und'
+	is_machine_translated?: boolean
+	translation_status?: 'original' | 'translated' | 'pending' | 'failed' | 'disabled'
 	created_at?: string
 	edited_at?: string | null
 	reactions?: Record<string, number>
@@ -142,11 +152,21 @@ export function reactionEmoji(key: string) {
  *
  * 服务端的校验是：必须以 / 开头、512 字节内、不带 query/hash、不含连续 //、
  * 不以 / 结尾、不含 .. 和空白。Nuxt 的 route.path 已经满足绝大部分，
- * 只有根路径和可能的尾斜杠要处理 —— 根路径本身就是 "/"，不能再削。
+ * 传入站点语言列表时去掉语言前缀，让译文页与原文共用评论、回复与 reaction。
+ * 根路径本身保持为 "/"。
  */
-export function commentPageKey(path: string) {
+export function commentPageKey(path: string, locales: readonly string[] = []) {
 	const clean = path.split(/[?#]/)[0]!.replace(/\/{2,}/g, '/')
-	return clean.length > 1 ? clean.replace(/\/+$/, '') : '/'
+	return stripLocale(clean, locales, 'zh').basePath
+}
+
+/** 只有公开正文读取支持 lang；日语路由码 ja 对应 API 的 jp。 */
+export function commentRequestLanguage(path: string, locale: string, method = 'GET'): CommentLanguage | undefined {
+	if (method.toUpperCase() !== 'GET'
+		|| !['/api/pages/thread', '/api/pages/thread/focus', '/api/comments/recent'].includes(path)) {
+		return
+	}
+	return locale === 'ja' || locale === 'jp' ? 'jp' : locale === 'en' ? 'en' : 'zh'
 }
 
 /**

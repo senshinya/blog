@@ -49,7 +49,7 @@ const currentLanguage = computed(() =>
 	margin: 1em 0;
 	border-radius: 0.8em;
 	color: var(--c-text);
-	animation: float-in 0.2s var(--delay) backwards;
+	animation: var(--entrance, float-in 0.2s var(--delay) backwards);
 
 	> article {
 		display: grid;

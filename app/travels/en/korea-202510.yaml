@@ -1,0 +1,527 @@
+slug: korea-202510
+draft: true
+title: South Korea
+subtitle: '2025.10'
+posttitle: 'Travel Journal: South Korea (October 2025)'
+description: 'Landed in Busan and worked our way up the coast to Seoul. Seven days of sea, temples, the border, palaces and city lights at night, and every meal taken seriously.'
+published: 2026-08-17
+totaldays: 7
+coverImage: https://blog-img.774352199.xyz/rfbX78.jpg
+days:
+  - day: 1
+    title: 'Arriving in Busan: First Night by the Sea'
+    descriptions:
+      - 'By the time the plane touched down at Gimhae, most of the day was already gone. Dragging our luggage onto the subway, my first impression of Korea was how quiet the platform was — and then, once we were in the city, how each sign was brighter than the last.'
+      - 'We went down to the sea anyway after dropping off our bags. Haeundae was almost empty at that hour, the tower blocks lining the shore with their lights. A short first day, just long enough to shake off the travelling.'
+    photos:
+      - src: https://blog-img.774352199.xyz/DLNdZy.jpg
+        alt: Arriving at Gimhae Airport
+        caption: The first photo at the airport. Both I and my luggage had landed; my head was still in transit.
+        lat: 35.171903
+        lng: 128.948506
+      - src: https://blog-img.774352199.xyz/xoAPra.jpg
+        alt: A Busan subway platform
+        caption: The first leg from the airport into the city began on a very quiet subway platform.
+        lat: 35.1634
+        lng: 128.984025
+      - src: https://blog-img.774352199.xyz/aDIuj7.jpg
+        alt: A shopping street by the sea
+        caption: 'The street near where we stayed was narrow, with signage lit from the ground floor all the way to the roof.'
+        lat: 35.163247
+        lng: 129.158942
+      - src: https://blog-img.774352199.xyz/Xe0RQq.jpg
+        alt: Shop signs at night
+        caption: 'Turning to look the other way: Busan at night is a good deal livelier than that platform was.'
+        lat: 35.163011
+        lng: 129.159344
+      - src: https://blog-img.774352199.xyz/PKe4W6.jpg
+        alt: Haeundae beach late at night
+        caption: 'It was already very late, and the beach had emptied out instead, leaving only a row of lights in the distance.'
+        lat: 35.159397
+        lng: 129.162444
+      - src: https://blog-img.774352199.xyz/hUB6QE.jpg
+        alt: Surf on wet sand
+        caption: 'You cannot make out the colour of the sea at night, but the white edge of the waves on the wet sand is perfectly clear.'
+        lat: 35.158586
+        lng: 129.162442
+      - src: https://blog-img.774352199.xyz/ZHJVJJ.jpg
+        alt: The beach and the towers along the shore
+        caption: Looking back you can see the towers along the coast; here the city and the sea are almost pressed together.
+        lat: 35.158806
+        lng: 129.162481
+  - day: 2
+    title: Along the Coast
+    descriptions:
+      - "I finally saw the sea properly from the window after waking up. Lunch was a pot of beef and glass noodles, bibimbap and a ring of side dishes — the table was better filled than the day's itinerary."
+      - 'In the afternoon we went to Haedong Yonggungsa. The temple spreads down along the rocky shore, and the stone steps, pines and rooflines cut the sea into sections; only at the very bottom do you get the open water back in one piece.'
+    photos:
+      - src: https://blog-img.774352199.xyz/EN4xux.jpg
+        alt: The coast outside the window at dawn
+        caption: 'Opening the curtains in the morning, the sea I had only heard the night before finally had a colour.'
+        lat: 35.160503
+        lng: 129.160969
+      - src: https://blog-img.774352199.xyz/wyvZKs.jpg
+        alt: A pot of beef and glass noodles
+        caption: 'A pot of beef, vegetables and glass noodles arrived, and the first proper meal of the trip started steaming.'
+        lat: 35.160531
+        lng: 129.160925
+      - src: https://blog-img.774352199.xyz/gzf7XW.jpg
+        alt: 'Stew, bibimbap and side dishes'
+        caption: 'The pot, the bibimbap and a ring of side dishes covered the table; our ordering skills had held up for now.'
+        lat: 35.160719
+        lng: 129.160567
+      - src: https://blog-img.774352199.xyz/JNuWcf.jpg
+        alt: A Korean flag outside the car window
+        caption: 'Driving out to Gijang, the flags along the road reminded me that we had landed right in the middle of a Korean holiday.'
+        lat: 35.166967
+        lng: 129.182006
+      - src: https://blog-img.774352199.xyz/gXUuOO.jpg
+        alt: Stone steps down to Haedong Yonggungsa
+        caption: 'Haedong Yonggungsa is built against the sea, and before you get to look at the water there is not a single step you can skip.'
+        lat: 35.188186
+        lng: 129.223247
+      - src: https://blog-img.774352199.xyz/ZQ0L0Z.jpg
+        alt: The forecourt and stone figures
+        caption: 'Walking into the forecourt, the coastline is briefly shut out behind statues and eaves.'
+        lat: 35.188186
+        lng: 129.223247
+      - src: https://blog-img.774352199.xyz/iEu6cP.jpg
+        alt: A slip warning sign by the steps
+        caption: The sign illustrates falling over rather vividly; it is hard not to give it a second look on the way up.
+        lat: 35.188186
+        lng: 129.223247
+      - src: https://blog-img.774352199.xyz/XelNGC.jpg
+        alt: 'Pines, temple roofs and the sea'
+        caption: 'A little further on, the pines, the temple roofs and the sea finally stack into the same frame.'
+        lat: 35.188186
+        lng: 129.223247
+      - src: https://blog-img.774352199.xyz/Ooqc95.jpg
+        alt: The rocky shore beside the temple
+        caption: 'Looking the other way from the temple, the rocks cut a curve out of the open water.'
+        lat: 35.188592
+        lng: 129.223344
+      - src: https://blog-img.774352199.xyz/ZHo3qf.jpg
+        alt: Rocks and open sea
+        caption: 'Reaching the most open viewpoint, this stretch of Haedong Yonggungsa comes to an end.'
+        lat: 35.188592
+        lng: 129.223344
+  - day: 2
+    title: 'Gijang: Sea and Evening'
+    descriptions:
+      - 'Leaving the temple we carried on along the coast, and the sights quickly turned into street corners, residential blocks and a rail line running right beside the water. The sea stayed next to us the whole time; only the foreground changed at every bend.'
+      - 'We caught the sunset in the evening, with the tracks, the sea and the distant towers all stacked into one frame. Once we had had enough of the water we went back into town for grilled meat, and only then did the day properly end.'
+    photos:
+      - src: https://blog-img.774352199.xyz/c7yZCq.jpg
+        alt: A street corner on the Gijang coast
+        caption: 'Back on the street after the sights, the ordinary life of a seaside town takes over again.'
+        lat: 35.166689
+        lng: 129.183697
+      - src: https://blog-img.774352199.xyz/qRCYuU.jpg
+        alt: The coastal rail line by day
+        caption: 'By day the tracks run out along the shore, holding a place for the sunset later on.'
+      - src: https://blog-img.774352199.xyz/DyQHqe.jpg
+        alt: Evening glow over the sea
+        caption: 'The sun went down slowly. There was nobody on the water, and nothing surplus in the frame.'
+        lat: 35.155633
+        lng: 129.177353
+      - src: https://blog-img.774352199.xyz/Q8A3dI.jpg
+        alt: 'Sunset, tracks and distant towers'
+        caption: 'The sun settled exactly onto the coastal tracks, with the last of the daylight still on the towers behind.'
+        lat: 35.155633
+        lng: 129.177353
+      - src: https://blog-img.774352199.xyz/ZoPRye.jpg
+        alt: The coastal line through a residential area
+        caption: The tracks pass right along the edge of a residential block; the sea train is never far from everyday life.
+        lat: 35.156494
+        lng: 129.175781
+      - src: https://blog-img.774352199.xyz/M48U6c.jpg
+        alt: A coast road and a harbour lighthouse
+        caption: 'We carried on along the shore after leaving the tracks, and the lighthouse at the end of the road turned this stretch of the walk.'
+        lat: 35.160053
+        lng: 129.170781
+      - src: https://blog-img.774352199.xyz/s3n3iP.jpg
+        alt: A datura flower by the road
+        caption: 'After the best part of a day looking at the sea, one flower hanging over the path pulled my eyes back to close range.'
+        lat: 35.160681
+        lng: 129.163042
+      - src: https://blog-img.774352199.xyz/7RIYv1.jpg
+        alt: A grill restaurant at dinner
+        caption: 'In the evening we ducked into a busy grill house, where at last the day no longer had to be spent walking.'
+        lat: 35.161944
+        lng: 129.160383
+      - src: https://blog-img.774352199.xyz/YiHMJH.jpg
+        alt: A grill table covered in dishes
+        caption: 'The grill had not fully heated up and the table was already taken over by side dishes, drinks and cutlery.'
+        lat: 35.16185
+        lng: 129.160244
+      - src: https://blog-img.774352199.xyz/fgaWB7.jpg
+        alt: Meat on the grill
+        caption: 'Once the meat was on the grill, the only remaining plan for the day was to eat properly.'
+        lat: 35.16185
+        lng: 129.160244
+  - day: 3
+    title: The Sea from a Cable Car
+    descriptions:
+      - 'Day three we moved to Songdo. After lunch we took the cable car across the bay, with the water, the hillside and the city sliding along beneath us — the only thing to overcome being the urge to keep staring through the glass floor.'
+      - 'Distance behaves strangely inside a cable car. The far shore looks close, yet the bay refuses to end. It was only when the towers started to loom that I realised we had crossed most of Songdo.'
+    photos:
+      - src: https://blog-img.774352199.xyz/TIi3un.jpg
+        alt: A pot of hot soup before the cable car
+        caption: Lunch was settled with a pot of hot soup before we went to the cable car.
+        lat: 35.161683
+        lng: 129.160558
+      - src: https://blog-img.774352199.xyz/8ZSo2E.jpg
+        alt: The Songdo cable car and the coast
+        caption: 'The car left the station and the hillside, the water and the city opposite opened out together.'
+        lat: 35.070572
+        lng: 129.022419
+      - src: https://blog-img.774352199.xyz/nysbC8.jpg
+        alt: A cable car coming the other way
+        caption: 'Another cabin slid past in front of the rocks, adding a little speed to an otherwise still sea.'
+        lat: 35.070572
+        lng: 129.022419
+      - src: https://blog-img.774352199.xyz/fy4Cp5.jpg
+        alt: Feet in a glass-floored cabin
+        caption: The sea is directly under the glass. My feet knew it was safe; my eyes were less convinced.
+        lat: 35.067303
+        lng: 129.021761
+      - src: https://blog-img.774352199.xyz/Eau0rl.jpg
+        alt: The cable line towards the city
+        caption: The line points straight at the skyline. You can see the destination; judging the distance is harder.
+        lat: 35.062472
+        lng: 129.020742
+      - src: https://blog-img.774352199.xyz/NuI5Rl.jpg
+        alt: A cabin above the water
+        caption: 'Shot vertically, the cable car looks as though it climbs straight out of the sea and in among the towers.'
+        lat: 35.062472
+        lng: 129.020742
+  - day: 3
+    title: 'Songdo: Streets and the Skywalk'
+    descriptions:
+      - 'After getting off the cable car we walked the skywalk out over the water, and spent what was left of the day without chasing any more sights. A cat in the park, a crow on a lamp post and a piece of street sculpture carried us back into town.'
+      - 'Looking at the bay once more from higher up, the cable car we had just ridden was reduced to a very thin line. In the evening we came back to the busy blocks and closed out our last full day in Busan with fried chicken and beer.'
+    photos:
+      - src: https://blog-img.774352199.xyz/pJ2oAE.JPG
+        alt: The Songdo Skywalk
+        caption: 'The skywalk reaches out over the water, and the people ahead give the walkway its sense of scale.'
+      - src: https://blog-img.774352199.xyz/gFD7qT.jpg
+        alt: A cat in the seaside park
+        caption: The cat in the park had no interest in tourists and was minding its own patch of sunshine.
+        lat: 35.061317
+        lng: 129.020047
+      - src: https://blog-img.774352199.xyz/VYvmUX.jpg
+        alt: A crow on a lamp post
+        caption: 'A crow perched on a lamp post and watched for a while, like another of the regulars here.'
+        lat: 35.061289
+        lng: 129.019992
+      - src: https://blog-img.774352199.xyz/G3KXz4.jpg
+        alt: Street sculpture
+        caption: "We passed a group of sculptures on the way out; Songdo's public spaces keep producing characters without warning."
+        lat: 35.062411
+        lng: 129.020389
+      - src: https://blog-img.774352199.xyz/8gnZk4.jpg
+        alt: Busan streets through the car window
+        caption: 'The car window joined the seaside park to the city, and the streets along the way began to fill up.'
+        lat: 35.087303
+        lng: 129.024569
+      - src: https://blog-img.774352199.xyz/WEtEqA.jpg
+        alt: A busy Songdo intersection
+        caption: 'Back in the commercial district, traffic and signage left the sea breeze behind us.'
+        lat: 35.097192
+        lng: 129.029489
+      - src: https://blog-img.774352199.xyz/vou4eu.JPG
+        alt: Songdo bay from above
+        caption: 'One more look from higher up: the cable line crosses the whole bay, and everywhere we had walked joins up.'
+      - src: https://blog-img.774352199.xyz/UKYyRr.jpg
+        alt: Fried chicken and beer
+        caption: 'We finished the evening with fried chicken and beer. After a day of walking, the portions looked about right.'
+        lat: 35.161047
+        lng: 129.16125
+  - day: 4
+    title: 'North: A Short Transfer Day'
+    descriptions:
+      - 'The morning began with being startled awake by an “extremely severe” emergency alert on my phone; reading it properly, it turned out to be an emergency medical notice for the Chuseok holiday. Koreans were celebrating; we were on luggage-and-city-change duty.'
+      - 'We ate lunch in Busan and headed north, reaching Seoul in the evening. No sights were planned for a transfer day — a platform, a hot pot of stew and an egg toastie were enough to account for it.'
+    photos:
+      - src: https://blog-img.774352199.xyz/EHXTfN.jpg
+        alt: A Chuseok emergency alert
+        caption: 'An “extremely severe” alert appeared on my phone in the morning; translated, it turned out to be an emergency medical notice for the Chuseok holiday.'
+      - src: https://blog-img.774352199.xyz/2eGvwe.jpg
+        alt: Bibimbap before leaving Busan
+        caption: "A bowl of bibimbap before leaving Busan, considerably more colourful than a transfer day's itinerary."
+        lat: 35.115175
+        lng: 129.039292
+      - src: https://blog-img.774352199.xyz/zjiQKw.jpg
+        alt: Omurice and sides
+        caption: My travelling companion went for omurice. Two lunches taking different routes to the same objective.
+        lat: 35.115178
+        lng: 129.039286
+      - src: https://blog-img.774352199.xyz/t5zl3a.jpg
+        alt: Arriving at Seoul Station
+        caption: "A few hours later we were standing on a platform in Seoul, and Busan's sea was officially left down south."
+        lat: 37.5534
+        lng: 126.970911
+      - src: https://blog-img.774352199.xyz/dSl7lk.jpg
+        alt: Budae jjigae in Seoul
+        caption: The first meal in Seoul was a steaming budae jjigae; the noodles photograph best just as they go in.
+        lat: 37.553531
+        lng: 126.920636
+      - src: https://blog-img.774352199.xyz/k19WnW.jpg
+        alt: An egg toastie
+        caption: 'An egg toastie on top of that. A transfer day is not strenuous, but the appetite was unaffected.'
+        lat: 37.553531
+        lng: 126.920636
+  - day: 5
+    title: South of the Border
+    descriptions:
+      - 'Visiting the DMZ means following a fixed route: first a tour bus, then a slow trip north between a memorial, a suspension bridge and a few viewpoints. On the map the border is a line; in front of you there are only fields, towns and hills under an overcast sky.'
+      - 'Zoom in and the towers in the woods, the tank by the road and the vehicle barriers appear one by one. The quiet here is not the quiet of ordinary countryside; even the riverside road on the way back made us instinctively say less.'
+    photos:
+      - src: https://blog-img.774352199.xyz/zqWti8.jpg
+        alt: Tour buses for the DMZ trip
+        caption: You cannot simply wander to the border; the trip starts with a row of tour buses waiting to leave.
+        lat: 37.890261
+        lng: 126.740819
+      - src: https://blog-img.774352199.xyz/vezfhd.jpg
+        alt: A memorial at the border site
+        caption: 'The memorial puts the history behind this landscape in front of you, and the mood drops accordingly.'
+        lat: 37.889764
+        lng: 126.739586
+      - src: https://blog-img.774352199.xyz/nAo1h6.jpg
+        alt: A suspension bridge behind the trees
+        caption: 'Further on from the memorial, a short section of the suspension bridge shows through the trees.'
+        lat: 37.889997
+        lng: 126.738881
+      - src: https://blog-img.774352199.xyz/eQpG7l.jpg
+        alt: A traditional pavilion on the hillside
+        caption: 'The pavilion on the site was still busy, with visitors stopping here briefly.'
+        lat: 37.890053
+        lng: 126.739864
+      - src: https://blog-img.774352199.xyz/Ksw9Cq.jpg
+        alt: Fields and hills near the border
+        caption: 'Fields, towns and layer upon layer of hills in the distance. The border itself never appears in the photograph.'
+        lat: 37.910944
+        lng: 126.705903
+      - src: https://blog-img.774352199.xyz/THtGUu.jpg
+        alt: Towers and installations in the woods
+        caption: Zoom in and the towers and installations scattered through the woods slowly become visible.
+        lat: 37.910942
+        lng: 126.705883
+      - src: https://blog-img.774352199.xyz/UlDxEN.jpg
+        alt: The DMZ entrance sign
+        caption: The entrance that actually says DMZ is not dramatic; one sign is enough to establish where you are.
+        lat: 37.916419
+        lng: 126.698369
+      - src: https://blog-img.774352199.xyz/nmsnTK.jpg
+        alt: A decommissioned tank by the road
+        caption: A decommissioned tank sits at the roadside; military remains here cannot be treated as scenery.
+        lat: 37.916508
+        lng: 126.698394
+      - src: https://blog-img.774352199.xyz/5517dh.jpg
+        alt: An empty road and vehicle barriers
+        caption: 'The empty road is divided into sections by the barriers, which makes an ordinary overcast day feel unusually quiet.'
+        lat: 37.904286
+        lng: 126.709119
+      - src: https://blog-img.774352199.xyz/96FtP2.jpg
+        alt: River and distant hills on the way out of the DMZ
+        caption: 'We left along the river and the road, the hills under cloud gradually drawing the day to a close.'
+        lat: 37.905519
+        lng: 126.740911
+  - day: 5
+    title: 'Back in Seoul, After Dark'
+    descriptions:
+      - 'We got back to Seoul in the evening, and the noise of a grill table finally took some of the edge off the day. After eating we kept walking — ice cream, clothing stalls and shopping-mall signage pushed us back into the weekend crowd.'
+    photos:
+      - src: https://blog-img.774352199.xyz/6dito9.jpg
+        alt: A grill table back in Seoul
+        caption: 'Back in Seoul from the border, dinner turned into a busy grill table again.'
+        lat: 37.553386
+        lng: 126.920542
+      - src: https://blog-img.774352199.xyz/3vNgox.jpg
+        alt: Dinner on the grill
+        caption: 'The meat sizzled on the plate, and the mood that had been weighing on the day finally eased a little.'
+        lat: 37.553244
+        lng: 126.920572
+      - src: https://blog-img.774352199.xyz/KXNWVZ.jpg
+        alt: Ice cream on an evening walk
+        caption: 'We kept walking after dinner, the ice cream in hand serving as the clearest objective of the stretch.'
+        lat: 37.553061
+        lng: 126.921106
+      - src: https://blog-img.774352199.xyz/04H1g5.jpg
+        alt: A clothing stall on the street
+        caption: The clothing stalls outside the mall run right to the edge of the pavement; at night the street is more market than street.
+        lat: 37.554128
+        lng: 126.922453
+      - src: https://blog-img.774352199.xyz/nYpWaX.jpg
+        alt: Seoul streets at night
+        caption: "Crowds, trees and mall signage packed together — Seoul's weekend night was nowhere near finished."
+        lat: 37.555411
+        lng: 126.923625
+  - day: 6
+    title: Palaces and the Old City
+    descriptions:
+      - 'We did not get up especially early. Fried chicken first, then Gyeongbokgung. It stayed overcast all day, Bugaksan half hidden behind the palace walls, which somehow made the painted eaves stand out more than they would have in sunshine.'
+      - 'From the palace gate we walked down to Gwanghwamun Square and then turned into the old city. Traditional roofs, modern office blocks and ordinary streets sit very close together here; one intersection and you are in a different period.'
+    photos:
+      - src: https://blog-img.774352199.xyz/U9hglv.jpg
+        alt: Fried chicken for lunch
+        caption: 'We slept until midday and opened the day with fried chicken, setting nutritional balance aside for now.'
+        lat: 37.555208
+        lng: 126.921294
+      - src: https://blog-img.774352199.xyz/JdCNnt.jpg
+        alt: Painted eaves at Gyeongbokgung
+        caption: 'Walking into Gyeongbokgung, the first thing to do is look up at the painted eaves, far brighter than the sky that day.'
+        lat: 37.576114
+        lng: 126.972408
+      - src: https://blog-img.774352199.xyz/LXCcDU.jpg
+        alt: Palace walls and Bugaksan in mist
+        caption: 'Mist sat on the mountain behind the palace walls, as though the whole complex had gained a very thin backdrop.'
+        lat: 37.576736
+        lng: 126.975975
+      - src: https://blog-img.774352199.xyz/pookDx.jpg
+        alt: A crow on the ridge tiles
+        caption: 'A crow on a traditional roof ridge, its black outline as simple as a seal stamp.'
+        lat: 37.576756
+        lng: 126.975883
+      - src: https://blog-img.774352199.xyz/rfbX78.jpg
+        alt: Traditional roofs and a modern office block
+        caption: A traditional roof and an office block share a frame across one palace wall — a very ordinary gap in time for Seoul.
+        lat: 37.576797
+        lng: 126.975881
+      - src: https://blog-img.774352199.xyz/gPUOFL.jpg
+        alt: Visitors in hanbok at the palace gate
+        caption: 'The closer to the gate, the more hanbok; the overcast weather had done nothing to quieten the entrance.'
+        lat: 37.576656
+        lng: 126.976758
+      - src: https://blog-img.774352199.xyz/cAiiwm.jpg
+        alt: The gate of Gyeongbokgung
+        caption: 'Seen head-on, the gate is so evenly composed that there is hardly a spare line to find.'
+        lat: 37.577494
+        lng: 126.97695
+      - src: https://blog-img.774352199.xyz/ew2Pax.jpg
+        alt: The main hall of Gyeongbokgung
+        caption: 'The main hall finally appears straight ahead, and every gate before it turns out to have been the build-up.'
+        lat: 37.577494
+        lng: 126.97695
+      - src: https://blog-img.774352199.xyz/9YWdSy.jpg
+        alt: The statue of King Sejong on Gwanghwamun Square
+        caption: 'Leaving Gyeongbokgung for Gwanghwamun Square, the statue of King Sejong brings the route back to modern Seoul.'
+        lat: 37.572814
+        lng: 126.977025
+      - src: https://blog-img.774352199.xyz/gyU2YG.jpg
+        alt: A temple gate in the old city
+        caption: 'Turning off the square into the old city, the temple gate is tucked into a far more everyday block than expected.'
+        lat: 37.565183
+        lng: 126.976914
+      - src: https://blog-img.774352199.xyz/Mz9wvJ.jpg
+        alt: An old tree and roofs by the wall
+        caption: 'Old trees, roofs and courtyard walls crowd quietly together, and the tourists sound further away.'
+        lat: 37.566008
+        lng: 126.975583
+      - src: https://blog-img.774352199.xyz/yanNBv.jpg
+        alt: A street in old Seoul
+        caption: Walk on and it is simply an ordinary street; there is no clear line where the palace ends and the old city begins.
+        lat: 37.563781
+        lng: 126.977822
+  - day: 6
+    title: Up Namsan into the Evening
+    descriptions:
+      - 'In the afternoon we carried on up Namsan. By the time N Seoul Tower showed itself through the trees the light had all but gone, and once the tower lit up green, the view from the top was nothing but city lights.'
+      - 'Coming back down into the shopping streets, Seoul returned to its usual volume at once. We finished with a pot of hot soup and a bowl of steamed egg, and put away the fullest day of the trip in comfort.'
+    photos:
+      - src: https://blog-img.774352199.xyz/26ysHs.jpg
+        alt: A monument beside the Namsan route
+        caption: 'We carried on up Namsan in the afternoon, the monument by the path marking the start of the climb.'
+        lat: 37.557156
+        lng: 126.983614
+      - src: https://blog-img.774352199.xyz/yp95u3.jpg
+        alt: The steep incline track
+        caption: 'The track runs almost straight up — easier than walking, and steeper than it looks.'
+        lat: 37.556972
+        lng: 126.983558
+      - src: https://blog-img.774352199.xyz/WefO9m.jpg
+        alt: An old cable car illustration on the wall
+        caption: An illustration of the old cable car on the wall lends this bit of transport a slightly earlier era.
+        lat: 37.556672
+        lng: 126.984253
+      - src: https://blog-img.774352199.xyz/IQEHwh.jpg
+        alt: N Seoul Tower through the trees
+        caption: 'As the light went, part of N Seoul Tower showed itself first through the leaves.'
+        lat: 37.552
+        lng: 126.987456
+      - src: https://blog-img.774352199.xyz/mxUsp1.jpg
+        alt: N Seoul Tower lit green
+        caption: 'The tower lit up green, and the daytime climb formally handed over to the night view.'
+        lat: 37.551736
+        lng: 126.987783
+      - src: https://blog-img.774352199.xyz/i2l96a.jpg
+        alt: The city at night from Namsan
+        caption: "From the top, Seoul's lights run out to where you can no longer make anything out."
+        lat: 37.551125
+        lng: 126.988344
+      - src: https://blog-img.774352199.xyz/so4K6z.jpg
+        alt: Dense Seoul lights
+        caption: 'Closer in, the lights of towers, roads and housing overlap with almost no gaps left.'
+        lat: 37.553261
+        lng: 126.986317
+      - src: https://blog-img.774352199.xyz/UwEnRz.jpg
+        alt: A main road seen from above
+        caption: One straight arterial road cuts through the sea of light and finally gives this dense night view a direction.
+        lat: 37.5543
+        lng: 126.98535
+      - src: https://blog-img.774352199.xyz/vztHwn.jpg
+        alt: Back down among the shops
+        caption: Down from Namsan and back into the crowd; the quiet at the summit lasted exactly as far as the next intersection.
+        lat: 37.561272
+        lng: 126.985161
+      - src: https://blog-img.774352199.xyz/n4HjUg.jpg
+        alt: A hot pot for dinner
+        caption: 'It had been a long day on foot, so dinner naturally had to be a soup you can eat slowly.'
+        lat: 37.563178
+        lng: 126.983583
+      - src: https://blog-img.774352199.xyz/WwLxNK.jpg
+        alt: 'Steamed egg, fresh from the pot'
+        caption: 'The steamed egg was still domed when it arrived, and had sunk a little by the time the photo was done.'
+        lat: 37.563178
+        lng: 126.983583
+  - day: 7
+    title: 'Half a Day Left, and the Flight Home'
+    descriptions:
+      - 'Only half a day remained. After a large plate of grilled chicken we went to the Starfield Library. The walls of books inside the mall are high enough to feel slightly unreal, and the escalators carrying people straight through the middle look more like the everyday reality of the place than quiet reading does.'
+      - 'We left for Incheon Airport in the evening and flew back to Shanghai overnight. When familiar city lights reappeared under the wing, the seven days had been used up exactly, with no day needing another sight forced into it.'
+    photos:
+      - src: https://blog-img.774352199.xyz/brv6Ao.jpg
+        alt: Grilled chicken before leaving Seoul
+        caption: 'The last proper meal was a full plate of grilled chicken and vegetables, enough to last until the airport.'
+        lat: 37.555964
+        lng: 126.924258
+      - src: https://blog-img.774352199.xyz/MgLyvx.jpg
+        alt: The Starfield Library from the front
+        caption: The Starfield Library is tucked inside a mall; only from straight on can you take in the height of the shelves on either side.
+        lat: 37.50975
+        lng: 127.06005
+      - src: https://blog-img.774352199.xyz/Ym9RBd.jpg
+        alt: Bookshelves and the dome
+        caption: 'Looking up from beside the escalator, the shelves, the dome and the passing crowd all fit into one frame.'
+        lat: 37.50975
+        lng: 127.06005
+      - src: https://blog-img.774352199.xyz/FhPiR1.jpg
+        alt: A quick meal at Incheon Airport
+        caption: We ate again at Incheon Airport; a journey home always makes a nonsense of normal mealtimes.
+        lat: 37.451325
+        lng: 126.45215
+      - src: https://blog-img.774352199.xyz/HOkZq2.jpg
+        alt: City lights under the wing
+        caption: 'The plane passed over Shanghai, the vertical frame keeping only the wing and the lights below.'
+        lat: 31.254803
+        lng: 121.780378
+      - src: https://blog-img.774352199.xyz/Yelkjk.jpg
+        alt: A night arrival in Shanghai
+        caption: "One more shot, held horizontally, with the runway and the city's night glow together under the wing."
+        lat: 31.254803
+        lng: 121.780378
+      - src: https://blog-img.774352199.xyz/yrfCwN.jpg
+        alt: A red panda installation after landing
+        caption: 'A red panda on duty being adorable after we landed, and there the seven days stop.'
+        lat: 31.154775
+        lng: 121.805122

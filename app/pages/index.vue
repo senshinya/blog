@@ -4,6 +4,7 @@ import { buildPath, resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 useSeoMeta({
 	description: () => t('site.description'),
 	ogImage: appConfig.author.avatar,
@@ -79,7 +80,7 @@ const { data: previewCount } = useAsyncData(
 			:key="article.path"
 			v-bind="article"
 			:to="resolveContentPath(article.path, locale)"
-			:style="getFixedDelay(index * 0.05)"
+			:style="entranceDelay(index * 0.05)"
 		/>
 	</TransitionGroup>
 

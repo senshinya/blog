@@ -11,6 +11,7 @@ const PAGE_SIZE = 20
 
 const appConfig = useAppConfig()
 const { t } = useI18n()
+const entranceDelay = useEntranceDelay()
 useSeoMeta({
 	title: () => t('page.memos.title'),
 	description: () => t('page.memos.description', { site: appConfig.title }),
@@ -95,7 +96,7 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 				:key="memo.id"
 				v-bind="memo"
 				:viewer-reactions="viewerReactions[`/memos/${memo.id}`]"
-				:style="getFixedDelay(index * 0.05)"
+				:style="entranceDelay(index * 0.05)"
 			/>
 		</ol>
 

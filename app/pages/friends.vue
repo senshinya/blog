@@ -5,6 +5,7 @@ import { buildPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 
 const collection = useContentCollection()
 const dataKey = computed(() => `content:/friends:${collection.value}`)
@@ -71,7 +72,14 @@ const copyFields = computed(() => [
 <Tab :tabs="[$t('page.friends.myInfo'), $t('page.friends.apply')]" center>
 	<template #tab1>
 		<div class="friends-tab">
-			<FeedCard v-bind="myFeed" :desc="myDesc" :comment="myComment" />
+			<!-- 这张卡不在错峰列表里，delay 本来靠继承 :root 的 0.2s；写成 entranceDelay(0.2)
+				把它显式化，顺带跟着一起在切换语言时跳过入场（见 useEntranceDelay） -->
+			<FeedCard
+				v-bind="myFeed"
+				:desc="myDesc"
+				:comment="myComment"
+				:style="entranceDelay(0.2)"
+			/>
 			<Copy v-for="field in copyFields" :key="field.id" :prompt="field.prompt" :code="field.code" />
 		</div>
 	</template>

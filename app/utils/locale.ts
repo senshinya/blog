@@ -109,6 +109,23 @@ export function resolveContentPath(path: string | undefined, locale: string, def
 	return path === undefined ? undefined : buildPath(path, locale, defaultLocale)
 }
 
+function isLocalRedirectPath(path: string) {
+	return path.startsWith('/') && !path.startsWith('//') && !/[\\\s]/.test(path)
+}
+
+/** 首屏和站内跳转共用同一个站内地址，保留原 URL 的查询参数和锚点。 */
+export function localeRedirectPath(target: string, fullPath: string, origin: string): string | undefined {
+	if (!isLocalRedirectPath(target))
+		return undefined
+	const destination = new URL(target, origin)
+	if (destination.origin !== new URL(origin).origin || !isLocalRedirectPath(destination.pathname))
+		return undefined
+	const source = new URL(fullPath, origin)
+	destination.search = source.search
+	destination.hash = source.hash
+	return `${destination.pathname}${destination.search}${destination.hash}`
+}
+
 /**
  * 返回应当跳转到的路径，undefined 表示留在原地。
  *
@@ -129,5 +146,33 @@ export function decideLocale({ path, stored, browser, manifest, locales, default
 	if (available && !available.includes(preferred))
 		return undefined
 
-	return buildPath(basePath, preferred, defaultLocale)
+	const target = buildPath(basePath, preferred, defaultLocale)
+	// 剥掉 /en 等前缀后可能露出 //host，不能交给首屏的 location.replace。
+	return isLocalRedirectPath(target) ? target : undefined
+}
+
+/**
+ * 这次导航是不是「同一页换个语言」。
+ *
+ * 用途是入场动画。切换语言会换到另一条路由记录（/、/en、/ja 是三条），
+ * NuxtPage 的 key 取自匹配到的记录路径，key 一变整个页面就卸载重建，
+ * 列表卡片全成了新元素，于是把入场动画重放一遍 —— float-in 带 backwards
+ * 填充又逐条延迟，看上去就是整列先消失、再一条条淡进来。换语言不是
+ * 「到达一个新页面」，这段入场本就不该播。
+ *
+ * from 允许 undefined：首次进站时没有上一个路由（vue-router 的
+ * START_LOCATION），那是真正的到达，返回 false 让动画照常播。
+ */
+export function isLocaleSwitch(
+	from: string | undefined,
+	to: string,
+	locales: readonly string[],
+	defaultLocale: string,
+) {
+	if (from === undefined)
+		return false
+
+	const a = stripLocale(from, locales, defaultLocale)
+	const b = stripLocale(to, locales, defaultLocale)
+	return a.basePath === b.basePath && a.locale !== b.locale
 }

@@ -4,6 +4,7 @@ import { buildPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 
 useSeoMeta({
 	title: () => t('page.travels.title'),
@@ -41,7 +42,7 @@ const items = computed(() => travels.value.map(travel => ({
 		<li
 			v-for="travel, index in items"
 			:key="travel.slug"
-			:style="getFixedDelay(index * 0.05)"
+			:style="entranceDelay(index * 0.05)"
 		>
 			<NuxtLink class="travel-card card upraise" :to="buildPath(`/travels/${travel.slug}`, locale, 'zh')">
 				<div class="travel-cover">
@@ -110,7 +111,7 @@ const items = computed(() => travels.value.map(travel => ({
 	// 给个下限兜住
 	min-height: 12rem;
 	color: var(--c-text);
-	animation: float-in 0.2s var(--delay) backwards;
+	animation: var(--entrance, float-in 0.2s var(--delay) backwards);
 
 	> article {
 		display: grid;

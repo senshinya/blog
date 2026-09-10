@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CommentSessionRequest } from '~/composables/useCommentSessionScope'
 import type { Comment, Thread, ThreadPage } from '~/utils/comment'
+import blogConfig from '~~/blog.config'
 
 /**
  * 评论区。文章页和碎语详情页共用，差别只在要不要标题和页面级 reaction。
@@ -30,7 +31,8 @@ const props = withDefaults(defineProps<{
  */
 const emit = defineEmits<{ page: [page: ThreadPage | null] }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const localeCodes = blogConfig.locales.map(l => l.code)
 const reactionLabel = computed(() => props.reactionLabel || t('comment.feedbackPrompt'))
 
 const route = useRoute()
@@ -55,7 +57,8 @@ const {
 onClickOutside(sessionAccount, closeSessionMenu)
 watch(() => user.value?.id, closeSessionMenu)
 
-const key = computed(() => props.pageKey ?? commentPageKey(route.path))
+const routeKey = computed(() => commentPageKey(route.path, localeCodes))
+const key = computed(() => props.pageKey ?? routeKey.value)
 const dataRevision = computed(() => dataRevisions.value[key.value] ?? 0)
 
 /**
@@ -63,7 +66,7 @@ const dataRevision = computed(() => dataRevisions.value[key.value] ?? 0)
  * 碎语列表里一屏可以同时展开好几个，那时不能都叫 comment —— 重复 id 会让锚点
  * 一律跳到第一个展开的那张卡片上。（卡片自己的 <li :id> 才是那里的落点。）
  */
-const anchorId = computed(() => key.value === commentPageKey(route.path) ? 'comment' : undefined)
+const anchorId = computed(() => key.value === routeKey.value ? 'comment' : undefined)
 
 const root = useTemplateRef('root')
 const listEl = useTemplateRef('list')
@@ -197,9 +200,15 @@ async function loadMore() {
 			comments: mergeComments(thread.value!.comments, next.comments),
 		}
 	}
+	catch (err) {
+		// 切换语言主动取消的分页不应冒泡成未处理的请求错误。
+		if (version === threadRequestVersion && sessionScope.current(request))
+			throw err
+	}
 	finally {
+		if (activeMoreRequest === request)
+			loadingMore.value = false
 		finishMoreRequest(request)
-		loadingMore.value = false
 	}
 }
 
@@ -304,6 +313,21 @@ onMounted(() => {
 })
 
 watch(tree, () => nextTick(layout))
+
+watch([key, locale], ([nextKey], [previousKey]) => {
+	if (status.value === 'idle')
+		return
+	thread.value = undefined
+	if (nextKey !== previousKey) {
+		focusId.value = parseCommentHash(route.hash)
+		focusMode.value = Boolean(focusId.value)
+	}
+	// 重取第一页或当前定向线程，同时取消旧语言的分页，避免混入另一种语言。
+	if (focusMode.value && focusId.value)
+		void loadFocus(focusId.value)
+	else
+		void loadThread()
+})
 
 watch(sessionEpoch, () => {
 	// 先抹掉带 can_edit / viewer_reactions 的旧投影，再以匿名会话重取。

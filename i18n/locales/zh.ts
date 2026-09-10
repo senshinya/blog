@@ -9,7 +9,7 @@ const zh = {
 		description: '互联网自留地。shinya 的个人博客，记录折腾、项目、笔记与日常 —— 网络与代理、自建服务、Go 与系统底层、以及那些不知道为什么就搞了一整个周末的东西。',
 		readFull: '点击查看全文',
 	},
-	lang: { unavailable: '该页暂无此语言版本' },
+	lang: { switch: '切换语言', unavailable: '该页暂无此语言版本' },
 	nav: {
 		articles: '文章',
 		travels: '游记',
@@ -20,6 +20,7 @@ const zh = {
 		skipToContent: '跳转到主要内容',
 	},
 	sidebar: {
+		appearance: '外观',
 		search: '搜索',
 		toggleAside: '切换侧边栏',
 		toggleMenu: '切换菜单',
@@ -108,6 +109,7 @@ const zh = {
 		collapseThread: '收起这条讨论',
 		owner: '站长',
 		edited: '已编辑',
+		machineTranslated: '机器翻译',
 		deleted: '这条评论已删除',
 		avatarAlt: '{name} 的头像',
 		readMore: '展开全文',
@@ -188,6 +190,13 @@ const zh = {
 			closeViewer: '关闭大图',
 			prevPhoto: '上一张',
 			nextPhoto: '下一张',
+			mapControls: {
+				title: '地图',
+				zoomIn: '放大',
+				zoomOut: '缩小',
+				attribution: '切换地图来源信息',
+				feedback: '地图反馈',
+			},
 			mapUnavailable: '这个浏览器没法渲染地图（缺少 WebGL），照片和游记正文不受影响。',
 		},
 		media: {
@@ -280,6 +289,7 @@ const zh = {
 		},
 		blogLog: {
 			title: '更新日志',
+			multilingual: '支持中英日切换，地图与评论同步适配',
 			commentMigration: '评论系统从 giscus 迁移至自建系统',
 			contentMigration: '迁移到 Nuxt 4 + Nuxt Content v3，内容回归 Markdown',
 			stackRewrite: '重构为 SvelteKit + PocketBase，自建后台 CMS',

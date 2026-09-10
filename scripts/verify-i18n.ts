@@ -31,7 +31,13 @@ for (const p of ['/atom.xml', '/en/atom.xml', '/ja/atom.xml'])
 // hreflang 只列真实存在的语言
 const html = readFileSync(at('/daily/anti-chronic-gastritis/index.html'), 'utf8')
 const tags = [...html.matchAll(/hreflang="([^"]+)"/g)].map(m => m[1]).sort()
-assert.deepEqual(tags, ['x-default', 'zh-CN'], `hreflang 不应包含无译文的语言，实际：${tags.join(',')}`)
+const expectedLanguages = [
+	'x-default',
+	...blogConfig.locales
+		.filter(l => existsSync(resolve('content', l.code, 'posts/daily/anti-chronic-gastritis.md')))
+		.map(l => l.language),
+].sort()
+assert.deepEqual(tags, expectedLanguages, `hreflang 应与实际译文一致，实际：${tags.join(',')}`)
 
 // 日文字体只在日语页
 assert.ok(readFileSync(at('/ja/index.html'), 'utf8').includes('Noto+Serif+JP'))
@@ -43,8 +49,7 @@ assert.ok(!readFileSync(at('/index.html'), 'utf8').includes('Noto+Serif+JP'))
  *
  * 后者把「作者还没写这篇译文」编码成了永久规则：哪天他把译文写好，这条检查
  * 反而会因为「做对了事」而变红。这里改成两侧都在运行时从磁盘/产物现状推导，
- * 不给任何一侧硬编码固定值——今天两个 content 目录都只有 .gitkeep，
- * 期望集合是空集，但那是算出来的事实，不是写死的断言。
+ * 不给任何一侧硬编码固定值，新增或移除译文时无需手动调整期望集合。
  */
 
 function walk(dir: string): string[] {
