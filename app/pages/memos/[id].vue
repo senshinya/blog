@@ -85,7 +85,7 @@ const loading = computed(() => status.value === 'idle' || status.value === 'pend
  *
  * 只在本页覆写，不去动全站的 canonicalLowercase。（unhead 对 canonical 去重，不会多一条。）
  */
-const canonical = computed(() => new URL(`/memos/${id.value}`, appConfig.url).href)
+const canonical = computed(() => new URL(buildPath(`/memos/${id.value}`, locale.value, 'zh'), appConfig.url).href)
 
 useHead({
 	link: [{ rel: 'canonical', href: canonical }],
