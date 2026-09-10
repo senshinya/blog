@@ -39,7 +39,7 @@ const { copy, copied } = useCopy(shareText)
 
 			<span v-if="categories">
 				<Icon :name="getCategoryIcon(categories[0])" />
-				{{ categories[0] }}
+				{{ $t(`category.${categories[0]}`) }}
 			</span>
 
 			<span>

@@ -45,6 +45,7 @@ const ja: MessageSchema = {
 		prevSlide: '前のスライド',
 		nextSlide: '次のスライド',
 	},
+	category: { fiddling: '弄り', projects: 'プロジェクト', notes: 'ノート', daily: '日常' },
 	content: {
 		copy: 'コピー',
 		copied: 'コピー済み',

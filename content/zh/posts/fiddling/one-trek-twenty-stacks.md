@@ -2,7 +2,7 @@
 title: "一个 TREK 引发的二十个 stack"
 description: "刷 GitHub trending 刷到一个旅行规划工具，想自己跑一台。既然都要开新 VPS，那就顺手多装亿点点。"
 date: 2026-05-11 22:43:00
-categories: [折腾]
+categories: [fiddling]
 tags: ["折腾", "vps", "自托管"]
 ---
 

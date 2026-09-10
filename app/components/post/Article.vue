@@ -25,7 +25,7 @@ defineProps<ArticleProps>()
 
 			<span v-if="categories" :style="{ color: getCategoryColor(categories[0]) }">
 				<Icon :name="getCategoryIcon(categories[0])" />
-				{{ categories[0] }}
+				{{ $t(`category.${categories[0]}`) }}
 			</span>
 
 			<span v-if="readingTime?.words" class="article-words">

@@ -47,6 +47,7 @@ const zh = {
 		prevSlide: '上一页',
 		nextSlide: '下一页',
 	},
+	category: { fiddling: '折腾', projects: '项目', notes: '笔记', daily: '日常' },
 	content: {
 		copy: '复制',
 		copied: '已复制',

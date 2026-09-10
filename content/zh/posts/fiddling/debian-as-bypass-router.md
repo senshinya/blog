@@ -2,7 +2,7 @@
 title: "debian 旁路由方案"
 description: "Debian 旁路由方案为用户提供了一种更为稳定和灵活的选择，摆脱了对 OpenWRT 和 LuCI 的依赖。通过直接在 Debian 上进行配置，用户可以享受更高的系统控制权，避免了 GUI 带来的种种限制和不稳定性。相比于常见的旁路由方案，Debian 的方法使得透明代理的设置更加可靠，为那些追求性能和效率的用户提供了新的可能性。"
 date: 2024-07-13 17:49:00
-categories: [折腾]
+categories: [fiddling]
 tags: ["折腾", "debian", "旁路由", "翻墙", "透明代理", "mihomo"]
 ---
 

@@ -2,7 +2,7 @@
 title: "迁移安卓一月谈"
 description: "换机频繁的我，经历了从一加到 iPhone 的转变，逐渐从折腾的乐趣转向了对生态的依赖。最近在 npy 的建议下，入手了 Oppo Find X8 Ultra，主要是为了提升拍照体验。尽管沉浸在 Apple 的生态中，但 App 的迁移问题让我意识到，Android 的应用生态依然参差不齐，寻找替代品的过程颇具挑战。这个月的迁移经历让我感受到不同平台之间的摩擦与适应。"
 date: 2025-06-05 23:26:00
-categories: [折腾]
+categories: [fiddling]
 tags: ["折腾", "Android", "Oppo", "苹果", "Apple", "手机"]
 ---
 
