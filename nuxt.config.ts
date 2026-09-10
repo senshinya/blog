@@ -321,6 +321,7 @@ ${packageJson.homepage}
 	},
 
 	i18n: {
+		baseUrl: blogConfig.url,
 		locales: blogConfig.locales,
 		defaultLocale: 'zh',
 		strategy: 'prefix_except_default',
