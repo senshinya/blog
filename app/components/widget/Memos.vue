@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { Memo } from '~/utils/memo'
+import { buildPath } from '~/utils/locale'
 
 const LIMIT = 5
+
+const { locale } = useI18n()
 
 // server: false —— 碎语更新频繁，若在构建时取数就会一直停留在上次部署的快照
 // 用 lazy 版而非顶层 await：await 会让本组件变成异步组件，要等 fetch 回来才实体化，
@@ -31,7 +34,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 <template>
 <BlogWidget card :title="$t('widget.memos.title')">
 	<template #action>
-		<UtilLink to="/memos" class="more">
+		<UtilLink :to="buildPath('/memos', locale, 'zh')" class="more">
 			{{ $t('widget.memos.viewAll') }}<Icon name="tabler:chevron-right" />
 		</UtilLink>
 	</template>
@@ -48,7 +51,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 
 			<ol v-else class="feed">
 				<li v-for="memo in memos" :key="memo.id">
-					<UtilLink :to="`/memos/${memo.id}`" class="item">
+					<UtilLink :to="buildPath(`/memos/${memo.id}`, locale, 'zh')" class="item">
 						<!-- monthDay 是定宽的，日期列才能对齐成左轨 -->
 						<UtilDate class="date" :date="memo.createTime" format="monthDay" />
 

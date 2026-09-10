@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { orderBy } from 'es-toolkit/array'
-import { resolveContentPath } from '~/utils/locale'
+import { buildPath, resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
@@ -51,7 +51,7 @@ const { data: previewCount } = useAsyncData(
 	</TransitionGroup>
 </template>
 
-<BlogHeader class="mobile-only" to="/" tag="h1" />
+<BlogHeader class="mobile-only" :to="buildPath('/', locale, 'zh')" tag="h1" />
 
 <!-- 此处不套 UtilHydrateSafe（上游原本有）。它内部是 ClientOnly，而 ClientOnly 挂载前后
 	返回的 vnode 类型不同（h(slot) 的组件 vnode vs slots.default() 的 vnode 数组），
@@ -66,7 +66,7 @@ const { data: previewCount } = useAsyncData(
 		:categories
 	>
 		<ZSecret>
-			<UtilLink v-if="previewCount" to="/preview" class="preview-entrance">
+			<UtilLink v-if="previewCount" :to="buildPath('/preview', locale, 'zh')" class="preview-entrance">
 				<Icon name="tabler:shield-lock" />
 				{{ $t('page.home.previewLink') }}
 			</UtilLink>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getTravelBySlug } from '~/travels'
+import { buildPath } from '~/utils/locale'
 
 definePageMeta({
 	layout: false,
@@ -189,7 +190,7 @@ function startsNewDay(index: number) {
 
 <template>
 <div ref="scroller" class="travel" :class="{ 'viewer-open': viewerOpen }">
-	<NuxtLink class="travel-back" to="/travels">
+	<NuxtLink class="travel-back" :to="buildPath('/travels', locale, 'zh')">
 		<Icon name="tabler:arrow-left" />
 		{{ $t('page.travels.title') }}
 	</NuxtLink>
@@ -279,7 +280,7 @@ function startsNewDay(index: number) {
 				<p class="travel-end-mark">
 					{{ $t('page.travels.theEnd') }}
 				</p>
-				<NuxtLink class="travel-end-link" to="/travels">
+				<NuxtLink class="travel-end-link" :to="buildPath('/travels', locale, 'zh')">
 					{{ $t('page.travels.backToList') }}
 				</NuxtLink>
 			</section>

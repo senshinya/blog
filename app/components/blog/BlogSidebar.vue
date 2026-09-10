@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { buildPath } from '~/utils/locale'
+
 const appConfig = useAppConfig()
 const layoutStore = useLayoutStore()
 const searchStore = useSearchStore()
@@ -17,7 +19,7 @@ const debouncedSelection = refDebounced(text)
 
 <!-- 不能用 Transition 实现弹出收起动画，因为半宽屏状态始终显示 -->
 <aside id="blog-sidebar" :class="{ show: layoutStore.state === 'sidebar' }">
-	<BlogHeader class="sidebar-header" to="/" />
+	<BlogHeader class="sidebar-header" :to="buildPath('/', locale, 'zh')" />
 
 	<nav class="sidebar-nav scrollcheck-y">
 		<div class="search-btn sidebar-nav-item gradient-card" @click="layoutStore.toggle('search')">

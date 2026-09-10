@@ -112,12 +112,12 @@ export default defineAppConfig({
 		{
 			title: '',
 			items: [
-				{ icon: 'tabler:files', textKey: 'nav.articles', url: '/' },
-				{ icon: 'tabler:map-2', textKey: 'nav.travels', url: '/travels' },
-				{ icon: 'tabler:bubble-text', textKey: 'nav.memos', url: '/memos' },
-				{ icon: 'tabler:movie', textKey: 'nav.media', url: '/media' },
-				{ icon: 'tabler:archive', textKey: 'nav.archive', url: '/archive' },
-				{ icon: 'tabler:link', textKey: 'nav.friends', url: '/friends' },
+				{ icon: 'tabler:files', textKey: 'nav.articles', url: '/', localized: true },
+				{ icon: 'tabler:map-2', textKey: 'nav.travels', url: '/travels', localized: true },
+				{ icon: 'tabler:bubble-text', textKey: 'nav.memos', url: '/memos', localized: true },
+				{ icon: 'tabler:movie', textKey: 'nav.media', url: '/media', localized: true },
+				{ icon: 'tabler:archive', textKey: 'nav.archive', url: '/archive', localized: true },
+				{ icon: 'tabler:link', textKey: 'nav.friends', url: '/friends', localized: true },
 			],
 		},
 	] satisfies Nav,

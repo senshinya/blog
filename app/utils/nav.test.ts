@@ -101,6 +101,16 @@ test('resolveNavUrl honours an explicitly passed defaultLocale', async () => {
 	assert.equal(result, '/zh/atom.xml')
 })
 
+// 根路径的导航项（如 nav.articles，url 为 '/'）标了 localized 时，绝不能拼出
+// 带尾斜杠的 /en/ —— 本站 trailingSlash: false，那是个不存在的 URL。
+// resolveNavUrl 委托给 buildPath 做拼接，这里锁住这个根路径特判确实生效。
+test('resolveNavUrl prefixes the root path without a trailing slash', async () => {
+	const { resolveNavUrl } = await import('./nav.ts')
+
+	assert.equal(resolveNavUrl({ icon: 'x', url: '/', textKey: 'nav.articles', localized: true }, 'en'), '/en')
+	assert.equal(resolveNavUrl({ icon: 'x', url: '/', textKey: 'nav.articles', localized: true }, 'ja'), '/ja')
+})
+
 test('resolveNavTitle returns the literal title and never calls t() when titleKey is absent', async (t) => {
 	const { resolveNavTitle } = await import('./nav.ts')
 	const mockT = t.mock.fn(() => 'SHOULD NOT BE USED')

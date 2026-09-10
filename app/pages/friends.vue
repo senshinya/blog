@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { myFeed } from '~~/blog.config'
 import feeds from '~/feeds'
+import { buildPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const collection = useContentCollection()
 const dataKey = computed(() => `content:/friends:${collection.value}`)
@@ -40,7 +41,7 @@ const copyFields = computed(() => [
 </template>
 
 <div class="mobile-only">
-	<BlogHeader to="/" tag="h1" />
+	<BlogHeader :to="buildPath('/', locale, 'zh')" tag="h1" />
 </div>
 
 <FeedGroup

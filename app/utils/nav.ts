@@ -1,4 +1,5 @@
 import type { NavItem, NavTitle } from '~/types/nav'
+import { buildPath } from './locale.ts'
 
 type Translate = (key: string, named?: Record<string, string | number>) => string
 
@@ -31,10 +32,15 @@ export function resolveNavText(item: NavItem, t: Translate): string {
  * 那也是外链）的字符串才当站内路径处理。这里不能用 isExtLink 判断——
  * isExtLink('/atom.xml') 本身就是 true（isPathFile 认 .xml 这个扩展名为外链），
  * 用它当守卫会把本该加前缀的 atom 链接也拦下来，等于撤销了这个函数存在的意义。
+ *
+ * 拼接本身委托给 buildPath，而不是自己 `/${locale}${item.url}` 拼字符串——
+ * 后者没有 buildPath 那道根路径特判，url 为 '/' 时会拼出带尾斜杠的 /en/，
+ * 一个 trailingSlash: false 站点里实际不存在的 URL（见 buildPath 的注释）。
+ * nav 里 nav.articles 一项的 url 正是 '/'，这条分支不是纸上谈兵。
  */
 export function resolveNavUrl(item: NavItem, locale: string, defaultLocale = 'zh'): string {
 	const isLocalPath = item.url.startsWith('/') && !item.url.startsWith('//')
-	return item.localized && isLocalPath && locale !== defaultLocale ? `/${locale}${item.url}` : item.url
+	return item.localized && isLocalPath ? buildPath(item.url, locale, defaultLocale) : item.url
 }
 
 /**

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Memo } from '~/utils/memo'
+import { buildPath } from '~/utils/locale'
 
 const API = 'https://memos.shinya.click/api/v1/memos'
 
@@ -16,7 +17,7 @@ const route = useRoute()
 const appConfig = useAppConfig()
 // 取数 handler 里要用，得在 setup 阶段先抓住（理由见下面 404 那段）
 const nuxtApp = useNuxtApp()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const id = computed(() => String(route.params.id))
 
@@ -115,7 +116,7 @@ useSeoMeta({
 </template>
 
 <div class="memo-detail proper-height">
-	<UtilLink to="/memos" class="back">
+	<UtilLink :to="buildPath('/memos', locale, 'zh')" class="back">
 		<Icon name="tabler:chevron-left" />
 		<span>{{ $t('nav.memos') }}</span>
 	</UtilLink>

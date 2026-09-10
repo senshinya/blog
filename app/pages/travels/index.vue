@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getTravels } from '~/travels'
+import { buildPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
@@ -42,7 +43,7 @@ const items = computed(() => travels.value.map(travel => ({
 			:key="travel.slug"
 			:style="getFixedDelay(index * 0.05)"
 		>
-			<NuxtLink class="travel-card card upraise" :to="`/travels/${travel.slug}`">
+			<NuxtLink class="travel-card card upraise" :to="buildPath(`/travels/${travel.slug}`, locale, 'zh')">
 				<div class="travel-cover">
 					<img
 						:src="getTravelImg(travel.coverImage, TravelImgWidth.cover)"

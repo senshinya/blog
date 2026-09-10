@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resolveContentPath } from '~/utils/locale'
+import { buildPath, resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
@@ -30,7 +30,7 @@ const { category, categories, listCategorized } = useCategory(listSorted)
 <div class="preview">
 	<div class="preview-header">
 		<h1>
-			<UtilLink class="mobile-only" to="/" :title="$t('page.preview.backHome')">
+			<UtilLink class="mobile-only" :to="buildPath('/', locale, 'zh')" :title="$t('page.preview.backHome')">
 				<Icon name="tabler:chevron-left" />
 			</UtilLink>{{ $t('page.preview.title') }}
 		</h1>
