@@ -3,6 +3,7 @@ import blogConfig from '~~/blog.config'
 import { manifest } from '#build/i18n-manifest'
 import { useLocaleMotion } from '~/composables/useLocaleMotion'
 import { stripLocale } from '~/utils/locale'
+import { settleAnimations } from '~/utils/settleAnimations'
 
 const expanded = defineModel<boolean>('expanded', { default: false })
 const route = useRoute()
@@ -15,10 +16,12 @@ const options = useTemplateRef('options')
 const optionsId = useId()
 const locales = blogConfig.locales
 const localeCodes = locales.map(l => l.code)
+const selected = ref<string>()
+let choice = 0
 
 // Derive language from the URL so SSR and hydration render the same selection.
 const current = computed(() => stripLocale(route.path, localeCodes, 'zh').locale)
-const currentIndex = computed(() => Math.max(0, localeCodes.indexOf(current.value)))
+const currentIndex = computed(() => Math.max(0, localeCodes.indexOf(selected.value ?? current.value)))
 const currentLocale = computed(() => locales[currentIndex.value]!)
 const available = computed(() => {
 	const { basePath } = stripLocale(route.path, localeCodes, 'zh')
@@ -26,6 +29,8 @@ const available = computed(() => {
 })
 
 async function open() {
+	choice++
+	selected.value = undefined
 	expanded.value = true
 	await nextTick()
 	options.value?.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus({ preventScroll: true })
@@ -42,12 +47,25 @@ async function close(restoreFocus = false) {
 async function choose(code: string) {
 	if (!available.value.includes(code))
 		return
-	persist(code)
+	const version = ++choice
 	const path = switchLocalePath(code)
+	selected.value = code
 	await close(true)
-	// Unresolvable routes (such as 404 pages) still retain the language preference.
-	if (path && code !== current.value)
-		return switchWithMotion(path)
+	// nextTick only applies the collapsed class. Starting a document snapshot now
+	// freezes the capsule at the first frame of its spring transition.
+	await settleAnimations(root.value?.closest('.reading-preferences') ?? root.value, 140)
+	if (version !== choice || !root.value?.isConnected)
+		return
+	persist(code)
+	try {
+		// Unresolvable routes still retain the language preference.
+		if (path && code !== current.value)
+			await switchWithMotion(path)
+	}
+	finally {
+		if (version === choice)
+			selected.value = undefined
+	}
 }
 
 function onKeydown(event: KeyboardEvent) {
@@ -67,7 +85,14 @@ function onFocusout(event: FocusEvent) {
 }
 
 onClickOutside(root, () => close())
-watch(() => route.path, () => close())
+watch(() => route.path, () => {
+	choice++
+	selected.value = undefined
+	close()
+})
+onScopeDispose(() => {
+	choice++
+})
 </script>
 
 <template>
@@ -101,7 +126,7 @@ watch(() => route.path, () => close())
 			type="button"
 			:aria-disabled="!available.includes(locale.code)"
 			:aria-label="locale.label"
-			:aria-pressed="current === locale.code"
+			:aria-pressed="(selected ?? current) === locale.code"
 			:lang="locale.code"
 			@click="choose(locale.code)"
 		>

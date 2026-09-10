@@ -278,11 +278,11 @@ const ja: MessageSchema = {
 		},
 		blogTech: {
 			title: '技術情報',
-			ciPlatform: 'CI基盤',
-			imageStorage: '画像ストレージ',
-			license: 'ソフトウェアライセンス',
-			contentLicense: '記事のライセンス',
-			canonicalDomain: '正規ドメイン',
+			ciPlatform: 'CI',
+			imageStorage: '画像',
+			license: 'ライセンス',
+			contentLicense: '利用許諾',
+			canonicalDomain: 'ドメイン',
 			buildInfo: 'ビルド情報',
 		},
 		blogLog: {

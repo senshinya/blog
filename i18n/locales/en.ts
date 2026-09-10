@@ -278,11 +278,11 @@ const en: MessageSchema = {
 		},
 		blogTech: {
 			title: 'Tech Info',
-			ciPlatform: 'CI Platform',
-			imageStorage: 'Image Storage',
+			ciPlatform: 'CI',
+			imageStorage: 'Images',
 			license: 'License',
-			contentLicense: 'Content License',
-			canonicalDomain: 'Canonical Domain',
+			contentLicense: 'Permission',
+			canonicalDomain: 'Domain',
 			buildInfo: 'Build Info',
 		},
 		blogLog: {
