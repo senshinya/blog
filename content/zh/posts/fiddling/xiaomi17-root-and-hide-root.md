@@ -1,6 +1,6 @@
 ---
 title: "小米 17 折腾日用：解锁、刷机、root 与隐藏"
-description: "小米 17 解锁 Bootloader、刷入官改 ROM 和隐藏 root 的折腾过程，以及如何让银行、支付应用与代理软件恢复正常使用"
+description: "越折腾越想折腾，老当益壮啊老当益壮"
 date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["折腾", "root", "bootloader"]
