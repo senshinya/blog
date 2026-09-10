@@ -5,6 +5,7 @@ description: "Distinguishing user-defined type names from ordinary variables is 
 date: 2025-03-15 20:35:00
 categories: [fiddling]
 tags: ["Tinkering", "compiler design", "parsing", "disambiguation"]
+image: "https://blog-img.774352199.xyz/2VKHK9.webp"
 ---
 
 ### Introduction

@@ -5,6 +5,7 @@ description: "The Table Manager (TBM) manages field and table structures. Parser
 date: 2021-12-25 15:44:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/zOMyv5.webp"
 ---
 
 The code in this chapter is in [backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser) and [backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm).

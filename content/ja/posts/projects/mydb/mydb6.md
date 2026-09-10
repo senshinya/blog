@@ -5,6 +5,7 @@ description: "VMは二相ロックでスケジュールの直列化可能性を�
 date: 2021-12-18 14:58:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/8YzotA.webp"
 ---
 
 この章で扱うコードはすべて[backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm)にあります。

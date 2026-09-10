@@ -5,6 +5,7 @@ description: "在一个平常的下午，Telegram 推送消息引发了对一个
 date: 2025-03-15 16:24:00
 categories: [fiddling]
 tags: ["折腾", "翻墙", "warp", "分流"]
+image: "https://blog-img.774352199.xyz/McjrrF.webp"
 ---
 
 上周一个普通的下午，一直挂在后台沉寂许久的 Telegram 收到了一条推送：

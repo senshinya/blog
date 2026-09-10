@@ -5,6 +5,7 @@ description: "实验 2a 专注于实现 Raft 算法中的 Leader 选举和心跳
 date: 2022-12-16 02:06:10
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/c11Uk4.webp"
 ---
 
 ### 前言

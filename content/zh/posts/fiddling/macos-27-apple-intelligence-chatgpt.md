@@ -5,6 +5,7 @@ description: "又一年 WWDC，macOS 27 又端上了全新的 Apple 智能。mac
 date: 2026-06-11 10:00:00
 categories: [fiddling]
 tags: ["折腾", "macOS", "Apple 智能", "ChatGPT"]
+image: "https://blog-img.774352199.xyz/fOFucm.webp"
 ---
 
 又是一年科技春晚 WWDC，macOS 27 如约而至。该换的皮换了，该升的版本号升了，唯独 macOS 27 最大的升级：Apple 智能，国行机器依然无法使用，又是一次环大陆更新，依旧的二等公民。

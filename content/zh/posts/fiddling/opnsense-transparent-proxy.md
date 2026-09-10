@@ -5,6 +5,7 @@ description: "OPNsense 作为一款开源的防火墙和路由系统，因其美
 date: 2025-01-16 23:09:00
 categories: [fiddling]
 tags: ["折腾", "翻墙", "透明代理", "OPNsense", "分流"]
+image: "https://blog-img.774352199.xyz/xA8C1E.webp"
 ---
 
 ### 前言

@@ -5,6 +5,7 @@ description: "MYDBは、データベースの基本原理を学び、実装し�
 date: 2021-11-27 14:43:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/xfci2J.webp"
 ---
 
 プロジェクト：[https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

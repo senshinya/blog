@@ -5,6 +5,7 @@ description: "The labs are an essential part of learning CSAPP, but setting up L
 date: 2021-12-27 00:09:00
 categories: [fiddling]
 tags: ["Tinkering", "CSAPP", "labs", "environment setup"]
+image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 ---
 
 ### Introduction

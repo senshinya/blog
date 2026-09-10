@@ -5,6 +5,7 @@ description: "MYDB 项目是一个旨在探索和实现数据库基本原理的�
 date: 2021-11-27 14:43:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/xfci2J.webp"
 ---
 
 项目地址：[https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

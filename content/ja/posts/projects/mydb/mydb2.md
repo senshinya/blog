@@ -5,6 +5,7 @@ description: "データマネージャー（DM）は上位モジュールとフ�
 date: 2021-11-30 23:18:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/WdIGoG.webp"
 ---
 
 この章で扱うコードはすべて[backend/common](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common)にあります。

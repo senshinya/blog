@@ -5,6 +5,7 @@ description: "BGPをもとに中国国内・国外のIPを振り分けること�
 date: 2024-10-07 16:51:00
 categories: [fiddling]
 tags: ["試行錯誤", "ソフトウェアルーター", "透過プロキシ", "トラフィック振り分け", "BGP"]
+image: "https://blog-img.774352199.xyz/MOmM1s.webp"
 ---
 
 これまで[Debianをサイドルーターにする](/ja/fiddling/debian-as-bypass-router)と[FakeIPを使った透過プロキシの振り分け](/ja/fiddling/fake-ip-based-transparent-proxy)の2回にわたって試し、自宅の透過プロキシはひとまず使える状態になりました。FakeIP方式では、国外のIPをFakeIPで識別し、メインルーターでそれを判別して振り分けます。sing-boxのDNSモジュールの設定は次のとおりです。

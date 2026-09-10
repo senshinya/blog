@@ -5,6 +5,7 @@ description: "刷 GitHub trending 刷到一个旅行规划工具，想自己跑�
 date: 2026-05-11 22:43:00
 categories: [fiddling]
 tags: ["折腾", "vps", "自托管"]
+image: "https://blog-img.774352199.xyz/BBdDWW.webp"
 ---
 
 前几天刷 GitHub trending，看到一个叫 TREK 的项目，让一群人在同一张地图上排路线、订住宿、列预算，做完还能丢给别人接着改。点进 demo 站玩了一圈，很精致。

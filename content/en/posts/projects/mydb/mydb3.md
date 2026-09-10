@@ -5,6 +5,7 @@ description: "DM abstracts the filesystem into pages and uses them as the unit o
 date: 2021-12-05 15:28:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/jlFC4E.webp"
 ---
 
 The code in this chapter is in [backend/dm/pageCache](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache) and [backend/dm/page](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page).

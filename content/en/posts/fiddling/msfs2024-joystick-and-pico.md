@@ -5,6 +5,7 @@ description: "A friend’s comment got me interested in simulation games. After 
 date: 2025-12-14 14:31:00
 categories: [fiddling]
 tags: ["Tinkering", "Microsoft Flight Simulator", "Thrustmaster", "pico"]
+image: "https://blog-img.774352199.xyz/lfhEuE.webp"
 ---
 
 ### Introduction

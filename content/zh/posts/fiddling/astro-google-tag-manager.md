@@ -5,6 +5,7 @@ description: "在将博客迁移至 Astro 框架后，常规的 Google Analytics
 date: 2025-05-28 22:09:00
 categories: [fiddling]
 tags: ["折腾", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
+image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 ---
 
 ### 前言

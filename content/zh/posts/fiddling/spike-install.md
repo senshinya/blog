@@ -5,6 +5,7 @@ description: "在安装 RISC-V 工具链时，首先需要获取 riscv-gnu-toolc
 date: 2023-05-24 17:51:09
 categories: [fiddling]
 tags: ["折腾", "环境搭建", "riscv", "spike", "riscv-pk"]
+image: "https://blog-img.774352199.xyz/rWNOKx.webp"
 ---
 
 闲的无聊看看 spike 源码，但是翻了很多教程都没有可以直接安装好 spike 和相关的工具链。于是自己动手丰衣足食，直接读相关仓库的 README，基本都可以安装成功，但是还是暗藏着一个小坑，记录一下。

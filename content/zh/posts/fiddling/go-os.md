@@ -5,6 +5,7 @@ description: "在一次春节假期中，灵感悄然降临。高铁上偶然阅
 date: 2023-02-02 23:24:55
 categories: [fiddling]
 tags: ["折腾", "golang", "os", "riscv"]
+image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
 ---
 
 ### 缘起

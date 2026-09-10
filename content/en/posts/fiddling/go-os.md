@@ -5,6 +5,7 @@ description: "Inspiration struck during Chinese New Year: an article read on the
 date: 2023-02-02 23:24:55
 categories: [fiddling]
 tags: ["Tinkering", "golang", "os", "riscv"]
+image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
 ---
 
 ### How it started

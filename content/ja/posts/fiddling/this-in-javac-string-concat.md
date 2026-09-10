@@ -5,6 +5,7 @@ description: "Javaでは`this`を使うことで、コンパイラの定数最�
 date: 2022-04-16 00:01:28
 categories: [fiddling]
 tags: ["試行錯誤", "java"]
+image: "https://blog-img.774352199.xyz/gKtkYe.webp"
 ---
 
 少し長いタイトルになりましたが、なかなか面白い問題です。次のコードを見てください。

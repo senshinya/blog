@@ -5,6 +5,7 @@ description: "DM 模块将文件系统抽象为页面，并以此为单位进行
 date: 2021-12-05 15:28:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/jlFC4E.webp"
 ---
 
 本章涉及代码都在 [backend/dm/pageCache](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache) 和 [backend/dm/page](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page) 中。

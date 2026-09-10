@@ -5,6 +5,7 @@ description: "数据管理器（DM）作为上层模块与文件系统之间的�
 date: 2021-11-30 23:18:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/WdIGoG.webp"
 ---
 
 本章涉及代码都在 [backend/common](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common) 中。

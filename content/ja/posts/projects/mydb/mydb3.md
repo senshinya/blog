@@ -5,6 +5,7 @@ description: "DMはファイルシステムをページとして抽象化し、�
 date: 2021-12-05 15:28:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/jlFC4E.webp"
 ---
 
 この章で扱うコードは[backend/dm/pageCache](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache)と[backend/dm/page](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page)にあります。

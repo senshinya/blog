@@ -5,6 +5,7 @@ description: "OnePlusからiPhoneへと何度も機種変更するうち、い�
 date: 2025-06-05 23:26:00
 categories: [fiddling]
 tags: ["試行錯誤", "Android", "Oppo", "Apple", "スマートフォン"]
+image: "https://blog-img.774352199.xyz/19NIhZ.webp"
 ---
 
 ### はじめに

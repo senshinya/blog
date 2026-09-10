@@ -5,6 +5,7 @@ description: "MYDB uses a client/server architecture similar to MySQL, allowing 
 date: 2021-12-25 18:26:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
 ---
 
 The code in this chapter is in [backend/server](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server), [client](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client), and [transport](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport).

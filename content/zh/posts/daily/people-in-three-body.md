@@ -5,6 +5,7 @@ description: "在《三体》中，刘慈欣通过浩瀚的历史叙述，探索
 date: 2022-04-11 00:13:13
 categories: [daily]
 tags: ["日常", "三体", "读书"]
+image: "https://blog-img.774352199.xyz/LTzbFP.webp"
 ---
 
 > 如果哪天中国搞民主了，那肯定是人间地狱，我肯定第二天就逃离中国。

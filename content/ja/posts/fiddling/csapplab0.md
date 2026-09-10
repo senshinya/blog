@@ -5,6 +5,7 @@ description: "CSAPPの学習では実験が欠かせませんが、Linux環境�
 date: 2021-12-27 00:09:00
 categories: [fiddling]
 tags: ["試行錯誤", "CSAPP", "実験", "環境構築"]
+image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 ---
 
 ### はじめに

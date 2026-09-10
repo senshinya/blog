@@ -5,6 +5,7 @@ description: "GFW 的运作机制并非简单的出口网关监控，而是通�
 date: 2024-06-23 15:31:32
 categories: [fiddling]
 tags: ["折腾", "防火墙", "国际互联网", "梯子"]
+image: "https://blog-img.774352199.xyz/sOpJuL.webp"
 ---
 
 技术无罪。

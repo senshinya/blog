@@ -5,6 +5,7 @@ description: "彼女が仕事で北京から上海に引っ越したので、回
 date: 2025-04-18 16:43:12
 categories: [fiddling]
 tags: ["試行錯誤", "透過プロキシ", "ソフトウェアルーター", "ネットワーク構築", "mihomo", "tailscale"]
+image: "https://blog-img.774352199.xyz/O6cAGh.webp"
 ---
 
 ### はじめに

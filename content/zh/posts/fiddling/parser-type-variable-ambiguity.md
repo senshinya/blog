@@ -5,6 +5,7 @@ description: "在语法分析过程中，用户自定义类型名与普通变量
 date: 2025-03-15 20:35:00
 categories: [fiddling]
 tags: ["折腾", "编译原理", "语法分析", "歧义消除"]
+image: "https://blog-img.774352199.xyz/2VKHK9.webp"
 ---
 
 ### 引

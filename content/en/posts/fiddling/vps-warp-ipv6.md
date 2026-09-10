@@ -5,6 +5,7 @@ description: "A Telegram notification on an ordinary afternoon introduced a temp
 date: 2025-03-15 16:24:00
 categories: [fiddling]
 tags: ["Tinkering", "censorship circumvention", "warp", "traffic routing"]
+image: "https://blog-img.774352199.xyz/McjrrF.webp"
 ---
 
 On an ordinary afternoon last week, Telegram, which had been sitting quietly in the background for ages, received a notification:

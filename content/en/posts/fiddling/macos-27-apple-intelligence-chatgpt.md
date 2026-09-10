@@ -5,6 +5,7 @@ description: "Another WWDC brings new Apple Intelligence features in macOS 27. T
 date: 2026-06-11 10:00:00
 categories: [fiddling]
 tags: ["Tinkering", "macOS", "Apple Intelligence", "ChatGPT"]
+image: "https://blog-img.774352199.xyz/fOFucm.webp"
 ---
 
 Another annual tech extravaganza, WWDC, and macOS 27 arrived on schedule. Skins changed, version numbers increased, but its biggest upgrade, Apple Intelligence, remains unavailable on China-market devices. Another update for everywhere around mainland China, and we remain second-class citizens.

@@ -5,6 +5,7 @@ description: "通过将苹果健康的心率数据定时同步到服务器，使
 date: 2025-03-31 23:51:00
 categories: [fiddling]
 tags: ["折腾", "Grafana", "心率", "Apple Watch"]
+image: "https://blog-img.774352199.xyz/F4qD2T.webp"
 ---
 
 整了个小活：把苹果健康的心率定时同步到服务器上，并由 Grafana 绘制展示，效果大概如下：

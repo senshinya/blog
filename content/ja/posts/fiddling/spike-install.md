@@ -5,6 +5,7 @@ description: "RISC-Vツールチェーンをインストールするには、ま
 date: 2023-05-24 17:51:09
 categories: [fiddling]
 tags: ["試行錯誤", "環境構築", "riscv", "spike", "riscv-pk"]
+image: "https://blog-img.774352199.xyz/rWNOKx.webp"
 ---
 
 暇つぶしにSpikeのソースを読もうと思ったのですが、いろいろな解説を見ても、Spikeと関連ツールチェーンをそのままインストールできるものがありませんでした。そこで自力で各リポジトリのREADMEを読み、ほぼ無事にインストールできました。ただ、一つ小さな落とし穴があったので記録しておきます。

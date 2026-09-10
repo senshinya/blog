@@ -5,6 +5,7 @@ description: "MapReduceは、大規模なデータセットの処理を簡単に
 date: 2022-01-16 17:32:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 ---
 
 ### はじめに

@@ -5,6 +5,7 @@ description: "MYDB 采用 C/S 结构，类似于 MySQL，允许多个客户端�
 date: 2021-12-25 18:26:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
 ---
 
 本章涉及代码都在 [backend/server](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server) 、 [client](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client) 与 [transport](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport) 中。

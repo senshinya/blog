@@ -5,6 +5,7 @@ description: "MYDB manages transactions through an XID file. Each transaction ha
 date: 2021-11-28 16:10:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/H4zZAK.webp"
 ---
 
 All the code in this chapter is in [backend/tm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tm).

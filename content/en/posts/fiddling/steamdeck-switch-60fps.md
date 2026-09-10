@@ -5,6 +5,7 @@ description: "This counts as NTR too, surely."
 date: 2026-09-09 23:59:00
 categories: [fiddling]
 tags: ["Steam Deck", "Switch", "EmuDeck", "Eden", "Lossless Scaling"]
+image: "https://blog-img.774352199.xyz/NDPUwc.webp"
 ---
 
 ### Introduction

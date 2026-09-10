@@ -5,6 +5,7 @@ description: "越折腾越想折腾，老当益壮啊老当益壮"
 date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["折腾", "root", "bootloader"]
+image: "https://blog-img.774352199.xyz/qfxB0h.webp"
 ---
 
 ::quote{icon="tabler:device-mobile"}

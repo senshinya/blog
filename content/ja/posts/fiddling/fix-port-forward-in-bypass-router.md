@@ -5,6 +5,7 @@ description: "サイドルーターを導入すると、メインルーターの
 date: 2024-08-15 23:50:00
 categories: [fiddling]
 tags: ["試行錯誤", "サイドルーター", "NAT", "ポート転送"]
+image: "https://blog-img.774352199.xyz/mRqws9.webp"
 ---
 
 ### はじめに

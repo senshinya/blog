@@ -5,6 +5,7 @@ description: "While refactoring a system, converting entities between layers mad
 date: 2022-08-15 01:05:01
 categories: [fiddling]
 tags: ["Tinkering", "golang", "reflection", "deep copy"]
+image: "https://blog-img.774352199.xyz/Blhm0I.webp"
 ---
 
 I have been swamped with a system refactor lately. The blog has been gathering dust for a while.

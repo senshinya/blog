@@ -5,6 +5,7 @@ description: "MapReduce 是一种高效的并行计算模型，旨在简化大�
 date: 2022-01-16 17:32:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 ---
 
 ### 前言

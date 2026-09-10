@@ -5,6 +5,7 @@ description: "MYDB implements a clustered index using a B+ tree. IM interacts di
 date: 2021-12-24 21:01:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/f92X4o.webp"
 ---
 
 All the code in this chapter is in [backend/im](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im).

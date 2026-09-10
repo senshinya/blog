@@ -5,6 +5,7 @@ description: "macOS and iPadOS 26 introduce the Liquid Glass design language, re
 date: 2025-06-10 20:18:00
 categories: [fiddling]
 tags: ["Tinkering", "macos", "ipados", "Liquid Glass"]
+image: "https://blog-img.774352199.xyz/TPSaLE.webp"
 ---
 
 Another annual tech extravaganza, WWDC 25, took place in the early hours of this morning. As we all know, technology is fundamentally about changing skins. Apart from highlighting Apple Intelligence, which people in China <del>cannot use on China-market devices</del> consider beneath them, the biggest news was the latest release of every platform's OS, now uniformly named by year, and the accompanying Liquid Glass design language.

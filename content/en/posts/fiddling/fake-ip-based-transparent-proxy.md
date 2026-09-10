@@ -5,6 +5,7 @@ description: "This FakeIP-based transparent proxy design addresses the single po
 date: 2024-08-16 23:53:00
 categories: [fiddling]
 tags: ["Tinkering", "censorship circumvention", "transparent proxy", "FakeIP"]
+image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 ---
 
 ### Introduction

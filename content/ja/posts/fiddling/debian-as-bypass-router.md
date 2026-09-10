@@ -5,6 +5,7 @@ description: "Debianをサイドルーターに使うと、OpenWrtやLuCIに依�
 date: 2024-07-13 17:49:00
 categories: [fiddling]
 tags: ["試行錯誤", "debian", "サイドルーター", "検閲回避", "透過プロキシ", "mihomo"]
+image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 ---
 
 ### はじめに

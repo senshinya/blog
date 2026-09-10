@@ -5,6 +5,7 @@ description: "Port forwarding on the main router often stops working when a side
 date: 2024-08-15 23:50:00
 categories: [fiddling]
 tags: ["Tinkering", "side router", "NAT", "port forwarding"]
+image: "https://blog-img.774352199.xyz/mRqws9.webp"
 ---
 
 ### Introduction

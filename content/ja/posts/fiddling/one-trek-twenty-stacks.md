@@ -5,6 +5,7 @@ description: "GitHub Trendingで旅行計画ツールを見つけ、自分でも
 date: 2026-05-11 22:43:00
 categories: [fiddling]
 tags: ["試行錯誤", "vps", "セルフホスティング"]
+image: "https://blog-img.774352199.xyz/BBdDWW.webp"
 ---
 
 先日GitHub TrendingでTREKというプロジェクトを見つけました。みんなで同じ地図上にルートを組み、宿を決め、予算を立てて、そのままほかの人に渡して編集を続けてもらえるツールです。デモサイトを触ってみると、とてもよくできていました。

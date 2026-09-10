@@ -5,6 +5,7 @@ description: "MapReduce is an efficient parallel computing model designed to sim
 date: 2022-01-16 17:32:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 ---
 
 ### Introduction

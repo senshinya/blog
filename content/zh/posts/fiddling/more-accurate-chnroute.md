@@ -5,6 +5,7 @@ description: "基于 BGP 的国内外 IP 分流方案，提升了透明代理的
 date: 2024-10-07 16:51:00
 categories: [fiddling]
 tags: ["折腾", "软路由", "透明代理", "分流", "BGP"]
+image: "https://blog-img.774352199.xyz/MOmM1s.webp"
 ---
 
 此前折腾过两节的透明代理方案：[debian 旁路由方案](/fiddling/debian-as-bypass-router) 和 [基于 FakeIP 的透明代理分流](/fiddling/fake-ip-based-transparent-proxy)，家里的透明代理基本已经可用了。基于 FakeIP 的方案使用 FakeIP 标记国外 IP，并在主路由识别并进行分流。sing-box 的 dns 模块配置为

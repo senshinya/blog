@@ -5,6 +5,7 @@ description: "構文解析では、ユーザー定義型名と通常の変数名
 date: 2025-03-15 20:35:00
 categories: [fiddling]
 tags: ["試行錯誤", "コンパイラ設計", "構文解析", "曖昧性の解消"]
+image: "https://blog-img.774352199.xyz/2VKHK9.webp"
 ---
 
 ### 導入

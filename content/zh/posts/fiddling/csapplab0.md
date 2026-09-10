@@ -5,6 +5,7 @@ description: "在学习 CSAPP 的过程中，实验环节的重要性不可忽�
 date: 2021-12-27 00:09:00
 categories: [fiddling]
 tags: ["折腾", "CSAPP", "实验", "环境搭建"]
+image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 ---
 
 ### 前言

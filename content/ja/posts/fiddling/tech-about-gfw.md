@@ -5,6 +5,7 @@ description: "GFWは単に出口のゲートウェイを監視するのではな
 date: 2024-06-23 15:31:32
 categories: [fiddling]
 tags: ["試行錯誤", "ファイアウォール", "グローバルインターネット", "検閲回避用プロキシ"]
+image: "https://blog-img.774352199.xyz/sOpJuL.webp"
 ---
 
 技術そのものに罪はありません。

@@ -5,6 +5,7 @@ description: "Lab 1 asks us to implement a MapReduce system with two core compon
 date: 2022-01-20 22:29:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
 ---
 
 ### Introduction

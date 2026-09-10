@@ -5,6 +5,7 @@ description: "表管理器（TBM）的职责是管理字段和表结构。通过
 date: 2021-12-25 15:44:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/zOMyv5.webp"
 ---
 
 本章涉及代码都在 [backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser) 与 [backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm) 中。

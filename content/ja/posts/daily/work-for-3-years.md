@@ -5,6 +5,7 @@ description: "ByteDanceで働いて3年。変化の速い環境で、時間ま�
 date: 2024-09-28 16:26:00
 categories: [daily]
 tags: ["日常", "仕事", "年間の振り返り"]
+image: "https://blog-img.774352199.xyz/hnCaht.webp"
 ---
 
 ![タイトルの元ネタ](https://blog-img.774352199.xyz/1726828874334.jpg)

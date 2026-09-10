@@ -5,6 +5,7 @@ description: "システムのリファクタリングで、階層ごとのエン
 date: 2022-08-15 01:05:01
 categories: [fiddling]
 tags: ["試行錯誤", "golang", "リフレクション", "ディープコピー"]
+image: "https://blog-img.774352199.xyz/Blhm0I.webp"
 ---
 
 最近はシステムのリファクタリングで大忙しです。ブログもすっかり放置してしまいました。

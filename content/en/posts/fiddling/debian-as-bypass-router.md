@@ -5,6 +5,7 @@ description: "Using Debian as a side router offers a more stable and flexible al
 date: 2024-07-13 17:49:00
 categories: [fiddling]
 tags: ["Tinkering", "debian", "side router", "censorship circumvention", "transparent proxy", "mihomo"]
+image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 ---
 
 ### Introduction

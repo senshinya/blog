@@ -5,6 +5,7 @@ description: "Periodically syncing heart-rate data from Apple Health to a server
 date: 2025-03-31 23:51:00
 categories: [fiddling]
 tags: ["Tinkering", "Grafana", "heart rate", "Apple Watch"]
+image: "https://blog-img.774352199.xyz/F4qD2T.webp"
 ---
 
 A little side project: periodically sync my heart rate from Apple Health to a server and plot it in Grafana. It looks roughly like this:

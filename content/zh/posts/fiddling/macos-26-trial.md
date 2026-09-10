@@ -5,6 +5,7 @@ description: "macOS 和 iPadOS 26 带来了全新的 Liquid Glass 设计语言�
 date: 2025-06-10 20:18:00
 categories: [fiddling]
 tags: ["折腾", "macos", "ipados", "Liquid Glass"]
+image: "https://blog-img.774352199.xyz/TPSaLE.webp"
 ---
 
 又是一年科技春晚 WWDC 25 在今日凌晨召开，众所周知科技以换皮为本，除了重点介绍了<del>国行用不到</del>国人不屑于使用的 Apple Intelligence 之外，最大的更新就是各平台系统发布了最新版并统一以年份命名，以及随之而来的 Liquid Glass 设计语言了。

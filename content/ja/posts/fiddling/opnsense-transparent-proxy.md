@@ -5,6 +5,7 @@ description: "OPNsenseは、美しい画面と充実した機能を備えるオ�
 date: 2025-01-16 23:09:00
 categories: [fiddling]
 tags: ["試行錯誤", "検閲回避", "透過プロキシ", "OPNsense", "トラフィック振り分け"]
+image: "https://blog-img.774352199.xyz/xA8C1E.webp"
 ---
 
 ### はじめに

@@ -5,6 +5,7 @@ description: "友人の一言からシミュレーターに興味が湧き、Mic
 date: 2025-12-14 14:31:00
 categories: [fiddling]
 tags: ["試行錯誤", "Microsoft Flight Simulator", "Thrustmaster", "pico"]
+image: "https://blog-img.774352199.xyz/lfhEuE.webp"
 ---
 
 ### はじめに

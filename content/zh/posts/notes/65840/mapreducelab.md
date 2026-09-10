@@ -5,6 +5,7 @@ description: "实验一的目标是实现一个 MapReduce 系统，分为 master
 date: 2022-01-20 22:29:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
 ---
 
 ### 前言

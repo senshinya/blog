@@ -5,6 +5,7 @@ description: "macOSとiPadOS 26では、新しいデザイン言語Liquid Glass�
 date: 2025-06-10 20:18:00
 categories: [fiddling]
 tags: ["試行錯誤", "macos", "ipados", "Liquid Glass"]
+image: "https://blog-img.774352199.xyz/TPSaLE.webp"
 ---
 
 今年もテック界の年越し番組ことWWDC 25が、今日の未明に開催されました。ご存じのとおり、技術の基本は着せ替えです。<del>中国本土向けモデルでは使えない</del>中国人が使うまでもないApple Intelligenceの紹介を除けば、最大の更新は各プラットフォームのOS最新版が年号ベースの統一名称になったことと、新しいデザイン言語Liquid Glassでしょう。

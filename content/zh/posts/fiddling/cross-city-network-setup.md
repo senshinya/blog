@@ -5,6 +5,7 @@ description: "随着工作调动，npy 从北京迁至上海，顺便处理了�
 date: 2025-04-18 16:43:12
 categories: [fiddling]
 tags: ["折腾", "透明代理", "软路由", "组网", "mihomo", "tailscale"]
+image: "https://blog-img.774352199.xyz/O6cAGh.webp"
 ---
 
 ### 前言

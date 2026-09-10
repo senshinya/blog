@@ -5,6 +5,7 @@ description: "テーブルマネージャー（TBM）は、フィールドとテ
 date: 2021-12-25 15:44:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/zOMyv5.webp"
 ---
 
 この章で扱うコードは[backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser)と[backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm)にあります。

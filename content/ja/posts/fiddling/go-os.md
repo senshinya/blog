@@ -5,6 +5,7 @@ description: "春節の帰省列車で、Goをベアメタルで動かす記事�
 date: 2023-02-02 23:24:55
 categories: [fiddling]
 tags: ["試行錯誤", "golang", "os", "riscv"]
+image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
 ---
 
 ### きっかけ

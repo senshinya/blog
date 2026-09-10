@@ -5,6 +5,7 @@ description: "VMでは、MVCCに伴うバージョンの飛び越しとデッド
 date: 2021-12-23 21:20:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/BF3yDW.webp"
 ---
 
 この章で扱うコードはすべて[backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm)にあります。

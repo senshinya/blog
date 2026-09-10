@@ -5,6 +5,7 @@ description: "在 Java 中，使用 `this` 关键字时，编译器对常量的�
 date: 2022-04-16 00:01:28
 categories: [fiddling]
 tags: ["折腾", "java"]
+image: "https://blog-img.774352199.xyz/gKtkYe.webp"
 ---
 
 名字起的有点长了，但是这确实是个挺有趣的问题。如下代码：

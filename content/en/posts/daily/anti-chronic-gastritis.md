@@ -5,6 +5,7 @@ description: "Chronic gastritis has been a long, uneven journey: stomach trouble
 date: 2024-09-01 22:03:10
 categories: [daily]
 tags: ["Daily Life", "Gastritis"]
+image: "https://blog-img.774352199.xyz/0Hr9l5.webp"
 ---
 
 I've had a sensitive stomach since I was little. Through primary school, middle school, and high school, I saw countless doctors and took countless medicines, but it never really got better. Anything cold or spicy would leave me bloated, with acid reflux and nausea. Even when I ate properly, nerves before an exam or interview could make me feel sick.

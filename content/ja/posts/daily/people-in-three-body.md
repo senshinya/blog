@@ -5,6 +5,7 @@ description: "『三体』では、劉慈欣が壮大な歴史を通して個人
 date: 2022-04-11 00:13:13
 categories: [daily]
 tags: ["日常", "三体", "読書"]
+image: "https://blog-img.774352199.xyz/LTzbFP.webp"
 ---
 
 > もし中国が民主主義になったら、きっとこの世の地獄になる。私は間違いなく翌日には中国を出る。

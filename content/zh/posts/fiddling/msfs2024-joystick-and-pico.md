@@ -5,6 +5,7 @@ description: "被朋友一句话撬开了玩模拟的念头，随手买了微软
 date: 2025-12-14 14:31:00
 categories: [fiddling]
 tags: ["折腾", "微软模拟飞行", "图马思特", "pico"]
+image: "https://blog-img.774352199.xyz/lfhEuE.webp"
 ---
 
 ### 前言

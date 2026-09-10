@@ -5,6 +5,7 @@ description: "VM must handle version skipping introduced by MVCC as well as dead
 date: 2021-12-23 21:20:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/BF3yDW.webp"
 ---
 
 All the code in this chapter is in [backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm).

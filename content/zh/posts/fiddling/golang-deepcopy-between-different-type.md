@@ -5,6 +5,7 @@ description: "在系统重构的过程中，面对分层架构中不同实体间
 date: 2022-08-15 01:05:01
 categories: [fiddling]
 tags: ["折腾", "golang", "反射", "深拷贝"]
+image: "https://blog-img.774352199.xyz/Blhm0I.webp"
 ---
 
 最近在做系统重构，忙得不可开交～博客荒废了好一阵子

@@ -5,6 +5,7 @@ description: "Unlocking the Xiaomi 17 bootloader, flashing a modified stock ROM,
 date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["Tinkering", "root", "bootloader"]
+image: "https://blog-img.774352199.xyz/qfxB0h.webp"
 ---
 
 ::quote{icon="tabler:device-mobile"}

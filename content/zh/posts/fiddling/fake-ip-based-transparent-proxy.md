@@ -5,6 +5,7 @@ description: "基于 FakeIP 的透明代理分流方案旨在解决传统旁路�
 date: 2024-08-16 23:53:00
 categories: [fiddling]
 tags: ["折腾", "翻墙", "透明代理", "FakeIP"]
+image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 ---
 
 ### 前言

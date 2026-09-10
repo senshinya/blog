@@ -5,6 +5,7 @@ description: "My frequent phone changes took me from OnePlus to iPhone, and from
 date: 2025-06-05 23:26:00
 categories: [fiddling]
 tags: ["Tinkering", "Android", "Oppo", "Apple", "smartphone"]
+image: "https://blog-img.774352199.xyz/19NIhZ.webp"
 ---
 
 ### Introduction

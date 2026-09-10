@@ -5,6 +5,7 @@ description: "VM 需要处理 MVCC 导致的版本跳跃及死锁问题。通过
 date: 2021-12-23 21:20:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/BF3yDW.webp"
 ---
 
 本章涉及代码都在 [backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm) 中。

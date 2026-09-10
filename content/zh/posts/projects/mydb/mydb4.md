@@ -5,6 +5,7 @@ description: "在 MYDB 的设计中，日志文件扮演着至关重要的角色
 date: 2021-12-08 22:55:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/TRcbsj.webp"
 ---
 
 本章涉及代码都在 [backend/dm/logger](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger) 和 [backend/dm/Recover.java](https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java) 中。

@@ -5,6 +5,7 @@ description: "MoonTV 是一款全新的影视聚合平台，基于 NextJS 和 Re
 date: 2025-07-20 23:32:00
 categories: [fiddling]
 tags: ["折腾", "moontv", "vibe coding", "cursor"]
+image: "https://blog-img.774352199.xyz/nIeONi.webp"
 ---
 
 大概半年前，就一直在关注一个项目 [LibreTV](https://github.com/LibreSpark/LibreTV)，这是一个影视聚合项目，聚合各种采集站的资源做统一搜索和播放。当时想着给 npy 部署一个追剧平台，就关注了一下这个项目，后面还给这个项目贡献了不少代码，包括更换 html5 播放器，对这个项目的运行逻辑也愈发熟稔。后面用着用着，这个项目的弊端也不断展现出来：这是一个纯前端项目，播放记录等信息都存储在浏览器的 localstorage 中，更换浏览器就会丢失；代码都是纯 JS 写就的，经过不同人手，代码也比较混乱，由于没有静态检查，很多代码都不太敢动，也很难进行大改。

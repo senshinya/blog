@@ -5,6 +5,7 @@ description: "MoonTV is a new video aggregation platform built with Next.js and 
 date: 2025-07-20 23:32:00
 categories: [fiddling]
 tags: ["Tinkering", "moontv", "vibe coding", "cursor"]
+image: "https://blog-img.774352199.xyz/nIeONi.webp"
 ---
 
 About half a year ago, I started following [LibreTV](https://github.com/LibreSpark/LibreTV), a video aggregator that combines resources from various indexing sites into unified search and playback. I wanted to deploy something for my girlfriend to watch shows on. Later, I contributed quite a bit of code, including replacing the HTML5 player, and became increasingly familiar with how it worked. Continued use exposed its weaknesses: it is entirely frontend-based, storing viewing history and other data in browser localstorage, so changing browsers loses everything. The code is plain JS, touched by many hands and rather messy. Without static checks, I was afraid to touch much of it, let alone make major changes.

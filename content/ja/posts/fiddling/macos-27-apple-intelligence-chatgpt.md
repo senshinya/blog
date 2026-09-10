@@ -5,6 +5,7 @@ description: "今年もWWDCでmacOS 27の新しいApple Intelligenceが登場し
 date: 2026-06-11 10:00:00
 categories: [fiddling]
 tags: ["試行錯誤", "macOS", "Apple Intelligence", "ChatGPT"]
+image: "https://blog-img.774352199.xyz/fOFucm.webp"
 ---
 
 今年もテック界の年越し番組、WWDCがやってきて、macOS 27も予定どおり登場しました。見た目は変わり、バージョン番号も上がりましたが、最大の更新であるApple Intelligenceだけは、中国本土向け端末で依然使えません。またも中国本土を避けて一周する更新で、相変わらず二等市民扱いです。

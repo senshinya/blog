@@ -5,6 +5,7 @@ description: "在构建动态博客时，添加说说功能能显著提升用户
 date: 2025-01-29 21:58:00
 categories: [fiddling]
 tags: ["折腾", "VitePress", "Memos", "CloudFlare"]
+image: "https://blog-img.774352199.xyz/hZX6hr.webp"
 ---
 
 ### 前言

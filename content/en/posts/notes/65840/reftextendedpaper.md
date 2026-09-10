@@ -5,6 +5,7 @@ description: "Raft is a consensus algorithm designed to improve the efficiency o
 date: 2022-12-03 21:40:09
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
+image: "https://blog-img.774352199.xyz/7mmvIZ.webp"
 ---
 
 ### Introduction

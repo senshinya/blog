@@ -5,6 +5,7 @@ description: "ブログをAstroに移行したところ、従来のGoogle Analyt
 date: 2025-05-28 22:09:00
 categories: [fiddling]
 tags: ["試行錯誤", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
+image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 ---
 
 ### はじめに

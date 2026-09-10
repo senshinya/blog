@@ -5,6 +5,7 @@ description: "BGP-based routing for Chinese and overseas IPs makes transparent p
 date: 2024-10-07 16:51:00
 categories: [fiddling]
 tags: ["Tinkering", "software router", "transparent proxy", "traffic routing", "BGP"]
+image: "https://blog-img.774352199.xyz/MOmM1s.webp"
 ---
 
 After two rounds of tinkering—[Using Debian as a Side Router](/en/fiddling/debian-as-bypass-router) and [Routing Transparent Proxy Traffic with FakeIP](/en/fiddling/fake-ip-based-transparent-proxy)—my home transparent proxy was basically usable. The FakeIP approach marks overseas IPs with FakeIP, which the main router identifies to route traffic. The sing-box DNS module was configured as follows:

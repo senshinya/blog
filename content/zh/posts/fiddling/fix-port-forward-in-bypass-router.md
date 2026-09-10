@@ -5,6 +5,7 @@ description: "在使用旁路由配置的情况下，主路由上的端口映射
 date: 2024-08-15 23:50:00
 categories: [fiddling]
 tags: ["折腾", "旁路由", "NAT", "端口映射"]
+image: "https://blog-img.774352199.xyz/mRqws9.webp"
 ---
 
 ### 前言

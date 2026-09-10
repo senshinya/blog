@@ -5,6 +5,7 @@ description: "ある平凡な午後、Telegramの通知で魅力的なVPSプラ�
 date: 2025-03-15 16:24:00
 categories: [fiddling]
 tags: ["試行錯誤", "検閲回避", "warp", "トラフィック振り分け"]
+image: "https://blog-img.774352199.xyz/McjrrF.webp"
 ---
 
 先週の何でもない午後、ずっとバックグラウンドで静かにしていたTelegramに通知が届きました。

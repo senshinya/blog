@@ -5,6 +5,7 @@ description: "OPNsense is an open-source firewall and router with an attractive 
 date: 2025-01-16 23:09:00
 categories: [fiddling]
 tags: ["Tinkering", "censorship circumvention", "transparent proxy", "OPNsense", "traffic routing"]
+image: "https://blog-img.774352199.xyz/xA8C1E.webp"
 ---
 
 ### Introduction

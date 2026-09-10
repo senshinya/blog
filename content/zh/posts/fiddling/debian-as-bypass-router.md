@@ -5,6 +5,7 @@ description: "Debian 旁路由方案为用户提供了一种更为稳定和灵�
 date: 2024-07-13 17:49:00
 categories: [fiddling]
 tags: ["折腾", "debian", "旁路由", "翻墙", "透明代理", "mihomo"]
+image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 ---
 
 ### 前言

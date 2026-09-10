@@ -5,6 +5,7 @@ description: "Xiaomi 17のBootloaderを解除し、純正改変ROMを導入し�
 date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["試行錯誤", "root", "bootloader"]
+image: "https://blog-img.774352199.xyz/qfxB0h.webp"
 ---
 
 ::quote{icon="tabler:device-mobile"}

@@ -5,6 +5,7 @@ description: "MYDBはB+木によるクラスタ化インデックスを実装し
 date: 2021-12-24 21:01:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/f92X4o.webp"
 ---
 
 この章で扱うコードはすべて[backend/im](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im)にあります。

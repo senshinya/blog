@@ -5,6 +5,7 @@ description: "After moving my blog to Astro, the usual Google Analytics integrat
 date: 2025-05-28 22:09:00
 categories: [fiddling]
 tags: ["Tinkering", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
+image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 ---
 
 ### Introduction

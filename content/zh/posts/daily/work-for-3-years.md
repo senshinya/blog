@@ -5,6 +5,7 @@ description: "在字节工作三年，时间的流逝仿佛在无形中加速。
 date: 2024-09-28 16:26:00
 categories: [daily]
 tags: ["日常", "工作", "年度总结"]
+image: "https://blog-img.774352199.xyz/hnCaht.webp"
 ---
 
 ![标题源](https://blog-img.774352199.xyz/1726828874334.jpg)

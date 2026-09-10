@@ -5,6 +5,7 @@ description: "MYDB is a personal project exploring and implementing the fundamen
 date: 2021-11-27 14:43:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/xfci2J.webp"
 ---
 
 Project: [https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

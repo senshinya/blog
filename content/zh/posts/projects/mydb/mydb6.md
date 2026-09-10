@@ -5,6 +5,7 @@ description: "VM 通过两段锁协议确保调度序列的可串行化，并引
 date: 2021-12-18 14:58:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/8YzotA.webp"
 ---
 
 本章涉及代码都在 [backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm) 中。

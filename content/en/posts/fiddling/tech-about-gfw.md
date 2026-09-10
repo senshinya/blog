@@ -5,6 +5,7 @@ description: "The GFW does more than monitor an exit gateway: it inspects intern
 date: 2024-06-23 15:31:32
 categories: [fiddling]
 tags: ["Tinkering", "firewall", "global Internet", "circumvention proxy"]
+image: "https://blog-img.774352199.xyz/sOpJuL.webp"
 ---
 
 Technology itself isn’t to blame.

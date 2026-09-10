@@ -5,6 +5,7 @@ description: "MYDBでは、クラッシュ後にデータを復旧できるよ�
 date: 2021-12-08 22:55:00
 categories: [projects]
 tags: ["java", "mydb"]
+image: "https://blog-img.774352199.xyz/TRcbsj.webp"
 ---
 
 この章で扱うコードは[backend/dm/logger](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger)と[backend/dm/Recover.java](https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java)にあります。

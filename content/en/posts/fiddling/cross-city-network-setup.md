@@ -5,6 +5,7 @@ description: "My girlfriend moved from Beijing to Shanghai for work, and I helpe
 date: 2025-04-18 16:43:12
 categories: [fiddling]
 tags: ["Tinkering", "transparent proxy", "software router", "networking", "mihomo", "tailscale"]
+image: "https://blog-img.774352199.xyz/O6cAGh.webp"
 ---
 
 ### Introduction

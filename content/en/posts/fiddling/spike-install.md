@@ -5,6 +5,7 @@ description: "To install the RISC-V toolchain, first obtain the riscv-gnu-toolch
 date: 2023-05-24 17:51:09
 categories: [fiddling]
 tags: ["Tinkering", "environment setup", "riscv", "spike", "riscv-pk"]
+image: "https://blog-img.774352199.xyz/rWNOKx.webp"
 ---
 
 I was bored and wanted to look through Spike's source, but none of the many tutorials I found got Spike and its toolchain installed out of the box. So I took matters into my own hands and read the repositories' READMEs. They mostly worked, with one small trap worth recording.

@@ -5,6 +5,7 @@ description: "I found a trip-planning tool on GitHub Trending and wanted to host
 date: 2026-05-11 22:43:00
 categories: [fiddling]
 tags: ["Tinkering", "vps", "self-hosting"]
+image: "https://blog-img.774352199.xyz/BBdDWW.webp"
 ---
 
 A few days ago, I came across TREK on GitHub Trending. It lets a group plan routes, book accommodation, and budget on the same map, then hand the plan to someone else to keep editing. I tried the demo, and it was beautifully done.

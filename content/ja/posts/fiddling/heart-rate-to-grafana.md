@@ -5,6 +5,7 @@ description: "Appleヘルスケアの心拍数を定期的にサーバーへ同�
 date: 2025-03-31 23:51:00
 categories: [fiddling]
 tags: ["試行錯誤", "Grafana", "心拍数", "Apple Watch"]
+image: "https://blog-img.774352199.xyz/F4qD2T.webp"
 ---
 
 ちょっとしたものを作りました。Appleヘルスケアの心拍数を定期的にサーバーへ同期して、Grafanaでグラフにします。こんな感じです。

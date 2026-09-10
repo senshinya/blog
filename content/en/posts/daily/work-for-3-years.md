@@ -5,6 +5,7 @@ description: "Three years at ByteDance have made time feel strangely accelerated
 date: 2024-09-28 16:26:00
 categories: [daily]
 tags: ["Daily Life", "Work", "Year in Review"]
+image: "https://blog-img.774352199.xyz/hnCaht.webp"
 ---
 
 ![Where the title came from](https://blog-img.774352199.xyz/1726828874334.jpg)

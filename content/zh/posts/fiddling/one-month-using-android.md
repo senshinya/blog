@@ -5,6 +5,7 @@ description: "换机频繁的我，经历了从一加到 iPhone 的转变，逐�
 date: 2025-06-05 23:26:00
 categories: [fiddling]
 tags: ["折腾", "Android", "Oppo", "苹果", "Apple", "手机"]
+image: "https://blog-img.774352199.xyz/19NIhZ.webp"
 ---
 
 ### 前言
