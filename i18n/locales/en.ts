@@ -38,6 +38,14 @@ const en: MessageSchema = {
 		theme: 'Theme: {name} {version}',
 	},
 	post: {
+		authorship: {
+			'replay': 'Replay stamp',
+			'label': 'Original authorship',
+			'human-only': { top: 'HUMAN AUTHORED', bottom: 'NO AI INVOLVED' },
+			'human-ai-polished': { top: 'HUMAN AUTHORED', bottom: 'AI POLISHED' },
+			'ai-human-reviewed': { top: 'AI AUTHORED', bottom: 'HUMAN REVIEWED' },
+			'ai-only': { top: 'AI AUTHORED', bottom: 'NO HUMAN INPUT' },
+		},
 		references: 'References',
 		license: 'License',
 		licenseNotice: 'This article is licensed under {link}. Please credit the source when reposting.',
@@ -86,6 +94,7 @@ const en: MessageSchema = {
 		heading: 'Comments',
 		feedbackPrompt: 'Done reading? Leave some feedback on this post',
 		signInPrompt: 'Sign in with GitHub to join the discussion',
+		loginWithGitHub: 'Sign in with GitHub',
 		login: 'Sign in',
 		viewProfile: 'View GitHub profile',
 		loggingOut: 'Signing out…',

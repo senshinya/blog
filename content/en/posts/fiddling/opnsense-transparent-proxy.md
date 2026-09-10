@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Transparent Proxying and Traffic Routing with OPNsense"
 description: "OPNsense is an open-source firewall and router with an attractive interface and a comprehensive feature set. After trying several routing setups, I came to appreciate its potential for transparent proxying and traffic routing. Combining it with BGP-based routing offers better security and stability, while its automatically updated IP lists make network management more convenient."
 date: 2025-01-16 23:09:00

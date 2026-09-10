@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Steam Deck 的第二春：Switch 模拟器到插帧 60FPS 一条龙"
 description: "这何尝不是一种 NTR"
 date: 2026-09-09 23:59:00

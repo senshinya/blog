@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "RISC-Vツールチェーンとエミュレーターのインストール"
 description: "RISC-Vツールチェーンをインストールするには、まずriscv-gnu-toolchainのソースを取得します。clone時に`--depth=1`を付けるとダウンロード量を減らせます。READMEのPrerequisitesを確認し、必要な依存関係をそろえてから進めます。Debianではコマンドで依存パッケージをまとめて導入できます。"
 date: 2023-05-24 17:51:09

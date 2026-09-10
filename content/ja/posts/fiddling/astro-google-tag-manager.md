@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "AstroにGoogle Analyticsを導入する（Tag Manager編）"
 description: "ブログをAstroに移行したところ、従来のGoogle Analytics導入方法では性能面が気になるようになりました。headタグにJavaScriptを直接追加してイベントを送ることはできますが、ページの性能に影響します。そこでpartytownでスクリプトをメインスレッドから切り離し、読み込みを妨げないようにしました。サンプルコードに手を加えることでGoogle Analyticsの導入に成功し、性能とアクセス解析を両立できました。"
 date: 2025-05-28 22:09:00

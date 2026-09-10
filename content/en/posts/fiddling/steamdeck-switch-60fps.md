@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "A Second Life for the Steam Deck: Switch Emulation and Frame Generation at 60 FPS"
 description: "This counts as NTR too, surely."
 date: 2026-09-09 23:59:00

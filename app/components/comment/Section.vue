@@ -377,7 +377,8 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 			<span class="grow" />
 			<button type="button" class="btn-github" @click="session.login(returnToNearest(root))">
 				<Icon name="tabler:brand-github" />
-				{{ $t('comment.login') }}
+				<span class="signin-label-desktop">{{ $t('comment.login') }}</span>
+				<span class="signin-label-mobile">{{ $t('comment.loginWithGitHub') }}</span>
 			</button>
 		</div>
 

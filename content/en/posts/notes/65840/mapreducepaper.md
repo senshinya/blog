@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Reading the MapReduce Paper"
 description: "MapReduce is an efficient parallel computing model designed to simplify processing large datasets. By defining the two key functions, Map and Reduce, users can break complex tasks into simple operations. The framework automatically handles data distribution and task scheduling, allowing developers to focus on the algorithm rather than low-level details. Its widespread use in distributed systems demonstrates its flexibility and practical value."
 date: 2022-01-16 17:32:00

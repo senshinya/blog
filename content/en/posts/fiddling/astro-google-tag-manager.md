@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Adding Google Analytics to Astro with Tag Manager"
 description: "After moving my blog to Astro, the usual Google Analytics integration no longer fit its performance goals. Adding event-reporting JavaScript directly to the head works, but hurts page performance. I used partytown to move the scripts off the main thread so they would not interfere with loading. With a few adjustments to the example code, Google Analytics finally worked, balancing performance with analytics."
 date: 2025-05-28 22:09:00

@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 2. A Reference-Counted Cache Framework and Shared Byte Arrays"
 description: "The Data Manager (DM) bridges higher-level modules and the filesystem, handling paging and caching while ensuring data safety and recovery. Its cache uses reference counting rather than traditional LRU, aiming for a reusable, efficient foundation for subsequent data operations."
 date: 2021-11-30 23:18:00

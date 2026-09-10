@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "More Accurate Routing for Chinese and Overseas IPs with BGP"
 description: "BGP-based routing for Chinese and overseas IPs makes transparent proxying more efficient and accurate. Marking overseas destinations with FakeIP lets the main router route traffic more intelligently for smoother connectivity. The sing-box DNS configuration is also refined to handle queries more flexibly and efficiently, improving the overall network experience."
 date: 2024-10-07 16:51:00

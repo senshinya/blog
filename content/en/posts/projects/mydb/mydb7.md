@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 7. Deadlock Detection and the Version Manager"
 description: "VM must handle version skipping introduced by MVCC as well as deadlocks. By simply marking a transaction, MYDB can cancel or roll it back and keep data from aborted transactions from affecting others. This design makes concurrent transaction handling more efficient and reliable, avoids the deadlock risks common with traditional 2PL, and improves overall stability and performance."
 date: 2021-12-23 21:20:00

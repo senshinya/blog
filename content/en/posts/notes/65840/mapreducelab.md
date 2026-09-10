@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "6.5840 Lab 1: MapReduce"
 description: "Lab 1 asks us to implement a MapReduce system with two core components: a master and workers. This requires a good command of Go RPC and concurrent programming, along with a thorough understanding of the MapReduce workflow. I built two versions, starting with mutex locks and then moving to a more elegant channel-based implementation without explicit locks, whose design is simpler and clearer. The key to understanding the lab is to read the relevant documentation carefully, especially the flowcharts and explanations."
 date: 2022-01-20 22:29:00

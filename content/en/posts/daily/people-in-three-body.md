@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "The “Majority” in The Three-Body Problem"
 description: "In The Three-Body Problem, Liu Cixin uses an immense historical canvas to explore the relationship between individuals and the collective. His doubts about Western democracy and the majority’s ability to determine its own fate run through the trilogy. Heroes struggle and sacrifice, only to see their work swept aside by history. Beginning with the Cultural Revolution, the story sets up a conflict between exceptional individuals and the ordinary masses, raising uncomfortable questions about humanity and society."
 date: 2022-04-11 00:13:13

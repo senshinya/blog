@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Steam Deckの第二の人生：Switchエミュレーター導入からフレーム補間で60FPSまで"
 description: "これも一種のNTRですよね"
 date: 2026-09-09 23:59:00

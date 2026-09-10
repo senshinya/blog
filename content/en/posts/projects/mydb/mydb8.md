@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 8. Index Management"
 description: "MYDB implements a clustered index using a B+ tree. IM interacts directly with the Data Manager (DM), bypassing the Version Manager (VM), so index data is written directly to the database file. This chapter details the binary-tree index structure and its basic node fields, including the leaf flag, key count, and sibling identifier, establishing the framework for indexed lookups."
 date: 2021-12-24 21:01:00

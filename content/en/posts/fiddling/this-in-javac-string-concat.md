@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "How Java’s this Keyword Can Prevent Compile-Time Constant Propagation"
 description: "In Java, using `this` can prevent the compiler from optimizing constants. Although `ab1` and `ab2` in this example appear to refer to the same static final variable `s`, comparing them produces different results. `ab1` concatenates a direct reference to the static variable, while `ab2` accesses it through `this`, preventing the same constant propagation optimization. This illustrates how a small syntactic difference can change compilation behavior."
 date: 2022-04-16 00:01:28

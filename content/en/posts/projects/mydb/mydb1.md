@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 1. Starting with the Transaction Manager"
 description: "MYDB manages transactions through an XID file. Each transaction has a unique XID, incrementing from 1; XID 0 denotes a super transaction whose state is always committed. TransactionManager maintains this file and records three states: active, committed, and aborted. This mechanism supports accurate transaction state queries and management, providing a foundation for system stability and reliability."
 date: 2021-11-28 16:10:00

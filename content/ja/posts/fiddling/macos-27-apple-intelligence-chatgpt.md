@@ -1,4 +1,5 @@
 ---
+authorship: ai-human-reviewed
 title: "中国本土向けMacでApple Intelligenceを使う：地域変更からChatGPTの取り出しまで"
 description: "今年もWWDCでmacOS 27の新しいApple Intelligenceが登場しました。macOS 26時代の回避方法はもう使えず、引き続きAppleとの知恵比べです。"
 date: 2026-06-11 10:00:00

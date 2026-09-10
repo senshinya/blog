@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 5. The Page Index and the Data Manager"
 description: "The page index is an important part of DM, optimizing insertions by caching the free space available on each page. It lets higher-level modules quickly locate a suitable page without a lengthy search, making data operations more efficient. Its implementation works closely with the DataItem abstraction to support efficient database operation."
 date: 2021-12-11 15:16:00

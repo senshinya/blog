@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Reading the Raft Paper"
 description: "Raft is a consensus algorithm designed to improve the efficiency of log replication. It is particularly suited to clusters of machines, allowing them to keep providing service even when some machines fail. It uses the replicated state machine model: logs record the order of commands so that every machine in the cluster can reach the same state. In Search of an Understandable Consensus Algorithm explores Raft’s design and compares it with Paxos, highlighting its understandability and providing a foundation for building reliable large-scale software systems. These reading notes aim to help explain the paper’s core concepts and their applications."
 date: 2022-12-03 21:40:09

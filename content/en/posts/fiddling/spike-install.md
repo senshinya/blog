@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Installing the RISC-V Toolchain and Emulator"
 description: "To install the RISC-V toolchain, first obtain the riscv-gnu-toolchain source. Using `--depth=1` when cloning reduces the download size. Check the README’s Prerequisites section and install the required dependencies. On Debian, a simple package installation command prepares the environment for building the toolchain."
 date: 2023-05-24 17:51:09

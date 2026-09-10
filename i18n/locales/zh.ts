@@ -40,6 +40,14 @@ const zh = {
 		theme: '主题: {name} {version}',
 	},
 	post: {
+		authorship: {
+			'replay': '点击重新盖章',
+			'label': '原文创作方式',
+			'human-only': { top: '纯人类创作', bottom: '无 AI 参与' },
+			'human-ai-polished': { top: '人类创作', bottom: 'AI 辅助润色' },
+			'ai-human-reviewed': { top: 'AI 主笔', bottom: '人类已审核' },
+			'ai-only': { top: 'AI 独立创作', bottom: '无人类参与' },
+		},
 		references: '参考链接',
 		license: '许可协议',
 		licenseNotice: '本文采用 {link} 许可协议，转载请注明出处。',
@@ -88,6 +96,7 @@ const zh = {
 		heading: '评论区',
 		feedbackPrompt: '读完了？给这篇文章一个反馈',
 		signInPrompt: '用 GitHub 账号参与讨论',
+		loginWithGitHub: '使用 GitHub 登录',
 		login: '登录',
 		viewProfile: '查看 GitHub 主页',
 		loggingOut: '退出中…',

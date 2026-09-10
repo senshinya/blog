@@ -38,6 +38,14 @@ const ja: MessageSchema = {
 		theme: 'テーマ: {name} {version}',
 	},
 	post: {
+		authorship: {
+			'replay': 'クリックして押し直す',
+			'label': '原文の執筆方法',
+			'human-only': { top: '人間が執筆', bottom: 'AI 不使用' },
+			'human-ai-polished': { top: '人間が執筆', bottom: 'AI が推敲補助' },
+			'ai-human-reviewed': { top: 'AI が執筆', bottom: '人間が確認済み' },
+			'ai-only': { top: 'AI が執筆', bottom: '人間の関与なし' },
+		},
 		references: '参考リンク',
 		license: 'ライセンス',
 		licenseNotice: '本記事は{link}のもとで公開しています。転載の際は出典を明記してください。',
@@ -86,6 +94,7 @@ const ja: MessageSchema = {
 		heading: 'コメント',
 		feedbackPrompt: '読み終えたら、感想を聞かせてください',
 		signInPrompt: 'GitHubでログインして参加',
+		loginWithGitHub: 'GitHubでログイン',
 		login: 'ログイン',
 		viewProfile: 'GitHubプロフィールを見る',
 		loggingOut: 'ログアウト中…',

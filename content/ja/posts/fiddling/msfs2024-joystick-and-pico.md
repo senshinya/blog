@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Microsoft Flight Simulator 2024をあれこれ試す"
 description: "友人の一言からシミュレーターに興味が湧き、Microsoft Flight Simulatorを購入。地図やモデルはリアルタイム配信、アカウントは再ログインが必要、チュートリアルは見つけにくく、キーボード操作も難しい。結局フライトスティックを買い、Pico VRまで設定してようやく一通り体験できました。"
 date: 2025-12-14 14:31:00

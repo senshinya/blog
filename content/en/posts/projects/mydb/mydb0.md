@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 0. Project Structure and a Few Things I Had to Say"
 description: "MYDB is a personal project exploring and implementing the fundamentals of databases, built in my spare time over a little more than half a month. I picked up some basic knowledge in my university database systems course, though during my internship I mostly used the classes as an excuse to slack off. My candid answers in an interview did not cause too much trouble, but they did make me reconsider what I knew about databases and decide to learn through hands-on practice. That was how this project began."
 date: 2021-11-27 14:43:00

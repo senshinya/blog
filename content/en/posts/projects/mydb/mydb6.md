@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 6. Record Versions and Transaction Isolation"
 description: "VM uses two-phase locking to ensure serializable schedules and introduces multiversion concurrency control (MVCC) to eliminate blocking between reads and writes. This chapter also defines conflicts between database operations, focusing on the interaction between updates and reads as a foundation for understanding transaction isolation levels."
 date: 2021-12-18 14:58:00

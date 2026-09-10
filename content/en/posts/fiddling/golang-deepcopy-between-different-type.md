@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Deep Copying Between Different Struct Types in Go"
 description: "While refactoring a system, converting entities between layers made deep copying surprisingly awkward. A product VO in the view layer, an entity in the domain layer, and a PO in the persistence layer can look nearly identical, yet small type differences complicate direct conversion. I used reflection to build a general conversion method, reducing repetitive assembler methods and making the code more maintainable and flexible."
 date: 2022-08-15 01:05:01

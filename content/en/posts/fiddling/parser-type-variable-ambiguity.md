@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Resolving Type Name and Variable Name Ambiguity in Parsing"
 description: "Distinguishing user-defined type names from ordinary variables is a challenge during parsing. A statement such as `a*b;` can be either an arithmetic expression or a declaration. Grammar rules, especially those involving type specifiers, can misidentify variables as types, affecting correctness and readability. The prevalence of declarations without initializers makes this ambiguity especially common."
 date: 2025-03-15 20:35:00

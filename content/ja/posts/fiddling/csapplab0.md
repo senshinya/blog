@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "CSAPP Labの環境構築"
 description: "CSAPPの学習では実験が欠かせませんが、Linux環境の構築が壁になりがちです。とくに仮想マシンでは、インストール失敗、互換性、ネットワーク接続などの問題に悩まされます。Windows 10バージョン2004以降なら、WSL（Windows Subsystem for Linux）が有力な選択肢です。従来の仮想マシンの複雑さや性能面の負担を避けながら、Linux環境を手軽に利用できます。"
 date: 2021-12-27 00:09:00

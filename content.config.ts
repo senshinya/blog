@@ -8,6 +8,9 @@ type ArticleType = keyof typeof blogConfig.article.types
 // 文章类型已在 blog.config 中定义，此处使用 any 类型绕过 zod 类型验证
 const articleTypes = Object.keys(blogConfig.article.types) as any
 
+export const AUTHORSHIP_TYPES = ['human-only', 'human-ai-polished', 'ai-human-reviewed', 'ai-only'] as const
+export type Authorship = typeof AUTHORSHIP_TYPES[number]
+
 export interface ArticleSchema {
 	title?: string
 	description?: string
@@ -16,6 +19,8 @@ export interface ArticleSchema {
 	categories?: string[]
 	tags?: string[]
 	type?: ArticleType
+	/** Original authorship; translations retain the same declaration. */
+	authorship?: Authorship
 
 	image?: string
 	recommend?: number
@@ -35,6 +40,8 @@ const articleSchema = z.object({
 	categories: z.array(z.string()).default([blogConfig.defaultCategory]),
 	tags: z.array(z.string()).default([]),
 	type: z.enum(articleTypes).optional().default(articleTypes[0]),
+
+	authorship: z.enum(AUTHORSHIP_TYPES).default('human-only'),
 
 	image: z.string().optional(),
 	recommend: z.number().optional(),

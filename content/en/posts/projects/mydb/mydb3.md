@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 3. Caching and Managing Data Pages"
 description: "DM abstracts the filesystem into pages and uses them as the unit of reading, writing, and caching. The default page size is 8K, with larger pages available to improve write performance under heavy loads. With the general-purpose cache framework already in place, we now define the page structure and implement efficient page caching."
 date: 2021-12-05 15:28:00

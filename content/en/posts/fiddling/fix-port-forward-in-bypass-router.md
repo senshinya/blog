@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Fixing Port Forwarding with a Side Router"
 description: "Port forwarding on the main router often stops working when a side router is introduced. Setting the side router as the gateway changes the forwarding path, breaking mappings that previously relied on the main router. A gateway translates addresses and forwards traffic from the internal network to the outside, and each internal device needs one to communicate externally. Understanding this mechanism helps explain how to fix the forwarding problem."
 date: 2024-08-15 23:50:00

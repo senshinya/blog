@@ -1,4 +1,5 @@
 ---
+authorship: ai-human-reviewed
 title: "Getting Apple Intelligence Working on a China-Market Mac: Region Changes and Extracting ChatGPT"
 description: "Another WWDC brings new Apple Intelligence features in macOS 27. The workarounds from macOS 26 no longer get through, so the battle of wits with Apple continues."
 date: 2026-06-11 10:00:00

@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "My Heart Beats for U: Visualizing Heart Rate in Grafana"
 description: "Periodically syncing heart-rate data from Apple Health to a server and visualizing it in Grafana provides an intuitive way to monitor it. Health Auto Export sends the data to an HTTP endpoint through its REST API automation, the server stores it in InfluxDB, and Grafana presents a clear dashboard for tracking and analyzing personal heart-rate changes."
 date: 2025-03-31 23:51:00

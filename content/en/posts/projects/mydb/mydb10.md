@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "MYDB 10. Implementing the Server, Client, and Wire Protocol"
 description: "MYDB uses a client/server architecture similar to MySQL, allowing multiple clients to connect to a server over sockets, execute SQL queries, and receive results. Communication uses a special binary format, though plain text would also be an option for a simpler implementation. The basic transport structure supports effective communication and processing between client and server."
 date: 2021-12-25 18:26:00

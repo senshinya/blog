@@ -1,4 +1,5 @@
 ---
+authorship: human-only
 title: "Routing Transparent Proxy Traffic with FakeIP"
 description: "This FakeIP-based transparent proxy design addresses the single point of failure, poor performance, and awkward port forwarding of a traditional side router. Switching to the sing-box proxy core improves forwarding performance and simplifies configuration, with broader protocol support and better optimization than the previous Clash setup. Clash can implement the same design, but sing-box provides a flexible alternative."
 date: 2024-08-16 23:53:00
