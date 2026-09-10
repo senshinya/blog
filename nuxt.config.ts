@@ -249,7 +249,7 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'nuxt-llms',
 		'unplugin-yaml/nuxt',
-		['~~/modules/i18n-manifest', { locales: ['zh', 'en', 'ja'], defaultLocale: 'zh' }],
+		['~~/modules/i18n-manifest', { locales: blogConfig.locales.map(l => l.code), defaultLocale: 'zh' }],
 	],
 
 	colorMode: {

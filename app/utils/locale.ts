@@ -74,6 +74,9 @@ export function resolvePreferred(
  * 拼成同一个目标 URL —— 前者用来发 hreflang，后者用来决定跳转去哪，
  * 两处拼法一旦分裂，hreflang 就可能指向一个会跳转或 404 的地址，
  * 这种问题在浏览器里不报错、任何测试都测不出来，必须靠共用同一份实现来保证一致。
+ *
+ * basePath 必须是不带语言前缀且已归一化的路径，即从 stripLocale 或 normalizeBasePath 得来。
+ * 若传入已有前缀的路径（如 /en/archive）或带尾斜杠的路径（如 /archive/），会无声地产生错误的结果（如 /en/en/archive）。
  */
 export function buildPath(basePath: string, locale: string, defaultLocale: string) {
 	if (locale === defaultLocale)
