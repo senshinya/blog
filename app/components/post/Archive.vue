@@ -34,7 +34,7 @@ defineProps<{
 	min-width: 0;
 	margin: var(--archive-item-gap, 0.2em) 0;
 	transition: all 0.2s;
-	animation: float-in 0.2s var(--delay) backwards;
+	animation: var(--entrance, float-in 0.2s var(--delay) backwards);
 
 	@media (max-width: $breakpoint-mobile) {
 		font-size: 0.9em;

@@ -21,7 +21,7 @@ const basicConfig = {
 	timeEstablished: '2021-11-27',
 	timeZone: 'Asia/Shanghai',
 	url: 'https://blog.shinya.click/',
-	defaultCategory: '笔记',
+	defaultCategory: 'notes',
 }
 
 // 存储 nuxt.config 和 app.config 共用的配置
@@ -31,16 +31,16 @@ const blogConfig = {
 	...basicConfig,
 
 	article: {
-		// 分类名用中文展示；URL 由文件路径（旧站的 abbrlink 前缀）决定，与此无关
+		/** 分类 id 与展示名解耦：id 语言无关，展示名进 i18n/locales/*.ts 的 category 词条 */
 		categories: {
-			/** 折腾（fiddling）：网络/代理/自建服务/系统与硬件 */
-			折腾: { icon: 'tabler:tool', color: '#33aaff' },
-			/** 项目（projects）：自己写的东西、造的轮子 */
-			项目: { icon: 'tabler:code', color: '#7777ff' },
-			/** 笔记（notes）：学习记录、原理梳理 */
-			笔记: { icon: 'tabler:notebook', color: '#33bbaa' },
-			/** 日常（daily）：生活片段与杂感 */
-			日常: { icon: 'tabler:leaf', color: '#ff7777' },
+			/** 折腾：网络/代理/自建服务/系统与硬件 */
+			fiddling: { icon: 'tabler:tool', color: '#33aaff' },
+			/** 项目：自己写的东西、造的轮子 */
+			projects: { icon: 'tabler:code', color: '#7777ff' },
+			/** 笔记：学习记录、原理梳理 */
+			notes: { icon: 'tabler:notebook', color: '#33bbaa' },
+			/** 日常：生活片段与杂感 */
+			daily: { icon: 'tabler:leaf', color: '#ff7777' },
 		},
 		/** 文章版式，首个为默认版式 */
 		types: {
@@ -91,6 +91,17 @@ const blogConfig = {
 		/** 订阅源是否启用XSLT样式 */
 		enableStyle: true,
 	},
+
+	/**
+	 * 三语言定义。name 是语言切换器上的按钮标签，label 是该语言的完整自称
+	 * （用于 aria-label 与 tooltip），两者都用各语言自称，任何语言环境下都是
+	 * 这个形态，故不进词条表。
+	 */
+	locales: [
+		{ code: 'zh', language: 'zh-CN', name: '中', label: '简体中文', file: 'zh.ts' },
+		{ code: 'en', language: 'en-US', name: 'En', label: 'English', file: 'en.ts' },
+		{ code: 'ja', language: 'ja-JP', name: 'あ', label: '日本語', file: 'ja.ts' },
+	],
 
 	/** 向 <head> 中添加脚本 */
 	scripts: [

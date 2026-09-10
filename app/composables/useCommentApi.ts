@@ -1,4 +1,5 @@
 import type { FetchOptions } from 'ofetch'
+import { commentRequestLanguage } from '~/utils/comment'
 
 /**
  * blog-comment 的错误体是统一的：
@@ -27,9 +28,12 @@ export class CommentError extends Error {
 			return err
 		const status: number = err?.status ?? err?.statusCode ?? 0
 		const body = err?.data?.error
+		// 全站是 SSG，这条只在客户端跑得到（见 useCommentApi 顶部的说明），
+		// 故直接取 $i18n 而不必顾虑 SSR 下 await 之后上下文断掉的问题
+		const { t } = useNuxtApp().$i18n
 		if (body?.code) {
 			return new CommentError(
-				body.message || '请求失败',
+				body.message || t('comment.requestFailed'),
 				body.code,
 				status,
 				body.field,
@@ -38,7 +42,7 @@ export class CommentError extends Error {
 		}
 		// 网络层直接断掉时没有响应体，status 为 0
 		return new CommentError(
-			status ? `服务返回 ${status}` : '连不上评论服务',
+			status ? t('comment.errorStatus', { status }) : t('comment.networkError'),
 			status ? 'internal' : 'network',
 			status,
 		)
@@ -57,13 +61,16 @@ export class CommentError extends Error {
  */
 export default function useCommentApi() {
 	const { comment } = useAppConfig()
+	const { locale } = useI18n()
 	const base = comment.api.replace(/\/+$/, '')
 
 	async function request<T>(path: string, opts: FetchOptions = {}): Promise<T> {
+		const lang = commentRequestLanguage(path, locale.value, opts.method)
 		try {
 			return await $fetch<T>(base + path, {
 				credentials: 'include',
 				...opts,
+				...(lang ? { query: { ...opts.query, lang } } : {}),
 			} as FetchOptions) as T
 		}
 		catch (err) {

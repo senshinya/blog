@@ -14,38 +14,40 @@ const props = withDefaults(defineProps<{
 const appConfig = useAppConfig()
 const card = computed(() => appConfig.component.alert.defaultStyle === 'flat' ? props.card : !props.flat)
 
+const { t } = useI18n()
+
 const typeMap = {
 	tip: {
 		icon: 'tabler:note',
 		color: '#3A7',
-		title: '提醒',
+		titleKey: 'content.alert.tip',
 	},
 	info: {
 		icon: 'tabler:info-circle',
 		// 使用 currentColor 会导致 --c-primary-soft 颜色混合错误
 		color: 'var(--c-text-1)',
-		title: '信息',
+		titleKey: 'content.alert.info',
 	},
 	question: {
 		icon: 'tabler:help-circle',
 		color: '#3AF',
-		title: '问题',
+		titleKey: 'content.alert.question',
 	},
 	warning: {
 		icon: 'tabler:alert-triangle',
 		color: '#F80',
-		title: '警告',
+		titleKey: 'content.alert.warning',
 	},
 	error: {
 		icon: 'tabler:circle-x',
 		color: '#F33',
-		title: '错误',
+		titleKey: 'content.alert.error',
 	},
-}
+} as const
 
 const icon = computed(() => props.icon || typeMap[props.type].icon)
 const color = computed(() => props.color || typeMap[props.type].color)
-const title = computed(() => props.title || typeMap[props.type].title)
+const title = computed(() => props.title || t(typeMap[props.type].titleKey))
 </script>
 
 <template>

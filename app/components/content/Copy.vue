@@ -56,12 +56,12 @@ onMounted(async () => {
 		v-text="code"
 	/>
 
-	<button v-if="showUndo" class="operation" aria-label="恢复原始内容" @click="undo">
+	<button v-if="showUndo" class="operation" :aria-label="$t('content.restoreOriginal')" @click="undo">
 		<Icon name="tabler:arrow-back-up" />
 	</button>
 
 	<Icon v-show="false" name="tabler:check" />
-	<button class="operation" aria-label="复制" @click="copy()">
+	<button class="operation" :aria-label="$t('content.copy')" @click="copy()">
 		<Icon :name="copied ? 'tabler:check' : 'tabler:copy'" />
 	</button>
 </code>

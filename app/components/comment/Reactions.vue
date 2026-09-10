@@ -254,7 +254,7 @@ watch([ready, user, () => props.settled], () => {
 		type="button"
 		class="chip"
 		:class="{ ghost: targetType === 'comment' }"
-		:aria-label="picking ? '收起反应' : '添加反应'"
+		:aria-label="picking ? $t('comment.reactionsClose') : $t('comment.reactionsAdd')"
 		:aria-expanded="picking"
 		@click="picking = !picking"
 	>

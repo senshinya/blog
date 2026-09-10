@@ -18,18 +18,18 @@ const category = defineModel<string>('category')
 	<ZDropdown trigger="focusin" tabindex="0">
 		<button :disabled="!categories">
 			<Icon :name="getCategoryIcon(category)" />
-			<span class="filter-text">{{ category ?? '全部分类' }}</span>
+			<span class="filter-text">{{ category ? $t(`category.${category}`) : $t('post.allCategories') }}</span>
 		</button>
 
 		<template #content="{ hide }">
 			<button :class="{ active: !category }" @click="hide(), category = undefined">
 				<Icon :name="getCategoryIcon()" />
-				<span>全部分类</span>
+				<span>{{ $t('post.allCategories') }}</span>
 			</button>
 
 			<button v-for="item in categories" :key="item" :class="{ active: item === category }" @click="hide(), category = item">
 				<Icon :name="getCategoryIcon(item)" />
-				<span>{{ item }}</span>
+				<span>{{ $t(`category.${item}`) }}</span>
 			</button>
 		</template>
 	</ZDropdown>

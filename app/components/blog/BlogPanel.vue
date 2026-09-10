@@ -21,7 +21,7 @@ const { transform } = useAvoidTransform(panelRef, avoidTargets)
 		v-if="hasAside"
 		class="toggle-aside widescreen-only"
 		:class="{ active: layoutStore.state === 'aside' }"
-		aria-label="切换侧边栏"
+		:aria-label="$t('sidebar.toggleAside')"
 		@click="layoutStore.toggle('aside')"
 	>
 		<Icon class="rtl-flip" name="tabler:align-right" />
@@ -31,7 +31,7 @@ const { transform } = useAvoidTransform(panelRef, avoidTargets)
 	<button
 		class="toggle-sidebar mobile-only"
 		:class="{ active: layoutStore.state === 'sidebar' }"
-		aria-label="切换菜单"
+		:aria-label="$t('sidebar.toggleMenu')"
 		@click="layoutStore.toggle('sidebar')"
 	>
 		<Icon class="rtl-flip" :name="layoutStore.state === 'sidebar' ? 'tabler:layout-sidebar-filled' : 'tabler:layout-sidebar'" />

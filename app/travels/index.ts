@@ -1,26 +1,29 @@
 import type { Travel } from '~/types/travel'
 import { getVisibleTravels } from './draft'
-import kansai from './kansai-202504.yaml'
-import korea from './korea-202510.yaml'
 
 /**
- * 游记注册表。新增一篇：放一个 <slug>.yaml 进来，再在此处 import + 登记。
- *
- * 文件名必须等于 slug —— nuxt.config 的预渲染路由是从文件名推出来的，
- * 并通过读取文本中的顶层 `draft: true` 排除草稿。真忘了在此登记，
- * 非草稿路由会在构建时以 404 炸出来，不会静默漏掉。
+ * 游记注册表。放一个 <slug>.yaml 进 app/travels/<locale>/ 即生效，
+ * 不需要手工登记 —— 预渲染路由由 modules/i18n-manifest 扫描同一批文件产出，
+ * 两处不会再各自维护一份事实。
  *
  * unplugin-yaml 把 *.yaml 声明为 Record<string, unknown>，故需断言。
  */
-const allTravels = [
-	korea,
-	kansai,
-] as unknown as Travel[]
+const modules = import.meta.glob<Record<string, unknown>>('./*/*.yaml', { eager: true, import: 'default' })
 
-const travels = getVisibleTravels(allTravels, import.meta.dev)
+const byLocale = new Map<string, Travel[]>()
 
-export default travels.toSorted((a, b) => b.published.localeCompare(a.published))
+for (const [path, data] of Object.entries(modules)) {
+	const locale = path.split('/')[1]!
+	const list = byLocale.get(locale) ?? []
+	list.push(data as unknown as Travel)
+	byLocale.set(locale, list)
+}
 
-export function getTravelBySlug(slug: string) {
-	return travels.find(travel => travel.slug === slug)
+export function getTravels(locale: string) {
+	const visible = getVisibleTravels(byLocale.get(locale) ?? [], import.meta.dev)
+	return visible.toSorted((a, b) => b.published.localeCompare(a.published))
+}
+
+export function getTravelBySlug(locale: string, slug: string) {
+	return getTravels(locale).find(travel => travel.slug === slug)
 }

@@ -33,6 +33,7 @@ export type WidgetName = RemovePrefix<KebabCase<RawWidgetName>, '-lazy-widget-'>
 
 export default function useWidgets(widgetList: MaybeRefOrGetter<WidgetName[]>) {
 	const { metaSlots } = useArticle()
+	const { t } = useI18n()
 
 	function renderMetaSlots(widgetName: WidgetName) {
 		const slotsTree = metaSlots.value?.[widgetName.slice('meta-'.length)]
@@ -41,7 +42,7 @@ export default function useWidgets(widgetList: MaybeRefOrGetter<WidgetName[]>) {
 			{ card: !slotsTree, ...slotsTree?.props },
 			() => slotsTree
 				? h(ContentRenderer, { value: slotsTree })
-				: `${widgetName} 不存在`,
+				: t('widget.notFound', { name: widgetName }),
 		)
 	}
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ParsedMemo } from '~/utils/memo'
+import { buildPath } from '~/utils/locale'
 
 /**
  * 一条 memo 的正文部分：头像、时间、内容、图片、标签。
@@ -17,6 +18,7 @@ const props = defineProps<ParsedMemo & {
 
 const appConfig = useAppConfig()
 const openLightbox = useLightbox()
+const { locale } = useI18n()
 </script>
 
 <template>
@@ -38,7 +40,7 @@ const openLightbox = useLightbox()
 			</div>
 
 			<!-- 时间戳即固定链接，是社交时间线的通行约定，也省得为它单开一个按钮 -->
-			<UtilLink v-if="!detail" :to="`/memos/${props.id}`" class="date-link">
+			<UtilLink v-if="!detail" :to="buildPath(`/memos/${props.id}`, locale, 'zh')" class="date-link">
 				<UtilDate class="date" :date="createTime" />
 			</UtilLink>
 		</div>

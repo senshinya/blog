@@ -4,18 +4,20 @@ import type { NavItem } from '~/types/nav'
 defineProps<{
 	list: NavItem[]
 }>()
+
+const { locale } = useI18n()
 </script>
 
 <template>
 <menu>
 	<UtilLink
-		v-for="{ text, icon, url } in list"
-		:key="text"
-		v-tip="text"
-		:to="url"
-		:aria-label="text"
+		v-for="item in list"
+		:key="item.textKey ?? item.text"
+		v-tip="resolveNavText(item, $t)"
+		:to="resolveNavUrl(item, locale)"
+		:aria-label="resolveNavText(item, $t)"
 	>
-		<Icon :name="icon" />
+		<Icon :name="item.icon" />
 	</UtilLink>
 </menu>
 </template>

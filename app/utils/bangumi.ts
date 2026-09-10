@@ -2,31 +2,30 @@
 // 数据源：https://api.bgm.tv/v0/users/{uid}/collections?subject_type=&type=&limit=&offset=
 // 已确认接口带 access-control-allow-origin: *，可浏览器端直接跨域取数。
 
-/** 一个分类：对应 collections API 的 subject_type，并附带该分类下三个状态的中文标签。 */
+/**
+ * 一个分类：对应 collections API 的 subject_type。标签、计数量词、三个状态的措辞
+ * 都是语言相关的文案，不放在这份数据里——它们在 i18n 的 media.* 命名空间下，
+ * 以 key 为下标（media.category.<key> / media.status.<key>.<status> / media.total.<key>）。
+ */
 export interface BgmCategory {
 	key: 'anime' | 'real' | 'game'
-	label: string
 	/** 筛选器图标（tabler） */
 	icon: string
-	/** 计数单位：部 / 款 */
-	unit: string
 	/** collections API 的 subject_type：番剧 2 / 影视(三次元) 6 / 游戏 4 */
 	subjectType: 2 | 4 | 6
-	/** 三个状态在该分类下的措辞（番剧/影视用「看」，游戏用「玩」），顺序对齐 BGM_STATUS_TYPES */
-	statusLabels: [doing: string, collect: string, wish: string]
 }
 
 export const BGM_CATEGORIES: BgmCategory[] = [
-	{ key: 'anime', label: '番剧', icon: 'tabler:device-tv', unit: '部', subjectType: 2, statusLabels: ['在看', '看过', '想看'] },
-	{ key: 'real', label: '影视', icon: 'tabler:movie', unit: '部', subjectType: 6, statusLabels: ['在看', '看过', '想看'] },
-	{ key: 'game', label: '游戏', icon: 'tabler:device-gamepad-2', unit: '款', subjectType: 4, statusLabels: ['在玩', '玩过', '想玩'] },
+	{ key: 'anime', icon: 'tabler:device-tv', subjectType: 2 },
+	{ key: 'real', icon: 'tabler:movie', subjectType: 6 },
+	{ key: 'game', icon: 'tabler:device-gamepad-2', subjectType: 4 },
 ]
 
 /** 状态展示顺序：在看 / 看过 / 想看 → collections API 的 type 值 3 / 2 / 1 */
 export const BGM_STATUS_TYPES = [3, 2, 1] as const
 export type BgmStatusType = typeof BGM_STATUS_TYPES[number]
 
-/** 状态的 URL slug，顺序对齐 BGM_STATUS_TYPES 与各分类的 statusLabels */
+/** 状态的 URL slug，顺序对齐 BGM_STATUS_TYPES，同时也是 media.status.<category> 下的 i18n key */
 export const BGM_STATUS_KEYS = ['doing', 'collect', 'wish'] as const
 export type BgmStatusKey = typeof BGM_STATUS_KEYS[number]
 

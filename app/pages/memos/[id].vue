@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Memo } from '~/utils/memo'
+import { buildPath } from '~/utils/locale'
 
 const API = 'https://memos.shinya.click/api/v1/memos'
 
@@ -16,6 +17,7 @@ const route = useRoute()
 const appConfig = useAppConfig()
 // 取数 handler 里要用，得在 setup 阶段先抓住（理由见下面 404 那段）
 const nuxtApp = useNuxtApp()
+const { t, locale } = useI18n()
 
 const id = computed(() => String(route.params.id))
 
@@ -24,10 +26,11 @@ const id = computed(() => String(route.params.id))
  * routeRules '/memos/**'）。取数必须在服务端跑完，下面 useSeoMeta 那几行才有内容可写 ——
  * 爬虫不跑 JS，客户端再漂亮的 head 它也看不见。
  *
- * key 用定值 + watch，而不是「随 id 变化的响应式 key」（useAsyncData 本身是支持后者的）：
- * 本项目开了 experimental.extractAsyncDataHandlers，它把传进来的第一个函数一律当作 handler
- * 抽进独立 chunk，于是响应式 key 会被换成一个返回 Promise 的懒加载包装函数，
- * 运行期直接抛 “key must be a non-empty string”。
+ * key 用定值 + watch，而不是「随 id 变化的响应式 key」（useAsyncData 本身是支持后者的）。
+ * 真要改成响应式 key，得写成 computed 再传进去，不能就地写 `() => ...`：本项目开了
+ * experimental.extractAsyncDataHandlers，它把参数里第一个函数一律当作 handler 抽进独立
+ * chunk，key 写成函数就会被抽走、换成一个返回 Promise 的懒加载包装函数，运行期直接抛
+ * “key must be a non-empty string”（详见 app/composables/useArticle.ts 的 useContentCollection）。
  *
  * 仍用 lazy 版：lazy 只影响客户端导航（从列表点进来时不挂起 Suspense，先换页再显示加载态），
  * 服务端那一遍照样 await（nuxt/app/composables/asyncData 里 onServerPrefetch(() => promise)）。
@@ -53,7 +56,7 @@ const { data, status, error } = useLazyAsyncData(
 			if (err?.statusCode === 404) {
 				nuxtApp.runWithContext(() => showError(createError({
 					statusCode: 404,
-					statusMessage: '碎语不存在',
+					statusMessage: t('page.memos.notFound'),
 					fatal: true,
 				})))
 			}
@@ -82,7 +85,7 @@ const loading = computed(() => status.value === 'idle' || status.value === 'pend
  *
  * 只在本页覆写，不去动全站的 canonicalLowercase。（unhead 对 canonical 去重，不会多一条。）
  */
-const canonical = computed(() => new URL(`/memos/${id.value}`, appConfig.url).href)
+const canonical = computed(() => new URL(buildPath(`/memos/${id.value}`, locale.value, 'zh'), appConfig.url).href)
 
 useHead({
 	link: [{ rel: 'canonical', href: canonical }],
@@ -91,8 +94,8 @@ useHead({
 useSeoMeta({
 	// 碎语没有标题，用正文首句代替。中英混排按字数截断本就难看，
 	// 但 title 是纯文本，没有 line-clamp 可用，只能按字数来
-	title: () => data.value ? (data.value.summary.slice(0, 30) || '图片') : '碎语',
-	description: () => data.value?.summary || `${appConfig.title}的碎碎念。`,
+	title: () => data.value ? (data.value.summary.slice(0, 30) || t('page.memos.image')) : t('page.memos.title'),
+	description: () => data.value?.summary || t('page.memos.detailDescription', { site: appConfig.title }),
 	ogUrl: canonical,
 	ogType: 'article',
 	// 碎语多是随手截图，首图即分享卡的主图（Memos 存的是图床绝对地址，直接可用）。
@@ -113,16 +116,16 @@ useSeoMeta({
 </template>
 
 <div class="memo-detail proper-height">
-	<UtilLink to="/memos" class="back">
+	<UtilLink :to="buildPath('/memos', locale, 'zh')" class="back">
 		<Icon name="tabler:chevron-left" />
-		<span>碎语</span>
+		<span>{{ $t('nav.memos') }}</span>
 	</UtilLink>
 
 	<!-- 404 已交给 showError，走到这里的是网络错误一类 -->
-	<ZError v-if="error" :message="`碎语加载失败：${error.message}`" />
+	<ZError v-if="error" :message="$t('page.memos.loadError', { message: error.message })" />
 
 	<p v-else-if="loading" class="tip">
-		加载中...
+		{{ $t('page.memos.loading') }}
 	</p>
 
 	<article v-else-if="data" class="memo">
@@ -135,7 +138,7 @@ useSeoMeta({
 		-->
 		<CommentSection
 			reactions
-			reaction-label="给这条 memo 一个反馈"
+			:reaction-label="$t('page.memos.feedbackPrompt')"
 			:page-key="`/memos/${data.memo.id}`"
 			:title="data.summary.slice(0, 60)"
 		>

@@ -5,6 +5,8 @@ const slots = defineSlots<{
 
 const chatRegex = /^\{(?<control>\.|:)?(?<caption>.*)\}$/
 
+const { t } = useI18n()
+
 function getControlClass(control?: string) {
 	if (control === '.')
 		return 'chat-myself'
@@ -16,7 +18,7 @@ function getControlClass(control?: string) {
 function render() {
 	const slotContent = slots.default()
 	if (!slotContent)
-		return <span>无会话内容</span>
+		return <span>{t('content.chatEmpty')}</span>
 
 	return slotContent.map((node: VNode) => {
 		// WARN: 此处使用了非标准的 v-slot:default

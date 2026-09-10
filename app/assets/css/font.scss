@@ -33,3 +33,41 @@
 		src: local("Noto Serif SC");
 	}
 }
+
+/* 中日共用汉字字形不同（直、骨、今、令 等），日语页面须落到 JP 字库。
+
+   --font-creative / --font-stroke-free 在 :root 里第一顺位是抖音美好体
+   "DOUYINSANSBOLD-GB"。曾经以为它"无假名覆盖"，想给它配一个 Noto Sans JP
+   兜底 —— 这个假设是错的：抓取过它的 @font-face（54 个 unicode-range 子集，
+   共 3070 个区间）逐一测过，集 U+96C6、直 U+76F4、骨 U+9AA8、今 U+4ECA、
+   令 U+4EE4 等汉字，以及假名 あ U+3042、ア U+30A2、か U+304B、カ U+30AB
+   全部落在覆盖范围内。字体回退是按字符逐个匹配、不是按语言整体切换的，
+   排在前面的字体只要覆盖某个码位就会被用掉 —— 无论后面跟着什么字体，
+   日语字符（含假名）只要给 DOUYINSANSBOLD-GB 排在前头就永远轮不到
+   Noto Sans JP，日语文本会用中文简体字形渲染。而且它连拉丁字符也覆盖，
+   放在 Noto Sans JP 之后也无法用来单独给拉丁文保留独立字重（那样拉丁字符
+   会先被 Noto Sans JP 吃掉，DOUYINSANSBOLD-GB 依然轮不到）。所以在
+   :lang(ja) 下这两个变量直接去掉 DOUYINSANSBOLD-GB，日语标题失去抖音
+   美好体的观感，是应得的代价（本站没有配置日文版的美术字），比日语渲染
+   成中文简体字形更正确。
+
+   :lang(ja) 与上面 :root 的特异度相同（0,1,0），且在文件里更靠后，会整体
+   覆盖 :root 的声明，包括它嵌套的 @media (max-resolution: 1.2dppx) 低分屏
+   分支 —— 所以这个分支也必须在这里出现，否则非视网膜屏幕会退回 :root 的
+   低分屏值，日语正文将完全用不上日文字库。
+   注意：低分屏分支只改了 --font-basic 里 JP 字体之外的那部分兜底链
+   （InterVariable → system-ui，避免低分屏下用未充分 hinting 的可变字体），
+   不是"要不要用 JP 字体"的开关 —— JP 字体在两个分支里都必须保留，因此这里
+   是把 --font-basic 非 JP 部分的兜底链换掉，而非照抄 :root 整条值。
+   --font-serif / --font-creative / --font-stroke-free 在 :root 里没有低分屏
+   分支，因此不受影响，无需在 media query 里重复。 */
+:lang(ja) {
+	--font-basic: "Noto Sans JP", "InterVariable", sans-serif;
+	--font-serif: "Noto Serif JP", serif;
+	--font-creative: "Noto Sans JP", "InterVariable", sans-serif;
+	--font-stroke-free: "Noto Sans JP", "Inter", sans-serif;
+
+	@media (max-resolution: 1.2dppx) {
+		--font-basic: "Noto Sans JP", "InterVariable", system-ui, sans-serif;
+	}
+}

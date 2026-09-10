@@ -47,7 +47,7 @@ export default defineAppConfig({
 			/** 归档页面每年标题对应的年龄 */
 			birthYear: 1999,
 			/** blog-stats widget 的预置文本 */
-			wordCount: '约7万',
+			wordCountKey: 'widget.blogStats.wordCount',
 		},
 	},
 
@@ -60,20 +60,20 @@ export default defineAppConfig({
 			{ icon: 'tabler:brand-github', text: 'GitHub: senshinya', url: 'https://github.com/senshinya' },
 			{ icon: 'tabler:brand-telegram', text: 'Telegram: senshinya', url: 'https://telegram.me/senshinya' },
 			{ icon: 'tabler:mail', text: blogConfig.author.email, url: `mailto:${blogConfig.author.email}` },
-			{ icon: 'tabler:rss', text: 'Atom订阅', url: '/atom.xml' },
-			{ icon: 'ri:subway-line', text: '开往 - 博客下一站', url: 'https://www.travellings.cn/go.html' },
+			{ icon: 'tabler:rss', textKey: 'footer.atom', url: '/atom.xml', localized: true },
+			{ icon: 'ri:subway-line', textKey: 'footer.travellingsTip', url: 'https://www.travellings.cn/go.html' },
 		] satisfies NavItem[],
 		/** 页脚站点地图 */
 		nav: [
 			{
-				title: '探索',
+				titleKey: 'footer.explore',
 				items: [
-					{ icon: 'tabler:rss', text: 'Atom订阅', url: '/atom.xml' },
-					{ icon: 'ri:subway-line', text: '开往', url: 'https://www.travellings.cn/go.html' },
+					{ icon: 'tabler:rss', textKey: 'footer.atom', url: '/atom.xml', localized: true },
+					{ icon: 'ri:subway-line', textKey: 'footer.travellings', url: 'https://www.travellings.cn/go.html' },
 				],
 			},
 			{
-				title: '社交',
+				titleKey: 'footer.social',
 				items: [
 					{ icon: 'tabler:brand-github', text: 'senshinya', url: 'https://github.com/senshinya' },
 					{ icon: 'tabler:brand-telegram', text: 'senshinya', url: 'https://telegram.me/senshinya' },
@@ -81,9 +81,9 @@ export default defineAppConfig({
 				],
 			},
 			{
-				title: '信息',
+				titleKey: 'footer.info',
 				items: [
-					{ icon: 'simple-icons:nuxt', text: `主题: ${pascalCase(name)} ${version}`, url: 'https://github.com/L33Z22L11/blog-v3' },
+					{ icon: 'simple-icons:nuxt', textKey: 'footer.theme', textParams: { name: pascalCase(name), version }, url: 'https://github.com/L33Z22L11/blog-v3' },
 					{ icon: 'tabler:certificate', text: '萌ICP备20248008号', url: 'https://icp.gov.moe/?keyword=20248008' },
 				],
 			},
@@ -95,7 +95,6 @@ export default defineAppConfig({
 		logo: blogConfig.author.avatar,
 		/** 展示标题文本，否则展示纯 Logo */
 		showTitle: true,
-		subtitle: blogConfig.subtitle,
 		emojiTail: ['📄', '🐟', '⌨️', '🍜', '🌙'],
 	},
 
@@ -112,12 +111,12 @@ export default defineAppConfig({
 		{
 			title: '',
 			items: [
-				{ icon: 'tabler:files', text: '文章', url: '/' },
-				{ icon: 'tabler:map-2', text: '游记', url: '/travels' },
-				{ icon: 'tabler:bubble-text', text: '碎语', url: '/memos' },
-				{ icon: 'tabler:movie', text: '娱乐', url: '/media' },
-				{ icon: 'tabler:archive', text: '归档', url: '/archive' },
-				{ icon: 'tabler:link', text: '友链', url: '/friends' },
+				{ icon: 'tabler:files', textKey: 'nav.articles', url: '/', localized: true },
+				{ icon: 'tabler:map-2', textKey: 'nav.travels', url: '/travels', localized: true },
+				{ icon: 'tabler:bubble-text', textKey: 'nav.memos', url: '/memos', localized: true },
+				{ icon: 'tabler:movie', textKey: 'nav.media', url: '/media', localized: true },
+				{ icon: 'tabler:archive', textKey: 'nav.archive', url: '/archive', localized: true },
+				{ icon: 'tabler:link', textKey: 'nav.friends', url: '/friends', localized: true },
 			],
 		},
 	] satisfies Nav,
@@ -129,15 +128,15 @@ export default defineAppConfig({
 	themes: {
 		light: {
 			icon: 'tabler:sun',
-			tip: '浅色模式',
+			tipKey: 'sidebar.theme.light',
 		},
 		system: {
 			icon: 'tabler:device-desktop',
-			tip: '跟随系统',
+			tipKey: 'sidebar.theme.system',
 		},
 		dark: {
 			icon: 'tabler:moon',
-			tip: '深色模式',
+			tipKey: 'sidebar.theme.dark',
 		},
 	},
 })

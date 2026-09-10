@@ -1,17 +1,18 @@
 <script setup lang="ts">
 const appConfig = useAppConfig()
+const { locale } = useI18n()
 </script>
 
 <template>
 <footer class="blog-footer">
 	<nav class="footer-nav">
 		<div v-for="(group, groupIndex) in appConfig.footer.nav" :key="groupIndex">
-			<hgroup class="text-creative" v-text="group.title" />
+			<hgroup class="text-creative" v-text="resolveNavTitle(group, $t)" />
 			<menu>
 				<li v-for="(item, itemIndex) in group.items" :key="itemIndex">
-					<UtilLink :to="item.url">
+					<UtilLink :to="resolveNavUrl(item, locale)">
 						<Icon :name="item.icon" />
-						<span class="nav-text">{{ item.text }}</span>
+						<span class="nav-text">{{ resolveNavText(item, $t) }}</span>
 					</UtilLink>
 				</li>
 			</menu>

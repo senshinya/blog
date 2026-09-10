@@ -9,7 +9,7 @@ const [scroll, toggleScroll] = useToggle(true)
 		<ZButton
 			variant="text"
 			:icon="scroll ? 'tabler:text-wrap' : 'tabler:text-wrap-disabled'"
-			:text="scroll ? '自动换行' : '横向滚动'"
+			:text="scroll ? $t('content.wrapText') : $t('content.scrollHorizontal')"
 			@click="toggleScroll()"
 		/>
 	</template>

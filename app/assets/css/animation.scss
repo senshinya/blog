@@ -4,6 +4,8 @@
 	--max-bezier-to-collapse: cubic-bezier(0, 0.5, 0.5, 1);
 }
 
+// Normal navigation keeps staggered card entrances. Locale switches set
+// --entrance: none and use the coordinated text transitions below instead.
 @keyframes float-in {
 	0% {
 		opacity: 0;
@@ -67,4 +69,130 @@
 .collapse-leave-from {
 	max-height: 50vh;
 	transition-timing-function: var(--max-bezier-to-full);
+}
+
+// Language motion B: the root and media stay crisp; only translated copy lifts.
+// Object-fit none preserves glyph size while the group's layout bounds change.
+.locale-motion {
+	--entrance: none;
+
+	&::view-transition {
+		pointer-events: none;
+	}
+
+	&::view-transition-group(*) {
+		animation-duration: 0.28s;
+		animation-timing-function: cubic-bezier(0.22, 0.68, 0, 1);
+	}
+
+	&::view-transition-old(root) {
+		animation: locale-hide 1ms both;
+	}
+
+	&::view-transition-new(root) {
+		animation: none;
+	}
+
+	&::view-transition-image-pair(.locale-part) {
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	&::view-transition-old(.locale-part),
+	&::view-transition-new(.locale-part) {
+		width: 100%;
+		height: 100%;
+		mix-blend-mode: normal;
+		object-fit: none;
+		object-position: left top;
+	}
+
+	&::view-transition-old(.locale-part) {
+		animation: locale-copy-out 0.143s both;
+	}
+
+	&::view-transition-new(.locale-part) {
+		animation: locale-copy-in 0.22s both;
+	}
+
+	&::view-transition-old(.locale-nav),
+	&::view-transition-new(.locale-nav) {
+		--locale-lift: 2px;
+
+		animation-duration: 0.12s;
+	}
+
+	&::view-transition-old(.locale-heading),
+	&::view-transition-new(.locale-heading) {
+		--locale-lift: 4px;
+	}
+
+	&::view-transition-old(.locale-body),
+	&::view-transition-new(.locale-body) {
+		--locale-lift: 3px;
+	}
+
+	&::view-transition-old(.locale-copy),
+	&::view-transition-new(.locale-copy) {
+		--locale-lift: 6px;
+	}
+
+	&::view-transition-old(.locale-step-1),
+	&::view-transition-new(.locale-step-1) {
+		animation-delay: 18ms;
+	}
+
+	&::view-transition-old(.locale-step-2),
+	&::view-transition-new(.locale-step-2) {
+		animation-delay: 36ms;
+	}
+
+	&::view-transition-old(.locale-label),
+	&::view-transition-new(.locale-label),
+	&::view-transition-old(.locale-metric),
+	&::view-transition-new(.locale-metric) {
+		--locale-lift: 0px;
+
+		animation-duration: 0.12s;
+	}
+
+	&::view-transition-old(.locale-stable),
+	&::view-transition-old(.locale-surface) {
+		animation: locale-hide 1ms both;
+	}
+
+	&::view-transition-new(.locale-stable),
+	&::view-transition-new(.locale-surface) {
+		animation: none;
+	}
+
+	&::view-transition-new(.locale-surface) {
+		object-fit: fill;
+	}
+}
+
+@keyframes locale-hide {
+	to { opacity: 0; }
+}
+
+@keyframes locale-copy-out {
+	to {
+		opacity: 0;
+		transform: translateY(calc(-1 * var(--locale-lift, 0px)));
+	}
+}
+
+@keyframes locale-copy-in {
+	from {
+		opacity: 0;
+		transform: translateY(var(--locale-lift, 0));
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.locale-motion::view-transition-group(*),
+	.locale-motion::view-transition-old(*),
+	.locale-motion::view-transition-new(*) {
+		animation: none;
+	}
 }

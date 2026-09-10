@@ -169,7 +169,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	<!-- 已删除只剩一行占位：线程的形状要留着，否则下面的回复会变成孤儿 -->
 	<template v-if="node.deleted">
 		<div class="comment-body">
-			这条评论已删除
+			{{ $t('comment.deleted') }}
 		</div>
 	</template>
 
@@ -177,7 +177,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 		<div class="avatar">
 			<img
 				:src="node.user?.avatar_url"
-				:alt="`${node.user?.name || node.user?.login} 的头像`"
+				:alt="$t('comment.avatarAlt', { name: node.user?.name || node.user?.login })"
 				width="32"
 				height="32"
 				loading="lazy"
@@ -188,7 +188,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			v-if="node.children.length"
 			type="button"
 			class="collapse"
-			:aria-label="collapsed ? '展开这条讨论' : '收起这条讨论'"
+			:aria-label="collapsed ? $t('comment.expandThread') : $t('comment.collapseThread')"
 			:aria-expanded="!collapsed"
 			@click="collapsed = !collapsed"
 		/>
@@ -198,9 +198,13 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 				<UtilLink :to="`https://github.com/${node.user?.login}`" class="name">
 					{{ node.user?.name || node.user?.login }}
 				</UtilLink>
-				<span v-if="owner" class="tag-owner">站长</span>
+				<span v-if="owner" class="tag-owner">{{ $t('comment.owner') }}</span>
 				<UtilDate v-if="node.created_at" class="date" :date="node.created_at" />
-				<span v-if="node.edited_at" class="edited">已编辑</span>
+				<span v-if="node.edited_at" class="edited">{{ $t('comment.edited') }}</span>
+				<span v-if="node.is_machine_translated && !editing" class="translation">
+					<Icon name="tabler:language" aria-hidden="true" />
+					{{ $t('comment.machineTranslated') }}
+				</span>
 			</div>
 
 			<template v-if="editing">
@@ -217,7 +221,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			<template v-else>
 				<div class="clip" :class="{ on: clipped }">
 					<!-- eslint-disable-next-line vue/no-v-html -- 服务端渲染并消毒过的 HTML -->
-					<div ref="prose" class="prose" v-html="node.body_html" />
+					<div ref="prose" class="prose" :lang="node.language === 'jp' ? 'ja' : node.language" v-html="node.body_html" />
 				</div>
 				<button
 					v-if="clipped"
@@ -225,7 +229,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 					class="more"
 					@click="clipped = false; unclipped = true"
 				>
-					展开全文
+					{{ $t('comment.readMore') }}
 				</button>
 
 				<div class="comment-foot">
@@ -238,13 +242,13 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 						@update="onReaction"
 					/>
 					<button type="button" class="act ghost" @click="user ? (replying = !replying) : login(returnToNearest(proseEl))">
-						回复
+						{{ $t('comment.reply') }}
 					</button>
 					<button v-if="node.can_edit" type="button" class="act ghost" @click="editing = true">
-						编辑
+						{{ $t('comment.edit') }}
 					</button>
 					<button v-if="node.can_delete" type="button" class="act danger ghost" @click="remove">
-						{{ confirmingDelete ? '确认删除' : '删除' }}
+						{{ confirmingDelete ? $t('comment.confirmDelete') : $t('comment.delete') }}
 					</button>
 				</div>
 
@@ -257,7 +261,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 								:title
 								:parent-id="node.id"
 								:subscribed="pageSubscribed"
-								:placeholder="`回复 ${node.user?.name || node.user?.login}`"
+								:placeholder="$t('comment.replyPlaceholder', { name: node.user?.name || node.user?.login })"
 								autofocus
 								@submitted="onReplied"
 								@cancel="replying = false"
@@ -295,7 +299,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			<span class="branchline" aria-hidden="true" />
 			<span class="plus" aria-hidden="true" />
 			<button type="button" class="more-replies" @click="expandedReplies = true">
-				另外 {{ folded }} 条回复
+				{{ $t('comment.moreReplies', { n: folded }) }}
 			</button>
 		</li>
 	</ol>

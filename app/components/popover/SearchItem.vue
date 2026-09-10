@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SearchResult } from 'minisearch'
+import { resolveContentPath } from '~/utils/locale'
 
 interface SearchItem extends SearchResult {
 	title: string
@@ -12,10 +13,12 @@ withDefaults(defineProps<Partial<SearchItem>>(), {
 	titles: () => [],
 	title: '',
 })
+
+const { locale } = useI18n()
 </script>
 
 <template>
-<UtilLink :to="id" class="search-item">
+<UtilLink :to="resolveContentPath(id, locale)" class="search-item">
 	<hgroup class="text-creative">
 		<span v-for="heading in [...titles, title]" :key="heading" class="title" v-html="highlightHtml(heading, queryTerms)" />
 		<Icon v-if="level === 1" name="tabler:file-text" />

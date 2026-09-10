@@ -23,13 +23,15 @@ const props = withDefaults(defineProps<{
 	autofocus?: boolean
 }>(), {
 	parentId: null,
-	placeholder: '说点什么',
 })
 
 const emit = defineEmits<{
 	submitted: [comment: Comment]
 	cancel: []
 }>()
+
+const { t } = useI18n()
+const placeholder = computed(() => props.placeholder || t('comment.placeholder'))
 
 const api = useCommentApi()
 const session = useCommentSession()
@@ -256,7 +258,7 @@ const shortcut = computed(() => import.meta.client && /mac/i.test(navigator.plat
 					:class="{ previewing }"
 					@click="togglePreview"
 				>
-					{{ previewing ? '继续写' : '预览' }}
+					{{ previewing ? $t('comment.continueWriting') : $t('comment.preview') }}
 				</button>
 
 				<button
@@ -267,14 +269,16 @@ const shortcut = computed(() => import.meta.client && /mac/i.test(navigator.plat
 					@click="subscribe = !subscribe"
 				>
 					<span class="tick" />
-					回复时邮件通知我
+					{{ $t('comment.notifyOnReply') }}
 				</button>
 
 				<span class="spacer" />
 
-				<span v-if="cooldown" class="ratelimit">
-					再等 <span class="sec">{{ cooldown }}</span> 秒
-				</span>
+				<i18n-t v-if="cooldown" keypath="comment.cooldown" tag="span" class="ratelimit">
+					<template #n>
+						<span class="sec">{{ cooldown }}</span>
+					</template>
+				</i18n-t>
 
 				<span v-if="length >= BODY_WARN" class="counter" :class="{ warn: length > BODY_MAX }">
 					{{ length }} / {{ BODY_MAX }}
@@ -288,17 +292,17 @@ const shortcut = computed(() => import.meta.client && /mac/i.test(navigator.plat
 						class="cbtn cbtn-secondary"
 						@click="emit('cancel')"
 					>
-						取消
+						{{ $t('comment.cancel') }}
 					</button>
 
 					<button
 						type="button"
 						class="cbtn cbtn-primary"
 						:disabled="!canSend"
-						:title="`${shortcut} 发送`"
+						:title="$t('comment.sendTitle', { shortcut })"
 						@click="submit"
 					>
-						{{ isEdit ? '保存' : '发表' }}
+						{{ isEdit ? $t('comment.save') : $t('comment.submit') }}
 					</button>
 				</div>
 			</div>

@@ -1,20 +1,33 @@
 <script setup lang="ts">
 import type { ModalEmits, ModalProps } from '#modals'
 import MiniSearch from 'minisearch'
+import blogConfig from '~~/blog.config'
 
 const props = defineProps<ModalProps>()
 
 defineEmits<ModalEmits>()
 
-const appConfig = useAppConfig()
-const segmenter = Intl.Segmenter && new Intl.Segmenter(appConfig.language, { granularity: 'word' })
+// appConfig 上从来没有 language 字段——之前这里恒为 undefined，Segmenter
+// 实际跟的是运行环境（浏览器/Node）的默认 locale，不是站点语言，
+// 中文分词因此一直没真正钉死过。这里改用 blogConfig.locales 换算当前语言。
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
+// computed 而非普通 const：MiniSearch 的 processTerm 在下面只构造一次，
+// 但闭包里读的是 segmenter.value，每次分词都会重新取值——写成普通 const
+// 会把 segmenter 钉死在挂载那一刻的语言上，语言切换后分词器不再跟随
+const segmenter = computed(() => Intl.Segmenter && new Intl.Segmenter(currentLanguage.value, { granularity: 'word' }))
 
+const collection = useContentCollection()
+
+const dataKey = computed(() => `search:${collection.value}`)
 // await useAsyncData() 会阻塞渲染
 const { data, status } = await useLazyAsyncData(
-	'search',
-	() => queryCollectionSearchSections('content', {
+	dataKey,
+	() => queryCollectionSearchSections(collection.value, {
 		ignoredTags: ['pre'],
 	}),
+	{ watch: [collection] },
 )
 
 const miniSearch = new MiniSearch({
@@ -26,8 +39,8 @@ const miniSearch = new MiniSearch({
 		combineWith: 'AND',
 		boost: { title: 3, titles: 2 },
 	},
-	processTerm: segmenter
-		? term => Array.from(segmenter.segment(term), seg => seg.segment.toLowerCase())
+	processTerm: segmenter.value
+		? term => Array.from(segmenter.value!.segment(term), seg => seg.segment.toLowerCase())
 		: undefined,
 })
 
@@ -100,7 +113,7 @@ function openActiveItem() {
 				type="search"
 				incremental
 				class="search-input"
-				placeholder="键入开始搜索"
+				:placeholder="$t('search.placeholder')"
 				@keydown.up.prevent
 				@keydown.down.prevent
 			>
@@ -108,7 +121,7 @@ function openActiveItem() {
 
 		<TransitionGroup name="expand">
 			<div v-if="debouncedWord && status === 'success' && !result.length" class="no-result">
-				无结果
+				{{ $t('search.noResults') }}
 			</div>
 
 			<menu
@@ -129,11 +142,11 @@ function openActiveItem() {
 			<div v-if="result.length" class="tip" @click="searchInput?.focus()">
 				<Key code="ArrowUp" prevent @press="updateActiveIndex(activeIndex - 1, true)" />
 				<Key code="ArrowDown" prevent @press="updateActiveIndex(activeIndex + 1, true)" />
-				切换&emsp;
+				{{ $t('search.navigate') }}&emsp;
 				<Key code="Enter" icon @press="openActiveItem" />
-				选择&emsp;
+				{{ $t('search.select') }}&emsp;
 				<Key code="Escape" :icon="false" @press="$emit('close')" />
-				关闭
+				{{ $t('search.close') }}
 			</div>
 		</TransitionGroup>
 	</div>

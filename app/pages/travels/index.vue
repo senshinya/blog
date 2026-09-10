@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import travels from '~/travels'
+import { getTravels } from '~/travels'
+import { buildPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
+const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 
 useSeoMeta({
-	title: '游记',
-	description: `${appConfig.title}的旅行记录：走过的地方、拍下的照片，和当时的心情。`,
+	title: () => t('page.travels.title'),
+	description: () => t('page.travels.description', { site: appConfig.title }),
 })
 
-const items = computed(() => travels.map(travel => ({
+const travels = computed(() => getTravels(locale.value))
+
+const items = computed(() => travels.value.map(travel => ({
 	...travel,
 	photoCount: travel.days.reduce((sum, day) => sum + day.photos.length, 0),
 })))
@@ -26,10 +31,10 @@ const items = computed(() => travels.map(travel => ({
 <div class="travels proper-height">
 	<header class="travels-header">
 		<h1 class="text-creative">
-			游记
+			{{ $t('page.travels.title') }}
 		</h1>
 		<p class="travels-desc">
-			走过的地方，和当时拍下的照片。
+			{{ $t('page.travels.tagline') }}
 		</p>
 	</header>
 
@@ -37,9 +42,9 @@ const items = computed(() => travels.map(travel => ({
 		<li
 			v-for="travel, index in items"
 			:key="travel.slug"
-			:style="getFixedDelay(index * 0.05)"
+			:style="entranceDelay(index * 0.05)"
 		>
-			<NuxtLink class="travel-card card upraise" :to="`/travels/${travel.slug}`">
+			<NuxtLink class="travel-card card upraise" :to="buildPath(`/travels/${travel.slug}`, locale, 'zh')">
 				<div class="travel-cover">
 					<img
 						:src="getTravelImg(travel.coverImage, TravelImgWidth.cover)"
@@ -60,8 +65,8 @@ const items = computed(() => travels.map(travel => ({
 					</p>
 					<p class="travel-meta">
 						<span><Icon name="tabler:calendar" /> {{ travel.published }}</span>
-						<span><Icon name="tabler:route" /> {{ travel.totaldays }} 天</span>
-						<span><Icon name="tabler:photo" /> {{ travel.photoCount }} 张</span>
+						<span><Icon name="tabler:route" /> {{ $t('page.travels.dayCount', { n: travel.totaldays }) }}</span>
+						<span><Icon name="tabler:photo" /> {{ $t('page.travels.photoCount', { n: travel.photoCount }) }}</span>
 					</p>
 				</article>
 			</NuxtLink>
@@ -106,7 +111,7 @@ const items = computed(() => travels.map(travel => ({
 	// 给个下限兜住
 	min-height: 12rem;
 	color: var(--c-text);
-	animation: float-in 0.2s var(--delay) backwards;
+	animation: var(--entrance, float-in 0.2s var(--delay) backwards);
 
 	> article {
 		display: grid;

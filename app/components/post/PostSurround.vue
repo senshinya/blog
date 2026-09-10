@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
+import blogConfig from '~~/blog.config'
+import { resolveContentPath, stripLocale } from '~/utils/locale'
+
+const LOCALES = blogConfig.locales.map(l => l.code)
 
 const route = useRoute()
+const { locale } = useI18n()
+const collection = useContentCollection()
 
+const dataKey = computed(() => `surround:${route.path}`)
 const { data: surrounds } = await useAsyncData(
-	`surround:${route.path}`,
-	() => queryCollectionItemSurroundings('content', route.path, { fields: ['date', 'title', 'type'] })
+	dataKey,
+	() => queryCollectionItemSurroundings(
+		collection.value,
+		stripLocale(route.path, LOCALES, 'zh').basePath,
+		{ fields: ['date', 'title', 'type'] },
+	)
 		.order('date', 'ASC')
 		.where('stem', 'LIKE', `posts/%`),
+	{ watch: [collection] },
 )
 
 const [prev = null, next = null] = surrounds.value ?? []
@@ -23,7 +35,7 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 
 <template>
 <DefineTemplate v-slot="{ post, icon, fallbackIcon, fallbackText, alignEnd }">
-	<UtilLink :to="post?.path" class="surround-link" :align-end>
+	<UtilLink :to="resolveContentPath(post?.path, locale)" class="surround-link" :align-end>
 		<Icon :class="{ 'rtl-flip': post }" :name="post ? icon : fallbackIcon" />
 		<div class="surround-text">
 			<strong class="title" :class="getPostTypeClassName(post?.type)">
@@ -37,11 +49,11 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 <div v-if="prev || next" class="surround-post" dir="ltr">
 	<ReuseTemplate
 		:post="next" icon="zi:solar-rewind-back-bold-duotone"
-		fallback-icon="line-md:coffee-twotone-loop" fallback-text="新故事即将发生"
+		fallback-icon="line-md:coffee-twotone-loop" :fallback-text="$t('post.surroundNext')"
 	/>
 	<ReuseTemplate
 		:post="prev" icon="zi:solar-rewind-forward-bold-duotone"
-		fallback-icon="line-md:construction-twotone" fallback-text="已抵达博客尽头"
+		fallback-icon="line-md:construction-twotone" :fallback-text="$t('post.surroundEnd')"
 		align-end
 	/>
 </div>

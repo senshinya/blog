@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import type { Memo } from '~/utils/memo'
+import { ENTRANCE_SKIP_KEY } from '~/composables/useEntranceDelay'
+import { buildPath } from '~/utils/locale'
 
 const LIMIT = 5
+
+const { locale } = useI18n()
+const localeSwitch = useState<boolean>(ENTRANCE_SKIP_KEY, () => false)
+const skipEntrance = localeSwitch.value
 
 // server: false —— 碎语更新频繁，若在构建时取数就会一直停留在上次部署的快照
 // 用 lazy 版而非顶层 await：await 会让本组件变成异步组件，要等 fetch 回来才实体化，
@@ -15,7 +21,17 @@ const { data: memos, status } = useLazyAsyncData('widget:memos', async () => {
 		createTime: m.createTime,
 		text: toMemoPlainText(m.content),
 	}))
-}, { server: false, default: () => [] })
+}, {
+	server: false,
+	default: () => [],
+	dedupe: 'defer',
+	// Locale routes remount this widget. Nuxt's default cache only reads static
+	// data after hydration, so reuse the client result for a language-only remount.
+	// Keep the state ref live: Nuxt may reuse the previous instance's options.
+	getCachedData: (key, nuxtApp, { cause }) => cause === 'initial' && localeSwitch.value
+		? nuxtApp.payload.data[key]
+		: undefined,
+})
 
 // server: false 时服务端压根不取数，status 停在 idle 而非 pending。
 // 漏掉 idle 会让预渲染的 HTML 直接落到空列表分支，写上「还没有碎语」
@@ -29,32 +45,32 @@ const { height: contentHeight } = useElementSize(contentEl)
 </script>
 
 <template>
-<BlogWidget card title="碎语">
+<BlogWidget card :class="{ 'skip-entrance': skipEntrance }" :title="$t('widget.memos.title')">
 	<template #action>
-		<UtilLink to="/memos" class="more">
-			全部<Icon name="tabler:chevron-right" />
+		<UtilLink :to="buildPath('/memos', locale, 'zh')" class="more">
+			{{ $t('widget.memos.viewAll') }}<Icon name="tabler:chevron-right" />
 		</UtilLink>
 	</template>
 
 	<div class="expander" :style="contentHeight ? { height: `${contentHeight}px` } : undefined">
 		<div ref="content">
 			<p v-if="loading" class="tip">
-				加载中...
+				{{ $t('widget.memos.loading') }}
 			</p>
 
 			<p v-else-if="!memos.length" class="tip">
-				还没有碎语
+				{{ $t('widget.memos.empty') }}
 			</p>
 
 			<ol v-else class="feed">
 				<li v-for="memo in memos" :key="memo.id">
-					<UtilLink :to="`/memos/${memo.id}`" class="item">
+					<UtilLink :to="buildPath(`/memos/${memo.id}`, locale, 'zh')" class="item">
 						<!-- monthDay 是定宽的，日期列才能对齐成左轨 -->
 						<UtilDate class="date" :date="memo.createTime" format="monthDay" />
 
 						<!-- 纯图碎语没有文字，给个占位免得只剩一个孤零零的日期 -->
 						<p class="text">
-							{{ memo.text || '[图片]' }}
+							{{ memo.text || $t('widget.memos.imagePlaceholder') }}
 						</p>
 					</UtilLink>
 				</li>
@@ -65,6 +81,18 @@ const { height: contentHeight } = useElementSize(contentEl)
 </template>
 
 <style lang="scss" scoped>
+// Locale changes retain the same feed: neither the TransitionGroup's scale nor
+// the height observer should make this widget look newly loaded.
+.blog-widget.skip-entrance {
+	opacity: 1;
+	transform: none;
+	transition: none;
+
+	.expander {
+		transition: none;
+	}
+}
+
 .expander {
 	// 负外边距 + 等量内边距：抵消后排版宽度不变，但给下面 .item 的负外边距
 	// 留出一圈不被 overflow 裁掉的余地，否则 hover 的填充块会被削掉两侧

@@ -81,10 +81,10 @@ onMounted(async () => {
 		<span v-if="language" class="language">{{ language }}</span>
 		<div class="operations">
 			<button @click="isWrap = !isWrap">
-				{{ isWrap ? '横向滚动' : '自动换行' }}
+				{{ isWrap ? $t('content.scrollHorizontal') : $t('content.wrapText') }}
 			</button>
 			<button @click="copy()">
-				{{ copied ? '已复制' : '复制' }}
+				{{ copied ? $t('content.copied') : $t('content.copy') }}
 			</button>
 		</div>
 	</figcaption>
@@ -100,7 +100,7 @@ onMounted(async () => {
 	<button
 		v-if="collapsible"
 		class="toggle-btn"
-		:aria-label="isCollapsed ? '展开代码块' : '折叠代码块'"
+		:aria-label="isCollapsed ? $t('content.expandCode') : $t('content.collapseCode')"
 		@click="toggleCollapsed()"
 	>
 		<Icon

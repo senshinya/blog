@@ -11,8 +11,10 @@ const props = withDefaults(defineProps<{
 	icon: undefined,
 })
 
+const { t } = useI18n()
+
 const tip = computed(() => ({
-	content: props.tip || (props.copy ? '点击复制' : ''),
+	content: props.tip || (props.copy ? t('content.clickToCopy') : ''),
 	inlinePositioning: true,
 	...props.tipOptions,
 }))

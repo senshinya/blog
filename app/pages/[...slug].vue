@@ -1,9 +1,17 @@
 <script setup lang="ts">
-const route = useRoute()
+import blogConfig from '~~/blog.config'
+import { stripLocale } from '~/utils/locale'
 
+const LOCALES = blogConfig.locales.map(l => l.code)
+
+const route = useRoute()
+const collection = useContentCollection()
+
+const dataKey = computed(() => `content:${route.path}`)
 const { data: post } = await useAsyncData(
-	`content:${route.path}`,
-	() => queryCollection('content').path(route.path).first(),
+	dataKey,
+	() => queryCollection(collection.value).path(stripLocale(route.path, LOCALES, 'zh').basePath).first(),
+	{ watch: [collection] },
 )
 
 const excerpt = computed(() => post.value?.description || '')
@@ -58,6 +66,6 @@ else {
 <ZError
 	v-else
 	icon="line-md:document-delete-twotone"
-	title="内容为空或页面不存在"
+	:title="$t('page.notFound.title')"
 />
 </template>

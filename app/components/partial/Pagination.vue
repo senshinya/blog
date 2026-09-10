@@ -23,14 +23,14 @@ if (props.avoid) {
 	ref="pagination"
 	class="pagination"
 	:class="{ sticky, expand }"
-	:aria-label="`第${page}页，共${totalPages}页`"
+	:aria-label="$t('ui.pagination.pageOf', { page, totalPages })"
 	:style="{ '--collapsed-width': `${pageArr.length * 2 + 6}em` }"
 >
 	<ZButton
 		:disabled="page <= 1"
 		class="pagination-button rtl-flip"
 		icon="tabler:arrow-left"
-		aria-label="上一页"
+		:aria-label="$t('ui.pagination.prev')"
 		@click="page--"
 	/>
 	<template v-for="i in pageArr" :key="i">
@@ -38,7 +38,7 @@ if (props.avoid) {
 			v-if="Number.isFinite(i)"
 			class="pagination-num"
 			:class="{ active: i === page }"
-			:aria-label="`第${i}页`"
+			:aria-label="$t('ui.pagination.page', { n: i })"
 			@click="page = i"
 			v-text="i"
 		/>
@@ -51,7 +51,7 @@ if (props.avoid) {
 		:disabled="page >= totalPages"
 		class="pagination-button rtl-flip"
 		icon="tabler:arrow-right"
-		aria-label="下一页"
+		:aria-label="$t('ui.pagination.next')"
 		@click="page++"
 	/>
 </nav>

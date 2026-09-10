@@ -3,11 +3,17 @@ import type { ArticleProps } from '~/types/article'
 import { groupBy } from 'es-toolkit/array'
 import { sumBy } from 'es-toolkit/math'
 import { mapValues } from 'es-toolkit/object'
+import blogConfig from '~~/blog.config'
+import { resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
+const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 useSeoMeta({
-	title: '归档',
-	description: `${appConfig.title}的所有文章归档。`,
+	title: () => t('page.archive.title'),
+	description: () => t('page.archive.description', { site: appConfig.title }),
 })
 const birthYear = computed(() => appConfig.component.stats.birthYear)
 const showTuning = ref(false)
@@ -17,7 +23,13 @@ const column = ref(1)
 const tuningRef = useTemplateRef('tuning-panel')
 useAvoidTarget(tuningRef, showTuning)
 
-const { data: listRaw } = await useAsyncData('posts:index', () => getArticleIndexOptions(), { default: () => [] })
+const collection = useContentCollection()
+const listKey = computed(() => `posts:index:${collection.value}`)
+const { data: listRaw } = await useAsyncData(
+	listKey,
+	() => getArticleIndexOptions(collection.value),
+	{ default: () => [], watch: [collection] },
+)
 const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted)
 
@@ -33,7 +45,7 @@ const listGrouped = computed(() => {
 const yearlyWordCount = computed(() =>
 	mapValues(Object.fromEntries(listGrouped.value), (articles) => {
 		const total = sumBy(articles, a => a.readingTime?.words ?? 0)
-		return formatNumber(total)
+		return formatNumber(total, currentLanguage.value)
 	}),
 )
 
@@ -66,7 +78,7 @@ function getArticleYear(article: ArticleProps) {
 		<ZSecret>
 			<ZToggle
 				v-model="showTuning"
-				label="密度调节"
+				:label="$t('page.archive.densityToggle')"
 			/>
 		</ZSecret>
 	</PostFilter>
@@ -88,12 +100,12 @@ function getArticleYear(article: ArticleProps) {
 
 			<div v-if="birthYear" class="archive-age">
 				<span>{{ Number(year) - birthYear }}</span>
-				<span class="age-label">岁</span>
+				<span class="age-label">{{ $t('page.archive.age') }}</span>
 			</div>
 
 			<div class="archive-info">
-				<span>{{ yearlyWordCount[year] }}字</span>
-				<span>{{ yearGroup?.length }}篇</span>
+				<span>{{ $t('post.words', { n: yearlyWordCount[year] }) }}</span>
+				<span>{{ $t('page.archive.postCount', { n: yearGroup?.length }, yearGroup?.length ?? 0) }}</span>
 			</div>
 		</div>
 
@@ -102,9 +114,9 @@ function getArticleYear(article: ArticleProps) {
 				v-for="article, index in yearGroup"
 				:key="article.path"
 				v-bind="article"
-				:to="article.path"
+				:to="resolveContentPath(article.path, locale)"
 				:show-category="column < 3"
-				:style="getFixedDelay(index * 0.03)"
+				:style="entranceDelay(index * 0.03)"
 			/>
 		</TransitionGroup>
 	</section>
@@ -112,7 +124,7 @@ function getArticleYear(article: ArticleProps) {
 	<div v-if="showTuning" ref="tuning-panel" class="archive-tuning card">
 		<ZSlider
 			v-model="spacing"
-			label="间距"
+			:label="$t('page.archive.spacing')"
 			:spring-min="-0.4"
 			:spring-max="0.1"
 			:list="['-0.3', '0']"
@@ -123,7 +135,7 @@ function getArticleYear(article: ArticleProps) {
 
 		<ZSlider
 			v-model="column"
-			label="列数"
+			:label="$t('page.archive.columns')"
 			min="1"
 			max="8"
 		/>

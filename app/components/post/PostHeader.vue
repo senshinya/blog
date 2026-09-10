@@ -1,16 +1,26 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
+import blogConfig from '~~/blog.config'
+import { buildPath } from '~/utils/locale'
 
 defineOptions({ inheritAttrs: false })
 const props = defineProps<ArticleProps>()
 
 const appConfig = useAppConfig()
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 
 const coverFilter = computed(() => props.meta?.coverFilter || (props.meta?.coverDim && 'brightness(0.75)') || undefined)
 
+/**
+ * 分享文本不需要是响应式的：这个组件在文章页面内，切换语言会改变路由（/daily/foo → /ja/daily/foo），
+ * 导致组件重新挂载。因此在 setup 期间读取一次是正确的——locale 在组件的生命周期内是常数。
+ * useCopy 的类型期望 string 或元素引用，传 ComputedRef 会被误认为是元素引用，返回空字符串。
+ */
 const shareText = `【${appConfig.title}】${props.title}\n\n${
 	props.description ? `${props.description}\n\n` : ''}${
-	new URL(props.path!, appConfig.url).href}`
+	new URL(buildPath(props.path!, locale.value, 'zh'), appConfig.url).href}`
 
 const { copy, copied } = useCopy(shareText)
 </script>
@@ -23,7 +33,7 @@ const { copy, copied } = useCopy(shareText)
 			<Icon v-show="false" name="tabler:check" />
 			<ZButton
 				:icon="copied ? 'tabler:check' : 'tabler:share'"
-				text="文字分享"
+				:text="$t('post.share')"
 				@click="copy()"
 			/>
 		</div>
@@ -32,19 +42,19 @@ const { copy, copied } = useCopy(shareText)
 			<UtilDate
 				v-if="date"
 				v-tip
-				:tip-transform="d => `创建于${d}`"
+				:tip-transform="d => $t('post.createdAt', { date: d })"
 				:date
 				icon="tabler:pencil-minus"
 			/>
 
 			<span v-if="categories">
 				<Icon :name="getCategoryIcon(categories[0])" />
-				{{ categories[0] }}
+				{{ $t(`category.${categories[0]}`) }}
 			</span>
 
 			<span>
 				<Icon name="tabler:pilcrow" />
-				{{ formatNumber(readingTime?.words) }} 字
+				{{ $t('post.words', { n: formatNumber(readingTime?.words, currentLanguage) }) }}
 			</span>
 		</div>
 	</div>

@@ -5,7 +5,7 @@ import { getFavicon } from './utils/img'
 
 export default [
 	{
-		name: '友链',
+		nameKey: 'page.friends.groupTitle',
 		entries: [
 			myFeed,
 			{

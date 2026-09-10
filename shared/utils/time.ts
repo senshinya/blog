@@ -4,30 +4,10 @@ import blogConfig from '~~/blog.config'
 // isSameUnit 和 isTimeDiffSignificant 随「更新日期」一并删除 ——
 // 它们存在的唯一目的就是判断 date 和 updated 差得够不够远、值不值得两个都显示
 
-const timeIntervals = [
-	{ label: '世纪', threshold: 60 * 60 * 24 * 365.2422 * 100 },
-	{ label: '年', threshold: 60 * 60 * 24 * 365.2422 },
-	{ label: '个月', threshold: 60 * 60 * 24 * 30.44 },
-	{ label: '天', threshold: 60 * 60 * 24 },
-	{ label: '小时', threshold: 60 * 60 },
-	{ label: '分', threshold: 60 },
-	{ label: '秒', threshold: 1 },
-]
-
-export function timeElapse(date: string | Temporal.PlainDateTime, maxDepth = 2) {
-	let timeString = ''
-	let secRemained = Temporal.Now.plainDateTimeISO().since(date, { largestUnit: 'second' }).seconds
-	for (const interval of timeIntervals) {
-		const count = Math.floor(secRemained / interval.threshold)
-		if (count <= 0)
-			continue
-		timeString += `${count}${interval.label}`
-		secRemained -= count * interval.threshold
-		if (--maxDepth <= 0)
-			break
-	}
-	return timeString || '刚刚'
-}
+// timeElapse() 搬去了同目录下的 timeElapse.ts：它不需要 blogConfig，
+// 独立出来才能被 node:test 直接 import 验证（这个文件的 toZonedTemporal
+// 要用到下面的 blogConfig.timeZone，这里的 '~~/blog.config' 是 Nuxt 别名，
+// 只有 Vite/Nuxt 构建才解析得了，纯 node:test 引这个文件必炸）。
 
 export function toInstantString(date: string | Temporal.ZonedDateTime) {
 	return (typeof date === 'string' ? toZonedTemporal(date) : date).toInstant().toString()
@@ -71,9 +51,11 @@ export const dateTimeFormat = {
 
 export type dateTimeFormatOptions = keyof typeof dateTimeFormat | Intl.DateTimeFormatOptions
 
-// 语言写死成站点语言：留空会跟着浏览器的 Accept-Language 走，
-// 同一个时间在英文浏览器里变成「07/13/2026」，与满页中文对不上
-export function toZdtLocaleString(date: string | Temporal.ZonedDateTime, format: dateTimeFormatOptions = 'full') {
+// locale 不能留空：留空会跟着浏览器的 Accept-Language 走，同一个时间在
+// 英文浏览器里变成「07/13/2026」，与页面本身的语言对不上。shared/ 下拿不到
+// useI18n()，故调用方（组件）负责把当前语言传进来；不传时退回站点默认语言，
+// 兜住 shared/ 内部或还没接上 i18n 的调用点。
+export function toZdtLocaleString(date: string | Temporal.ZonedDateTime, format: dateTimeFormatOptions = 'full', locale: string = blogConfig.language) {
 	return (typeof date === 'string' ? toZonedTemporal(date) : date)
-		.toLocaleString(blogConfig.language, typeof format === 'string' ? dateTimeFormat[format] : format)
+		.toLocaleString(locale, typeof format === 'string' ? dateTimeFormat[format] : format)
 }

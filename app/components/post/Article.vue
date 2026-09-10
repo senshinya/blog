@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
+import blogConfig from '~~/blog.config'
 
 defineProps<ArticleProps>()
+
+const { locale } = useI18n()
+const currentLanguage = computed(() =>
+	blogConfig.locales.find(l => l.code === locale.value)?.language ?? blogConfig.language)
 </script>
 
 <template>
@@ -25,12 +30,12 @@ defineProps<ArticleProps>()
 
 			<span v-if="categories" :style="{ color: getCategoryColor(categories[0]) }">
 				<Icon :name="getCategoryIcon(categories[0])" />
-				{{ categories[0] }}
+				{{ $t(`category.${categories[0]}`) }}
 			</span>
 
 			<span v-if="readingTime?.words" class="article-words">
 				<Icon name="tabler:pilcrow" />
-				{{ formatNumber(readingTime?.words) }}字
+				{{ $t('post.words', { n: formatNumber(readingTime?.words, currentLanguage) }) }}
 			</span>
 		</div>
 	</article>
@@ -44,7 +49,7 @@ defineProps<ArticleProps>()
 	margin: 1em 0;
 	border-radius: 0.8em;
 	color: var(--c-text);
-	animation: float-in 0.2s var(--delay) backwards;
+	animation: var(--entrance, float-in 0.2s var(--delay) backwards);
 
 	> article {
 		display: grid;

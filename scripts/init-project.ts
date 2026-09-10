@@ -28,7 +28,7 @@ if (!args.includes('--yes')) {
 
 const placeholderAvatar = 'https://weavatar.com/avatar/?d=initials&name=博主'
 const today = Temporal.Now.plainDateISO()
-const postDir = `./content/posts/${today.year}`
+const postDir = `./content/zh/posts/${today.year}`
 const examplePath = './content/previews/example.md'
 if (!fs.existsSync(examplePath)) {
 	log.error('示例文章不存在，请在未初始化的模板副本中运行；未修改任何文件。')

@@ -1,27 +1,50 @@
 <script setup lang="ts">
 import { myFeed } from '~~/blog.config'
 import feeds from '~/feeds'
+import { buildPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
+const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 
+const collection = useContentCollection()
+const dataKey = computed(() => `content:/friends:${collection.value}`)
 const { data: postLink } = await useAsyncData(
-	'content:/friends',
-	() => queryCollection('content').path('/friends').first(),
+	dataKey,
+	() => queryCollection(collection.value).path('/friends').first(),
+	{ watch: [collection] },
 )
 
 useSeoMeta({
-	title: '友链',
+	title: () => t('page.friends.title'),
 	ogType: 'profile',
-	description: `${appConfig.title}的友链页面，收集了添加他为友链的网站和他订阅的网站列表。`,
+	description: () => t('page.friends.description', { site: appConfig.title }),
 })
 
-const copyFields = {
-	博主: myFeed.author,
-	标题: myFeed.title,
-	介绍: myFeed.desc,
-	网址: myFeed.link,
-	头像: myFeed.avatar,
-}
+// myFeed.desc 兜底用的 blogConfig.subtitle、myFeed.comment 都是中文默认值，
+// 友链页展示"我的博客信息"卡片时要跟着语言走——用 i18n 词条覆盖，而不是动
+// blog.config.ts 这份多处（OPML 等构建期消费方）共用的默认语言源
+const myDesc = computed(() => t('site.subtitle'))
+const myComment = computed(() => t('page.friends.myComment'))
+
+// feeds.ts 里的 myFeed 同时出现在自己的友链分组里（是自己友链列表里的"自己"这个彩蛋），
+// 那份列表和其余条目一样走 FeedGroup -> FeedCard 的通用渲染，其余条目的 desc/comment
+// 是别人的博客名与自我介绍，本就该保留原文；只有 myFeed 这一条需要按引用识别出来单独覆盖，
+// 不能改 feeds.ts 本身——它还被友链检测 CLI 用相对路径直接导入
+const localizedFeeds = computed(() => feeds.map(group => ({
+	...group,
+	entries: group.entries.map(entry => entry === myFeed
+		? { ...entry, desc: myDesc.value, comment: myComment.value }
+		: entry),
+})))
+
+const copyFields = computed(() => [
+	{ id: 'author', prompt: t('page.friends.author'), code: myFeed.author },
+	{ id: 'blogTitle', prompt: t('page.friends.blogTitle'), code: myFeed.title },
+	{ id: 'blogDesc', prompt: t('page.friends.blogDesc'), code: myDesc.value },
+	{ id: 'blogUrl', prompt: t('page.friends.blogUrl'), code: myFeed.link },
+	{ id: 'avatar', prompt: t('page.friends.avatar'), code: myFeed.avatar },
+])
 </script>
 
 <template>
@@ -36,21 +59,28 @@ const copyFields = {
 </template>
 
 <div class="mobile-only">
-	<BlogHeader to="/" suffix="友链" tag="h1" />
+	<BlogHeader :to="buildPath('/', locale, 'zh')" tag="h1" />
 </div>
 
 <FeedGroup
-	v-for="group in feeds"
-	:key="group.name"
+	v-for="group in localizedFeeds"
+	:key="group.name ?? group.nameKey"
 	v-bind="group"
 	:shuffle="appConfig.link.randomInGroup"
 />
 
-<Tab :tabs="['我的博客信息', '申请友链']" center>
+<Tab :tabs="[$t('page.friends.myInfo'), $t('page.friends.apply')]" center>
 	<template #tab1>
 		<div class="friends-tab">
-			<FeedCard v-bind="myFeed" />
-			<Copy v-for="(code, prompt) in copyFields" :key="prompt" :prompt :code />
+			<!-- 这张卡不在错峰列表里，delay 本来靠继承 :root 的 0.2s；写成 entranceDelay(0.2)
+				把它显式化，顺带跟着一起在切换语言时跳过入场（见 useEntranceDelay） -->
+			<FeedCard
+				v-bind="myFeed"
+				:desc="myDesc"
+				:comment="myComment"
+				:style="entranceDelay(0.2)"
+			/>
+			<Copy v-for="field in copyFields" :key="field.id" :prompt="field.prompt" :code="field.code" />
 		</div>
 	</template>
 	<template #tab2>
@@ -60,12 +90,12 @@ const copyFields = {
 			class="article"
 		/>
 		<p v-else class="text-center">
-			可于 friends.md 配置友链补充说明。
+			{{ $t('page.friends.applyNotice') }}
 		</p>
 	</template>
 </Tab>
 
-<PostComment title="友链" :reactions="false" />
+<PostComment :title="$t('page.friends.title')" :reactions="false" />
 </template>
 
 <style lang="scss" scoped>

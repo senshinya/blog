@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+import { buildPath } from '~/utils/locale'
 
 defineProps<{
 	error: NuxtError & { url?: string }
 }>()
+
+const { locale } = useI18n()
 </script>
 
 <template>
@@ -19,8 +22,8 @@ defineProps<{
 			:title="`[${error.status}] ${error.message}`"
 		>
 			<template #operation>
-				<ZButton text="返回主页" @click="clearError({ redirect: '/' })" />
-				<ZButton text="尝试忽略" @click="clearError()" />
+				<ZButton :text="$t('error.backHome')" @click="clearError({ redirect: buildPath('/', locale, 'zh') })" />
+				<ZButton :text="$t('error.ignore')" @click="clearError()" />
 			</template>
 		</ZError>
 	</div>

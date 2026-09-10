@@ -731,6 +731,18 @@
 		> .edited {
 			font-style: italic;
 		}
+
+		> .translation {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.25em;
+			font-size: 0.6875rem;
+			white-space: nowrap;
+
+			.iconify {
+				font-size: 1.15em;
+			}
+		}
 	}
 
 	// 站长标记：描边而非实心，和 chip 同一种材质

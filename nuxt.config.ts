@@ -1,28 +1,32 @@
-import { readdirSync, readFileSync } from 'node:fs'
-import { basename, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { arch, env, version as nodeVersion, platform } from 'node:process'
 import { pathToFileURL } from 'node:url'
 import { name as ciName, CLOUDFLARE_PAGES, GITHUB_ACTIONS, NETLIFY, VERCEL } from 'ci-info'
 import { mapValues } from 'es-toolkit/object'
 import { pascalCase } from 'es-toolkit/string'
 import { Temporal } from 'temporal-polyfill'
-import { isTravelDraftSource } from './app/travels/draft'
 import blogConfig from './blog.config'
 import packageJson from './package.json'
 import redirectList from './redirects.json'
 
+const localePrefixes = ['', ...blogConfig.locales.filter(l => l.code !== 'zh').map(l => `/${l.code}`)]
+
+/**
+ * 把按路径写死的 routeRules 按语言展开。加了语言前缀之后，
+ * 只写 '/media' 会漏掉 /en/media 与 /ja/media —— 那两个会退回默认行为，
+ * 失败得很安静（/media 依赖 ssr:false 才能让首帧读到 route.query）。
+ */
+function localizeRules<T extends Record<string, unknown>>(rules: T) {
+	return Object.fromEntries(
+		Object.entries(rules).flatMap(([path, rule]) =>
+			localePrefixes.map(prefix => [`${prefix}${path}`, rule] as const),
+		),
+	) as Record<string, T[keyof T]>
+}
+
 function pluginPath(path: string) {
 	return pathToFileURL(resolve(`./remark-plugins/${path}.ts`)).href
 }
-
-// 游记数据是 app/travels/*.yaml。加载 nuxt.config 的 jiti 不认 yaml import，
-// 所以从文件名推路由，并直接读取文本中的顶层 `draft: true` 来排除草稿。
-// 文件名即 slug，这条约定由迁移脚本和 app/travels/index.ts 共同保证。
-const travelDirectory = resolve('./app/travels')
-const travelRoutes = readdirSync(travelDirectory)
-	.filter(file => file.endsWith('.yaml'))
-	.filter(file => !isTravelDraftSource(readFileSync(resolve(travelDirectory, file), 'utf8')))
-	.map(file => `/travels/${basename(file, '.yaml')}`)
 
 // 此处配置无需修改
 export default defineNuxtConfig({
@@ -38,7 +42,7 @@ export default defineNuxtConfig({
 			],
 			link: [
 				{ rel: 'icon', href: blogConfig.favicon },
-				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
+				// atom feed 的 alternate link 按 locale 生成，见 app/app.vue 的 useHead
 				// 首屏就要打这个域名取会话和线程，提前把 TLS 握完
 				{ rel: 'preconnect', href: blogConfig.comment.api, crossorigin: '' },
 				{ rel: 'stylesheet', href: 'https://s4.zstatic.net/npm/katex@0.16.44/dist/katex.min.css' },
@@ -93,15 +97,17 @@ export default defineNuxtConfig({
 			// https://github.com/nuxt/content/issues/2378
 			autoSubfolderIndex: CLOUDFLARE_PAGES || GITHUB_ACTIONS || NETLIFY ? false : undefined,
 
-			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳。
-			// 显式登记：列表页 + 每篇详情页，漏链也不会静默不生成。
+			// 游记不走 Nuxt Content，爬虫只能靠侧栏导航和旧文内链摸过来，不够稳，
+			// 这里显式登记列表页。每篇详情页由 modules/i18n-manifest 扫描
+			// app/travels/<locale>/*.yaml 后追加进本数组（见该模块 setup），
+			// 此处不再重复维护。
 			//
 			// 碎语详情页不在此列：碎语是运行时数据，构建期无从枚举 id，
 			// 改由 ISR 按需渲染（见 routeRules 的 '/memos/**'）。
 			//
 			// /media 配了 ssr:false（见 routeRules），crawler 不会渲染它，显式登记才能生成
 			// 那个纯客户端壳（/media/index.html）。路径是静态的，直接命中该文件。
-			routes: ['/', '/travels', ...travelRoutes, '/media'],
+			routes: ['/', '/travels', ...localePrefixes.map(prefix => `${prefix}/media`)],
 
 			/**
 			 * 以下两条是从 `nuxt generate` 切到 `nuxt build` 之后必须自己补上的。
@@ -138,41 +144,44 @@ export default defineNuxtConfig({
 		 */
 		'/api/og': { prerender: false },
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
-		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		'/favicon.ico': { redirect: { to: blogConfig.favicon } },
-		/**
-		 * 娱乐页的筛选状态写在 URL query（?category=&status=）。若预渲染，产物是不带 query 的
-		 * /media，payload.path 也就是 /media；水合时路由优先采信这个 renderedPath 而非地址栏
-		 * （同 /memos/_shell 的坑，且 Nuxt 还会 replaceState 到 renderedPath，把地址栏 query 也抹掉），
-		 * 于是深链 /media?category=game 首帧 query 为空，会先按默认(番剧·在看)取一次数、落定后再取一次。
-		 * ssr:false 让本页纯客户端渲染，产物无 path，route.query 从首帧即照地址栏，深链首取即正确。
-		 * 配合 nitro.prerender.routes 里登记 /media，生成可 200 直达的客户端壳。
-		 */
-		'/media': { ssr: false },
-		/**
-		 * 碎语详情页：按需服务端渲染，产物交给 Vercel 的 ISR 缓存。
-		 *
-		 * 碎语是运行时数据，构建期无从枚举 id，所以这页曾经是个纯客户端的 SPA 壳
-		 * （预渲染 /memos/_shell，再由平台把 /memos/* 200 重写到它身上）。代价是分享出去
-		 * 只有一具空壳：爬虫不跑 JS，拿到的 <title> 连模板变量都没被替换，og:* 一个不剩。
-		 * 页面级的 useSeoMeta 从未在服务端跑过。
-		 *
-		 * 改走 SSR 之后：HTML 里就有正文首句和首图，不存在的 id 也能回真 404 而非 200 + 壳。
-		 * 本项目为 /api/og 已经带着一个运行时函数（见 server/api/og.get.ts），这里是搭它的便车。
-		 *
-		 * 必须是 '**' 而不是 '*'：开了 isr 的路由，renderer 会把水合用的 payload 拆出去单放
-		 * （_PAYLOAD_EXTRACTION = routeOptions.isr || routeOptions.cache），页面因此还要再取一次
-		 * /memos/<id>/_payload.json。而 vercel preset 把 '*' 译成 [^/]*，跨不过那个斜杠，
-		 * 这一取就漏出 ISR、次次落到函数上 —— HTML 命中缓存，payload 每次现算。
-		 *
-		 * '**' 顺带吃下 /memos 列表页倒是无妨：Vercel 的路由表里 handle: filesystem 排在
-		 * ISR 规则之前，列表页有预渲染好的 index.html 顶着，走不到这条。
-		 *
-		 * 600 秒是缓存窗口，也是编辑一条旧碎语后线上更新的延迟上限。往长了调更省函数调用，
-		 * 但改错别字要等更久。
-		 */
-		'/memos/**': { isr: 600 },
 		'/subscriptions.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
+		...localizeRules({
+			// 三语 atom feed（见 server/routes/{,en/,ja/}atom.xml.get.ts）都要预渲染
+			'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
+			/**
+			 * 娱乐页的筛选状态写在 URL query（?category=&status=）。若预渲染，产物是不带 query 的
+			 * /media，payload.path 也就是 /media；水合时路由优先采信这个 renderedPath 而非地址栏
+			 * （同 /memos/_shell 的坑，且 Nuxt 还会 replaceState 到 renderedPath，把地址栏 query 也抹掉），
+			 * 于是深链 /media?category=game 首帧 query 为空，会先按默认(番剧·在看)取一次数、落定后再取一次。
+			 * ssr:false 让本页纯客户端渲染，产物无 path，route.query 从首帧即照地址栏，深链首取即正确。
+			 * 配合 nitro.prerender.routes 里登记 /media，生成可 200 直达的客户端壳。
+			 */
+			'/media': { ssr: false },
+			/**
+			 * 碎语详情页：按需服务端渲染，产物交给 Vercel 的 ISR 缓存。
+			 *
+			 * 碎语是运行时数据，构建期无从枚举 id，所以这页曾经是个纯客户端的 SPA 壳
+			 * （预渲染 /memos/_shell，再由平台把 /memos/* 200 重写到它身上）。代价是分享出去
+			 * 只有一具空壳：爬虫不跑 JS，拿到的 <title> 连模板变量都没被替换，og:* 一个不剩。
+			 * 页面级的 useSeoMeta 从未在服务端跑过。
+			 *
+			 * 改走 SSR 之后：HTML 里就有正文首句和首图，不存在的 id 也能回真 404 而非 200 + 壳。
+			 * 本项目为 /api/og 已经带着一个运行时函数（见 server/api/og.get.ts），这里是搭它的便车。
+			 *
+			 * 必须是 '**' 而不是 '*'：开了 isr 的路由，renderer 会把水合用的 payload 拆出去单放
+			 * （_PAYLOAD_EXTRACTION = routeOptions.isr || routeOptions.cache），页面因此还要再取一次
+			 * /memos/<id>/_payload.json。而 vercel preset 把 '*' 译成 [^/]*，跨不过那个斜杠，
+			 * 这一取就漏出 ISR、次次落到函数上 —— HTML 命中缓存，payload 每次现算。
+			 *
+			 * '**' 顺带吃下 /memos 列表页倒是无妨：Vercel 的路由表里 handle: filesystem 排在
+			 * ISR 规则之前，列表页有预渲染好的 index.html 顶着，走不到这条。
+			 *
+			 * 600 秒是缓存窗口，也是编辑一条旧碎语后线上更新的延迟上限。往长了调更省函数调用，
+			 * 但改错别字要等更久。
+			 */
+			'/memos/**': { isr: 600 },
+		}),
 	},
 
 	runtimeConfig: {
@@ -204,7 +213,7 @@ export default defineNuxtConfig({
 		css: {
 			preprocessorOptions: {
 				scss: {
-					additionalData: '@use "@/assets/css/_variable.scss" as *;',
+					additionalData: '@use "@/assets/css/_variable.scss" as *; @use "@/assets/css/_mixin.scss" as *;',
 				},
 			},
 		},
@@ -228,17 +237,26 @@ export default defineNuxtConfig({
 		'@bikariya/image-viewer',
 		'@bikariya/modals',
 		'@bikariya/shiki',
-		'@nuxt/a11y',
+		/**
+		 * @nuxt/a11y 的 axe 插件在**非安全上下文**下会整个崩掉：它的 active-tab-tracker
+		 * 调 crypto.randomUUID()，而该 API 仅在 secure context 可用（localhost 算，
+		 * http://192.168.x.x 不算）。它的 try/catch 里 catch 分支又调了同一个函数，
+		 * 所以两条路都抛，应用初始化失败（NUXT_E1005），连带 vue-tippy 不注册、v-tip 解析不了。
+		 * 局域网联调（nuxt dev --host + 用 IP 访问）时用 NUXT_A11Y=0 关掉它。
+		 */
+		['@nuxt/a11y', { enabled: env.NUXT_A11Y !== '0' }],
 		'@nuxt/content',
 		'@nuxt/hints',
 		'@nuxt/icon',
 		'@nuxt/image',
 		'@nuxtjs/color-mode',
+		'@nuxtjs/i18n',
 		'@nuxtjs/seo',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
 		'nuxt-llms',
 		'unplugin-yaml/nuxt',
+		['~~/modules/i18n-manifest', { locales: blogConfig.locales.map(l => l.code), defaultLocale: 'zh' }],
 	],
 
 	colorMode: {
@@ -307,6 +325,18 @@ ${packageJson.homepage}
 			// 只关这一项，hydration / web-vitals 那些提示照旧。
 			lazyLoad: false,
 		},
+	},
+
+	i18n: {
+		baseUrl: blogConfig.url,
+		locales: blogConfig.locales,
+		defaultLocale: 'zh',
+		strategy: 'prefix_except_default',
+		// 关掉自带检测：它只在入口判一次且不认识清单，与 01.locale-preference
+		// 中间件是竞争关系，同时开会双重跳转。
+		detectBrowserLanguage: false,
+		lazy: true,
+		langDir: 'locales/',
 	},
 
 	icon: {

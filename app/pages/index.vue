@@ -1,13 +1,22 @@
 <script setup lang="ts">
 import { orderBy } from 'es-toolkit/array'
+import { buildPath, resolveContentPath } from '~/utils/locale'
 
 const appConfig = useAppConfig()
+const { t, locale } = useI18n()
+const entranceDelay = useEntranceDelay()
 useSeoMeta({
-	description: appConfig.description,
+	description: () => t('site.description'),
 	ogImage: appConfig.author.avatar,
 })
 
-const { data: listRaw } = await useAsyncData('posts:index', () => getArticleIndexOptions(), { default: () => [] })
+const collection = useContentCollection()
+const listKey = computed(() => `posts:index:${collection.value}`)
+const { data: listRaw } = await useAsyncData(
+	listKey,
+	() => getArticleIndexOptions(collection.value),
+	{ default: () => [], watch: [collection] },
+)
 const { listSorted } = useArticleSort(listRaw)
 const { category, categories, listCategorized } = useCategory(listSorted, { bindQuery: 'category' })
 const { page, totalPages, listPaged } = usePagination(listCategorized, { bindQuery: 'page' })
@@ -16,7 +25,7 @@ watch(category, () => {
 	page.value = 1
 })
 
-useSeoMeta({ title: () => (page.value > 1 ? `第${page.value}页` : '') })
+useSeoMeta({ title: () => (page.value > 1 ? t('ui.pagination.page', { n: page.value }) : '') })
 
 const listRecommended = computed(() => orderBy(
 	listRaw.value.filter(item => item.recommend !== null),
@@ -24,9 +33,11 @@ const listRecommended = computed(() => orderBy(
 	['desc'],
 ))
 
+const previewCountKey = computed(() => `previews:count:${collection.value}`)
 const { data: previewCount } = useAsyncData(
-	'previews:count',
-	() => queryCollection('content').where('stem', 'LIKE', 'previews/%').count(),
+	previewCountKey,
+	() => queryCollection(collection.value).where('stem', 'LIKE', 'previews/%').count(),
+	{ watch: [collection] },
 )
 </script>
 
@@ -41,7 +52,7 @@ const { data: previewCount } = useAsyncData(
 	</TransitionGroup>
 </template>
 
-<BlogHeader class="mobile-only" to="/" tag="h1" />
+<BlogHeader class="mobile-only" :to="buildPath('/', locale, 'zh')" tag="h1" />
 
 <!-- 此处不套 UtilHydrateSafe（上游原本有）。它内部是 ClientOnly，而 ClientOnly 挂载前后
 	返回的 vnode 类型不同（h(slot) 的组件 vnode vs slots.default() 的 vnode 数组），
@@ -56,9 +67,9 @@ const { data: previewCount } = useAsyncData(
 		:categories
 	>
 		<ZSecret>
-			<UtilLink v-if="previewCount" to="/preview" class="preview-entrance">
+			<UtilLink v-if="previewCount" :to="buildPath('/preview', locale, 'zh')" class="preview-entrance">
 				<Icon name="tabler:shield-lock" />
-				查看预览文章
+				{{ $t('page.home.previewLink') }}
 			</UtilLink>
 		</ZSecret>
 	</PostFilter>
@@ -68,8 +79,8 @@ const { data: previewCount } = useAsyncData(
 			v-for="article, index in listPaged"
 			:key="article.path"
 			v-bind="article"
-			:to="article.path"
-			:style="getFixedDelay(index * 0.05)"
+			:to="resolveContentPath(article.path, locale)"
+			:style="entranceDelay(index * 0.05)"
 		/>
 	</TransitionGroup>
 

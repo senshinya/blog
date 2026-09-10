@@ -15,7 +15,7 @@ test('renders eight accessible media card placeholders during full-page loading'
 	assert.match(page, /<MediaCardSkeleton\s*\/>/)
 	assert.match(page, /aria-hidden="true"/)
 	assert.match(page, /role="status"/)
-	assert.match(page, /正在加载娱乐收藏/)
+	assert.match(page, /\$t\('page\.media\.loading'\)/)
 	assert.doesNotMatch(page, /<p v-else-if="loading" class="media-tip">/)
 })
 

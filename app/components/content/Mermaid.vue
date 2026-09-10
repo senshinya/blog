@@ -77,17 +77,17 @@ const diagram = computedAsync<{ svg?: string, width?: number, error?: string }>(
 			<ZButton
 				variant="text"
 				:icon="scroll ? 'tabler:arrows-minimize' : 'tabler:arrows-horizontal'"
-				:text="scroll ? '适应宽度' : '横向滚动'"
+				:text="scroll ? $t('content.fitWidth') : $t('content.scrollHorizontal')"
 				@click="toggleScroll()"
 			/>
 		</template>
-		<div class="scrollcheck-x" tabindex="0" role="region" aria-label="Mermaid 图表">
+		<div class="scrollcheck-x" tabindex="0" role="region" :aria-label="$t('content.mermaidDiagram')">
 			<div :style="{ minWidth: scroll && diagram.width ? `${diagram.width}px` : undefined }" v-html="diagram.svg" />
 		</div>
 	</Tooltip>
 	<template v-else-if="diagram.error">
 		<details class="mermaid-error">
-			<summary>图表渲染失败，查看错误详情</summary>
+			<summary>{{ $t('content.mermaidError') }}</summary>
 			<pre>{{ diagram.error }}</pre>
 		</details>
 		<ProsePre :code language="mermaid" meta="wrap" />

@@ -6,9 +6,10 @@ const PAGE_SIZE = 20
 const BGM_API = 'https://api.bgm.tv/v0/users'
 
 const appConfig = useAppConfig()
+const { t } = useI18n()
 useSeoMeta({
-	title: '娱乐',
-	description: `${appConfig.title}追过的番剧、看过的影视、玩过的游戏，同步自 Bangumi。`,
+	title: () => t('page.media.title'),
+	description: () => t('page.media.description', { site: appConfig.title }),
 })
 
 const route = useRoute()
@@ -34,7 +35,14 @@ function parseStatus(v: unknown): BgmStatusKey {
 // 水合时路由照地址栏解析，route.query 从首帧即正确 —— 深链首取即用 URL 上的参数，不会先按默认打一枪。
 const categoryKey = computed(() => parseCategory(route.query.category))
 const statusKey = computed(() => parseStatus(route.query.status))
-const category = computed(() => BGM_CATEGORIES.find(c => c.key === categoryKey.value)!)
+// 分类的展示层：图标/subjectType 取自静态数据，标签与三个状态的措辞现取现译，
+// 这样切换语言时（t 的响应式依赖变化）这份列表会跟着重算，而不必重新请求接口
+const categories = computed(() => BGM_CATEGORIES.map(c => ({
+	...c,
+	label: t(`media.category.${c.key}`),
+	statusLabels: BGM_STATUS_KEYS.map(s => t(`media.status.${c.key}.${s}`)) as [string, string, string],
+})))
+const category = computed(() => categories.value.find(c => c.key === categoryKey.value)!)
 const statusType = computed(() => BGM_STATUS_TYPES[BGM_STATUS_KEYS.indexOf(statusKey.value)]!)
 
 // 点击只写回 query（默认值省略以保持裸 /media；push 让每个组合可后退），状态由上面的 computed 派生
@@ -132,20 +140,21 @@ watch([categoryKey, statusKey], reload)
 <div class="media proper-height">
 	<header class="media-header">
 		<h1 class="text-creative">
-			娱乐
+			{{ $t('page.media.title') }}
 		</h1>
-		<p class="media-desc">
-			追过的番剧、看过的影视、玩过的游戏，同步自
-			<UtilLink to="https://bgm.tv">
-				Bangumi
-			</UtilLink>
-		</p>
+		<i18n-t keypath="page.media.syncNotice" tag="p" class="media-desc">
+			<template #link>
+				<UtilLink to="https://bgm.tv">
+					Bangumi
+				</UtilLink>
+			</template>
+		</i18n-t>
 	</header>
 
 	<div class="media-filter">
 		<div class="filter-cats">
 			<button
-				v-for="c in BGM_CATEGORIES"
+				v-for="c in categories"
 				:key="c.key"
 				type="button"
 				class="filter-cat"
@@ -157,7 +166,7 @@ watch([categoryKey, statusKey], reload)
 			</button>
 
 			<span v-if="!loading && !error && total" class="filter-count">
-				共 {{ total }} {{ category.unit }}
+				{{ $t(`media.total.${categoryKey}`, { n: total }, total) }}
 			</span>
 		</div>
 
@@ -177,11 +186,11 @@ watch([categoryKey, statusKey], reload)
 	</div>
 
 	<!-- 整页报错只在「一条都没加载出来」时顶替内容；「加载更多」失败不清空已有列表 -->
-	<ZError v-if="error && !items.length" :message="`加载失败：${error.message}`" />
+	<ZError v-if="error && !items.length" :message="$t('page.media.loadError', { message: error.message })" />
 
 	<template v-else-if="loading">
 		<span class="media-loading-status" role="status">
-			正在加载娱乐收藏
+			{{ $t('page.media.loading') }}
 		</span>
 		<ol class="media-grid" aria-hidden="true">
 			<li v-for="index in 8" :key="index">
@@ -191,7 +200,7 @@ watch([categoryKey, statusKey], reload)
 	</template>
 
 	<p v-else-if="!items.length" class="media-tip">
-		这个分类还没有收藏
+		{{ $t('page.media.empty') }}
 	</p>
 
 	<template v-else>
@@ -209,11 +218,11 @@ watch([categoryKey, statusKey], reload)
 			<ZButton
 				v-if="items.length < total"
 				:icon="loadingMore ? 'line-md:loading-loop' : 'tabler:chevron-down'"
-				:text="loadingMore ? '加载中' : '加载更多'"
+				:text="loadingMore ? $t('page.media.loadingMore') : $t('page.media.loadMore')"
 				@click="loadMore"
 			/>
 			<p v-else class="media-tip">
-				共 {{ total }} 条，没有更多了
+				{{ $t('page.media.count', { n: total }) }}
 			</p>
 		</div>
 	</template>
