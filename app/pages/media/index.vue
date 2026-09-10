@@ -229,7 +229,7 @@ watch([categoryKey, statusKey], reload)
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .media {
 	padding: 1rem;
 }
@@ -248,7 +248,7 @@ watch([categoryKey, statusKey], reload)
 	}
 }
 
-// 筛选器：分类=带图标的胶囊标签（主），状态=下划线文字标签（次），计数锚在右侧
+/* 筛选器：分类=带图标的胶囊标签（主），状态=下划线文字标签（次），计数锚在右侧 */
 .media-filter {
 	margin: 1.25rem 0 0.5rem;
 }
@@ -318,7 +318,7 @@ watch([categoryKey, statusKey], reload)
 		color: var(--c-primary);
 	}
 
-	// 激活项底部 2px 下划线，切换时淡入淡出
+	/* 激活项底部 2px 下划线，切换时淡入淡出 */
 	&::after {
 		content: "";
 		position: absolute;

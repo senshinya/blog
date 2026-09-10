@@ -17,7 +17,7 @@ export default antfu({
 	rules: {
 		'vue/block-lang': ['warn', {
 			script: { lang: ['ts', 'tsx'] },
-			style: { lang: ['css', 'scss'], allowNoLang: true },
+			style: { lang: ['css'], allowNoLang: true },
 		}],
 		'vue/enforce-style-attribute': ['warn', {
 			allow: ['scoped'],

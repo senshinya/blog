@@ -68,9 +68,6 @@ catalogs:
     postcss-nesting:
       specifier: ^14.0.1
       version: 14.0.1
-    sass-embedded:
-      specifier: ^1.104.0
-      version: 1.104.0
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
@@ -391,9 +388,6 @@ importers:
       rimraf:
         specifier: catalog:util
         version: 6.1.3
-      sass-embedded:
-        specifier: catalog:framework
-        version: 1.104.0
       strip-ansi:
         specifier: catalog:util
         version: 7.2.0
@@ -8354,7 +8348,8 @@ snapshots:
 
   '@braintree/sanitize-url@7.1.2': {}
 
-  '@bufbuild/protobuf@2.14.1': {}
+  '@bufbuild/protobuf@2.14.1':
+    optional: true
 
   '@cacheable/memory@2.2.0':
     dependencies:
@@ -11769,7 +11764,8 @@ snapshots:
   colord@2.10.0:
     optional: true
 
-  colorjs.io@0.7.1: {}
+  colorjs.io@0.7.1:
+    optional: true
 
   comma-separated-tokens@2.0.3: {}
 
@@ -13072,7 +13068,8 @@ snapshots:
 
   hachure-fill@0.5.2: {}
 
-  has-flag@4.0.0: {}
+  has-flag@4.0.0:
+    optional: true
 
   has-flag@5.0.1:
     optional: true
@@ -13322,7 +13319,8 @@ snapshots:
 
   image-meta@0.2.2: {}
 
-  immutable@5.1.9: {}
+  immutable@5.1.9:
+    optional: true
 
   import-fresh@3.3.1:
     dependencies:
@@ -15879,6 +15877,7 @@ snapshots:
   rxjs@7.8.2:
     dependencies:
       tslib: 2.8.1
+    optional: true
 
   safe-buffer@5.1.2: {}
 
@@ -15972,6 +15971,7 @@ snapshots:
       sass-embedded-unknown-all: 1.104.0
       sass-embedded-win32-arm64: 1.104.0
       sass-embedded-win32-x64: 1.104.0
+    optional: true
 
   sass@1.104.0:
     dependencies:
@@ -16346,6 +16346,7 @@ snapshots:
   supports-color@8.1.1:
     dependencies:
       has-flag: 4.0.0
+    optional: true
 
   supports-hyperlinks@4.5.0:
     dependencies:
@@ -16371,8 +16372,10 @@ snapshots:
   sync-child-process@1.0.2:
     dependencies:
       sync-message-port: 1.2.0
+    optional: true
 
-  sync-message-port@1.2.0: {}
+  sync-message-port@1.2.0:
+    optional: true
 
   synckit@0.11.13:
     dependencies:
@@ -16499,7 +16502,8 @@ snapshots:
 
   ts-dedent@2.3.0: {}
 
-  tslib@2.8.1: {}
+  tslib@2.8.1:
+    optional: true
 
   type-check@0.4.0:
     dependencies:
@@ -16805,7 +16809,8 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  varint@6.0.0: {}
+  varint@6.0.0:
+    optional: true
 
   verkit@0.3.2: {}
 

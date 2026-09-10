@@ -77,10 +77,11 @@ export default defineNuxtConfig({
 		'@/assets/css/animation.css',
 		'@/assets/css/article.css',
 		'@/assets/css/color.css',
-		'@/assets/css/comment.scss',
+		'@/assets/css/comment.css',
 		'@/assets/css/font.css',
 		'@/assets/css/lqip.css',
 		'@/assets/css/main.css',
+		'@/assets/css/reading-preferences.css',
 		'@/assets/css/reusable.css',
 	],
 
@@ -215,14 +216,6 @@ export default defineNuxtConfig({
 	},
 
 	vite: {
-		// 本站新增组件仍使用 SCSS，与上游原生 CSS 并存。
-		css: {
-			preprocessorOptions: {
-				scss: {
-					additionalData: '@use "@/assets/css/_variable.scss" as *; @use "@/assets/css/_mixin.scss" as *;',
-				},
-			},
-		},
 		define: {
 			/** 在生产环境启用 Vue DevTools */
 			// __VUE_PROD_DEVTOOLS__: 'true',

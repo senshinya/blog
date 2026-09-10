@@ -1,29 +1,29 @@
-// 自建评论区（blog-comment）的样式。
-// 放全局而不是 SFC 的 scoped：评论正文是服务端渲染好的 HTML，用 v-html 插进来，
-// scoped 的属性选择器够不到那些节点；且 .comment 是递归组件，多层嵌套的导轨
-// 选择器写在一处才看得清。所有规则都收在 .z-comment 下，不会漏到别处。
+/* 自建评论区（blog-comment）的样式。 */
+/* 放全局而不是 SFC 的 scoped：评论正文是服务端渲染好的 HTML，用 v-html 插进来， */
+/* scoped 的属性选择器够不到那些节点；且 .comment 是递归组件，多层嵌套的导轨 */
+/* 选择器写在一处才看得清。所有规则都收在 .z-comment 下，不会漏到别处。 */
 
 :root {
-	// 编辑器的描边/填充阶梯，照抄 Reddit：纯黑（浅色）或纯白（深色）加透明度。
-	// 混的是 --c-text-1，所以一套值同时覆盖两个主题，不用写两份。
-	--rc-ring: color-mix(in srgb, var(--c-text-1) 20%, transparent); // Reddit #00000033
-	--rc-ring-on: color-mix(in srgb, var(--c-text-1) 50%, transparent); // Reddit #0000007F
+	/* 编辑器的描边/填充阶梯，照抄 Reddit：纯黑（浅色）或纯白（深色）加透明度。 */
+	/* 混的是 --c-text-1，所以一套值同时覆盖两个主题，不用写两份。 */
+	--rc-ring: color-mix(in srgb, var(--c-text-1) 20%, transparent); /* Reddit #00000033 */
+	--rc-ring-on: color-mix(in srgb, var(--c-text-1) 50%, transparent); /* Reddit #0000007F */
 	--rc-fill: color-mix(in srgb, var(--c-text-1) 8%, transparent);
 	--rc-fill-hover: color-mix(in srgb, var(--c-text-1) 12%, transparent);
-	--rc-pressed: color-mix(in srgb, var(--c-text-1) 15%, transparent); // Reddit #00000026
+	--rc-pressed: color-mix(in srgb, var(--c-text-1) 15%, transparent); /* Reddit #00000026 */
 }
 
 .z-comment {
-	// --surface = 评论区脚下的底色。折叠钮要用它盖住导线、长正文的渐隐要淡入它。
-	// 评论直接落在页面底上，故默认取 --c-bg-1；若哪天塞进一张卡片里，
-	// 只需在容器上重新声明一次 --surface。
+	/* --surface = 评论区脚下的底色。折叠钮要用它盖住导线、长正文的渐隐要淡入它。 */
+	/* 评论直接落在页面底上，故默认取 --c-bg-1；若哪天塞进一张卡片里， */
+	/* 只需在容器上重新声明一次 --surface。 */
 	--surface: var(--c-bg-1);
 
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
 
-	// ── 区块骨架 ──────────────────────────────────────────────
+	/* ── 区块骨架 ────────────────────────────────────────────── */
 	.comment-head {
 		display: flex;
 		flex-wrap: wrap;
@@ -37,7 +37,7 @@
 		}
 	}
 
-	// 排序切换：文字按钮，不做成 chip，避免和 reaction 抢注意力
+	/* 排序切换：文字按钮，不做成 chip，避免和 reaction 抢注意力 */
 	.sort {
 		display: flex;
 		align-items: center;
@@ -65,9 +65,9 @@
 		}
 	}
 
-	// 排序行：Reddit 把它放在编辑框和列表之间，不放在标题右边。
-	// .z-comment 是 flex 列且 gap:1rem，margin 只补差额 ——
-	// 编辑框 →(gap 16)→ 排序行 →(gap 16 + margin 16 = 32)→ 列表，和 Reddit 实测一致
+	/* 排序行：Reddit 把它放在编辑框和列表之间，不放在标题右边。 */
+	/* .z-comment 是 flex 列且 gap:1rem，margin 只补差额 —— */
+	/* 编辑框 →(gap 16)→ 排序行 →(gap 16 + margin 16 = 32)→ 列表，和 Reddit 实测一致 */
 	.sort-row {
 		display: flex;
 		align-items: center;
@@ -75,10 +75,10 @@
 		margin-block-end: 1rem;
 	}
 
-	// ── 编辑器 ────────────────────────────────────────────────
-	// 照着 Reddit 的 composer 量的：圆角等于半高（收起时是一颗真 pill），
-	// 闲置没有自己的底色 —— 框里就是页面底色，靠一根透明度描边立住。
-	// 工具条聚焦才从 0 高度长出来。
+	/* ── 编辑器 ──────────────────────────────────────────────── */
+	/* 照着 Reddit 的 composer 量的：圆角等于半高（收起时是一颗真 pill）， */
+	/* 闲置没有自己的底色 —— 框里就是页面底色，靠一根透明度描边立住。 */
+	/* 工具条聚焦才从 0 高度长出来。 */
 	.composer {
 		border: 1px solid var(--rc-ring);
 		border-radius: 21px;
@@ -86,7 +86,7 @@
 		transition: border-color 0.22s ease;
 		cursor: text;
 
-		// Reddit 的收起态没有 hover 规则（class 里只有 focus-within:），这里照办
+		/* Reddit 的收起态没有 hover 规则（class 里只有 focus-within:），这里照办 */
 		&:focus-within {
 			border-color: var(--rc-ring-on);
 			cursor: auto;
@@ -94,7 +94,7 @@
 
 		> textarea {
 			display: block;
-			overflow: hidden; // 高度交给 JS，不出原生滚动条和拖拽手柄
+			overflow: hidden; /* 高度交给 JS，不出原生滚动条和拖拽手柄 */
 			width: 100%;
 			max-height: 20em;
 			padding: 8px 16px;
@@ -109,24 +109,24 @@
 			}
 		}
 
-		// 预览：直接套 .prose，和发出去之后逐像素一致
+		/* 预览：直接套 .prose，和发出去之后逐像素一致 */
 		> .composer-preview {
 			padding: 8px 16px;
 		}
 
-		// 输入框和预览面板共用同一个最小高度：一行行高 + 上下 padding。
-		// 不写这条，切到预览时空内容只剩 padding，整个框会从 44 塌到 18。
-		// 写成同一条声明是为了让两边严格相等 —— 自增高用的 scrollHeight 是整数，
-		// 各写各的会差半个像素。
+		/* 输入框和预览面板共用同一个最小高度：一行行高 + 上下 padding。 */
+		/* 不写这条，切到预览时空内容只剩 padding，整个框会从 44 塌到 18。 */
+		/* 写成同一条声明是为了让两边严格相等 —— 自增高用的 scrollHeight 是整数， */
+		/* 各写各的会差半个像素。 */
 		> textarea,
 		> .composer-preview {
 			min-height: calc(1.75em + 16px);
 		}
 	}
 
-	// 展开动画：0fr → 1fr 把工具条长出来，配一点上浮和渐显。
-	// 注意 transition 里写的是 translate 而不是 transform ——
-	// translate 是独立属性，transform 覆盖不到它，写错会在收起首帧闪一下
+	/* 展开动画：0fr → 1fr 把工具条长出来，配一点上浮和渐显。 */
+	/* 注意 transition 里写的是 translate 而不是 transform —— */
+	/* translate 是独立属性，transform 覆盖不到它，写错会在收起首帧闪一下 */
 	.composer-foot-wrap {
 		display: grid;
 		grid-template-rows: 0fr;
@@ -153,9 +153,9 @@
 		}
 	}
 
-	// 回复框的进出场。此前只有框内的工具条和自增高有动画，框自己是硬生生蹦出来的，
-	// 一整块 44px 凭空出现，底下的回复被顶开时看着像跳了一帧。
-	// 高度同样走 0fr → 1fr，缓动与工具条那一下取同一条，免得一个框上两段动画各走各的
+	/* 回复框的进出场。此前只有框内的工具条和自增高有动画，框自己是硬生生蹦出来的， */
+	/* 一整块 44px 凭空出现，底下的回复被顶开时看着像跳了一帧。 */
+	/* 高度同样走 0fr → 1fr，缓动与工具条那一下取同一条，免得一个框上两段动画各走各的 */
 	.composer-slot {
 		display: grid;
 		grid-template-rows: 1fr;
@@ -164,7 +164,7 @@
 	.composer-slot-in {
 		overflow: hidden;
 
-		// grid item 默认 min-height: auto，撑着内容不肯缩，0fr 那一行就压不下去
+		/* grid item 默认 min-height: auto，撑着内容不肯缩，0fr 那一行就压不下去 */
 		min-height: 0;
 	}
 
@@ -181,9 +181,9 @@
 
 	.composer-enter-from,
 	.composer-leave-to {
-		// 光把高度压到 0 还不够：.comment-body 是 flex + gap，那 0.4rem 的缝在高度为 0 时
-		// 照样占位，于是展开的第一帧先硬跳 6px 再开始长。负 margin 把它一并收掉，
-		// 且跟着一起过渡 —— 间距是和框一起长出来的，不是先蹦出来等着
+		/* 光把高度压到 0 还不够：.comment-body 是 flex + gap，那 0.4rem 的缝在高度为 0 时 */
+		/* 照样占位，于是展开的第一帧先硬跳 6px 再开始长。负 margin 把它一并收掉， */
+		/* 且跟着一起过渡 —— 间距是和框一起长出来的，不是先蹦出来等着 */
 		grid-template-rows: 0fr;
 		margin-block-start: -0.4rem;
 
@@ -204,9 +204,9 @@
 		}
 	}
 
-	// 窄到一行放不下就换行，而不是把每颗药丸压扁 —— 嵌套回复在 375px 下版心只有
-	// 267px，一行要 313px。此前是靠 flex-shrink 硬挤，「预览」两个字被压成上下两行、
-	// 药丸从 32px 撑到 40px，那排控件就散了
+	/* 窄到一行放不下就换行，而不是把每颗药丸压扁 —— 嵌套回复在 375px 下版心只有 */
+	/* 267px，一行要 313px。此前是靠 flex-shrink 硬挤，「预览」两个字被压成上下两行、 */
+	/* 药丸从 32px 撑到 40px，那排控件就散了 */
 	.composer-foot-in {
 		display: flex;
 		flex-wrap: wrap;
@@ -219,8 +219,8 @@
 		}
 	}
 
-	// 一行放得下时 .spacer 已经把它顶到最右，auto 不多做什么；
-	// 换了行则由它接手，让这一组仍然靠右，不至于掉到第二行左端
+	/* 一行放得下时 .spacer 已经把它顶到最右，auto 不多做什么； */
+	/* 换了行则由它接手，让这一组仍然靠右，不至于掉到第二行左端 */
 	.composer-actions {
 		display: flex;
 		gap: 4px;
@@ -228,8 +228,8 @@
 	}
 
 
-	// 工具条里的控件共用一套：h32 全圆角，按下叠一层 15% 蒙版。
-	// Reddit 的按钮没有 scale 变换，这里也不加
+	/* 工具条里的控件共用一套：h32 全圆角，按下叠一层 15% 蒙版。 */
+	/* Reddit 的按钮没有 scale 变换，这里也不加 */
 	.cbtn {
 		display: inline-flex;
 		align-items: center;
@@ -240,7 +240,7 @@
 		background-color: transparent;
 		font-size: 0.8125rem;
 
-		// 药丸是固定高度的，字一折行就顶破它。宁可整行换行，也不让字在药丸里折
+		/* 药丸是固定高度的，字一折行就顶破它。宁可整行换行，也不让字在药丸里折 */
 		white-space: nowrap;
 		transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 
@@ -249,7 +249,7 @@
 		}
 	}
 
-	// plain：透明起步，hover 才填出一颗药丸 —— Reddit 的图标按钮就是这样
+	/* plain：透明起步，hover 才填出一颗药丸 —— Reddit 的图标按钮就是这样 */
 	.cbtn-plain {
 		color: var(--c-text-3);
 
@@ -272,12 +272,12 @@
 		background-color: var(--c-primary);
 		color: hsl(var(--hue-theme) 0% 100%);
 
-		// hover 是底色 × 0.75 向黑：Reddit 实测 rgb(0,82,72) → rgb(0,62,54)，62/82 = 54/72 = 0.75
+		/* hover 是底色 × 0.75 向黑：Reddit 实测 rgb(0,82,72) → rgb(0,62,54)，62/82 = 54/72 = 0.75 */
 		&:hover:not(:disabled), &:focus-visible:not(:disabled) {
 			background-color: color-mix(in srgb, var(--c-primary) 75%, #000);
 		}
 
-		// 空内容时降到半透明，让页面底色透上来 —— 和 Reddit 的暗态 Comment 同一个意思
+		/* 空内容时降到半透明，让页面底色透上来 —— 和 Reddit 的暗态 Comment 同一个意思 */
 		&:disabled {
 			background-color: color-mix(in srgb, var(--c-primary) 45%, transparent);
 			color: var(--c-bg);
@@ -288,7 +288,7 @@
 		}
 	}
 
-	// 字数只在逼近上限时才出现：写到两三百字时那个数字不携带信息
+	/* 字数只在逼近上限时才出现：写到两三百字时那个数字不携带信息 */
 	.counter {
 		margin-inline: 8px;
 		font-family: var(--font-monospace);
@@ -301,7 +301,7 @@
 		}
 	}
 
-	// 订阅开关：自绘 13px 勾选框。原生 checkbox 的系统蓝会是这一屏上的第三种蓝
+	/* 订阅开关：自绘 13px 勾选框。原生 checkbox 的系统蓝会是这一屏上的第三种蓝 */
 	.subscribe {
 		> .tick {
 			position: relative;
@@ -338,30 +338,30 @@
 		}
 	}
 
-	// 手机上这一行只留订阅开关和动作按钮，挤在同一行：左边勾选，右边取消/发表。
-	// 预览是锦上添花的，先让位 —— 手机上写 Markdown 本来就少，而三颗药丸各占一行
-	// 会把回复框拉得比正文还高
-	@media (max-width: $breakpoint-phone) {
-		// 正在预览时必须留着：那时 textarea 是 hidden 的，藏了就退不回编辑态
+	/* 手机上这一行只留订阅开关和动作按钮，挤在同一行：左边勾选，右边取消/发表。 */
+	/* 预览是锦上添花的，先让位 —— 手机上写 Markdown 本来就少，而三颗药丸各占一行 */
+	/* 会把回复框拉得比正文还高 */
+	@media (max-width: 528px) {
+		/* 正在预览时必须留着：那时 textarea 是 hidden 的，藏了就退不回编辑态 */
 		.cbtn-preview:not(.previewing) {
 			display: none;
 		}
 
-		// 撑开用的空元素在这里是多余的：动作按钮自己有 margin-inline-start: auto，
-		// 留着它只是白占一个 gap —— 而这一行就差那几像素
+		/* 撑开用的空元素在这里是多余的：动作按钮自己有 margin-inline-start: auto， */
+		/* 留着它只是白占一个 gap —— 而这一行就差那几像素 */
 		.composer-foot-in > .spacer {
 			display: none;
 		}
 
-		// 少了预览这颗，订阅开关成了行首，收掉药丸的横向留白让它贴左。
-		// 也是匀宽度：375px 下一层回复的版心只有 249px，
-		// 订阅 + 取消 + 发表要挤进去，按原样是差 2px 就要换行的
+		/* 少了预览这颗，订阅开关成了行首，收掉药丸的横向留白让它贴左。 */
+		/* 也是匀宽度：375px 下一层回复的版心只有 249px， */
+		/* 订阅 + 取消 + 发表要挤进去，按原样是差 2px 就要换行的 */
 		.subscribe {
 			padding-inline: 4px;
 		}
 	}
 
-	// 限速提示：不是红色报错，是一句人话 + 倒数
+	/* 限速提示：不是红色报错，是一句人话 + 倒数 */
 	.ratelimit {
 		display: flex;
 		align-items: center;
@@ -375,15 +375,15 @@
 		}
 	}
 
-	// 字段级错误：贴着控件，不是顶部一条通用横幅
+	/* 字段级错误：贴着控件，不是顶部一条通用横幅 */
 	.field-error {
 		padding: 0 0.875rem 0.625rem;
 		font-size: 0.75rem;
 		color: var(--c-error);
 	}
 
-	// 已登录：头像和署名是一个 disclosure。低频的主页、登出动作藏在下拉层里，
-	// 不再占据编辑器上方的主布局。
+	/* 已登录：头像和署名是一个 disclosure。低频的主页、登出动作藏在下拉层里， */
+	/* 不再占据编辑器上方的主布局。 */
 	.session-user {
 		display: flex;
 		flex-direction: column;
@@ -576,7 +576,7 @@
 		translate: 0 -4px;
 	}
 
-	@media (max-width: $breakpoint-phone) {
+	@media (max-width: 528px) {
 		.session-account,
 		.session-trigger {
 			flex-shrink: 1;
@@ -605,7 +605,7 @@
 		}
 	}
 
-	// 未登录：一条横幅，不是一个空的大编辑框
+	/* 未登录：一条横幅，不是一个空的大编辑框 */
 	.signin {
 		display: flex;
 		flex-wrap: wrap;
@@ -705,10 +705,10 @@
 		}
 	}
 
-	// ── 列表 ──────────────────────────────────────────────────
-	// 条目不是卡片，列表也不套边框环。在真实文章上量过：一篇 30 条评论的区块
-	// 有 7000px+ 高，1px 的环永远看不到上下边，只在正文两侧各拖一条淡线，
-	// 跟回复引导线抢戏。去掉之后评论直接落在页面底上、和正文左右对齐。分组交给 gap。
+	/* ── 列表 ────────────────────────────────────────────────── */
+	/* 条目不是卡片，列表也不套边框环。在真实文章上量过：一篇 30 条评论的区块 */
+	/* 有 7000px+ 高，1px 的环永远看不到上下边，只在正文两侧各拖一条淡线， */
+	/* 跟回复引导线抢戏。去掉之后评论直接落在页面底上、和正文左右对齐。分组交给 gap。 */
 	.comment-list {
 		display: flex;
 		flex-direction: column;
@@ -730,9 +730,9 @@
 	}
 
 	.avatar {
-		// 定位起来才能压住弯头：弯头是绝对定位的伪元素，会盖过普通流里的头像。
-		// 弯头横段特意扎进头像 8px，靠头像盖住，边缘才不会露缝，所以头像得在最上层
-		// —— 导轨那节的三层是 补丁 1 < 弯头 2 < 头像 3。
+		/* 定位起来才能压住弯头：弯头是绝对定位的伪元素，会盖过普通流里的头像。 */
+		/* 弯头横段特意扎进头像 8px，靠头像盖住，边缘才不会露缝，所以头像得在最上层 */
+		/* —— 导轨那节的三层是 补丁 1 < 弯头 2 < 头像 3。 */
 		position: relative;
 		overflow: hidden;
 		width: 2rem;
@@ -750,8 +750,8 @@
 		}
 	}
 
-	// 显式占第 2 列：收起时头像会 display:none，不指定的话 body 会被网格自动
-	// 排到第一列去，整条评论挤成一条 2rem 宽的竖串。
+	/* 显式占第 2 列：收起时头像会 display:none，不指定的话 body 会被网格自动 */
+	/* 排到第一列去，整条评论挤成一条 2rem 宽的竖串。 */
 	.comment-body {
 		display: flex;
 		flex-direction: column;
@@ -778,7 +778,7 @@
 			}
 		}
 
-		// UtilDate 渲染出来是 span，不是 time
+		/* UtilDate 渲染出来是 span，不是 time */
 		> time, > .date {
 			font-variant-numeric: tabular-nums;
 		}
@@ -800,7 +800,7 @@
 		}
 	}
 
-	// 站长标记：描边而非实心，和 chip 同一种材质
+	/* 站长标记：描边而非实心，和 chip 同一种材质 */
 	.tag-owner {
 		padding: 1px 7px;
 		border: 1px solid var(--c-primary);
@@ -810,7 +810,7 @@
 		color: var(--c-primary);
 	}
 
-	// ── 评论正文：article.scss 的缩排版本 ─────────────────────
+	/* ── 评论正文：article.scss 的缩排版本 ───────────────────── */
 	.prose {
 		font-size: 0.9375rem;
 		line-height: 1.75;
@@ -831,7 +831,7 @@
 			}
 		}
 
-		// 和正文同一种纸：strong 用那条渐变下划线，不是加粗
+		/* 和正文同一种纸：strong 用那条渐变下划线，不是加粗 */
 		strong {
 			background: linear-gradient(var(--c-primary-soft), var(--c-primary-soft)) no-repeat center bottom / 100% 30%;
 			font-weight: 600;
@@ -910,7 +910,7 @@
 		}
 	}
 
-	// ── 交互行 ────────────────────────────────────────────────
+	/* ── 交互行 ──────────────────────────────────────────────── */
 	.comment-foot,
 	.reactions {
 		display: flex;
@@ -920,46 +920,46 @@
 		font-size: 0.75rem;
 	}
 
-	// 次要动作平时隐身，沿用 memo 卡片的 ghost 语汇
+	/* 次要动作平时隐身，沿用 memo 卡片的 ghost 语汇 */
 	.ghost {
 		opacity: 0;
 
-		// 过渡里必须写 translate 而不是 transform —— translate 是独立的变换属性，
-		// transition: transform 盖不到它，位移会瞬间跳 2px 而透明度在渐变，看着就是抖一下
+		/* 过渡里必须写 translate 而不是 transform —— translate 是独立的变换属性， */
+		/* transition: transform 盖不到它，位移会瞬间跳 2px 而透明度在渐变，看着就是抖一下 */
 		transition: opacity 0.2s, translate 0.2s, border-color 0.2s, color 0.2s, background-color 0.2s;
 		translate: 0 2px;
 
 		&:focus-visible {
 			opacity: 1;
-			transition-delay: 0s; // 键盘聚焦要立刻可见，不吃下面那 0.12s
+			transition-delay: 0s; /* 键盘聚焦要立刻可见，不吃下面那 0.12s */
 			translate: 0;
 		}
 	}
 
-	// :not(:has(.comment:hover)) —— 只点亮鼠标真正落在的那一条。
-	// 没有它，祖先链上每个 .comment 都处于 :hover，父评论的动作行会跟着冒出来。
-	// 末段是后代而非直接子选择器：reaction 那排被 CommentReactions 包了一层 .reactions，
-	// 加反应的 ＋ 在第三层。写成 > 会够不着它，那颗按钮就永远停在 opacity: 0。
-	// 嵌套评论不会被误伤 —— .replies 是 .comment-body 的兄弟，不在它里面。
+	/* :not(:has(.comment:hover)) —— 只点亮鼠标真正落在的那一条。 */
+	/* 没有它，祖先链上每个 .comment 都处于 :hover，父评论的动作行会跟着冒出来。 */
+	/* 末段是后代而非直接子选择器：reaction 那排被 CommentReactions 包了一层 .reactions， */
+	/* 加反应的 ＋ 在第三层。写成 > 会够不着它，那颗按钮就永远停在 opacity: 0。 */
+	/* 嵌套评论不会被误伤 —— .replies 是 .comment-body 的兄弟，不在它里面。 */
 	.comment:hover:not(:has(.comment:hover)) > .comment-body > .comment-foot .ghost {
 		opacity: 1;
 
-		// 出现晚一点：鼠标从子评论移出时，必然先短暂落在父评论身上，
-		// 此刻父级恰好满足上面的选择器。没有这个延迟，父级动作行会闪一下再消失。
-		// 消失方向不延迟（延迟只写在这条规则里）。
+		/* 出现晚一点：鼠标从子评论移出时，必然先短暂落在父评论身上， */
+		/* 此刻父级恰好满足上面的选择器。没有这个延迟，父级动作行会闪一下再消失。 */
+		/* 消失方向不延迟（延迟只写在这条规则里）。 */
 		transition-delay: 0.12s;
 		translate: 0;
 	}
 
-	// 回复框开着时这一行常驻：正在对这条评论说话，控件却随鼠标移开就消失，
-	// 想取消或改成编辑还得先把鼠标挪回去，把它们重新唤出来
+	/* 回复框开着时这一行常驻：正在对这条评论说话，控件却随鼠标移开就消失， */
+	/* 想取消或改成编辑还得先把鼠标挪回去，把它们重新唤出来 */
 	.comment.replying > .comment-body > .comment-foot .ghost {
 		opacity: 1;
 		translate: 0;
 	}
 
 	@media (hover: none) {
-		// 触屏无 hover，入口再淡也得常驻，否则等于不存在
+		/* 触屏无 hover，入口再淡也得常驻，否则等于不存在 */
 		.ghost {
 			opacity: 0.45;
 			translate: 0;
@@ -972,9 +972,9 @@
 		line-height: 1.5;
 		color: var(--c-text-3);
 
-		// opacity 和 translate 必须一起列上：这条规则排在 .ghost 之后，
-		// 只写 color 会把 .ghost 的过渡列表整个盖掉 —— 于是加反应的 ＋ 是淡入 + 上浮，
-		// 而回复/编辑/删除是硬切，同一排控件两种出场方式
+		/* opacity 和 translate 必须一起列上：这条规则排在 .ghost 之后， */
+		/* 只写 color 会把 .ghost 的过渡列表整个盖掉 —— 于是加反应的 ＋ 是淡入 + 上浮， */
+		/* 而回复/编辑/删除是硬切，同一排控件两种出场方式 */
 		transition: opacity 0.2s, translate 0.2s, color 0.2s;
 
 		&:hover {
@@ -986,47 +986,47 @@
 		}
 	}
 
-	// ── 线程导轨 ──────────────────────────────────────────────
-	// 导线从头像正下方垂下来，用圆角弯头接进子评论的头像，线上挂折叠钮。
-	// 比「整块左边一条竖线」多说了两件事：这条线是从谁身上长出来的，
-	// 以及这棵子树可以收起来。
+	/* ── 线程导轨 ────────────────────────────────────────────── */
+	/* 导线从头像正下方垂下来，用圆角弯头接进子评论的头像，线上挂折叠钮。 */
+	/* 比「整块左边一条竖线」多说了两件事：这条线是从谁身上长出来的， */
+	/* 以及这棵子树可以收起来。 */
 
-	// 导线颜色不能用 --c-border：在真实页面上量过，它对底色只有 1.35:1（暗）
-	// 和 1.18:1（浅），两个主题下都等于没画。
+	/* 导线颜色不能用 --c-border：在真实页面上量过，它对底色只有 1.35:1（暗） */
+	/* 和 1.18:1（浅），两个主题下都等于没画。 */
 
-	// 另外，混进 --surface 而不是 transparent：导线必须是**不透明**的。父导线在子评论
-	// 整个高度上连续，而弯头的直线段正好叠在它上面 —— 半透明色叠两层，不透明度
-	// 从 0.45 涨到 0.70，接缝处会明显发白。混进底色得到同样的视觉颜色，
-	// 但重叠不再累加。Reddit 的线也是纯色。
+	/* 另外，混进 --surface 而不是 transparent：导线必须是**不透明**的。父导线在子评论 */
+	/* 整个高度上连续，而弯头的直线段正好叠在它上面 —— 半透明色叠两层，不透明度 */
+	/* 从 0.45 涨到 0.70，接缝处会明显发白。混进底色得到同样的视觉颜色， */
+	/* 但重叠不再累加。Reddit 的线也是纯色。 */
 	.comment {
 		--rail: color-mix(in srgb, var(--c-text-3) 45%, var(--surface));
 	}
 
-	// 有回复时，从头像下沿垂一条线，一路画到这条评论的底 —— 长度是死的，不去量。
-	// 收口交给最后一条回复：它自带一块底色补丁（.branchline），把压在自己身上的
-	// 那一段擦掉，线就正好断在弯头的起点上。Reddit 也是这么做的。
+	/* 有回复时，从头像下沿垂一条线，一路画到这条评论的底 —— 长度是死的，不去量。 */
+	/* 收口交给最后一条回复：它自带一块底色补丁（.branchline），把压在自己身上的 */
+	/* 那一段擦掉，线就正好断在弯头的起点上。Reddit 也是这么做的。 */
 
-	// 之前用脚本量出 --rail-cut 来截断，量的是「父级底边到最后一条回复顶边」，
-	// 这两个矩形分属两个元素，而每条评论都有各自延迟的 float-in（transform:
-	// translateY(10%)），getBoundingClientRect 把位移一起算了进去：动画期间量到的
-	// 顶边偏低，截短量就偏小，线便探出弯头一截；探出多少 = 那条回复高度的 10%，
-	// 所以每处长短还不一样。ResizeObserver 只盯尺寸不盯位移，动画结束也不会回来纠正。
+	/* 之前用脚本量出 --rail-cut 来截断，量的是「父级底边到最后一条回复顶边」， */
+	/* 这两个矩形分属两个元素，而每条评论都有各自延迟的 float-in（transform: */
+	/* translateY(10%)），getBoundingClientRect 把位移一起算了进去：动画期间量到的 */
+	/* 顶边偏低，截短量就偏小，线便探出弯头一截；探出多少 = 那条回复高度的 10%， */
+	/* 所以每处长短还不一样。ResizeObserver 只盯尺寸不盯位移，动画结束也不会回来纠正。 */
 	.comment.has-replies::after {
 		content: "";
 		position: absolute;
 
-		// 半像素：1px 的线居中于 2rem 的槽，左沿就在 15.5。弯头的左边框必须落在
-		// 同一个亚像素上，两段的抗锯齿才一致，接缝才看不出来。
+		/* 半像素：1px 的线居中于 2rem 的槽，左沿就在 15.5。弯头的左边框必须落在 */
+		/* 同一个亚像素上，两段的抗锯齿才一致，接缝才看不出来。 */
 		inset-block: 2.4rem 0;
 		inset-inline-start: calc(1rem - 0.5px);
 		width: 1px;
 		background: var(--rail);
 	}
 
-	// 子评论的弯头，几何照抄 Reddit（它的槽宽和头像也是 32/32，可以直接对齐）：
-	// 半径 12 < 高度 16，所以弧之前留了 4px 的垂直直线段 —— 导线和弯头在这段
-	// 重叠的直线上交接，而不是在曲率最大的切点上，接缝才不显形。
-	// 横段一直伸到 24.5px，会扎进头像 8px 藏在下面，头像圆边再怎么抗锯齿也不露缝。
+	/* 子评论的弯头，几何照抄 Reddit（它的槽宽和头像也是 32/32，可以直接对齐）： */
+	/* 半径 12 < 高度 16，所以弧之前留了 4px 的垂直直线段 —— 导线和弯头在这段 */
+	/* 重叠的直线上交接，而不是在曲率最大的切点上，接缝才不显形。 */
+	/* 横段一直伸到 24.5px，会扎进头像 8px 藏在下面，头像圆边再怎么抗锯齿也不露缝。 */
 	.replies > .comment::before {
 		content: "";
 		position: absolute;
@@ -1038,22 +1038,22 @@
 		border-inline-start: 1px solid var(--rail);
 		border-end-start-radius: 12px;
 
-		// 补丁 1 < 弯头 2 < 头像 3。补丁要擦掉父导线，弯头要画在补丁上，
-		// 而弯头的横段扎进头像那 8px 得让头像盖回去。
+		/* 补丁 1 < 弯头 2 < 头像 3。补丁要擦掉父导线，弯头要画在补丁上， */
+		/* 而弯头的横段扎进头像那 8px 得让头像盖回去。 */
 		z-index: 2;
 	}
 
-	// 最后一条回复的底色补丁。宽度正好一个缩进级，够得到父导线（槽内 15.5px），
-	// 够不到祖父那条（还要再往左 32px）；高度跟着自己长，回复框展开、子树收起
-	// 都不用重新量。
+	/* 最后一条回复的底色补丁。宽度正好一个缩进级，够得到父导线（槽内 15.5px）， */
+	/* 够不到祖父那条（还要再往左 32px）；高度跟着自己长，回复框展开、子树收起 */
+	/* 都不用重新量。 */
 	.branchline {
 		display: none;
 	}
 
 	.replies > .comment:last-child {
-		// float-in 的 transform 会让这条回复自成层叠上下文，补丁被关在里面就压不住
-		// 父导线（父导线是父级的 ::after，在盒树里排得比整个 .replies 还后）。
-		// 把整条回复抬一层，动画期间也不会漏出探头的那一截。
+		/* float-in 的 transform 会让这条回复自成层叠上下文，补丁被关在里面就压不住 */
+		/* 父导线（父导线是父级的 ::after，在盒树里排得比整个 .replies 还后）。 */
+		/* 把整条回复抬一层，动画期间也不会漏出探头的那一截。 */
 		z-index: 1;
 
 		> .branchline {
@@ -1077,26 +1077,26 @@
 		padding-inline-start: 2rem;
 	}
 
-	// 折叠钮：坐在导线上，底色盖住线，读起来就是「线在这里可以掐断」。
-	// 描边环是必须的 —— 没有它就只是导线上一个色块，看不出能点。
+	/* 折叠钮：坐在导线上，底色盖住线，读起来就是「线在这里可以掐断」。 */
+	/* 描边环是必须的 —— 没有它就只是导线上一个色块，看不出能点。 */
 	.collapse {
 		display: grid;
 		place-content: center;
 		position: absolute;
 
-		// 纵向与动作行同心 —— 量过 Reddit，折叠钮和「回复/奖励/共享」那一行
-		// 的中线是重合的。动作行的 y 随正文高度变，只能由脚本写入。
+		/* 纵向与动作行同心 —— 量过 Reddit，折叠钮和「回复/奖励/共享」那一行 */
+		/* 的中线是重合的。动作行的 y 随正文高度变，只能由脚本写入。 */
 		inset-block-start: var(--collapse-y, 2.05rem);
 		inset-inline-start: calc(1rem - 0.5rem);
 		width: 1rem;
 		height: 1rem;
 		border-radius: 50%;
 
-		// 悬停的高亮不能去换 background-color：--c-primary-soft 只有 15~20% 的 alpha，
-		// 一换上去这颗圆点就透了，被它掐断的导线会从底下浮出来。改成第二层 inset 阴影
-		// 铺在不透明的 --surface 上 —— 阴影在背景之上、内容之下，视觉和直接上色一样，
-		// 底下照旧盖得死。两个状态都写满两层，box-shadow 才逐层过渡而不是硬切。
-		// （.cbtn:active 的按下态用的也是这招。）
+		/* 悬停的高亮不能去换 background-color：--c-primary-soft 只有 15~20% 的 alpha， */
+		/* 一换上去这颗圆点就透了，被它掐断的导线会从底下浮出来。改成第二层 inset 阴影 */
+		/* 铺在不透明的 --surface 上 —— 阴影在背景之上、内容之下，视觉和直接上色一样， */
+		/* 底下照旧盖得死。两个状态都写满两层，box-shadow 才逐层过渡而不是硬切。 */
+		/* （.cbtn:active 的按下态用的也是这招。） */
 		box-shadow: 0 0 0 1px var(--rail), inset 0 0 0 1rem transparent;
 		background-color: var(--surface);
 		font-size: 0.75rem;
@@ -1104,8 +1104,8 @@
 		color: var(--c-text-2);
 		transition: all 0.2s;
 
-		// 导线是 .comment::after，在盒树里排在这个按钮后面，默认会盖在它上面。
-		// 抬一层，圆点才能真的把线掐断。
+		/* 导线是 .comment::after，在盒树里排在这个按钮后面，默认会盖在它上面。 */
+		/* 抬一层，圆点才能真的把线掐断。 */
 		z-index: 1;
 
 		&:hover {
@@ -1114,9 +1114,9 @@
 		}
 	}
 
-	// 加减号统一：整数像素定位。1px 笔画要在 16px 盒子里居中得偏移 7.5px，
-	// 落在半像素上就发虚，而且横竖两笔虚的程度不一样、看着粗细不均。
-	// 改成 2px 笔画 + 整数偏移，中心精确落在 (8, 8)，两根笔一样实。
+	/* 加减号统一：整数像素定位。1px 笔画要在 16px 盒子里居中得偏移 7.5px， */
+	/* 落在半像素上就发虚，而且横竖两笔虚的程度不一样、看着粗细不均。 */
+	/* 改成 2px 笔画 + 整数偏移，中心精确落在 (8, 8)，两根笔一样实。 */
 	.collapse::before,
 	.comment.collapsed > .collapse::after,
 	.more-item .plus::before,
@@ -1143,12 +1143,12 @@
 		height: 8px;
 	}
 
-	// 收起后：正文和整棵子树都不见，只留一行摘要
+	/* 收起后：正文和整棵子树都不见，只留一行摘要 */
 	.comment.collapsed {
-		// 摘要行只有 18px 高，而列表里每条评论都以 32px 的头像起头。夹在同样的 24px
-		// 间距里，这一行上下都缺一截，读起来像是贴在下一条头上 —— 加上折叠钮是齐着
-		// 行底摆的（16px 高塞进 18px 的行），下缘还先碰到间距。撑到和头像行等高、
-		// 内容居中，列表的节奏就不因为收起而塌一格。「另外 N 条回复」用的是同一套。
+		/* 摘要行只有 18px 高，而列表里每条评论都以 32px 的头像起头。夹在同样的 24px */
+		/* 间距里，这一行上下都缺一截，读起来像是贴在下一条头上 —— 加上折叠钮是齐着 */
+		/* 行底摆的（16px 高塞进 18px 的行），下缘还先碰到间距。撑到和头像行等高、 */
+		/* 内容居中，列表的节奏就不因为收起而塌一格。「另外 N 条回复」用的是同一套。 */
 		align-items: center;
 		min-height: 2rem;
 
@@ -1157,15 +1157,15 @@
 			display: none;
 		}
 
-		// 收起后整条缩成一行：头像让位，折叠钮提到首行占住 gutter，
-		// 否则按钮还停在 2.05rem 上、掉进下一条评论的头像位。
+		/* 收起后整条缩成一行：头像让位，折叠钮提到首行占住 gutter， */
+		/* 否则按钮还停在 2.05rem 上、掉进下一条评论的头像位。 */
 		> .avatar {
 			display: none;
 		}
 
-		// 折叠钮顶的是让位的头像，就该落在头像该在的位置：2rem 行里居中 = 0.5rem。
-		// 顺带把弯头也对上了 —— 嵌套评论收起时，弯头的横段停在 16px 上，
-		// 正好是这颗圆点的中线（之前按钮偏上 5px，线是斜擦过去的）。
+		/* 折叠钮顶的是让位的头像，就该落在头像该在的位置：2rem 行里居中 = 0.5rem。 */
+		/* 顺带把弯头也对上了 —— 嵌套评论收起时，弯头的横段停在 16px 上， */
+		/* 正好是这颗圆点的中线（之前按钮偏上 5px，线是斜擦过去的）。 */
 		> .collapse {
 			inset-block-start: 0.5rem;
 		}
@@ -1181,9 +1181,9 @@
 		}
 	}
 
-	// 「另外 N 条回复」与子评论同级：⊕ 占住子头像的位置，同样接一个弯头。
-	// 量过 Reddit —— 它的 ⊕ 中心比父头像中心右移整整一个缩进级（33px），
-	// 也就是子头像该在的中心。
+	/* 「另外 N 条回复」与子评论同级：⊕ 占住子头像的位置，同样接一个弯头。 */
+	/* 量过 Reddit —— 它的 ⊕ 中心比父头像中心右移整整一个缩进级（33px）， */
+	/* 也就是子头像该在的中心。 */
 	.more-item {
 		align-items: center;
 		min-height: 2rem;
@@ -1201,8 +1201,8 @@
 			color: var(--c-text-2);
 			transition: all 0.2s;
 
-			// ⊕ 顶的是子头像的位置，层级也跟头像同一档：弯头横段的右端正好抵在它
-			// 左沿上，让 ⊕ 压住，抗锯齿才不会在环边上蹭出一小截线头。
+			/* ⊕ 顶的是子头像的位置，层级也跟头像同一档：弯头横段的右端正好抵在它 */
+			/* 左沿上，让 ⊕ 压住，抗锯齿才不会在环边上蹭出一小截线头。 */
 			z-index: 3;
 		}
 
@@ -1226,10 +1226,10 @@
 		}
 	}
 
-	// ── 超长正文折叠 ──────────────────────────────────────────
-	// 真实评论里大量读者直接粘贴代码却不加围栏，渲染成 <br> 堆叠的正文，
-	// 一条评论能占两屏半。giscus 时代这被 iframe 的滚动条掩盖了，自渲染就摊开在
-	// 页面上。实测 MYDB 7 那篇加折叠后从 10170px 降到 7111px。
+	/* ── 超长正文折叠 ────────────────────────────────────────── */
+	/* 真实评论里大量读者直接粘贴代码却不加围栏，渲染成 <br> 堆叠的正文， */
+	/* 一条评论能占两屏半。giscus 时代这被 iframe 的滚动条掩盖了，自渲染就摊开在 */
+	/* 页面上。实测 MYDB 7 那篇加折叠后从 10170px 降到 7111px。 */
 	.clip {
 		position: relative;
 
@@ -1251,7 +1251,7 @@
 		}
 	}
 
-	// 纯文字，不做成描边胶囊 —— 那样会和 reaction chip 撞成同一类控件
+	/* 纯文字，不做成描边胶囊 —— 那样会和 reaction chip 撞成同一类控件 */
 	.more {
 		align-self: flex-start;
 		margin-top: 0.15rem;
@@ -1265,7 +1265,7 @@
 		}
 	}
 
-	// ── 页面级 reaction：属于文章，不属于对话 ──────────────────
+	/* ── 页面级 reaction：属于文章，不属于对话 ────────────────── */
 	.page-react {
 		display: flex;
 		flex-wrap: wrap;
@@ -1279,13 +1279,13 @@
 			color: var(--c-text-2);
 		}
 
-		// 靠右。窄屏下这一行会换行，那时它独占一行的右端，仍然不与控件挤在一起
+		/* 靠右。窄屏下这一行会换行，那时它独占一行的右端，仍然不与控件挤在一起 */
 		> .aside {
 			margin-inline-start: auto;
 		}
 	}
 
-	// ── 邮件深链落点 ──────────────────────────────────────────
+	/* ── 邮件深链落点 ────────────────────────────────────────── */
 	.comment.focused > .comment-body {
 		border-radius: 0.3rem;
 		animation: comment-highlight 3s;
@@ -1316,7 +1316,7 @@
 		}
 	}
 
-	// ── 已删除占位 ────────────────────────────────────────────
+	/* ── 已删除占位 ──────────────────────────────────────────── */
 	.comment.deleted > .comment-body {
 		padding: 0.4rem 0.75rem;
 		border: 1px dashed var(--c-border);
@@ -1325,7 +1325,7 @@
 		color: var(--c-text-3);
 	}
 
-	// ── 空 / 加载 / 出错 ──────────────────────────────────────
+	/* ── 空 / 加载 / 出错 ────────────────────────────────────── */
 	.state {
 		display: flex;
 		flex-direction: column;
@@ -1389,9 +1389,9 @@
 	}
 }
 
-// CommentReactions 自带的作用域。它既出现在评论区里，也出现在碎语卡片的页脚上，
-// 所以这套样式不能收在 .z-comment 下 —— 那样卡片页脚里的 chip 会掉光描边。
-// chip 本身完全沿用 memo/Card.vue 的既有样式。
+/* CommentReactions 自带的作用域。它既出现在评论区里，也出现在碎语卡片的页脚上， */
+/* 所以这套样式不能收在 .z-comment 下 —— 那样卡片页脚里的 chip 会掉光描边。 */
+/* chip 本身完全沿用 memo/Card.vue 的既有样式。 */
 .c-reactions {
 	display: flex;
 	flex-wrap: wrap;
@@ -1420,7 +1420,7 @@
 			transform: scale(0.94);
 		}
 
-		// 已参与 = 实心。这是 giscus 没做好的一件事：你点没点过看不出来
+		/* 已参与 = 实心。这是 giscus 没做好的一件事：你点没点过看不出来 */
 		&.on {
 			border-color: var(--c-primary);
 			background-color: var(--c-primary-soft);
@@ -1439,10 +1439,10 @@
 		}
 	}
 
-	// 展开那八个：一起蹦出来太突兀，按顺序错开一点点。
-	// 收拢靠 max-width / padding / 负 margin 一起归零，让 chip 在流里真的缩掉，
-	// 后面的「＋」自然跟着滑 —— 用 position: absolute 把它们抽出流的话，
-	// 这排是 flex-wrap 的，抽出去的那几个会叠到行首。
+	/* 展开那八个：一起蹦出来太突兀，按顺序错开一点点。 */
+	/* 收拢靠 max-width / padding / 负 margin 一起归零，让 chip 在流里真的缩掉， */
+	/* 后面的「＋」自然跟着滑 —— 用 position: absolute 把它们抽出流的话， */
+	/* 这排是 flex-wrap 的，抽出去的那几个会叠到行首。 */
 	.chip.pick-enter-active,
 	.chip.pick-leave-active {
 		max-width: 3rem;
@@ -1460,7 +1460,7 @@
 		opacity: 0;
 		max-width: 0;
 
-		// 抵掉 flex 的 gap，收起时不留下八段空隙
+		/* 抵掉 flex 的 gap，收起时不留下八段空隙 */
 		margin-inline-start: -5px;
 		padding-inline: 0;
 		scale: 0.7;
@@ -1474,7 +1474,7 @@
 	}
 }
 
-// 名字带前缀：article.scss 里已有一个全局的 highlight，两者的动画内容不同
+/* 名字带前缀：article.scss 里已有一个全局的 highlight，两者的动画内容不同 */
 @keyframes comment-highlight {
 	50% {
 		box-shadow: 0 0 0 6px var(--c-primary-soft);

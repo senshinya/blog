@@ -353,16 +353,16 @@ function startsNewDay(index: number) {
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .travel {
 	overflow-y: auto;
 
-	// 页面自己当滚动容器：整页吸附靠它，不必去改全局 html/body 的样式
+	/* 页面自己当滚动容器：整页吸附靠它，不必去改全局 html/body 的样式 */
 	height: 100dvh;
 	background-color: var(--c-bg);
 	scroll-snap-type: y mandatory;
 
-	// 看图时锁住翻屏：滚轮改为一张一张翻照片（见 onViewerWheel）
+	/* 看图时锁住翻屏：滚轮改为一张一张翻照片（见 onViewerWheel） */
 	&.viewer-open {
 		overflow: hidden;
 	}
@@ -380,7 +380,7 @@ function startsNewDay(index: number) {
 	border-radius: 2em;
 	box-shadow: var(--box-shadow-2);
 
-	// 不透明：正文会从它底下滚过去，半透明的话内容会透出来糊成一团
+	/* 不透明：正文会从它底下滚过去，半透明的话内容会透出来糊成一团 */
 	background-color: var(--ld-bg-card);
 	font-size: 0.9rem;
 	color: var(--c-text-1);
@@ -392,7 +392,7 @@ function startsNewDay(index: number) {
 }
 
 .travel-body {
-	// 桌面端地图在右侧独立成列，不占屏幕的垂直空间
+	/* 桌面端地图在右侧独立成列，不占屏幕的垂直空间 */
 	--travel-map-h: 0px;
 
 	display: grid;
@@ -400,25 +400,25 @@ function startsNewDay(index: number) {
 }
 
 .travel-map-col {
-	order: 2; // 叙事在左、地图在右；但 DOM 里地图在前，移动端才好吸顶
+	order: 2; /* 叙事在左、地图在右；但 DOM 里地图在前，移动端才好吸顶 */
 	position: sticky;
 	top: 0;
 	height: 100dvh;
 }
 
 .travel-map-toggle {
-	display: none; // 桌面端地图常驻，不需要开关
+	display: none; /* 桌面端地图常驻，不需要开关 */
 }
 
 .travel-screen {
-	// 一屏一天：高度锁死一个视口，滚动只会停在整屏上，屏与屏的内容不会同框
+	/* 一屏一天：高度锁死一个视口，滚动只会停在整屏上，屏与屏的内容不会同框 */
 	display: flex;
 	flex-direction: column;
 	height: calc(100dvh - var(--travel-map-h));
 	padding: clamp(2rem, 4vw, 4rem) clamp(1.5rem, 4vw, 4rem);
 	scroll-margin-top: var(--travel-map-h);
 	scroll-snap-align: start;
-	scroll-snap-stop: always; // 一次滚动只翻一屏，不许一口气飞过好几天
+	scroll-snap-stop: always; /* 一次滚动只翻一屏，不许一口气飞过好几天 */
 }
 
 /* ── 封面屏 ── */
@@ -429,10 +429,10 @@ function startsNewDay(index: number) {
 	background-position: center;
 	background-size: cover;
 
-	// 文字直接压在封面图上，颜色不跟主题走（底图明暗未知）
+	/* 文字直接压在封面图上，颜色不跟主题走（底图明暗未知） */
 	color: #FFF;
 
-	// 压暗：左侧最重，保证标题和正文的可读性；右侧留亮，让照片本身还看得见
+	/* 压暗：左侧最重，保证标题和正文的可读性；右侧留亮，让照片本身还看得见 */
 	&::before {
 		content: "";
 		position: absolute;
@@ -442,7 +442,7 @@ function startsNewDay(index: number) {
 }
 
 .travel-cover-text {
-	position: relative; // 压在遮罩之上
+	position: relative; /* 压在遮罩之上 */
 	z-index: 1;
 }
 
@@ -470,7 +470,7 @@ function startsNewDay(index: number) {
 	max-width: 32rem;
 	margin-top: 1.2rem;
 	line-height: 2;
-	white-space: pre-line; // 作者手排的分行
+	white-space: pre-line; /* 作者手排的分行 */
 	color: #FFFFFFE6;
 }
 
@@ -500,7 +500,7 @@ function startsNewDay(index: number) {
 	z-index: 1;
 }
 
-// 主题的 animation.scss 里只有入场用的 float-in，滚动提示要的是循环浮动，自带一个
+/* 主题的 animation.css 里只有入场用的 float-in，滚动提示要的是循环浮动，自带一个 */
 @keyframes travel-bob {
 	0%, 100% {
 		transform: translateY(0);
@@ -514,7 +514,7 @@ function startsNewDay(index: number) {
 /* ── 每天一屏 ── */
 
 .travel-day-head {
-	flex-shrink: 0; // 标题钉在屏顶，只有下面的正文滚
+	flex-shrink: 0; /* 标题钉在屏顶，只有下面的正文滚 */
 	padding-bottom: 1rem;
 }
 
@@ -537,8 +537,8 @@ function startsNewDay(index: number) {
 .travel-day-content {
 	flex: 1;
 	overflow-y: auto;
-	min-height: 0; // 不加这条，flex 子项不肯收缩，内滚就失效
-	overscroll-behavior-y: auto; // 内层滚到底后，把滚动交还给外层去翻下一屏
+	min-height: 0; /* 不加这条，flex 子项不肯收缩，内滚就失效 */
+	overscroll-behavior-y: auto; /* 内层滚到底后，把滚动交还给外层去翻下一屏 */
 }
 
 .travel-para {
@@ -550,7 +550,7 @@ function startsNewDay(index: number) {
 .travel-photos {
 	display: grid;
 
-	// 照片是这页的主角，缩略图给足尺寸；一屏放不下的部分在屏内滚动
+	/* 照片是这页的主角，缩略图给足尺寸；一屏放不下的部分在屏内滚动 */
 	grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
 	gap: 0.8rem;
 	margin-top: 1.5rem;
@@ -570,8 +570,8 @@ function startsNewDay(index: number) {
 /* ── 看图器 ── */
 
 .travel-viewer {
-	// 只盖叙事列（栅格是 55fr / 45fr），右边 45% 留给地图 ——
-	// 用整屏遮罩的话，「看大图」和「看这张拍在哪」就互相盖住了
+	/* 只盖叙事列（栅格是 55fr / 45fr），右边 45% 留给地图 —— */
+	/* 用整屏遮罩的话，「看大图」和「看这张拍在哪」就互相盖住了 */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -585,18 +585,18 @@ function startsNewDay(index: number) {
 	z-index: 4;
 }
 
-// 只为让 figcaption 有个合法的父元素，不参与布局。
-// 不能让它生成盒子：.travel-viewer-img 的 max-height: 100% 要有一个「高度确定」的父元素才算得出来，
-// 而 .travel-viewer 是 position: fixed + inset，高度是确定的。中间插一个高度由内容撑起（auto）的
-// figure，那个百分比就会解析成 none，图会当场撑破容器。
-// display: contents 让 figure 不生成盒子，img 和 figcaption 仍是 .travel-viewer 的直接 flex 子项 ——
-// 连 gap: 1rem 都照常落在它们之间，布局一个像素都不动
+/* 只为让 figcaption 有个合法的父元素，不参与布局。 */
+/* 不能让它生成盒子：.travel-viewer-img 的 max-height: 100% 要有一个「高度确定」的父元素才算得出来， */
+/* 而 .travel-viewer 是 position: fixed + inset，高度是确定的。中间插一个高度由内容撑起（auto）的 */
+/* figure，那个百分比就会解析成 none，图会当场撑破容器。 */
+/* display: contents 让 figure 不生成盒子，img 和 figcaption 仍是 .travel-viewer 的直接 flex 子项 —— */
+/* 连 gap: 1rem 都照常落在它们之间，布局一个像素都不动 */
 .travel-viewer-figure {
 	display: contents;
 }
 
 .travel-viewer-img {
-	min-height: 0; // 让 flex 能把图压回容器内，而不是撑破
+	min-height: 0; /* 让 flex 能把图压回容器内，而不是撑破 */
 	max-width: 100%;
 	max-height: 100%;
 	border-radius: 0.6rem;
@@ -692,16 +692,16 @@ function startsNewDay(index: number) {
 	}
 }
 
-@media (max-width: $breakpoint-mobile) {
-	// 单列：地图改为吸顶条。这里必须是 block 而不是 grid ——
-	// grid item 的 sticky 只在自己那一行的范围内生效，一滚就跑没了
+@media (max-width: 768px) {
+	/* 单列：地图改为吸顶条。这里必须是 block 而不是 grid —— */
+	/* grid item 的 sticky 只在自己那一行的范围内生效，一滚就跑没了 */
 	.travel-body {
 		--travel-map-h: 35vh;
 
 		display: block;
 	}
 
-	// 地图收起时，每屏能用的高度跟着长回来
+	/* 地图收起时，每屏能用的高度跟着长回来 */
 	.travel-body.map-collapsed {
 		--travel-map-h: 2.5rem;
 	}
@@ -734,12 +734,12 @@ function startsNewDay(index: number) {
 		padding: 1.2rem 1rem;
 	}
 
-	// 窄屏放不下 13rem 两列，退到两列小图
+	/* 窄屏放不下 13rem 两列，退到两列小图 */
 	.travel-photos {
 		grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
 	}
 
-	// 窄屏没有右侧列：看图器改为让出顶部那条地图，地图照样跟着照片飞
+	/* 窄屏没有右侧列：看图器改为让出顶部那条地图，地图照样跟着照片飞 */
 	.travel-viewer {
 		inset: var(--travel-map-h) 0 0;
 		padding: 3rem 1rem 1.5rem;

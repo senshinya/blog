@@ -71,7 +71,7 @@ const { locale } = useI18n()
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .memo-body {
 	display: flex;
 	flex-direction: column;
@@ -108,8 +108,8 @@ const { locale } = useI18n()
 	}
 }
 
-// 链接态的时间戳：静止时与普通时间戳一模一样，hover 才显形，
-// 免得每张卡片顶上都挂一个显眼的彩色链接
+/* 链接态的时间戳：静止时与普通时间戳一模一样，hover 才显形， */
+/* 免得每张卡片顶上都挂一个显眼的彩色链接 */
 .date-link:hover > .date {
 	text-decoration: underline;
 	color: var(--c-primary);
@@ -121,8 +121,8 @@ const { locale } = useI18n()
 	gap: 8px;
 
 	> .img-item {
-		// padding-bottom 撑出正方形，图片绝对定位填满并裁切，
-		// 这样任意比例的截图都不会把某一行拉高
+		/* padding-bottom 撑出正方形，图片绝对定位填满并裁切， */
+		/* 这样任意比例的截图都不会把某一行拉高 */
 		position: relative;
 		overflow: hidden;
 		padding-bottom: 100%;
@@ -144,7 +144,7 @@ const { locale } = useI18n()
 	}
 }
 
-// 填充的方角 chip = 内容标签，与互动控件那种描边的圆角 chip 刻意区分
+/* 填充的方角 chip = 内容标签，与互动控件那种描边的圆角 chip 刻意区分 */
 .memo-tags {
 	display: flex;
 	flex-wrap: wrap;
@@ -167,10 +167,10 @@ const { locale } = useI18n()
 	line-height: 1.6;
 	color: var(--c-text-2);
 
-	// 以下这些是给 marked 渲染出来的正文用的，故一律收在 .rich-text 之下。
-	// 摊在 .memo-content 上会连坐 MemoLinkCard —— 它的根就是个 <a>，
-	// 会被 :deep(a) 染成主色、hover 时整张卡的文字都加上下划线。
-	// 且父组件那条选择器还比卡片自己的样式更specific，在子组件里盖不掉
+	/* 以下这些是给 marked 渲染出来的正文用的，故一律收在 .rich-text 之下。 */
+	/* 摊在 .memo-content 上会连坐 MemoLinkCard —— 它的根就是个 <a>， */
+	/* 会被 :deep(a) 染成主色、hover 时整张卡的文字都加上下划线。 */
+	/* 且父组件那条选择器还比卡片自己的样式更specific，在子组件里盖不掉 */
 	:deep(.rich-text) {
 		p {
 			margin: 0.3em 0;

@@ -5,7 +5,7 @@ import { CommentError } from '~/composables/useCommentApi'
 /**
  * 一条评论及其整棵子树（递归组件）。
  *
- * 导轨的几何、折叠钮、弯头都在 assets/css/comment.scss 里；
+ * 导轨的几何、折叠钮、弯头都在 assets/css/comment.css 里；
  * 这里只管状态：收起、超长正文折叠、客户端收纳回复、回复/编辑/删除。
  */
 const props = defineProps<{
@@ -161,7 +161,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 >
 	<!--
 		导线收口。父导线是一路画到底的，靠最后一条回复拿一块底色把压在自己身上的
-		那段擦掉，线就断在弯头起点上。只有 :last-child 会显示（见 comment.scss），
+		那段擦掉，线就断在弯头起点上。只有 :last-child 会显示（见 comment.css），
 		所以这里无条件挂着，不必让子组件知道自己排第几。
 	-->
 	<span class="branchline" aria-hidden="true" />

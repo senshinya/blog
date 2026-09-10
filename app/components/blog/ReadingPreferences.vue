@@ -10,7 +10,7 @@ const expanded = ref(false)
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .reading-preferences {
 	--preference-height: 2.125rem;
 	--preference-spring: cubic-bezier(0.22, 1.25, 0.36, 1);

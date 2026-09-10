@@ -221,18 +221,18 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 </li>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .memo {
 	display: flex;
 	flex-direction: column;
 
-	// 不用 gap：.tail 高度归零时 gap 仍然占位，零互动的卡片底下就还留着一条缝。
-	// 那 0.5rem 挪进 .tail-in 的 padding，跟着一起被裁掉
+	/* 不用 gap：.tail 高度归零时 gap 仍然占位，零互动的卡片底下就还留着一条缝。 */
+	/* 那 0.5rem 挪进 .tail-in 的 padding，跟着一起被裁掉 */
 	gap: 0;
 	margin-bottom: 1rem;
 	padding: 1rem;
 
-	// 1px 描边环，比实心卡片轻，条目多时不至于糊成一片
+	/* 1px 描边环，比实心卡片轻，条目多时不至于糊成一片 */
 	border-radius: 8px;
 	box-shadow: 0 0 0 1px var(--c-bg-soft);
 	animation: var(--entrance, float-in 0.3s backwards);
@@ -254,7 +254,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	gap: 0.5rem;
 	padding-top: 0.5rem;
 
-	// 给 overflow 裁切边界留一个完整像素，避免 reaction 的圆角底边被抗锯齿削薄
+	/* 给 overflow 裁切边界留一个完整像素，避免 reaction 的圆角底边被抗锯齿削薄 */
 	padding-bottom: 1px;
 }
 
@@ -266,7 +266,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	font-size: 0.75rem;
 }
 
-// 只读数据：图标 + 数字，无边框无底色，与上面的控件在材质上分开
+/* 只读数据：图标 + 数字，无边框无底色，与上面的控件在材质上分开 */
 .comments {
 	display: flex;
 	align-items: center;
@@ -287,8 +287,8 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	}
 }
 
-// 卡片有自己的描边环，评论区落在卡片底色上而不是页面底色上 ——
-// 导线、折叠钮、长正文渐隐都要用它，故在这里重新声明一次
+/* 卡片有自己的描边环，评论区落在卡片底色上而不是页面底色上 —— */
+/* 导线、折叠钮、长正文渐隐都要用它，故在这里重新声明一次 */
 .memo-thread {
 	--surface: var(--ld-bg-card);
 

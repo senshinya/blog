@@ -98,7 +98,7 @@ const copyFields = computed(() => [
 <PostComment :title="$t('page.friends.title')" :reactions="false" />
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .friends-tab {
 	margin: 1rem;
 }

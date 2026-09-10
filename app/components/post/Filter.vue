@@ -36,7 +36,7 @@ const category = defineModel<string>('category')
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .post-filter {
 	display: flex;
 	gap: 1rem;
@@ -51,7 +51,7 @@ const category = defineModel<string>('category')
 	}
 }
 
-// 插槽里的内容（预览入口、密度调节）靠左，把分类下拉顶到右边
+/* 插槽里的内容（预览入口、密度调节）靠左，把分类下拉顶到右边 */
 :deep(.secret-container) {
 	margin-inline-end: auto;
 }

@@ -1,5 +1,5 @@
-// Shared sliding options inside the reading-preferences capsule.
-@mixin segmented-pill {
+/* Shared base stays below scoped component rules regardless of async stylesheet order. */
+:where(.reading-preferences) :is(.language-options, .theme-toggle) {
 	display: grid;
 	grid-template-columns: repeat(var(--option-count, 3), minmax(0, 1fr));
 	position: relative;

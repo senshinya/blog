@@ -9,7 +9,7 @@
  * 为什么要 LQIP：占好位之后那块地方是空的，图到位前先用三个主色渲一层渐变，别开天窗。
  * 编码沿用 retypeset / frzi 的 LQIP-CSS：把图缩到 3×3，取左上、中心、右下三个像素，
  * 打包进一个 32 位整数（11+11+10 位），写成 8 位十六进制。**每张图只要 8 个字节** ——
- * 解包由 CSS 的相对颜色语法完成，见 app/assets/css/lqip.scss。
+ * 解包由 CSS 的相对颜色语法完成，见 app/assets/css/lqip.css。
  * https://frzi.medium.com/lqip-css-73dc6dda2529
  *
  * 宽高和缩略像素都从 Cloudflare Images Transformations 取（图床那个 zone 已开）：

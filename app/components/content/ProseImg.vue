@@ -52,11 +52,11 @@ function zoom() {
 />
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .prose-img {
 	width: auto;
 
-	// 竖构图的截图撑满栏宽后会高得离谱，故同时约束高度；原图交给灯箱看
+	/* 竖构图的截图撑满栏宽后会高得离谱，故同时约束高度；原图交给灯箱看 */
 	max-height: 60vh;
 	border-radius: 0.5em;
 	cursor: zoom-in;

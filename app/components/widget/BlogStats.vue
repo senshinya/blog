@@ -41,9 +41,9 @@ const blogStats = computed(() => [{
 </BlogWidget>
 </template>
 
-<style lang="scss" scoped>
-// Keep the three statistics side by side. Shared rows align values even when
-// translated labels wrap; each text snapshot remains clipped to its own column.
+<style scoped>
+/* Keep the three statistics side by side. Shared rows align values even when */
+/* translated labels wrap; each text snapshot remains clipped to its own column. */
 .blog-stats :deep(.dl-group.small) {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));

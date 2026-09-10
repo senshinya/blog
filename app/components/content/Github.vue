@@ -57,7 +57,7 @@ const subtitle = computed(() => data.value?.license?.spdx_id ?? data.value?.lang
 </UtilLink>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .github-card {
 	display: flex;
 	align-items: center;

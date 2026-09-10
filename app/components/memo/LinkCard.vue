@@ -76,18 +76,18 @@ const thumbnail = computed(() => hasPreview.value
 </UtilLink>
 </template>
 
-<style lang="scss" scoped>
-// 描边而非实心卡：碎语卡本身就是 1px 环（见 MemoCard），
-// 里头再套一张带底色和投影的实心卡会压过正文
+<style scoped>
+/* 描边而非实心卡：碎语卡本身就是 1px 环（见 MemoCard）， */
+/* 里头再套一张带底色和投影的实心卡会压过正文 */
 .memo-link-card {
 	display: flex;
 	align-items: center;
 	gap: 0.8rem;
 	overflow: hidden;
 
-	// 用 rem 而非 em：卡片自身是 0.9em 字号，写 em 的话间距会跟着缩水一成，
-	// 数值与看到的效果对不上。
-	// 相邻两张卡的外边距会合并，故卡与卡、卡与正文之间都是这一个值
+	/* 用 rem 而非 em：卡片自身是 0.9em 字号，写 em 的话间距会跟着缩水一成， */
+	/* 数值与看到的效果对不上。 */
+	/* 相邻两张卡的外边距会合并，故卡与卡、卡与正文之间都是这一个值 */
 	margin: 0.9rem 0;
 	padding: 0.6rem;
 	border-radius: 8px;
@@ -96,9 +96,9 @@ const thumbnail = computed(() => hasPreview.value
 	line-height: 1.4;
 	transition: box-shadow 0.2s, background-color 0.2s;
 
-	// 与 MemoCard 里 reaction chip 的 hover 同一套（描边转主色 + 主色淡底）。
-	// 项目没有全局的 focus-visible 兜底，各组件自己管，故键盘态要一并写上，
-	// 否则 Tab 过来只剩浏览器默认轮廓
+	/* 与 MemoCard 里 reaction chip 的 hover 同一套（描边转主色 + 主色淡底）。 */
+	/* 项目没有全局的 focus-visible 兜底，各组件自己管，故键盘态要一并写上， */
+	/* 否则 Tab 过来只剩浏览器默认轮廓 */
 	&:hover, &:focus-visible {
 		box-shadow: 0 0 0 1px var(--c-primary);
 		background-color: var(--c-primary-soft);
@@ -110,7 +110,7 @@ const thumbnail = computed(() => hasPreview.value
 	overflow: hidden;
 }
 
-// 两行封顶。标题长短各站差异极大，不封顶会把卡片撑成一段文章
+/* 两行封顶。标题长短各站差异极大，不封顶会把卡片撑成一段文章 */
 .link-title {
 	display: -webkit-box;
 	overflow: hidden;
@@ -120,7 +120,7 @@ const thumbnail = computed(() => hasPreview.value
 	color: var(--c-text);
 }
 
-// 单行省略。这里放的是描述或路径，两者都可能很长
+/* 单行省略。这里放的是描述或路径，两者都可能很长 */
 .link-description {
 	overflow: hidden;
 	margin-top: 0.2em;
@@ -130,7 +130,7 @@ const thumbnail = computed(() => hasPreview.value
 	color: var(--c-text-3);
 }
 
-// 尺寸写死，三个状态同一个格子 —— 这是「数据回来不抽动版面」的关键
+/* 尺寸写死，三个状态同一个格子 —— 这是「数据回来不抽动版面」的关键 */
 .thumbnail {
 	display: flex;
 	flex-shrink: 0;
@@ -143,13 +143,13 @@ const thumbnail = computed(() => hasPreview.value
 	background-color: var(--c-bg-2);
 
 	> img {
-		// 打底态放的是 favicon：小方图标，居中摆着即可，撑满只会糊成一片
+		/* 打底态放的是 favicon：小方图标，居中摆着即可，撑满只会糊成一片 */
 		width: 2rem;
 		height: 2rem;
 		object-fit: contain;
 	}
 
-	// 抓到 og:image 才填满整格
+	/* 抓到 og:image 才填满整格 */
 	&.preview > img {
 		width: 100%;
 		height: 100%;

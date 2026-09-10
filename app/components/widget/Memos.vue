@@ -80,9 +80,9 @@ const { height: contentHeight } = useElementSize(contentEl)
 </BlogWidget>
 </template>
 
-<style lang="scss" scoped>
-// Locale changes retain the same feed: neither the TransitionGroup's scale nor
-// the height observer should make this widget look newly loaded.
+<style scoped>
+/* Locale changes retain the same feed: neither the TransitionGroup's scale nor */
+/* the height observer should make this widget look newly loaded. */
 .blog-widget.skip-entrance {
 	opacity: 1;
 	transform: none;
@@ -94,8 +94,8 @@ const { height: contentHeight } = useElementSize(contentEl)
 }
 
 .expander {
-	// 负外边距 + 等量内边距：抵消后排版宽度不变，但给下面 .item 的负外边距
-	// 留出一圈不被 overflow 裁掉的余地，否则 hover 的填充块会被削掉两侧
+	/* 负外边距 + 等量内边距：抵消后排版宽度不变，但给下面 .item 的负外边距 */
+	/* 留出一圈不被 overflow 裁掉的余地，否则 hover 的填充块会被削掉两侧 */
 	overflow: hidden;
 	margin-inline: -0.4em;
 	padding-inline: 0.4em;
@@ -108,14 +108,14 @@ const { height: contentHeight } = useElementSize(contentEl)
 	gap: 0.1em;
 }
 
-// 竖向节奏由定宽的日期左轨建立，不靠分隔线；
-// 负外边距让 hover 的填充块比文字宽出一圈，读起来才像可点的靶区
+/* 竖向节奏由定宽的日期左轨建立，不靠分隔线； */
+/* 负外边距让 hover 的填充块比文字宽出一圈，读起来才像可点的靶区 */
 .item {
 	display: grid;
 	grid-template-columns: auto 1fr;
 
-	// 日期字号比正文小，行盒里的基线位置也不同，靠调 line-height 去凑永远凑不准；
-	// baseline 对齐让浏览器按首行基线摆，日期才真正坐在第一行文字的那条线上
+	/* 日期字号比正文小，行盒里的基线位置也不同，靠调 line-height 去凑永远凑不准； */
+	/* baseline 对齐让浏览器按首行基线摆，日期才真正坐在第一行文字的那条线上 */
 	align-items: baseline;
 	gap: 0.6em;
 	margin-inline: -0.4em;
@@ -133,7 +133,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 }
 
 .date {
-	// tabular-nums 保证 07/09 和 11/28 等宽，左轨才不会抖
+	/* tabular-nums 保证 07/09 和 11/28 等宽，左轨才不会抖 */
 	font-family: var(--font-monospace);
 	font-size: 0.75em;
 	font-variant-numeric: tabular-nums;
@@ -142,7 +142,7 @@ const { height: contentHeight } = useElementSize(contentEl)
 }
 
 .text {
-	// 中英混排按字数截断很难看，交给浏览器按行截
+	/* 中英混排按字数截断很难看，交给浏览器按行截 */
 	display: -webkit-box;
 	overflow: hidden;
 	-webkit-line-clamp: 2;

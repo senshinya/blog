@@ -280,7 +280,7 @@ watch(locale, () => {
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .travel-map-wrap {
 	position: relative;
 	width: 100%;
@@ -307,8 +307,8 @@ watch(locale, () => {
 	color: var(--c-text-3);
 }
 
-// 标记和 popup 是 MapLibre 用 DOM API 塞进来的，不带 scoped 属性，故用 :deep 穿透
-// 外层 .travel-marker 不设任何会影响 transform 的属性 —— MapLibre 拿它定位
+/* 标记和 popup 是 MapLibre 用 DOM API 塞进来的，不带 scoped 属性，故用 :deep 穿透 */
+/* 外层 .travel-marker 不设任何会影响 transform 的属性 —— MapLibre 拿它定位 */
 .travel-map :deep(.travel-marker-dot) {
 	display: block;
 	width: 0.9rem;
@@ -351,7 +351,7 @@ watch(locale, () => {
 	}
 }
 
-// popup 小三角按锚点方向分别上色，否则深色主题下会露出一个白尖
+/* popup 小三角按锚点方向分别上色，否则深色主题下会露出一个白尖 */
 .travel-map :deep(.maplibregl-popup-anchor-bottom .maplibregl-popup-tip) {
 	border-top-color: var(--ld-bg-card);
 }

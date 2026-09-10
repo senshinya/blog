@@ -115,7 +115,7 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .memos {
 	padding: 1rem;
 }

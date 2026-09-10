@@ -33,10 +33,8 @@ onMounted(() => mounted.value = true)
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .theme-toggle {
-	@include segmented-pill;
-
 	flex: 1;
 
 	&::before {

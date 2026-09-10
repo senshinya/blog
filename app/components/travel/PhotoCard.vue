@@ -29,7 +29,7 @@ defineEmits<{
 </li>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .travel-photo {
 	position: relative;
 	overflow: hidden;
@@ -75,7 +75,7 @@ defineEmits<{
 	translate: 0 0.3rem;
 	pointer-events: none;
 
-	// 触屏没有 hover，直接常显
+	/* 触屏没有 hover，直接常显 */
 	@media (hover: none) {
 		opacity: 1;
 		translate: 0;

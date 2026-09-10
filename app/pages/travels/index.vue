@@ -75,7 +75,7 @@ const items = computed(() => travels.value.map(travel => ({
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .travels {
 	padding: 1rem;
 }
@@ -99,16 +99,16 @@ const items = computed(() => travels.value.map(travel => ({
 	list-style: none;
 }
 
-// 与文章卡片同构（components/post/Article.vue）：底色、圆角、hover 抬升全交给全局 .card.upraise，
-// 这里只补封面的裁切和排版。
-// 逐项错峰的 --delay 挂在外层 <li> 上，会一路渗到这棵子树 —— 所以子元素里的过渡时长
-// 一律写死 0.2s，不能再用 var(--delay)：第一项的 delay 是 0s，hover 会当场瞬跳
+/* 与文章卡片同构（components/post/Article.vue）：底色、圆角、hover 抬升全交给全局 .card.upraise， */
+/* 这里只补封面的裁切和排版。 */
+/* 逐项错峰的 --delay 挂在外层 <li> 上，会一路渗到这棵子树 —— 所以子元素里的过渡时长 */
+/* 一律写死 0.2s，不能再用 var(--delay)：第一项的 delay 是 0s，hover 会当场瞬跳 */
 .travel-card {
 	container-type: inline-size;
 	position: relative;
 
-	// 封面宽度 = 卡片高 × 比例，而卡片高是被文字撑出来的 —— 描述短的游记会把封面一起压扁。
-	// 给个下限兜住
+	/* 封面宽度 = 卡片高 × 比例，而卡片高是被文字撑出来的 —— 描述短的游记会把封面一起压扁。 */
+	/* 给个下限兜住 */
 	min-height: 12rem;
 	color: var(--c-text);
 	animation: var(--entrance, float-in 0.2s var(--delay) backwards);
@@ -120,28 +120,20 @@ const items = computed(() => travels.value.map(travel => ({
 	}
 }
 
-// 封面盒子的比例。竖构图的照片按这个比例取景：越接近 1，图越宽、上下裁得越多；
-// 越小（如 4/5）越接近原图，但也越窄。调这一个值即可
-$cover-ratio: 1;
-
-// 左缘模糊：半径，以及糊到多远就彻底淡干净。范围收得越紧，图保持清晰的部分越多
-$cover-blur: 4px;
-$cover-blur-end: 35%;
-
-// 盒子必须严丝合缝地等于「画出来的那张图」，否则 mask 和模糊层会落空 ——
-// 之前用 object-fit: contain 就栽在这：竖图被缩成盒子右侧窄窄一条，而 mask 是按盒子算的，
-// 渐变早在图的左边的空白区里就走完了，图本体整个落在不透明、不模糊的区间，看着毫无效果。
-// 改成「固定比例的盒子 + cover」：cover 保证图铺满盒子，盒子即图，渐变才有东西可作用。
-// 另外外壳自身不能带 opacity / mask / filter —— 这三者任意一个都会让它变成 backdrop root，
-// 里面的 ::after 就采样不到那张图，模糊层会糊在卡片底色上，等于什么都没糊。
-// 故渐隐和 hover 提亮全部下沉到 > img
+/* 盒子必须严丝合缝地等于「画出来的那张图」，否则 mask 和模糊层会落空 —— */
+/* 之前用 object-fit: contain 就栽在这：竖图被缩成盒子右侧窄窄一条，而 mask 是按盒子算的， */
+/* 渐变早在图的左边的空白区里就走完了，图本体整个落在不透明、不模糊的区间，看着毫无效果。 */
+/* 改成「固定比例的盒子 + cover」：cover 保证图铺满盒子，盒子即图，渐变才有东西可作用。 */
+/* 另外外壳自身不能带 opacity / mask / filter —— 这三者任意一个都会让它变成 backdrop root， */
+/* 里面的 ::after 就采样不到那张图，模糊层会糊在卡片底色上，等于什么都没糊。 */
+/* 故渐隐和 hover 提亮全部下沉到 > img */
 .travel-cover {
 	position: absolute;
 	inset-inline-end: 0;
 	top: 0;
 	height: 100%;
-	max-width: calc(45% + 2em); // 卡片被文字撑得过高时，别让封面侵占文字区
-	aspect-ratio: $cover-ratio; // 宽度 = 卡片高 × 比例
+	max-width: calc(45% + 2em); /* 卡片被文字撑得过高时，别让封面侵占文字区 */
+	aspect-ratio: 1; /* 宽度 = 卡片高 × 比例；比例越小，竖构图保留越多、封面越窄。 */
 
 	> img {
 		opacity: 0.8;
@@ -153,16 +145,16 @@ $cover-blur-end: 35%;
 		object-fit: cover;
 	}
 
-	// 左缘的模糊渐变。backdrop-filter 糊的是「身下已经画好的东西」，也就是那张图；
-	// 再给这层模糊自己套一道 mask，让它从左往右淡出 —— 于是模糊强度随位置连续变化，
-	// 而不是糊完在某一列突然变清晰、留一条硬边。
-	// 文字在 DOM 里排在封面之后（且 position: relative），画在这层之上，不会被糊到
+	/* 左缘的模糊渐变。backdrop-filter 糊的是「身下已经画好的东西」，也就是那张图； */
+	/* 再给这层模糊自己套一道 mask，让它从左往右淡出 —— 于是模糊强度随位置连续变化， */
+	/* 而不是糊完在某一列突然变清晰、留一条硬边。 */
+	/* 文字在 DOM 里排在封面之后（且 position: relative），画在这层之上，不会被糊到 */
 	&::after {
 		content: "";
 		position: absolute;
 		inset: 0;
-		backdrop-filter: blur($cover-blur);
-		mask-image: linear-gradient(to var(--end), #FFF, transparent $cover-blur-end);
+		backdrop-filter: blur(4px);
+		mask-image: linear-gradient(to var(--end), #FFF, transparent 35%);
 		pointer-events: none;
 	}
 
@@ -175,14 +167,15 @@ $cover-blur-end: 35%;
 		width: 60%;
 	}
 
-	// 窄屏放不下左右分栏：封面退回顶部通栏，文字压在它下缘的渐隐处。
-	// 渐隐方向转成竖直，模糊也跟着转 —— 糊的边从左缘变成下缘
-	@mixin cover-narrow {
+	/* 窄屏放不下左右分栏：封面退回顶部通栏，文字压在它下缘的渐隐处。 */
+	/* 渐隐方向转成竖直，模糊也跟着转 —— 糊的边从左缘变成下缘 */
+
+	@media (max-width: 528px) {
 		position: revert;
 		width: 100%;
 		height: auto;
 		max-width: none;
-		aspect-ratio: 2.4; // 通栏横幅：同样是盒子定比例、cover 铺满，盒子即图
+		aspect-ratio: 2.4; /* 通栏横幅：同样是盒子定比例、cover 铺满，盒子即图 */
 		margin-bottom: -10%;
 
 		> img {
@@ -190,8 +183,8 @@ $cover-blur-end: 35%;
 		}
 
 		&::after {
-			// 与横向那支对称：从边缘起最糊，到 $cover-blur-end 的距离处淡干净
-			mask-image: linear-gradient(transparent (100% - $cover-blur-end), #FFF);
+			/* 与横向那支对称：从边缘起最糊，到 35% 的距离处淡干净 */
+			mask-image: linear-gradient(transparent 65%, #FFF);
 		}
 
 		& + article {
@@ -202,13 +195,33 @@ $cover-blur-end: 35%;
 			}
 		}
 	}
+}
 
-	@media (max-width: $breakpoint-phone) {
-		@include cover-narrow;
-	}
+@container (max-width: 528px) {
+	.travel-cover {
+		position: revert;
+		width: 100%;
+		height: auto;
+		max-width: none;
+		aspect-ratio: 2.4; /* 通栏横幅：同样是盒子定比例、cover 铺满，盒子即图 */
+		margin-bottom: -10%;
 
-	@container (max-width: #{$breakpoint-phone}) {
-		@include cover-narrow;
+		> img {
+			mask-image: linear-gradient(#FFF 50%, transparent);
+		}
+
+		&::after {
+			/* 与横向那支对称：从边缘起最糊，到 35% 的距离处淡干净 */
+			mask-image: linear-gradient(transparent 65%, #FFF);
+		}
+
+		& + article {
+			width: auto;
+
+			> .travel-title {
+				text-shadow: 0 0 0.2em var(--ld-bg-card), 0 0 0.5em var(--ld-bg-card), 0 0 1em var(--ld-bg-card);
+			}
+		}
 	}
 }
 
@@ -224,7 +237,7 @@ $cover-blur-end: 35%;
 
 .travel-summary {
 	font-size: 0.9em;
-	white-space: pre-line; // description 里的换行是作者排的分行，保住
+	white-space: pre-line; /* description 里的换行是作者排的分行，保住 */
 	color: var(--c-text-2);
 }
 

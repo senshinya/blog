@@ -15,7 +15,7 @@
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .bgm-card-skeleton {
 	display: flex;
 	overflow: hidden;

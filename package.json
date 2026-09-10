@@ -87,7 +87,6 @@
     "remark-math": "catalog:content",
     "remark-reading-time": "catalog:content",
     "rimraf": "catalog:util",
-    "sass-embedded": "catalog:framework",
     "strip-ansi": "catalog:util",
     "typescript": "catalog:framework",
     "unplugin-yaml": "catalog:framework",

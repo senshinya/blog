@@ -69,7 +69,7 @@ const summary = computed(() => subject.value.short_summary?.trim() || '')
 </UtilLink>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .bgm-card {
 	display: flex;
 	overflow: hidden;
@@ -137,12 +137,12 @@ const summary = computed(() => subject.value.short_summary?.trim() || '')
 	}
 }
 
-// 我的评分：唯一的主题色，从公开评分里跳出来
+/* 我的评分：唯一的主题色，从公开评分里跳出来 */
 .bgm-rate {
 	color: var(--c-primary);
 }
 
-// 我的评价：站主自己的话，语气上突出一点
+/* 我的评价：站主自己的话，语气上突出一点 */
 .bgm-comment {
 	display: -webkit-box;
 	overflow: hidden;
@@ -163,7 +163,7 @@ const summary = computed(() => subject.value.short_summary?.trim() || '')
 	}
 }
 
-// 简介沉到卡片底部（无评价时贴着标题下方留白撑开）
+/* 简介沉到卡片底部（无评价时贴着标题下方留白撑开） */
 .bgm-summary {
 	display: -webkit-box;
 	overflow: hidden;

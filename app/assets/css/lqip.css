@@ -26,66 +26,69 @@
  */
 
 [style*="--lqip:"] {
-  --lqip-c: var(--lqip);
+	--lqip-c: var(--lqip);
 
-  /* c0 = 位 31..21：R 的高 4 位、R 的低 4 位、G 的高 3 位 */
-  --lqip-c0: color(
-    from var(--lqip-c)
-    srgb
-    calc(round(down, r * 255 / pow(2, 4)) / 15)
-    calc(mod(round(down, r * 255), pow(2, 4)) / 15)
-    calc(round(down, g * 255 / pow(2, 5)) / 7)
-    / 1
-  );
+	/* c0 = 位 31..21：R 的高 4 位、R 的低 4 位、G 的高 3 位 */
+	--lqip-c0:
+		color(
+			from var(--lqip-c)
+			srgb
+			calc(round(down, r * 255 / pow(2, 4)) / 15)
+			calc(mod(round(down, r * 255), pow(2, 4)) / 15)
+			calc(round(down, g * 255 / pow(2, 5)) / 7)
+			/ 1
+		);
 
-  /* c1 = 位 20..10：横跨 G 和 B */
-  --lqip-c1: color(
-    from var(--lqip-c)
-    srgb
-    calc(mod(round(down, g * 255 / 2), pow(2, 4)) / 15)
-    calc(((mod(round(down, g * 255), 2) * pow(2, 3)) + (round(down, b * 255 / pow(2, 5)))) / 15)
-    calc(mod(round(down, b * 255 / pow(2, 2)), pow(2, 3)) / 7)
-    / 1
-  );
+	/* c1 = 位 20..10：横跨 G 和 B */
+	--lqip-c1:
+		color(
+			from var(--lqip-c)
+			srgb
+			calc(mod(round(down, g * 255 / 2), pow(2, 4)) / 15)
+			calc(((mod(round(down, g * 255), 2) * pow(2, 3)) + (round(down, b * 255 / pow(2, 5)))) / 15)
+			calc(mod(round(down, b * 255 / pow(2, 2)), pow(2, 3)) / 7)
+			/ 1
+		);
 
-  /* c2 = 位 9..0：横跨 B 和 A */
-  --lqip-c2: color(
-    from var(--lqip-c)
-    srgb
-    calc((((mod(round(down, b * 255), pow(2, 2)) * 2)) + round(down, alpha * 255 / pow(2, 7))) / 7)
-    calc(mod(round(down, alpha * 255 / pow(2, 3)), pow(2, 4)) / 15)
-    calc(mod(round(down, alpha * 255), pow(2, 3)) / 7)
-    / 1
-  );
+	/* c2 = 位 9..0：横跨 B 和 A */
+	--lqip-c2:
+		color(
+			from var(--lqip-c)
+			srgb
+			calc((((mod(round(down, b * 255), pow(2, 2)) * 2)) + round(down, alpha * 255 / pow(2, 7))) / 7)
+			calc(mod(round(down, alpha * 255 / pow(2, 3)), pow(2, 4)) / 15)
+			calc(mod(round(down, alpha * 255), pow(2, 3)) / 7)
+			/ 1
+		);
 
-  /* 右下色铺在右下、中心色铺在中间，最后垫一层左上色打底 —— 三个色互相渗开，
+	/* 右下色铺在右下、中心色铺在中间，最后垫一层左上色打底 —— 三个色互相渗开，
      糊成一张极粗的印象图。多段 alpha 是为了让边缘化得开，不留同心圆的硬圈 */
-  background:
-    radial-gradient(
-      150% 75% at 80% 100%,
-      var(--lqip-c2),
-      rgb(from var(--lqip-c2) r g b / 98%) 10%,
-      rgb(from var(--lqip-c2) r g b / 92%) 20%,
-      rgb(from var(--lqip-c2) r g b / 82%) 30%,
-      rgb(from var(--lqip-c2) r g b / 68%) 40%,
-      rgb(from var(--lqip-c2) r g b / 32%) 60%,
-      rgb(from var(--lqip-c2) r g b / 18%) 70%,
-      rgb(from var(--lqip-c2) r g b / 8%) 80%,
-      rgb(from var(--lqip-c2) r g b / 2%) 90%,
-      transparent
-    ),
-    radial-gradient(
-      100% 75% at 40% 50%,
-      var(--lqip-c1),
-      rgb(from var(--lqip-c1) r g b / 98%) 10%,
-      rgb(from var(--lqip-c1) r g b / 92%) 20%,
-      rgb(from var(--lqip-c1) r g b / 82%) 30%,
-      rgb(from var(--lqip-c1) r g b / 68%) 40%,
-      rgb(from var(--lqip-c1) r g b / 32%) 60%,
-      rgb(from var(--lqip-c1) r g b / 18%) 70%,
-      rgb(from var(--lqip-c1) r g b / 8%) 80%,
-      rgb(from var(--lqip-c1) r g b / 2%) 90%,
-      transparent
-    ),
-    var(--lqip-c0);
+	background:
+		radial-gradient(
+			150% 75% at 80% 100%,
+			var(--lqip-c2),
+			rgb(from var(--lqip-c2) r g b / 98%) 10%,
+			rgb(from var(--lqip-c2) r g b / 92%) 20%,
+			rgb(from var(--lqip-c2) r g b / 82%) 30%,
+			rgb(from var(--lqip-c2) r g b / 68%) 40%,
+			rgb(from var(--lqip-c2) r g b / 32%) 60%,
+			rgb(from var(--lqip-c2) r g b / 18%) 70%,
+			rgb(from var(--lqip-c2) r g b / 8%) 80%,
+			rgb(from var(--lqip-c2) r g b / 2%) 90%,
+			transparent
+		),
+		radial-gradient(
+			100% 75% at 40% 50%,
+			var(--lqip-c1),
+			rgb(from var(--lqip-c1) r g b / 98%) 10%,
+			rgb(from var(--lqip-c1) r g b / 92%) 20%,
+			rgb(from var(--lqip-c1) r g b / 82%) 30%,
+			rgb(from var(--lqip-c1) r g b / 68%) 40%,
+			rgb(from var(--lqip-c1) r g b / 32%) 60%,
+			rgb(from var(--lqip-c1) r g b / 18%) 70%,
+			rgb(from var(--lqip-c1) r g b / 8%) 80%,
+			rgb(from var(--lqip-c1) r g b / 2%) 90%,
+			transparent
+		),
+		var(--lqip-c0);
 }

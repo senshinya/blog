@@ -4,7 +4,7 @@ import { CommentError } from '~/composables/useCommentApi'
 
 /**
  * 编辑框。几何照着 Reddit 的 composer 量的：圆角等于半高，闲置无底色，
- * 工具条聚焦（或已有草稿）才从 0 高度长出来。样式在 assets/css/comment.scss。
+ * 工具条聚焦（或已有草稿）才从 0 高度长出来。样式在 assets/css/comment.css。
  *
  * 顶层发表、回复、编辑三种用法共用这一个组件，差别只在 parentId / editId。
  */

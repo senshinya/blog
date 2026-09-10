@@ -136,7 +136,7 @@ onScopeDispose(() => {
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .lang-toggle {
 	flex: 0 0 auto;
 	position: relative;
@@ -182,8 +182,6 @@ onScopeDispose(() => {
 }
 
 .language-options {
-	@include segmented-pill;
-
 	position: absolute;
 	opacity: 0;
 	inset: 0;

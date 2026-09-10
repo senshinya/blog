@@ -109,7 +109,7 @@ onMounted(() => {
 </button>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .authorship-seal {
 	display: block;
 	width: var(--seal-size, 164px);
