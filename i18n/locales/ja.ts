@@ -1,6 +1,12 @@
 import type { MessageSchema } from './zh'
 
 const ja: MessageSchema = {
+	site: {
+		title: '信也のブログ',
+		subtitle: 'コードを書く人',
+		description: 'インターネットの片隅。shinya の個人ブログ。いじり、プロジェクト、ノート、日常 —— ネットワークとプロキシ、セルフホスト、Go とシステム内部、そして気づけば週末を丸ごと溶かしていたあれこれ。',
+		readFull: '全文を読む',
+	},
 	lang: { unavailable: 'この言語版はまだありません' },
 	nav: {
 		articles: '記事',

@@ -3,6 +3,12 @@
  * 否则 MessageSchema 会退化成字面量类型，另外两种语言无法满足。
  */
 const zh = {
+	site: {
+		title: '信也のブログ',
+		subtitle: '一写代码的',
+		description: '互联网自留地。shinya 的个人博客，记录折腾、项目、笔记与日常 —— 网络与代理、自建服务、Go 与系统底层、以及那些不知道为什么就搞了一整个周末的东西。',
+		readFull: '点击查看全文',
+	},
 	lang: { unavailable: '该页暂无此语言版本' },
 	nav: {
 		articles: '文章',

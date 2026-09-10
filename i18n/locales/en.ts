@@ -1,6 +1,12 @@
 import type { MessageSchema } from './zh'
 
 const en: MessageSchema = {
+	site: {
+		title: 'Shinya\'s Blog',
+		subtitle: 'Someone who writes code',
+		description: 'A corner of the internet. Shinya\'s personal blog on tinkering, projects, notes and daily life — networking and proxies, self-hosted services, Go and systems internals, and things that somehow ate an entire weekend.',
+		readFull: 'Read the full post',
+	},
 	lang: { unavailable: 'Not available in this language yet' },
 	nav: {
 		articles: 'Posts',

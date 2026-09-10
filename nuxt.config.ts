@@ -42,7 +42,7 @@ export default defineNuxtConfig({
 			],
 			link: [
 				{ rel: 'icon', href: blogConfig.favicon },
-				{ rel: 'alternate', type: 'application/atom+xml', href: '/atom.xml' },
+				// atom feed 的 alternate link 按 locale 生成，见 app/app.vue 的 useHead
 				// 首屏就要打这个域名取会话和线程，提前把 TLS 握完
 				{ rel: 'preconnect', href: blogConfig.comment.api, crossorigin: '' },
 				{ rel: 'stylesheet', href: 'https://s4.zstatic.net/npm/katex@0.16.44/dist/katex.min.css' },
@@ -144,10 +144,11 @@ export default defineNuxtConfig({
 		 */
 		'/api/og': { prerender: false },
 		'/api/stats': { prerender: true, headers: { 'Content-Type': 'application/json' } },
-		'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		'/favicon.ico': { redirect: { to: blogConfig.favicon } },
 		'/subscriptions.opml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 		...localizeRules({
+			// 三语 atom feed（见 server/routes/{,en/,ja/}atom.xml.get.ts）都要预渲染
+			'/atom.xml': { prerender: true, headers: { 'Content-Type': 'application/xml' } },
 			/**
 			 * 娱乐页的筛选状态写在 URL query（?category=&status=）。若预渲染，产物是不带 query 的
 			 * /media，payload.path 也就是 /media；水合时路由优先采信这个 renderedPath 而非地址栏
