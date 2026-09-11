@@ -59,6 +59,7 @@ export async function buildAtomFeed(event: H3Event, locale: keyof typeof MESSAGE
 
 	const posts = await queryCollection(event, collection)
 		.where('stem', 'LIKE', 'posts/%')
+		.where('draft', '=', false)
 		.order('date', 'DESC')
 		.limit(blogConfig.feed.limit)
 		.all()

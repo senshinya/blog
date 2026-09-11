@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "更精确的基于 BGP 的国内外 IP 分流"
+seoTitle: "用 BGP 数据生成更精确的中国 IP 分流规则"
 description: "基于 BGP 的国内外 IP 分流方案，提升了透明代理的效率和精准度。通过对国外 IP 进行 FakeIP 标记，主路由能够更智能地进行流量分流，确保网络连接的顺畅性。sing-box 的 DNS 模块配置也进行了相应优化，使得在处理 DNS 请求时，更加灵活且高效，进一步提升整体网络体验。"
 date: 2024-10-07 16:51:00
 categories: [fiddling]

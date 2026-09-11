@@ -10,14 +10,20 @@ const shiki = useShiki()
 const codeElement = useTemplateRef('code')
 const highlighted = ref(false)
 
-onMounted(async () => {
+useVisibleTask(codeElement, async (isActive) => {
 	if (!props.language)
 		return
-	await shiki.mountInline(codeElement.value!, props.code, {
-		language: props.language,
-		transformerOptions: ['ignoreColorizedBrackets'],
-	})
-	highlighted.value = true
+	try {
+		await shiki.mountInline(codeElement.value!, props.code, {
+			language: props.language,
+			transformerOptions: ['ignoreColorizedBrackets'],
+		})
+		if (isActive())
+			highlighted.value = true
+	}
+	catch {
+		// Keep readable inline code if its optional highlighter cannot load.
+	}
 })
 </script>
 

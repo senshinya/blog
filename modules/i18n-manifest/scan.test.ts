@@ -84,3 +84,30 @@ test('excludes draft travels outside development', async () => {
 	const dev = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: true, hidePostPrefix: true })
 	assert.deepEqual(dev['/travels/secret-202601'], ['zh'])
 })
+
+test('excludes article drafts and all preview sources before generating localized routes', async () => {
+	const { scanLocaleTrees } = await import('./scan.ts')
+	const { content, travels } = fixture()
+	for (const locale of ['zh', 'en', 'ja']) {
+		mkdirSync(join(content, locale, 'previews'), { recursive: true })
+		writeFileSync(join(content, locale, 'previews/secret.md'), '---\npermalink: /public-looking\n---\nSecret preview')
+		writeFileSync(join(content, locale, 'posts/daily/draft.md'), '---\n"draft": TRUE\npermalink: /secret-article\n---\nSecret article')
+		writeFileSync(join(content, locale, 'posts/daily/published.md'), '---\ndraft: false\n---\ndraft: true\n')
+	}
+	const options = { contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], hidePostPrefix: true }
+	const prod = scanLocaleTrees({ ...options, isDev: false })
+	assert.equal(prod['/public-looking'], undefined)
+	assert.equal(prod['/secret-article'], undefined)
+	assert.deepEqual(prod['/daily/published'], ['en', 'ja', 'zh'])
+	const dev = scanLocaleTrees({ ...options, isDev: true })
+	assert.deepEqual(dev['/public-looking'], ['en', 'ja', 'zh'])
+	assert.deepEqual(dev['/secret-article'], ['en', 'ja', 'zh'])
+})
+
+test('excludes YAML travel drafts whose top-level flag uses a quoted key', async () => {
+	const { scanLocaleTrees } = await import('./scan.ts')
+	const { content, travels } = fixture()
+	writeFileSync(join(travels, 'zh/quoted-draft.yaml'), '\"draft\": true\nslug: quoted-draft\n')
+	const manifest = scanLocaleTrees({ contentDir: content, travelsDir: travels, locales: ['zh', 'en', 'ja'], isDev: false, hidePostPrefix: true })
+	assert.equal(manifest['/travels/quoted-draft'], undefined)
+})

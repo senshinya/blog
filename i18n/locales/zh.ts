@@ -4,6 +4,7 @@
  */
 const zh = {
 	site: {
+		seoTitle: 'Java、Go、网络与自托管实践',
 		title: '信也のブログ',
 		subtitle: '一写代码的',
 		description: '互联网自留地。shinya 的个人博客，记录折腾、项目、笔记与日常 —— 网络与代理、自建服务、Go 与系统底层、以及那些不知道为什么就搞了一整个周末的东西。',
@@ -40,6 +41,7 @@ const zh = {
 		theme: '主题: {name} {version}',
 	},
 	post: {
+		author: '作者：{name}',
 		authorship: {
 			'replay': '点击重新盖章',
 			'label': '原文创作方式',

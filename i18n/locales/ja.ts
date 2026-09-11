@@ -2,6 +2,7 @@ import type { MessageSchema } from './zh'
 
 const ja: MessageSchema = {
 	site: {
+		seoTitle: 'Java・Go・ネットワーク・セルフホスティング',
 		title: '信也のブログ',
 		subtitle: 'コードを書く人',
 		description: 'インターネットの片隅。shinya の個人ブログ。試行、制作、覚書、日常 —— ネットワークとプロキシ、セルフホスト、Go とシステム内部、そして気づけば週末を丸ごと溶かしていたあれこれ。',
@@ -38,6 +39,7 @@ const ja: MessageSchema = {
 		theme: 'テーマ: {name} {version}',
 	},
 	post: {
+		author: '著者：{name}',
 		authorship: {
 			'replay': 'クリックして押し直す',
 			'label': '原文の執筆方法',

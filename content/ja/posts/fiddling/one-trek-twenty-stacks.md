@@ -1,6 +1,7 @@
 ---
 authorship: ai-human-reviewed
 title: "TREKひとつのつもりが、20個のスタックに"
+seoTitle: "TREK から 20 個の Docker サービスへ：ARM VPS のセルフホスティング"
 description: "GitHub Trendingで旅行計画ツールを見つけ、自分でも動かしたくなりました。どうせ新しいVPSを借りるなら、ついでにもう少し、いや、だいぶ色々入れてしまおうと。"
 date: 2026-05-11 22:43:00
 categories: [fiddling]

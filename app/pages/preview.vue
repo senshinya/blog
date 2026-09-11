@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { buildPath, resolveContentPath } from '~/utils/locale'
 
+if (!import.meta.dev)
+	throw createError({ statusCode: 404, statusMessage: 'Not Found' })
+
 const appConfig = useAppConfig()
 const { t, locale } = useI18n()
 const entranceDelay = useEntranceDelay()
 useSeoMeta({
+	robots: 'noindex, nofollow',
 	title: () => t('page.preview.title'),
 	description: () => t('page.preview.description', { site: appConfig.title }),
 })

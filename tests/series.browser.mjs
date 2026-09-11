@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import process from 'node:process'
 import { after, before, test } from 'node:test'
+import { isolateExternalRequests } from './browser-network.mjs'
 
 const baseURL = process.env.SEO_BASE_URL || 'http://127.0.0.1:3236'
 let browser
@@ -12,6 +13,7 @@ after(async () => browser?.close())
 
 async function open(options = {}) {
 	const context = await browser.newContext({ baseURL, locale: 'zh-CN', viewport: { width: 375, height: 900 }, ...options })
+	await isolateExternalRequests(context, baseURL)
 	const page = await context.newPage()
 	await page.goto('/projects/mydb/mydb6', { waitUntil: 'domcontentloaded' })
 	if (options.javaScriptEnabled !== false)
@@ -24,6 +26,7 @@ test('compact series keeps all links in HTML and supports native disclosure with
 	try {
 		assert.equal(await page.locator('.post-series summary').count(), 1)
 		assert.equal(await page.locator('.post-series ol a').count(), 11)
+		assert.equal(await page.locator('.series-overview').count(), 0)
 		assert.equal(await page.locator('.surround-post').count(), 0, 'Series supplies the single previous/next navigation')
 		assert.equal(await page.locator('.post-series details').getAttribute('open'), null)
 		await page.locator('.post-series summary').click()
@@ -70,7 +73,7 @@ test('opening and closing animate continuously, including reversing mid-animatio
 	}
 })
 
-test('reduced motion toggles immediately and series overview anchors open the directory', async () => {
+test('reduced motion toggles immediately and direct series anchors open the directory', async () => {
 	const { context, page } = await open({ reducedMotion: 'reduce' })
 	try {
 		assert.equal(await page.locator('.post-series summary').count(), 1)
@@ -175,20 +178,3 @@ for (const mode of ['fallback', 'reduce']) {
 		finally { await context.close() }
 	})
 }
-
-test('an explicit series overview reopens a previously visited first chapter', async () => {
-	const { context, page } = await open()
-	try {
-		await page.goto('/projects/mydb/mydb0', { waitUntil: 'domcontentloaded' })
-		await page.waitForFunction(() => document.querySelector('.post-series summary')?.getAttribute('aria-expanded') === 'false')
-		await page.locator('.series-next').click()
-		await page.waitForURL('**/projects/mydb/mydb1')
-		await page.locator('.post-series summary').click()
-		await page.locator('.series-overview').click()
-		await page.waitForURL('**/projects/mydb/mydb0#series-mydb')
-		await page.waitForFunction(() => document.querySelector('.post-series summary')?.getAttribute('aria-expanded') !== null)
-		assert.equal(await page.locator('.post-series summary').getAttribute('aria-expanded'), 'true', 'An explicit overview link must expand the directory even after a prior closed visit')
-		assert.ok(await page.locator('.series-chapters a').first().isVisible())
-	}
-	finally { await context.close() }
-})

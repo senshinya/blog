@@ -227,6 +227,10 @@ function onMousedown(e: MouseEvent) {
 }
 
 const shortcut = computed(() => import.meta.client && /mac/i.test(navigator.platform) ? '⌘↵' : 'Ctrl↵')
+
+useResourceFonts(() => ({
+	monospace: !!cooldown.value || length.value >= BODY_WARN || /<(?:pre|code)\b/i.test(preview.value),
+}))
 </script>
 
 <template>

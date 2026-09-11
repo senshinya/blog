@@ -19,6 +19,8 @@ const props = defineProps<ParsedMemo & {
 const appConfig = useAppConfig()
 const openLightbox = useLightbox()
 const { locale } = useI18n()
+
+useResourceFonts({ monospace: true })
 </script>
 
 <template>

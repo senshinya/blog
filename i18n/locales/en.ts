@@ -2,6 +2,7 @@ import type { MessageSchema } from './zh'
 
 const en: MessageSchema = {
 	site: {
+		seoTitle: 'Java, Go, networking and self-hosting',
 		title: 'Shinya\'s Blog',
 		subtitle: 'Someone who writes code',
 		description: 'A corner of the internet. Shinya\'s personal blog on tinkering, projects, notes and daily life — networking and proxies, self-hosted services, Go and systems internals, and things that somehow ate an entire weekend.',
@@ -38,6 +39,7 @@ const en: MessageSchema = {
 		theme: 'Theme: {name} {version}',
 	},
 	post: {
+		author: 'Author: {name}',
 		authorship: {
 			'replay': 'Replay stamp',
 			'label': 'Original authorship',

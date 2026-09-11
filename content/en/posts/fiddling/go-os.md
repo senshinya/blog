@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "A Project That Failed: Seven Not-So-Happy Days over Chinese New Year"
+seoTitle: "Bare-metal Go on RISC-V: debugging a kernel linker failure"
 description: "Inspiration struck during Chinese New Year: an article read on the train about running Go on bare metal sparked an interest in low-level system interfaces. Its successful implementation suggested exciting possibilities for combining a high-level language with an OS. Further research revealed earlier work on the idea, and that growing enthusiasm became a project full of anticipation that ultimately did not work out."
 date: 2023-02-02 23:24:55
 categories: [fiddling]

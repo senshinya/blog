@@ -32,6 +32,8 @@ const [DefineTemplate, ReuseTemplate] = createReusableTemplate<{
 	fallbackText: string
 	alignEnd?: boolean
 }>({ inheritAttrs: false })
+
+useResourceFonts(() => ({ serif: !!surrounds.value?.some(post => post?.type === 'story') }))
 </script>
 
 <template>

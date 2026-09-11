@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "My Heart Beats for U：心拍数をGrafanaで可視化する"
+seoTitle: "心拍数を Grafana に同期する：My heart beats for U"
 description: "Appleヘルスケアの心拍数を定期的にサーバーへ同期し、Grafanaで可視化して直感的に確認できるようにしました。Health Auto ExportのREST API機能でHTTPエンドポイントへデータを送り、InfluxDBに保存します。Grafanaのダッシュボードから、自分の心拍数の変化を追ったり分析したりできます。"
 date: 2025-03-31 23:51:00
 categories: [fiddling]

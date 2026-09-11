@@ -1,8 +1,11 @@
 import type { ReadTimeResults } from 'reading-time'
+import { fileURLToPath } from 'node:url'
 import { defineCollection } from '@nuxt/content'
+import { tryUseNuxt } from '@nuxt/kit'
 import { defineSitemapSchema } from '@nuxtjs/sitemap/content'
 import { z } from 'zod'
 import blogConfig from './blog.config'
+import { getContentSourceExcludes } from './modules/publication/sources'
 
 type ArticleType = keyof typeof blogConfig.article.types
 // 文章类型已在 blog.config 中定义，此处使用 any 类型绕过 zod 类型验证
@@ -15,6 +18,7 @@ export interface ArticleSchema {
 	title?: string
 	description?: string
 	seoDescription?: string
+	seoTitle?: string
 	date?: string
 	published?: string
 	categories?: string[]
@@ -26,7 +30,7 @@ export interface ArticleSchema {
 	image?: string
 	recommend?: number
 	references?: { title?: string, link?: string }[]
-	/** TODO */
+	/** 草稿仅在开发环境可访问。 */
 	draft?: boolean
 	permalink?: string
 
@@ -37,6 +41,7 @@ const articleSchema = z.object({
 	title: z.string().optional(),
 	description: z.string().optional(),
 	seoDescription: z.string().optional(),
+	seoTitle: z.string().optional(),
 	date: z.string().optional(),
 	published: z.string().optional(),
 	categories: z.array(z.string()).default([blogConfig.defaultCategory]),
@@ -67,7 +72,11 @@ export type Locale = typeof LOCALES[number]
 
 function makeCollection(locale: Locale) {
 	return defineCollection({
-		source: { include: `${locale}/**`, prefix: '' },
+		source: {
+			include: `${locale}/**/*.md`,
+			prefix: '',
+			exclude: getContentSourceExcludes(fileURLToPath(new URL('./content', import.meta.url)), locale, tryUseNuxt()?.options.dev ?? false),
+		},
 		type: 'page',
 		schema: articleSchema.extend({
 			sitemap: defineSitemapSchema({

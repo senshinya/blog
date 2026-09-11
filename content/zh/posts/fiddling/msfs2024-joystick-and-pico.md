@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "微软模拟飞行 2024 折腾记录"
+seoTitle: "微软模拟飞行 2024：TCA 摇杆与 PICO 4 Pro VR 配置"
 description: "被朋友一句话勾起了玩模拟游戏的念头，随手买了微软模拟飞行，才发现地图和模型实时串流、账号还得二次登录，新手教程藏得奇怪，键盘操控生涩，最后入手摇杆并折腾 Pico VR 才算完整体验。"
 date: 2025-12-14 14:31:00
 categories: [fiddling]

@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "Using Debian as a Side Router"
+seoTitle: "Debian gateway setup with mihomo, AdGuard Home and transparent proxying"
 description: "Using Debian as a side router offers a more stable and flexible alternative without depending on OpenWrt and LuCI. Configuring Debian directly gives you greater control over the system and avoids the limitations and instability of a GUI. Compared with common side-router setups, this approach makes transparent proxying more reliable and offers another option for those who value performance and efficiency."
 date: 2024-07-13 17:49:00
 categories: [fiddling]

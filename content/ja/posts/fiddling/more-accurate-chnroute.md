@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "BGPで中国国内・国外IPの振り分けをより正確にする"
+seoTitle: "BGP データで中国向け IP ルーティングルールを改善する"
 description: "BGPをもとに中国国内・国外のIPを振り分けることで、透過プロキシの効率と精度を高めます。国外の宛先をFakeIPで識別すれば、メインルーターでより適切に通信を振り分けられます。sing-boxのDNS設定も見直し、DNSクエリを柔軟かつ効率的に処理して、ネットワーク全体の使い勝手を改善します。"
 date: 2024-10-07 16:51:00
 categories: [fiddling]

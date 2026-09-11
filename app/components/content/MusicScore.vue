@@ -5,6 +5,9 @@ const props = defineProps<{
 	abc: string
 }>()
 
+const score = useTemplateRef('score')
+const failed = ref(false)
+const pending = ref(true)
 const container = useTemplateRef('abcjs-container')
 const synthController = useTemplateRef('synth-controller')
 
@@ -34,17 +37,29 @@ async function checkSoundFonts() {
 	}
 }
 
-onMounted(async () => {
-	const { renderAbc, synth } = await import('abcjs')
+useVisibleTask(score, async (isActive) => {
+	try {
+		const { renderAbc, synth } = await import('abcjs')
+		if (!isActive())
+			return
 
-	tuneObj.value = renderAbc(container.value!, props.abc, abcVisualParams)[0]
+		tuneObj.value = renderAbc(container.value!, props.abc, abcVisualParams)[0]
+		pending.value = false
 
-	if (!synth.supportsAudio() || !(await checkSoundFonts()))
-		return
+		if (!synth.supportsAudio() || !(await checkSoundFonts()) || !isActive())
+			return
 
-	synthObjController.value = new synth.SynthController()
-	synthObjController.value.load(synthController.value!, null, synthVisualOptions)
-	synthObjController.value.setTune(tuneObj.value, false)
+		synthObjController.value = new synth.SynthController()
+		synthObjController.value.load(synthController.value!, null, synthVisualOptions)
+		await synthObjController.value.setTune(tuneObj.value, false)
+	}
+	catch (error) {
+		if (!isActive())
+			return
+		console.error('[music-abc] Score initialization failed:', error)
+		failed.value = !tuneObj.value
+		pending.value = false
+	}
 })
 
 onUnmounted(() => {
@@ -53,7 +68,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-<div class="music-score">
+<div ref="score" class="music-score" :class="{ pending }" :aria-busy="pending">
+	<pre v-if="failed">{{ abc }}</pre>
 	<div ref="abcjs-container" />
 	<div ref="synth-controller" />
 </div>
@@ -61,6 +77,10 @@ onUnmounted(() => {
 
 <style scoped>
 .music-score {
+	&.pending {
+		min-height: 8rem;
+	}
+
 	line-height: 1.4;
 
 	:deep(.abcjs-inline-audio) {

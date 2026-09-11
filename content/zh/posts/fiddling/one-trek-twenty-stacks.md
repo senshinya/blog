@@ -1,6 +1,7 @@
 ---
 authorship: ai-human-reviewed
 title: "一个 TREK 引发的二十个 stack"
+seoTitle: "从 TREK 到二十个 Docker 服务：ARM VPS 自托管记录"
 description: "刷 GitHub trending 刷到一个旅行规划工具，想自己部署一套。既然都要开新 VPS，那就顺手多装亿点点。"
 date: 2026-05-11 22:43:00
 categories: [fiddling]

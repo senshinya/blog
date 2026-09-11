@@ -4,6 +4,7 @@ import { globSync, readFileSync } from 'node:fs'
 import process from 'node:process'
 import { after, before, test } from 'node:test'
 import { parse } from 'yaml'
+import { isolateExternalRequests } from './browser-network.mjs'
 
 const baseURL = process.env.SEO_BASE_URL || 'http://127.0.0.1:3236'
 let browser
@@ -15,6 +16,7 @@ after(async () => browser?.close())
 
 async function openPage(locale = 'en-US') {
 	const context = await browser.newContext({ baseURL, locale, viewport: { width: 390, height: 844 } })
+	await isolateExternalRequests(context, baseURL)
 	const page = await context.newPage()
 	const errors = []
 	page.on('pageerror', e => errors.push(e.message))

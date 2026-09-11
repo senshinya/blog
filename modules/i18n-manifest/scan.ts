@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
-import { isTravelDraftSource } from '../../app/travels/draft.ts'
+import { isPrivateContentSource, isTravelDraftSource } from '../publication/sources.ts'
 
 export type Manifest = Record<string, string[]>
 
@@ -84,6 +84,8 @@ export function scanLocaleTrees({ contentDir, travelsDir, locales, isDev, hidePo
 		const root = join(contentDir, locale)
 		for (const file of walk(root)) {
 			if (!file.endsWith('.md'))
+				continue
+			if (!isDev && isPrivateContentSource(relative(root, file), readFileSync(file, 'utf8')))
 				continue
 			add(manifest, contentRoutePath(root, file, hidePostPrefix), locale)
 		}

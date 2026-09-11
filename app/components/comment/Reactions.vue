@@ -225,6 +225,8 @@ watch([ready, user, () => props.settled], () => {
 	if (p)
 		toggle(p.emoji)
 }, { immediate: true })
+
+useResourceFonts(() => ({ monospace: !!chips.value.length }))
 </script>
 
 <template>

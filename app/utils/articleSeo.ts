@@ -30,8 +30,8 @@ export function articleSchemaData(post: SeoArticle, path: string, language: stri
 			'@type': 'Person' as const,
 			'@id': personId,
 			'name': site.author.name,
-			'url': site.author.homepage,
-			'sameAs': [site.author.homepage],
+			'url': 'https://shinya.click/',
+			'sameAs': ['https://shinya.click/', site.author.homepage],
 		},
 		article: {
 			'@type': 'BlogPosting' as const,

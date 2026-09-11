@@ -41,19 +41,16 @@ export default defineNuxtConfig({
 				{ name: 'mobile-web-app-capable', content: 'yes' },
 			],
 			link: [
-				{ rel: 'icon', href: blogConfig.favicon },
+				{ rel: 'icon', type: 'image/png', sizes: '96x96', href: blogConfig.favicon },
+				{ rel: 'icon', type: 'image/png', sizes: '48x48', href: '/icons/favicon-48.png' },
+				{ rel: 'icon', type: 'image/png', sizes: '192x192', href: '/icons/favicon-192.png' },
+				{ rel: 'apple-touch-icon', sizes: '180x180', href: '/icons/apple-touch-icon.png' },
 				// atom feed 的 alternate link 按 locale 生成，见 app/app.vue 的 useHead
 				// 首屏就要打这个域名取会话和线程，提前把 TLS 握完
 				{ rel: 'preconnect', href: blogConfig.comment.api, crossorigin: '' },
-				{ rel: 'stylesheet', href: 'https://s4.zstatic.net/npm/katex@0.16.44/dist/katex.min.css' },
 				// "InterVariable", "Inter"
 				{ rel: 'stylesheet', href: 'https://s4.zstatic.net/npm/inter-ui@4.1.1/inter-variable.css' },
-				{ rel: 'stylesheet', href: 'https://s4.zstatic.net/npm/inter-ui@4.1.1/inter.css' },
-				// "JetBrains Mono", 思源宋体 "Noto Serif SC"
 				{ rel: 'preconnect', href: 'https://fonts.gstatic.cn', crossorigin: '' },
-				{ rel: 'stylesheet', href: 'https://fonts.googleapis.cn/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Serif+SC:wght@200..900&display=swap' },
-				// 抖音美好体 "DOUYINSANSBOLD-GB"
-				{ rel: 'stylesheet', href: 'https://fonts.bytedance.com/dfd/api/v1/css?family=DOUYINSANSBOLD-GB&display=swap' },
 			],
 			templateParams: {
 				separator: '|',
@@ -157,7 +154,7 @@ export default defineNuxtConfig({
 			 * ssr:false 让本页纯客户端渲染，产物无 path，route.query 从首帧即照地址栏，深链首取即正确。
 			 * 配合 nitro.prerender.routes 里登记 /media，生成可 200 直达的客户端壳。
 			 */
-			'/media': { ssr: false },
+			'/media': { ssr: false, robots: 'noindex, follow', sitemap: false, headers: { 'X-Robots-Tag': 'noindex, follow' } },
 			/**
 			 * 碎语详情页：按需服务端渲染，产物交给 Vercel 的 ISR 缓存。
 			 *
@@ -181,6 +178,8 @@ export default defineNuxtConfig({
 			 * 但改错别字要等更久。
 			 */
 			'/memos/**': { isr: 600 },
+			'/preview': { prerender: false, sitemap: false },
+			'/previews/**': { prerender: false, sitemap: false },
 		}),
 	},
 
@@ -245,6 +244,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/seo',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
+		'~~/modules/publication',
 		'nuxt-llms',
 		'unplugin-yaml/nuxt',
 		['~~/modules/i18n-manifest', { locales: blogConfig.locales.map(l => l.code), defaultLocale: 'zh' }],

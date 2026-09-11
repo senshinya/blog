@@ -42,6 +42,8 @@ const loading = computed(() => status.value === 'idle' || status.value === 'pend
 // 服务端与首帧测量前 height 为 0，此时不落 style，保持 auto，故预渲染的 HTML 不会被压扁。
 const contentEl = useTemplateRef('content')
 const { height: contentHeight } = useElementSize(contentEl)
+
+useResourceFonts(() => ({ monospace: !!memos.value.length }))
 </script>
 
 <template>

@@ -105,6 +105,8 @@ useSeoMeta({
 	// 有真图才铺大图；退回头像时用 summary，免得一张方形头像被拉成横幅
 	twitterCard: () => data.value?.memo.images.length ? 'summary_large_image' : 'summary',
 })
+
+useResourceFonts({ monospace: true })
 </script>
 
 <template>

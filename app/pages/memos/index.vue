@@ -128,13 +128,9 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 		<h1 class="text-creative">
 			{{ $t('page.memos.title') }}
 		</h1>
-		<i18n-t keypath="page.memos.syncNotice" tag="p" class="memos-desc">
-			<template #link>
-				<UtilLink to="https://memos.shinya.click">
-					Memos
-				</UtilLink>
-			</template>
-		</i18n-t>
+		<p class="memos-desc">
+			{{ $t('page.memos.syncNotice', { link: 'Memos' }) }}
+		</p>
 	</header>
 
 	<ZError v-if="error" :message="$t('page.memos.loadError', { message: error.message })" />

@@ -144,6 +144,8 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	node.value.reactions = payload.reactions
 	node.value.viewer_reactions = payload.viewer_reactions
 }
+
+useResourceFonts(() => ({ monospace: /<(?:pre|code)\b/i.test(node.value.body_html) }))
 </script>
 
 <template>

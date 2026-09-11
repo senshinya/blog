@@ -40,6 +40,9 @@ const { copy, copied } = useCopy(shareText)
 		</div>
 
 		<div v-if="!meta?.hideInfo" class="post-info">
+			<a class="post-author" href="https://shinya.click/" :aria-label="$t('post.author', { name: blogConfig.author.name })">
+				{{ blogConfig.author.name }}
+			</a>
 			<UtilDate
 				v-if="date"
 				v-tip

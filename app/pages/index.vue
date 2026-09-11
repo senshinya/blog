@@ -44,7 +44,7 @@ function changeCategory(value?: string) {
 	navigateTo({ path: paginationPath(1, locale.value), query: value ? { category: value } : {} })
 }
 
-useSeoMeta({ title: () => (page.value > 1 ? t('ui.pagination.page', { n: page.value }) : '') })
+useSeoMeta({ title: () => page.value > 1 ? `${t('ui.pagination.page', { n: page.value })} · ${t('site.seoTitle')}` : t('site.seoTitle') })
 
 const listRecommended = computed(() => orderBy(
 	listRaw.value.filter(item => item.recommend !== null),
@@ -55,7 +55,7 @@ const listRecommended = computed(() => orderBy(
 const previewCountKey = computed(() => `previews:count:${collection.value}`)
 const { data: previewCount } = useAsyncData(
 	previewCountKey,
-	() => queryCollection(collection.value).where('stem', 'LIKE', 'previews/%').count(),
+	() => import.meta.dev ? queryCollection(collection.value).where('stem', 'LIKE', 'previews/%').count() : Promise.resolve(0),
 	{ watch: [collection] },
 )
 </script>

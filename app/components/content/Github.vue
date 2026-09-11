@@ -24,6 +24,8 @@ const { data } = await useAsyncData(
 
 const compactNum = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 })
 const subtitle = computed(() => data.value?.license?.spdx_id ?? data.value?.language ?? null)
+
+useResourceFonts({ monospace: true })
 </script>
 
 <template>

@@ -9,9 +9,9 @@ const collection = useContentCollection()
 const series = computed(() => articleSeries.find(item => item.paths.includes(props.path)))
 const { data: entries } = await useAsyncData(`series:${collection.value}`, () => queryArticleIndex(collection.value), { default: () => [] })
 const copy = computed(() => ({
-	zh: { series: '系列', overview: '系列总目录', previous: '上一篇', next: '下一篇', current: '本文', mydb: 'MYDB · 手写数据库' },
-	en: { series: 'Series', overview: 'Series overview', previous: 'Previous', next: 'Next', current: 'Current', mydb: 'MYDB · Building a database' },
-	ja: { series: 'シリーズ', overview: 'シリーズ目次', previous: '前の記事', next: '次の記事', current: 'この記事', mydb: 'MYDB · データベースを作る' },
+	zh: { series: '系列', previous: '上一篇', next: '下一篇', current: '本文', mydb: 'MYDB · 手写数据库' },
+	en: { series: 'Series', previous: 'Previous', next: 'Next', current: 'Current', mydb: 'MYDB · Building a database' },
+	ja: { series: 'シリーズ', previous: '前の記事', next: '次の記事', current: 'この記事', mydb: 'MYDB · データベースを作る' },
 })[locale.value]!)
 const title = computed(() => series.value?.id === 'mydb' ? copy.value.mydb : series.value?.title[locale.value])
 const chapters = computed(() => series.value?.paths.flatMap((path) => {
@@ -109,9 +109,6 @@ onBeforeUnmount(() => animation?.cancel())
 					</NuxtLink>
 				</li>
 			</ol>
-			<NuxtLink class="series-overview" :to="`${resolveContentPath(series.paths[0], locale)}#${anchor}`">
-				{{ copy.overview }} <span aria-hidden="true">↗</span>
-			</NuxtLink>
 		</div>
 	</details>
 	<div v-if="previous || next" class="series-neighbors">
@@ -209,15 +206,6 @@ onBeforeUnmount(() => animation?.cancel())
 	font-size: 0.7rem;
 }
 
-.series-overview {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.4rem;
-	min-height: 2.5rem;
-	font-size: 0.75rem;
-	color: var(--c-text-2);
-}
-
 .series-neighbors {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -250,13 +238,11 @@ onBeforeUnmount(() => animation?.cancel())
 
 @media (hover: hover) {
 	.series-chapters a:hover,
-	.series-overview:hover,
 	.series-neighbors a:hover { color: var(--c-primary); }
 }
 
 @media (pointer: coarse) {
-	.series-chapters a,
-	.series-overview { min-height: 44px; }
+	.series-chapters a { min-height: 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

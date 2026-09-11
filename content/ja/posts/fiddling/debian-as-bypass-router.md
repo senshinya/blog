@@ -1,6 +1,7 @@
 ---
 authorship: human-only
 title: "Debianをサイドルーターにする"
+seoTitle: "Debian サブゲートウェイ：mihomo・AdGuard Home と透過プロキシ"
 description: "Debianをサイドルーターに使うと、OpenWrtやLuCIに依存せず、より安定した柔軟な構成を作れます。Debianを直接設定することでシステムを細かく制御でき、GUIの制約や不安定さを避けられます。一般的なサイドルーター構成と比べて透過プロキシを安定して運用しやすく、性能や効率を重視する場合の選択肢になります。"
 date: 2024-07-13 17:49:00
 categories: [fiddling]

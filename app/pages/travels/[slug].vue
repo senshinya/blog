@@ -146,6 +146,12 @@ onKeyStroke(['ArrowRight', 'ArrowDown'], (e) => {
 })
 
 /** 窄屏上地图是吸顶条，占着一截高度，给个收起开关 */
+const mapColumn = useTemplateRef<HTMLElement>('mapColumn')
+const mapVisible = ref(false)
+useVisibleTask(mapColumn, () => {
+	mapVisible.value = true
+})
+
 const mapCollapsed = ref(false)
 const resizingMap = ref(false)
 
@@ -227,9 +233,9 @@ function startsNewDay(index: number) {
 	</NuxtLink>
 
 	<div class="travel-body" :class="{ 'map-collapsed': mapCollapsed }">
-		<aside class="travel-map-col">
+		<aside ref="mapColumn" class="travel-map-col">
 			<ClientOnly>
-				<TravelMap :photos="mapPhotos" :focus="focusedPhoto" />
+				<LazyTravelMap v-if="mapVisible" :photos="mapPhotos" :focus="focusedPhoto" />
 			</ClientOnly>
 			<button
 				class="travel-map-toggle mobile-only"
@@ -261,6 +267,9 @@ function startsNewDay(index: number) {
 						{{ travel.description }}
 					</p>
 					<p class="travel-cover-meta">
+						<a href="https://shinya.click/" :aria-label="$t('post.author', { name: blogConfig.author.name })">
+							<Icon name="tabler:user" /> {{ blogConfig.author.name }}
+						</a>
 						<span><Icon name="tabler:route" /> {{ $t('page.travels.tripDays', { n: travel.totaldays }) }}</span>
 						<span><Icon name="tabler:photo" /> {{ $t('page.travels.tripPhotos', { n: photoCount }) }}</span>
 						<span><Icon name="tabler:calendar" /> {{ travel.published }}</span>
@@ -522,7 +531,7 @@ function startsNewDay(index: number) {
 	font-size: 0.85rem;
 	color: #FFFFFFB3;
 
-	> span {
+	> span, > a {
 		display: flex;
 		align-items: center;
 		gap: 0.35em;

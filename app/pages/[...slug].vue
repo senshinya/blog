@@ -14,9 +14,14 @@ const discussionKey = computed(() => stripLocale(contentPath.value, LOCALES, 'zh
 const dataKey = computed(() => `content:${contentPath.value}`)
 const { data: post } = await useAsyncData(
 	dataKey,
-	() => queryCollection(collection.value).path(stripLocale(contentPath.value, LOCALES, 'zh').basePath).first(),
+	async () => {
+		const entry = await queryCollection(collection.value).path(stripLocale(contentPath.value, LOCALES, 'zh').basePath).first()
+		return import.meta.dev || isPublicArticle(entry) ? entry : null
+	},
 	{ watch: [collection] },
 )
+
+useContentResources(() => post.value)
 
 const hasSeries = computed(() => !!post.value?.stem.startsWith('posts/') && articleSeries.some(series => series.paths.includes(post.value!.path)))
 const excerpt = computed(() => post.value?.description || '')
@@ -29,7 +34,9 @@ const { widgets } = useWidgets(asideWidgetNames)
 
 if (post.value) {
 	useSeoMeta({
-		title: post.value.title,
+		title: post.value.seoTitle || post.value.title,
+		ogTitle: post.value.seoTitle || post.value.title,
+		twitterTitle: post.value.seoTitle || post.value.title,
 		ogType: 'article',
 		ogImage: post.value.image,
 		description: post.value.seoDescription || post.value.description,

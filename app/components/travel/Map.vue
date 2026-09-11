@@ -195,13 +195,15 @@ function focusPhoto(photo: TravelPhoto) {
 		marker.togglePopup()
 }
 
-onMounted(async () => {
+useVisibleTask(container, async (isActive) => {
 	// try/catch 不是防御性摆设：MapLibre 拿不到 WebGL 上下文时，new Map() 会同步抛错。
 	// 不接住的话，这个错会从 onMounted 冒到 Nuxt，把整篇游记换成 500 错误页 ——
 	// 地图挂了就赔上全文，不值当。
 	try {
 		// 动态 import：maplibre 只在游记详情页加载，不进其它页面的首屏包
 		maplibre = await import('maplibre-gl')
+		if (!isActive() || !container.value)
+			return
 
 		map = new maplibre.Map({
 			container: container.value!,
@@ -226,6 +228,8 @@ onMounted(async () => {
 		})
 	}
 	catch (error) {
+		if (!isActive())
+			return
 		console.error('[travel] 地图初始化失败，降级为无地图模式：', error)
 		failed.value = true
 		map = undefined

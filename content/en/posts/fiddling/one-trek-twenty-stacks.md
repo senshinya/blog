@@ -1,6 +1,7 @@
 ---
 authorship: ai-human-reviewed
 title: "One TREK, Twenty Stacks"
+seoTitle: "From TREK to twenty Docker services: self-hosting on an ARM VPS"
 description: "I found a trip-planning tool on GitHub Trending and wanted to host my own instance. Since I was getting a new VPS anyway, I might as well install a little extra. Well, quite a lot extra."
 date: 2026-05-11 22:43:00
 categories: [fiddling]
