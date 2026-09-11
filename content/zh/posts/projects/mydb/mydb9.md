@@ -82,7 +82,7 @@ MYDB 实现的 SQL 语句语法如下：
 
 parser 包的 Tokenizer 类，对语句进行逐字节解析，根据空白符或者上述词法规则，将语句切割成多个 token。对外提供了 `peek()`、`pop()` 方法方便取出 Token 进行解析。切割的实现不赘述。
 
-Parser 类则直接对外提供了 `Parse(byte[] statement)` 方法，核心就是一个调用 Tokenizer 类分割 Token，并根据词法规则包装成具体的 Statement 类并返回。解析过程很简单，仅仅是根据第一个 Token 来区分语句类型，并分别处理，不再赘述。
+Parser 类则直接对外提供了 `Parse(byte[] statement)` 方法，核心就是调用 Tokenizer 类分割 Token，并根据词法规则包装成具体的 Statement 类并返回。解析过程很简单，仅仅是根据第一个 Token 来区分语句类型，并分别处理，不再赘述。
 
 虽然根据编译原理，词法分析应当写一个自动机去做的，但是又不是不能用
 
@@ -96,13 +96,13 @@ Parser 类则直接对外提供了 `Parse(byte[] statement)` 方法，核心就�
 [FieldName][TypeName][IndexUid]
 ```
 
-这里 FieldName 和 TypeName，以及后面的表明，存储的都是字节形式的字符串。这里规定一个字符串的存储方式，以明确其存储边界。
+这里 FieldName 和 TypeName，以及后面的表名，存储的都是字节形式的字符串。这里规定一个字符串的存储方式，以明确其存储边界。
 
 ```
 [StringLength][StringData]
 ```
 
-TypeName 为字段的类型，限定为 int32、int64 和 string 类型。如果这个字段有索引，那个 IndexUID 指向了索引二叉树的根，否则该字段为 0。
+TypeName 为字段的类型，限定为 int32、int64 和 string 类型。如果这个字段有索引，那么 IndexUID 指向了索引二叉树的根，否则该字段为 0。
 
 根据这个结构，通过一个 UID 从 VM 中读取并解析如下：
 
@@ -215,4 +215,4 @@ public interface TableManager {
 
 由于 TableManager 已经是直接被最外层 Server 调用（MYDB 是 C/S 结构），这些方法直接返回执行的结果，例如错误信息或者结果信息的字节数组（可读）。
 
-各个方法的具体实现很简单，不再赘述，无非是调用 VM 的相关方法。唯一值得注意的一个小点是，在创建新表时，采用的时头插法，所以每次创建表都需要更新 Booter 文件。
+各个方法的具体实现很简单，不再赘述，无非是调用 VM 的相关方法。唯一值得注意的一个小点是，在创建新表时，采用的是头插法，所以每次创建表都需要更新 Booter 文件。

@@ -67,7 +67,7 @@ private HashMap<Long, Integer> references;          // 资源的引用个数
 private HashMap<Long, Boolean> getting;             // 正在被获取的资源
 ```
 
-When `get()` retrieves a resource, it first enters an infinite loop to keep trying the cache. It checks whether another thread is currently fetching this resource from the backing store. If so, come back and check again in a bit. (
+When `get()` retrieves a resource, it first enters an infinite loop to keep trying the cache. It checks whether another thread is currently fetching this resource from the backing store. If so, it waits a bit and checks again later…
 
 ```java
 while(true) {

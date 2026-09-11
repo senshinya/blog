@@ -12,7 +12,7 @@ image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 
 不想看废话可直接跳转解决方案一节
 
-此前一直在 Google Analytics 上看博客的访问量，分析各种 referer 等信息。使用 hexo 和 hugo 等静态博客框架，都可以很容易的接入 Google Analytics，直接在 head 标签中添加 js 代码即可。前些日子将博客迁移到了 Astro 框架，诚然可以用老办法，直接在 head 执行 js 代码上报事件，但是就会造成性能下降。众所周知，Astro 追求极致前端性能、尽量 0 JS 执行。一旦使用 js 上报事件，就会造成性能损失
+此前一直在 Google Analytics 上看博客的访问量，分析各种 referer 等信息。使用 hexo 和 hugo 等静态博客框架，都可以很容易地接入 Google Analytics，直接在 head 标签中添加 js 代码即可。前些日子将博客迁移到了 Astro 框架，诚然可以用老办法，直接在 head 执行 js 代码上报事件，但是就会造成性能下降。众所周知，Astro 追求极致前端性能、尽量 0 JS 执行。一旦使用 js 上报事件，就会造成性能损失
 
 ![性能满昏！](https://blog-img.774352199.xyz/2025/e1e778992ea6b393ed763a8642db3770.png)
 
@@ -22,11 +22,11 @@ image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 
 上报直接掉零了
 
-很难绷，于是开始了漫长的排查，始终没能找到问题所在。网上找到的所有相关例子都和我的方式相同。都有些奇怪，这些人写完教程都不自己测试一下吗，完全不可用啊
+很难绷，于是开始了漫长的排查，始终没能找到问题所在。网上找到的所有相关例子都和我的方式相同。我都有些奇怪，这些人写完教程都不自己测试一下吗，完全不可用啊
 
 只得将其搁置了俩月，期间临时改用了 umami 统计数据
 
-这两天又想了起来，如芒在背如鲠在喉，于是又开始了漫长的搜索。最终在 GitHub 的一个 [角落](https://github.com/QwikDev/partytown/issues/382#issuecomment-1667675238) 中找到了解决方案
+这两天又想了起来，一直惦记着，怎么也放不下，于是又开始了漫长的搜索。最终在 GitHub 的一个 [角落](https://github.com/QwikDev/partytown/issues/382#issuecomment-1667675238) 中找到了解决方案
 
 ### 解决方案
 
@@ -51,7 +51,7 @@ image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 - `type="text/partytown"` 指示脚本由 partytown 执行，而不在主线程执行
 - `gtag` 函数必须定义为 window 对象的一个函数变量，不能定义为一个函数声明（很奇怪）
 
-在 astro 的配置文件（形如是 `astro.config.ts` 或 `astro.config.mjs`）中添加以下配置
+在 astro 的配置文件（如 `astro.config.ts` 或 `astro.config.mjs`）中添加以下配置
 
 ```js
 import partytown from '@astrojs/partytown'

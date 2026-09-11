@@ -98,7 +98,7 @@ Now I get up at 8:30, go to the office for breakfast, leave straight after dinne
 > [!CAUTION]
 > Keep grinding? How am I supposed to do that if I grind myself into an early grave?
 
-Fortunately, the upheaval also drove out quite a few product managers, and the workload dropped sharply. Management did switch to “if there's no work to stir up, stir up trouble for people,” adding yet more checkpoints and rules. Our current skip-level manager also has a distinctly Alibaba flavor, with a fondness for baffling team-building activities and personal talent shows. Another form of torture, really. Still, the platform has settled into low-frequency maintenance, and there aren't so many little things to deal with.
+Fortunately, the upheaval also drove out quite a few product managers, and the workload dropped sharply. Management did switch to “if there's no work to stir up, stir up trouble for people,” adding yet more checkpoints and rules. Our current skip-level manager also has a distinctly Alibaba flavor, with a fondness for baffling team-building activities and personal talent shows. Another form of torture, really. Still, the platform now needs only occasional maintenance, and there aren't so many little things to deal with.
 
 The job market out there is terrible. I'll coast for now.
 

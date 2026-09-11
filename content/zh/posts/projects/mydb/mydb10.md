@@ -12,7 +12,7 @@ image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
 
 ### 前言
 
-NYDB 被设计为 C/S 结构，类似于 MySQL。支持启动一个服务器，并有多个客户端去连接，通过 socket 通信，执行 SQL 返回结果。
+MYDB 被设计为 C/S 结构，类似于 MySQL。支持启动一个服务器，并有多个客户端去连接，通过 socket 通信，执行 SQL 返回结果。
 
 ### C/S 通信
 

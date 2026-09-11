@@ -24,7 +24,7 @@ Fortunately, there was no *H. pylori*. But chronic gastritis with erosions turne
 
 The doctor prescribed three medicines for two weeks: enteric-coated esomeprazole tablets, teprenone capsules, and dispersible trimebutine maleate tablets.
 
-Those two weeks were wonderful. I barely felt any discomfort, and everything tasted good. Only later did I learn that omeprazole was suppressing my stomach acid and keeping all the symptoms at bay. Once I stopped taking the medicine, things started going downhill.
+Those two weeks were wonderful. I barely felt any discomfort, and everything tasted good. Only later did I learn that esomeprazole was suppressing my stomach acid and keeping all the symptoms at bay. Once I stopped taking the medicine, things started going downhill.
 
 There wasn't a particularly severe rebound, actually. It was more that I could constantly feel my stomach, in the upper-left abdomen. It didn't hurt, but it was *there*. That constant reminder often left me irritable. And the stomach responds to emotions, so...
 
@@ -33,10 +33,10 @@ Time to make some changes!
 Here's what I'm trying for now:
 
 1. Get up early, at 8:30, and eat breakfast. The company has a decent spread: I usually have a boiled egg, a bowl of congee, and whatever steamed buns are on offer that day.
-2. Take Kangfuxin liquid, the “cockroach potion,” three times a day to help the gastric erosions heal. It doesn't taste nearly as bad as I expected. Apart from being rather syrupy-sweet, it's actually quite drinkable once you get past the mental hurdle (
+2. Take Kangfuxin liquid, the “cockroach potion,” three times a day to help the gastric erosions heal. It doesn't taste nearly as bad as I expected. Apart from being rather syrupy-sweet, it's actually quite drinkable once you get past the mental hurdle...
 3. Take B vitamins and vitamin C whenever I remember. I'm pretty relaxed about that one.
 4. Have yogurt about an hour after lunch. I haven't been able to tell whether this helps, because I bought the wrong yogurt... I got Bright Dairy's yogurt-flavored milk drink instead. A whole case of it 😭.
-5. Go to bed earlier. I've mostly managed to get it down to before 1 a.m., which probably doesn't count as all that early.
+5. Go to bed earlier. I've mostly managed to get to bed before 1 a.m., which probably doesn't count as all that early.
 6. Quit drinking.
 
 We'll see how it goes. I'm not following a particularly strict diet; hopefully a few months of looking after myself will help my stomach recover.

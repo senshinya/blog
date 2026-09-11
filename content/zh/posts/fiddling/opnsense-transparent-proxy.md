@@ -14,7 +14,7 @@ image: "https://blog-img.774352199.xyz/xA8C1E.webp"
 
 后续更换了主路由 OpenWRT，旁路由 Debian 的 [方案](/fiddling/debian-as-bypass-router)，后面又不使用旁路由方案，先后尝试了 [基于 FakeIP 的分流转发方案](/fiddling/fake-ip-based-transparent-proxy) 和 [基于 BGP 的分流转发方案](/fiddling/more-accurate-chnroute)，最终稳定在了基于 BGP 的分流转发方案上
 
-最近又了解到了 OPNsense 这个防火墙/路由系统。简直是梦中情路由系统，开源免费，UI 美观，功能完善，同时还提供了 gui 界面支持自动更新 ip list 以用于分流。所以计划将现有的分流转发方案迁移到该系统上，同时不在单独使用一个软路由用于科学，而是直接将 clash 集成进主路由中
+最近又了解到了 OPNsense 这个防火墙/路由系统。简直是梦中情路由系统，开源免费，UI 美观，功能完善，同时还提供了 gui 界面支持自动更新 ip list 以用于分流。所以计划将现有的分流转发方案迁移到该系统上，同时不再单独使用一个软路由用于科学，而是直接将 clash 集成进主路由中
 
 网上冲浪了下，相关的教程并不多，有部分教程也由于年久失修，不再有效。踩了一些坑后，决定整理一下详细的方案
 
@@ -31,7 +31,7 @@ DNS 解析和流量处理都依赖了 clash 的功能，所以第一步先安装
 
 ssh 进 OPNsense（怎么开启 ssh？STFW）后，新建文件夹 `/usr/local/clash` 作为 clash 二进制、配置文件和其他相关文件的存放点。clash 二进制建议 scp 过去（毕竟主路由现在还没科学，直接下载速度很慢）。这里需要先把 clash 二进制和配置文件上传到该目录下。clash 二进制重命名为 clash，配置文件命名为 `config.yaml`
 
-在 mihomo 的 [releases 页面](https://github.com/MetaCubeX/mihomo/releases) 下载最新的内核版本。注意下载 freebsd 版本，根据你的机器架构选择 386、amd64 或者 arm64。如果你是 amd64 且后续运行 clash 时阶段出现以下报错，请下载 `amd64-compatible` 版
+在 mihomo 的 [releases 页面](https://github.com/MetaCubeX/mihomo/releases) 下载最新的内核版本。注意下载 freebsd 版本，根据你的机器架构选择 386、amd64 或者 arm64。如果你是 amd64 且后续运行 clash 时出现以下报错，请下载 `amd64-compatible` 版
 
 ```shell
 This PROGRAM can only be run on _AMD64 processors with v3 microarchitecture_ support.
@@ -51,7 +51,7 @@ tun:
 
 dns 监听 5353 端口，作为 OPNsense 自带的 DNS 上游。同时关闭 tun，不主动劫持流量，而是由 OPNsense 进行流量筛选后导入。这里 mixed-port 同时兼具 socks-port、http-port 和 https-port 的功能
 
-运行 `pw user add clash -c "Clash" -s /usr/sbin/nologin` 创建一个无登录的 clash 用户，并通过 `chown clash:clash /usr/local/clash` 赋予文件夹权限。完成后可以通过 `/usr/local/clash/clash -d /usr/local/clash` 执行一次，观察下是否可以成功运行
+运行 `pw user add clash -c "Clash" -s /usr/sbin/nologin` 创建一个不可登录的 clash 用户，并通过 `chown clash:clash /usr/local/clash` 赋予文件夹权限。完成后可以通过 `/usr/local/clash/clash -d /usr/local/clash` 执行一次，观察下是否可以成功运行
 
 #### 注册 clash 服务
 
@@ -120,7 +120,7 @@ message:restarting clash
 
 接下来设置 clash 开机自启就可以了，但这里有个坑：
 
-> clash 作为系统服务启动后，并没有完成启动后就保持后台运行的功能，这样每次系统重启后会启动到 clash 之后就不会往后走，因该 clash 一直会保持在前台，导致排在 clash 后面的待启动服务就没法启动了
+> clash 作为系统服务启动后，并没有完成启动后就保持后台运行的功能，这样每次系统重启，启动到 clash 就不会再往后走，因为 clash 一直会保持在前台，导致排在 clash 后面的待启动服务就没法启动了
 
 有一个曲折的办法就是通过 OPNsense 自带的一个服务监控功能 Monit 来拉起和监控 clash 的状态。Monit 功能可在 `服务-Monit` 中开启
 
@@ -167,7 +167,7 @@ $ fetch -o /usr/local/etc/pkg/repos/mimugmail.conf https://www.routerperformance
 $ pkg update
 ```
 
-接着在 web-gui 中的系统 - 固件 - 插件中搜索 adguard，安装 os-adguardhome-maxit 即可。安装完成后即可在服务-Adguardhome 中开启 Adguard Home。web 管理开放在 3000 端口，初始化设置过程不表，注意 DNS 监听端口设置为 53，即以 Adguard Home 作为 OPNsense 所在机器的默认 DNS server
+接着在 web-gui 中的系统 - 固件 - 插件中搜索 adguard，安装 os-adguardhome-maxit 即可。安装完成后即可在服务-Adguardhome 中开启 Adguard Home。web 管理开放在 3000 端口，初始化设置过程就不展开了，注意 DNS 监听端口设置为 53，即以 Adguard Home 作为 OPNsense 所在机器的默认 DNS server
 
 安装完成后在 Adguard Home 的设置-DNS 设置中将上游 DNS 服务器设置为 127.0.0.1:5353，即 Clash 的 DNS 监听地址即可
 
@@ -294,7 +294,7 @@ tun2socks_enable="YES"
 
 给予文件可执行权限 `chmod +x /usr/local/etc/rc.syshook.d/early/60-tun2socks` 即可
 
-#### 新建端口、配置网关
+#### 新建接口、配置网关
 
 在 OPNsense 的接口 - 分配中，添加一个新接口，设备即为我们在配置文件中写的 proxytun2socks0，保存即可
 

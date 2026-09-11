@@ -20,7 +20,7 @@ image: "https://blog-img.774352199.xyz/H4zZAK.webp"
 
 在 MYDB 中，每一个事务都有一个 XID，这个 ID 唯一标识了这个事务。事务的 XID 从 1 开始标号，并自增，不可重复。并特殊规定 XID 0 是一个超级事务（Super Transaction）。当一些操作想在没有申请事务的情况下进行，那么可以将操作的 XID 设置为 0。XID 为 0 的事务的状态永远是 committed。
 
-TransactionManager 维护了一个 XID 格式的文件，用来记录各个事务的状态。MYDB 中，每个事务都有下面的三种状态：
+TransactionManager 维护了一个 XID 格式的文件，用来记录各个事务的状态。MYDB 中，每个事务都处于下面三种状态之一：
 
 1.  active，正在进行，尚未结束
 2.  committed，已提交
@@ -61,7 +61,7 @@ public static final long SUPER_XID = 0;
 static final String XID_SUFFIX = ".xid";
 ```
 
-文件读写都采用了 NIO 方式的 FileChannel，读写方式都和传统 IO 的 Input/Output Stream 都有一些区别，不过区别主要是接口方面，熟悉使用即可。
+文件读写都采用了 NIO 方式的 FileChannel，读写方式和传统 IO 的 Input/Output Stream 有一些区别，不过区别主要是接口方面，熟悉使用即可。
 
 在构造函数创建了一个 TransactionManager 之后，首先要对 XID 文件进行校验，以保证这是一个合法的 XID 文件。校验的方式也很简单，通过文件头的 8 字节数字反推文件的理论长度，与文件的实际长度做对比。如果不同则认为 XID 文件不合法。
 
@@ -177,7 +177,7 @@ private boolean checkXID(long xid, byte status) {
 }
 ```
 
-当然，检查之间记得排除 SUPER\_XID。
+当然，检查之前记得排除 SUPER\_XID。
 
 另外就是两个静态方法：`create()` 和 `open()`，分别表示创建一个 xid 文件并创建 TM 和从一个已有的 xid 文件来创建 TM。从零创建 XID 文件时需要写一个空的 XID 文件头，即设置 xidCounter 为 0，否则后续在校验时会不合法：
 

@@ -10,7 +10,7 @@ image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
 
 ### 前言
 
-实验一是要实现一个 MapReduce 系统，基本就是两个部分：实现 master 程序和实现 worker 程序。这个实验基本就是劝退怪了，一来是对 golang 的 rpc 和并发的使用要比较熟悉，二来就是要对 MapReduce 的整个流程机制要比较熟悉。其实有一个小秘诀，就是拼命看论文中的这张图，再拼命看下面的流程讲解：
+实验一是要实现一个 MapReduce 系统，基本就是两个部分：实现 master 程序和实现 worker 程序。这个实验基本就是劝退怪了，一来是对 golang 的 rpc 和并发的使用要比较熟悉，二来就是要对 MapReduce 的整个流程机制比较熟悉。其实有一个小秘诀，就是拼命看论文中的这张图，再拼命看下面的流程讲解：
 
 ![mapReduce 执行流程](https://blog-img.774352199.xyz/2025/6f7e7839e6f09e0d8193d530920a6f7e.jpg)
 
@@ -18,7 +18,7 @@ image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
 
 ### 实验讲解
 
-做实验之前，首先需要读懂实验。说明书在：[https://pdos.csail.mit.edu/6.824/labs/lab-mr.html](https://pdos.csail.mit.edu/6.824/labs/lab-mr.html)。主要这个实验需要在 Linux 环境下进行，因为进程通信基于 unix socket，MacOS 原则上来说也可以，但是据说还是会有些小问题。
+做实验之前，首先需要读懂实验。说明书在：[https://pdos.csail.mit.edu/6.824/labs/lab-mr.html](https://pdos.csail.mit.edu/6.824/labs/lab-mr.html)。注意，这个实验需要在 Linux 环境下进行，因为进程通信基于 unix socket，MacOS 原则上来说也可以，但是据说还是会有些小问题。
 
 代码中已经提供了一个单线程串行版的 MapReduce，代码在 `src/main/mrsequential.go`。这个版本很重要，建议先阅读一遍，可以大致了解整体的流程。有一些内容的处理也可以直接从中 copy。
 
@@ -28,7 +28,7 @@ mrcoordinator 会调用 `mr/coordinator.go` 中的 MakeCoordinator 函数，来�
 
 mrworker 的处理就很简单了，只有一个主协程，直接调用了 `mr/worker.go` 的 Worker 函数，在这里处理即可。一般可以直接实现成单协程程序。
 
-测试脚本为 `src/main/test-mr.sh`，它会将两个现成的 MapReduce 程序：wc 和 indexer 通过你的框架执行，并与串行执行的结果相比较。它同时还会检查并行运行相同的 Map 或 Reduce 任务、甚至 worker 执行任务期间发生 crash 时，最终是否能得到正确的结构。通常它会启动一个 master 进程和三个 worker 进程。如果在运行期间发生错误不退出时，可以通过 `ps -A` 命令，找到 mrcoordinator 进程的 pid，并 kill 掉即可。普通的 `ctrl + c` 可能无法完全退出，会影响后续的测试。
+测试脚本为 `src/main/test-mr.sh`，它会将两个现成的 MapReduce 程序：wc 和 indexer 通过你的框架执行，并与串行执行的结果相比较。它同时还会检查并行运行相同的 Map 或 Reduce 任务、甚至 worker 执行任务期间发生 crash 时，最终是否能得到正确的结果。通常它会启动一个 master 进程和三个 worker 进程。如果在运行期间发生错误，程序无法退出，可以通过 `ps -A` 命令，找到 mrcoordinator 进程的 pid，并 kill 掉即可。普通的 `ctrl + c` 可能无法完全退出，会影响后续的测试。
 
 最后，请多阅读几遍实验指导书。
 
@@ -150,7 +150,7 @@ var (
 )
 ```
 
-master 首先遍历所有的 tasks，找出其中的状态为未执行的状态，并根据当前的阶段，返回 Map 或者 Reduce 任务。如果当前没有空闲任务的话，又分为以下两种情况。当前为 Map 阶段，这时需要返回 TaskType\_Wait 任务，要求 worker 等待，Map 阶段结束后还需要进行 Reduce 任务；当前为 Reduce 阶段，这时所有任务已经完成，返回 TaskType\_Exit 要求 worker 退出。
+master 首先遍历所有的 tasks，找出其中状态为未执行的任务，并根据当前的阶段，返回 Map 或者 Reduce 任务。如果当前没有空闲任务的话，又分为以下两种情况。当前为 Map 阶段，这时需要返回 TaskType\_Wait 任务，要求 worker 等待，Map 阶段结束后还需要进行 Reduce 任务；当前为 Reduce 阶段，这时所有任务已经完成，返回 TaskType\_Exit 要求 worker 退出。
 
 当 worker 完成时，会通知 master 任务完成。传递的信息中会带有任务的类型和任务的 Id。master 会忽略掉非当前阶段的任务，根据 taskId 修改 tasks 中的任务状态为 finished（忽略当前任务状态，直接改为完成），并删除 timeout 中的对应结构。
 
@@ -240,4 +240,4 @@ func Worker(mapf func(string, string) []KeyValue,
 }
 ```
 
-map 和 reduce 的操作，可以参考串行单线程的实现。有一点注意是，由于可能有多个进程同时执行同一个任务，也可能会出现执行到一半崩溃的情况，遗留下的文件可能会导致后续 worker 重新执行时发生错误。所以创建输出文件时，可以通过 ioutil.TempFile 函数创建一个临时文件写入，等到写入完成后通过 os.Rename 重命名为目标文件，这样即可保证最后的输出文件一定是完整的。
+map 和 reduce 的操作，可以参考串行单线程的实现。有一点需要注意，由于可能有多个进程同时执行同一个任务，也可能会出现执行到一半崩溃的情况，遗留下的文件可能会导致后续 worker 重新执行时发生错误。所以创建输出文件时，可以通过 ioutil.TempFile 函数创建一个临时文件写入，等到写入完成后通过 os.Rename 重命名为目标文件，这样即可保证最后的输出文件一定是完整的。

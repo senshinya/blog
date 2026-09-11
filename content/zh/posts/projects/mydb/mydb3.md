@@ -105,7 +105,7 @@ private void flush(Page pg) {
 }
 ```
 
-PageCache 还使用了一个 AtomicInteger，来记录了当前打开的数据库文件有多少页。这个数字在数据库文件被打开时就会被计算，并在新建页面时自增。
+PageCache 还使用了一个 AtomicInteger，来记录当前打开的数据库文件有多少页。这个数字在数据库文件被打开时就会被计算，并在新建页面时自增。
 
 ```java
 public int newPage(byte[] initData) {
@@ -170,7 +170,7 @@ private static boolean checkVc(byte[] raw) {
 
 MYDB 对于普通数据页的管理就比较简单了。一个普通页面以一个 2 字节无符号数起始，表示这一页的空闲位置的偏移。剩下的部分都是实际存储的数据。
 
-所以对普通页的管理，基本都是围绕着对 FSO（Free Space Offset）进行的。例如向页面插入数据：
+所以对普通页的管理，基本都是围绕 FSO（Free Space Offset）的操作进行的。例如向页面插入数据：
 
 ```java
 // 将 raw 插入 pg 中，返回插入位置
@@ -205,7 +205,7 @@ public static int getFreeSpace(Page pg) {
 }
 ```
 
-剩余两个函数 `recoverInsert()` 和 `recoverUpdate()` 用于在数据库崩溃后重新打开时，恢复例程直接插入数据以及修改数据使用。
+剩余两个函数 `recoverInsert()` 和 `recoverUpdate()` 供恢复例程使用，在数据库崩溃后重新打开时，直接插入或修改数据。
 
 ```java
 // 将 raw 插入 pg 中的 offset 位置，并将 pg 的 offset 设置为较大的 offset

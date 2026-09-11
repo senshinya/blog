@@ -8,7 +8,7 @@ tags: ["折腾", "软路由", "透明代理", "分流", "BGP"]
 image: "https://blog-img.774352199.xyz/MOmM1s.webp"
 ---
 
-此前折腾过两节的透明代理方案：[debian 旁路由方案](/fiddling/debian-as-bypass-router) 和 [基于 FakeIP 的透明代理分流](/fiddling/fake-ip-based-transparent-proxy)，家里的透明代理基本已经可用了。基于 FakeIP 的方案使用 FakeIP 标记国外 IP，并在主路由识别并进行分流。sing-box 的 dns 模块配置为
+此前折腾过两套透明代理方案：[debian 旁路由方案](/fiddling/debian-as-bypass-router) 和 [基于 FakeIP 的透明代理分流](/fiddling/fake-ip-based-transparent-proxy)，家里的透明代理基本已经可用了。基于 FakeIP 的方案使用 FakeIP 标记国外 IP，由主路由识别并进行分流。sing-box 的 dns 模块配置为
 
 ```json
 {
@@ -69,7 +69,7 @@ image: "https://blog-img.774352199.xyz/MOmM1s.webp"
 
 > 根据中国具体国情、维基百科，能够直接与国际互联网建立 BGP Session 只有三大运营商、教育网和科技网
 
-网上有很多教程教你如何自己运营一个 AS，由此拉到一张完整的 BGP 表。但是作为懒狗（拿来主义），我找到 Github 上其实已经有一些基于 BGP 的 CN-IP list。本篇基于这个项目：https://github.com/gaoyifan/china-operator-ip/blob/ip-lists/china.txt
+网上有很多教程教你如何自己运营一个 AS，由此拉到一张完整的 BGP 表。但是作为懒狗（拿来主义），我发现 Github 上其实已经有一些基于 BGP 的 CN-IP list。本篇基于这个项目：https://github.com/gaoyifan/china-operator-ip/blob/ip-lists/china.txt
 
 有了 list，下面就是 code time！
 
@@ -128,7 +128,7 @@ ip rule add fwmark 1 table 100
 ip route add default via 192.168.7.2 table 100
 ```
 
-代码注释很完全，不做过多解释
+代码注释很完整，不做过多解释
 
 如果你的路由系统是 OpenWRT，需要额外安装 bash、ipset、iptables 等，OpenWRT 的默认 shell 是 ash，无法运行此脚本
 

@@ -17,7 +17,7 @@ Project: [https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/
 
 Maybe I am addicted to reinventing wheels, or maybe I just felt I needed to brush up on database fundamentals. Either way, I finished this project in a little more than half a month, working from the end of the workday until midnight.
 
-I do have a bit of history with databases. When my university offered its database systems course, I happened to be interning in Shenzhen. Online classes became a perfectly legitimate excuse to slack off at work, and I did just about everything except listen to the lectures. Operating systems was taught around the same time, but since I actually had some interest in OS, I did not learn it quite as badly as databases.
+I do have a bit of history with databases. When my university offered its database systems course, I happened to be interning in Shenzhen. Online classes became a perfectly legitimate excuse to slack off at work, and I did just about everything except listen to the lectures. Operating systems was taught around the same time, but since I actually had some interest in OS, my grasp of it was not quite as shaky as my database knowledge.
 
 The consequences caught up with me soon enough. In my second interview at ByteDance, the interviewer asked how much I knew about databases. In the spirit of being candid and clear, I said, “Nothing at all.” He then asked about redis, and I could only say, “Nothing about that either.” Fortunately, he did not hold it against me and passed me anyway. I do wonder whether those two “I don’t knows” tanked my interview feedback, though…
 

@@ -107,7 +107,7 @@ AST構築中に確実に行える検査は、次の2つです。
 1. ユーザー定義型の使用時に、以前に宣言された型か確認する。変数宣言による隠蔽はまだ確認できない。
 2. `declaration_specifiers`にユーザー定義型の`type_specifier`が含まれるなら、`type_specifier`はそれ1つだけにする。ユーザー定義型はすでに完全な型なので、他の型指定子とは組み合わせない。
 
-1つ目は、構築中にユーザー定義型のスコープスタックを維持します。`{`のシフトで新しいスコープを積み、`}`のシフトで先頭を取り除きます。Declarationへ還元したらtypedefの印を確認し、型定義ならそのノードの全DeclaratorIDを最上位スコープへ追加します。`typedef_name := IDENTIFIER`で還元したノードでは、`IDENTIFIER`が以前に定義された型であるはずなので、スタックの上から下へ探します。
+1つ目は、構築中にユーザー定義型のスコープスタックを維持します。`{`のシフトで新しいスコープを積み、`}`のシフトでスタック先頭のスコープを取り除きます。Declarationへ還元したらtypedefの印を確認し、型定義ならそのノードの全DeclaratorIDをスタック先頭のスコープへ追加します。`typedef_name := IDENTIFIER`で還元したノードでは、`IDENTIFIER`が以前に定義された型であるはずなので、スタックの上から下へ探します。
 
 2つ目は簡単で、`declaration`、`function_definition`、`parameter_declaration`への還元時に`declaration_specifiers`を検査すればよいだけです。
 
@@ -132,7 +132,7 @@ type ScopeSymbols struct {
 }
 ```
 
-構築中と同様、`{`でスコープを積み、`}`で先頭を取り除きます。`declaration`ノードにtypedefの印があればDeclaratorIDを最上位スコープの型名に、なければ変数名に追加します。変数名の追加時は、同じスコープに同名の型名がないかを調べ、あればエラーにします。型名を追加するときも逆の検査をします。
+構築中と同様、`{`でスコープを積み、`}`でスタック先頭のスコープを取り除きます。`declaration`ノードにtypedefの印があればDeclaratorIDをスタック先頭のスコープの型名に、なければ変数名に追加します。変数名の追加時は、同じスコープに同名の型名がないかを調べ、あればエラーにします。型名を追加するときも逆の検査をします。
 
 関数定義の関数名も、変数シンボルとしてテーブルに追加します。関数定義は`function_definition := declaration_specifiers declarator...`という形で、`declarator`のDeclaratorIDが関数名です。
 

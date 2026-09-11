@@ -10,7 +10,7 @@ image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 
 ### はじめに
 
-MapReduceは、Googleが初期に提案した、大規模なデータセットの並列計算を支えるソフトウェアアーキテクチャのモデルです。現在では、多くの分散システムでこの考え方が使われています。
+MapReduceは、Googleが以前提案した、大規模なデータセットの並列計算を支えるソフトウェアアーキテクチャのモデルです。現在では、多くの分散システムでこの考え方が使われています。
 
 その理論は、Googleが2004年に発表した論文『MapReduce: Simplified Data Processing on Large Clusters』にまとめられています。全文は[こちら](https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf)で読めます。わずか13ページですが、その辺の短い論文とは比べものにならないほど情報が詰まっています。
 

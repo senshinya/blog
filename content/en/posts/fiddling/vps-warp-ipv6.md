@@ -25,7 +25,7 @@ The WARP script I used before was [fscarmen/warp](https://gitlab.com/fscarmen/wa
 1. WARP reduces speed, and not all outbound traffic needs it. Usually only services picky about IP addresses, such as Netflix and OpenAI, need to use WARP.
 2. Once WARP takes over all traffic, it sometimes prefers IPv4 even with a dual-stack exit. DNS resolution takes place inside WARP, remotely, so there is no way to intervene.
 
-For the first problem, the script supports a non-global mode that exposes a local SOCKS proxy, letting proxy software route selected traffic through it. For the second, the proxy software can resolve DNS locally before sending the resolved traffic out through WARP.
+For the first problem, the script supports a non-global mode that exposes a local SOCKS proxy, letting proxy software route selected traffic through it. For the second, the proxy software can resolve DNS locally before sending traffic to the resolved addresses through WARP.
 
 You can select non-global WARP mode directly when running the installation script:
 

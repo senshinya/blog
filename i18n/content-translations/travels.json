@@ -1,0 +1,14 @@
+{
+  "kansai-202504": {
+    "path": "/travels/kansai-202504",
+    "zh": { "title": "近畿地方", "posttitle": "游记：近畿地方（2025.4）" },
+    "en": { "title": "Kansai", "posttitle": "Travel Journal: Kansai (April 2025)" },
+    "ja": { "title": "近畿地方", "posttitle": "旅行記：近畿地方（2025年4月）" }
+  },
+  "korea-202510": {
+    "path": "/travels/korea-202510",
+    "zh": { "title": "南韩", "posttitle": "游记：南韩（2025.10）" },
+    "en": { "title": "South Korea", "posttitle": "Travel Journal: South Korea (October 2025)" },
+    "ja": { "title": "韓国", "posttitle": "旅行記：韓国（2025年10月）" }
+  }
+}

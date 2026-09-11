@@ -46,7 +46,7 @@ Raft divides time into terms. Each term begins with an election in which one or 
 
 A term is a monotonically increasing integer. Each machine stores its current term and includes it in communications with other machines. If a machine discovers that its current term is lower than another machine's, it updates its own term. A candidate or leader that discovers a higher term, indicating a newer term, immediately becomes a follower.
 
-Basic communication between Raft machines requires only two RPC types. RequestVote RPCs are initiated by candidates during elections; “canvassing for votes” sounds a little odd as a translation. AppendEntries RPCs are initiated by the leader to replicate logs and maintain heartbeats.
+Basic communication between Raft machines requires only two RPC types. RequestVote RPCs are initiated by candidates during elections. The Chinese rendering, literally “canvassing for votes,” sounds a little odd to me. AppendEntries RPCs are initiated by the leader to replicate logs and maintain heartbeats.
 
 #### Leader Election
 
@@ -116,7 +116,7 @@ Three issues remain:
 2. The leader may not belong to the new configuration. In that case, it steps down when it commits C_new. For a while, then, it manages a cluster that does not include itself: it replicates entries but does not count itself toward a majority.
 3. Removed servers can disrupt the cluster. Since they no longer receive heartbeats, they may start elections and send RequestVote RPCs with higher terms, causing the current leader to become a follower. These elections cannot succeed, and a new leader will still come from the new cluster, but the removed machines can repeatedly time out and harm availability.
 
-To prevent the third issue, Raft adds a restriction: a server that receives RequestVote before its timeout since hearing from the current leader has elapsed does not update its term or grant a vote. As long as the leader maintains heartbeats with the current cluster, a vote request with a higher term cannot unseat it.
+To prevent the third issue, Raft adds a restriction: a server that receives RequestVote before the election timeout has elapsed since its last heartbeat from the current leader does not update its term or grant a vote. As long as the leader maintains heartbeats with the current cluster, a vote request with a higher term cannot unseat it.
 
 #### Log Compaction
 

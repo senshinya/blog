@@ -83,7 +83,7 @@ Interesting. The kext had already changed the device to the US region, and `Regi
 
 ## Dealing with countryd
 
-I connected a Japanese proxy node and confirmed that my exit IP was Japanese. Even Apple's own GeoIP endpoint returned JP:
+I connected to a Japanese proxy node and confirmed that my exit IP was Japanese. Even Apple's own GeoIP endpoint returned JP:
 
 ```bash
 curl -s https://gspe1-ssl.ls.apple.com/pep/gcc   # 返回 JP
@@ -118,7 +118,7 @@ As long as Wi-Fi is on, the hotspot you connect to makes no difference. Nearby C
 
 Disable Wi-Fi and use a wired connection, and `countryd` loses all physical location signals, leaving GeoIP as its only source.
 
-I used iPhone USB tethering plus a global Japanese proxy on the Mac, keeping Wi-Fi off. Checking `countryd` again, GeoIP finally showed Japan:
+I used iPhone USB tethering and routed all traffic on the Mac through a Japanese proxy, keeping Wi-Fi off. Checking `countryd` again, GeoIP finally showed Japan:
 
 ```
 "CACHE: Geo IP country code changing", "from":"CN", "to":"JP, priority = 5 (GeoIP)"

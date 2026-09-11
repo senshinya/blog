@@ -18,7 +18,7 @@ That history reflects my changing attitude. Early on, with OnePlus and Pixel, I 
 
 Just as I was happily drowning in that ecosystem, my girlfriend hit me with: “Your photos are absolute garbage.” Fair enough. Back when I obsessed over phones, I cared about benchmark scores and specs. A camera only needed to scan QR codes. Now I had to prove to her:
 
-> Any shortage of technique can be compensated for with software and hardware!
+> Any lack of skill can be made up for with software and hardware!
 
 Of course, this was just another excuse to buy a phone. In fact, K's camera had caught my attention on our last [Kansai trip](/en/travels/kansai-202504), especially its long telephoto lens. But I am naturally lazy and do not want to edit photos afterward. Why not buy a <mark>smartphone</mark> with better lenses and color processing to satisfy that urge?
 

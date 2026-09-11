@@ -1,7 +1,7 @@
 ---
 authorship: ai-human-reviewed
 title: "一个 TREK 引发的二十个 stack"
-description: "刷 GitHub trending 刷到一个旅行规划工具，想自己跑一台。既然都要开新 VPS，那就顺手多装亿点点。"
+description: "刷 GitHub trending 刷到一个旅行规划工具，想自己部署一套。既然都要开新 VPS，那就顺手多装亿点点。"
 date: 2026-05-11 22:43:00
 categories: [fiddling]
 tags: ["折腾", "vps", "自托管"]
@@ -65,7 +65,7 @@ Dockge 面板里二十来个 stack 全绿着。当然，这里面相当一部分
 
 部署改成蓝绿。blog-blue 和 blog-green 两个容器常驻，活跃的由 `/opt/app/blog/active` 标记，Caddy 的反代上游从 `/opt/app/caddy-blog/upstream.caddy` 这个文件 import。CI 推完新镜像跑 switch.sh：起 target 色、等 healthcheck、改 import 文件、caddy reload 切流，失败自动回滚。做完之后发文章不用再等三分钟 build，PB 后台改一下，保存即生效。
 
-后台是 SvelteKit 内部的 SPA，挂在 /admin 下，走 Authelia forward_auth。admin 到 PB 的写请求经 Caddy 同源反代 `/api/pb/*`，token 由 Caddy 注入，浏览器和 git 仓库都摸不到这把 key。PB 写入会触发一个 JS 钩子 POST 到 blog 容器的内部端点，做服务端缓存失效，再调一次 Cloudflare API purge 边缘缓存，公开页平均还是 CDN 命中。
+后台是 SvelteKit 内部的 SPA，挂在 /admin 下，走 Authelia forward_auth。admin 到 PB 的写请求经 Caddy 同源反代 `/api/pb/*`，token 由 Caddy 注入，浏览器和 git 仓库都摸不到这把 key。PB 写入会触发一个 JS 钩子 POST 到 blog 容器的内部端点，做服务端缓存失效，再调一次 Cloudflare API purge 边缘缓存，公开页大多仍然命中 CDN 缓存。
 
 整个迁移两个晚上搞定。
 

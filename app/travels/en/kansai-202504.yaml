@@ -29,7 +29,7 @@ days:
         lng: 121.80728
       - src: https://blog-img.774352199.xyz/oBCAWM.webp
         alt: 'Overtime, with a brave little smile'
-        caption: 'By now it was four in the morning. Checked in, through security, past immigration. S could finally do overtime… undisturbed.'
+        caption: 'By now it was four in the morning. Checked in, through security, past customs. S could finally do overtime… undisturbed.'
         lat: 31.1506972
         lng: 121.8073194
       - src: https://blog-img.774352199.xyz/VWe7oM.webp
@@ -39,7 +39,7 @@ days:
         lng: 121.80741
       - src: https://blog-img.774352199.xyz/Haz3sP.webp
         alt: The next morning’s sun
-        caption: 'After circling the departure hall again and again, a whole crowd suddenly pressed up against the windows with their phones out. Ah, of course: the sun was coming up.'
+        caption: 'After circling the departure hall again and again, I suddenly noticed a crowd pressed up against the windows taking photos. Ah, of course: the sun was coming up.'
         lat: 31.150605
         lng: 121.807594
       - src: https://blog-img.774352199.xyz/egvYLZ.webp
@@ -60,7 +60,7 @@ days:
         lat: 31.15092
         lng: 121.809425
       - src: https://blog-img.774352199.xyz/FByyUH.webp
-        alt: Up in the cloud—just not the one in Guizhou
+        alt: Above the clouds, though not the Guizhou kind that hosts iCloud
         lat: 30.9678027
         lng: 122.13342
       - src: https://blog-img.774352199.xyz/PhKuO2.webp
@@ -69,7 +69,7 @@ days:
         lng: 122.14048
       - src: https://blog-img.774352199.xyz/8wSA4R.webp
         alt: Little islands
-        caption: The first little island after half a day of flying with nothing to look at.
+        caption: The first little island after what felt like ages of flying with nothing to look at.
         lat: 32.8994638
         lng: 129.580627
       - src: https://blog-img.774352199.xyz/HAAY0y.webp
@@ -100,17 +100,17 @@ days:
     photos:
       - src: https://blog-img.774352199.xyz/LaNbtP.webp
         alt: A very improvised lunch
-        caption: 'All three of us are the type who never plan, so a restaurant reservation was out of the question. We picked somewhere in the basement of Kyoto Station with no queue. It turns out restaurants without queues have their reasons: a small, bloody, undercooked steak that refused to be chewed, and outrageously expensive too.'
+        caption: 'All three of us are the type who never plan, so a restaurant reservation was out of the question. We picked somewhere in the basement of Kyoto Station with no queue. It turns out restaurants without queues have their reasons: a small, bloody, undercooked steak too tough to chew, and outrageously expensive too.'
         lat: 34.9867972
         lng: 135.7580361
       - src: https://blog-img.774352199.xyz/GlHSXJ.webp
         alt: A shrine in the city center
-        caption: 'Our hotel was near Shijō in Kyoto, about the most modern part of the city. Even along a busy main road like that you still see any number of shrines, sitting beside the such-and-such Bank and such-and-such Building, and the centuries slide over each other.'
+        caption: 'Our hotel was near Shijō in Kyoto, about the most modern part of the city. Even along a busy main road like that you still see any number of shrines, sitting beside the such-and-such Bank and such-and-such Building, making it feel as if different eras coexist.'
         lat: 35.00742
         lng: 135.7597194
       - src: https://blog-img.774352199.xyz/n9RrOE.webp
         alt: 'Inabadō (Byōdō-ji), the “cat shrine”'
-        caption: 'We left our luggage at the hotel. S and K both have furry children at home, so the first stop on the plan was Inabadō (Byōdō-ji), also known as the cat shrine. It actually enshrines Yakushi Nyorai, but it is famous for selling cat amulets, and people on Xiaohongshu have run into the tabby that lives there. Sadly we did not meet it, and only heard steady meowing from behind the statues. I bought a cat-shaped strap for a notebook, in the hope of one day finding a notebook I like enough to use it on.'
+        caption: 'We left our luggage at the hotel. S and K both have pets at home, so the first stop on the plan was Inabadō (Byōdō-ji), also known as the cat shrine. It actually enshrines Yakushi Nyorai, but it is famous for selling cat amulets, and people on Xiaohongshu have run into the tabby that lives there. Sadly we did not meet it, and only heard steady meowing from behind the statues. I bought a cat-shaped strap for a notebook, in the hope of one day finding a notebook I like enough to use it on.'
         lat: 34.9993416
         lng: 135.7602638
       - src: https://blog-img.774352199.xyz/KSjTQ6.webp
@@ -119,7 +119,7 @@ days:
         lng: 135.7680111
       - src: https://blog-img.774352199.xyz/z5nLnr.webp
         alt: Late cherry blossoms down a quiet alley
-        caption: 'Green grown fat, red grown thin.'
+        caption: 'Lush green leaves, with only a few blossoms left.'
         lat: 34.9988694
         lng: 135.7682333
       - src: https://blog-img.774352199.xyz/iPS74e.webp
@@ -129,7 +129,7 @@ days:
         lng: 135.7688
       - src: https://blog-img.774352199.xyz/N8ieWN.webp
         alt: 'The Kamo River, take two'
-        caption: 'Sitting by the Kamo River staring at the far bank, time slipped a little. It is also possible I fell asleep and woke up again. A group who looked like university students were picnicking nearby, and a steady stream of people cycled or jogged past behind us. Everything was completely unhurried, except for S, who was still running a meeting on his phone.'
+        caption: 'As I sat by the Kamo River staring at the far bank, it felt as though I had slipped through time. It is also possible I fell asleep and woke up again. A group who looked like university students were picnicking nearby, and a steady stream of people cycled or jogged past behind us. Everything was completely unhurried, except for S, who was still in a meeting on his phone.'
         lat: 34.999005
         lng: 135.7695305
       - src: https://blog-img.774352199.xyz/d8cp3H.webp
@@ -180,7 +180,7 @@ days:
         lng: 135.8459472
       - src: https://blog-img.774352199.xyz/VpuSwQ.webp
         alt: Abundant Ebon Deer
-        caption: 'Oh my god, it is the real thing!'
+        caption: 'Holy crap, a die-hard Honkai: Star Rail fan!'
         lat: 34.6808805
         lng: 135.8466805
       - src: https://blog-img.774352199.xyz/18ZFvJ.webp
@@ -190,7 +190,7 @@ days:
         lng: 135.8484194
       - src: https://blog-img.774352199.xyz/h6hz4h.webp
         alt: Another influencer deer
-        caption: 'There is another little 🦌 that likes to pose by the exit as well, though compared with the entrance there was hardly anyone about.'
+        caption: 'There is another little 🦌 that likes to pose by the exit of Kasuga Taisha as well, though compared with the entrance there was hardly anyone about.'
         lat: 34.6809694
         lng: 135.84764
       - src: https://blog-img.774352199.xyz/i66eZ6.webp
@@ -246,7 +246,7 @@ days:
         lng: 135.847342
       - src: https://blog-img.774352199.xyz/ZTYoPO.webp
         alt: Rice doesn’t come cheap in Nara
-        caption: 'Japanese rice prices had already made the news for soaring before we came. A 1.5 kg bag in a convenience store was 1,920 yen, somewhere north of thirty yuan per jin. Eye-watering.'
+        caption: 'Japanese rice prices had already made the news for soaring before we came. A 1.5 kg bag in a convenience store was 1,920 yen, over thirty yuan per 500 g. Eye-watering.'
         lat: 34.684598
         lng: 135.828862
   - day: 3
@@ -281,7 +281,7 @@ days:
         lng: 135.756024
       - src: https://blog-img.774352199.xyz/BzWgH5.jpg
         alt: Scenery along the way
-        caption: "We headed for the airport at around three in the afternoon, right at Japanese home time. Leaning against the window I watched crowds of schoolkids walking home in twos and threes. What youth. They say you cannot have youth and the sense of it at the same time, but some people's youth really is more youthful than others."
+        caption: "We headed for the airport at around three in the afternoon, just as school was letting out. Leaning against the window I watched groups of high school students walking home in twos and threes. What youth. They say you cannot have youth and the sense of it at the same time, but some people's youth really is more youthful than others."
         lat: 34.8889527
         lng: 135.670027
       - src: https://blog-img.774352199.xyz/tRRKQ1.jpg

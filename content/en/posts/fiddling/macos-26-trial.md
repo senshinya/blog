@@ -17,7 +17,7 @@ I do not usually follow WWDC and tend to play it safe, waiting for the stable re
 
 Since I have sold my iPhone (see [the previous post](/en/fiddling/one-month-using-android)), this trial covers macOS and iPadOS, which seem to be attracting relatively fewer complaints.
 
-The most obvious change is, of course, the UI. Liquid Glass, the design language now shared across platforms, supposedly originated in visionOS. I have also sold my visionOS device, so I cannot compare directly, but it certainly has that visionOS feel: frosted-glass windows and a consistent skeuomorphic style for the icons—slices of frosted glass, perhaps? Let's call them that for now.
+The most obvious change is, of course, the UI. Liquid Glass, the design language now shared across platforms, supposedly originated in visionOS. I have also sold my Vision Pro, so I cannot compare directly, but it certainly has that visionOS feel: frosted-glass windows and a consistent skeuomorphic style for the icons—slices of frosted glass, perhaps? Let's call them that for now.
 
 ![Honestly, it looks a little knockoff-like, with a hint of old-school knockoff phones](https://blog-img.774352199.xyz/2025/a8cf24e6e65fb60e3b12459b13dd7b80.png)
 

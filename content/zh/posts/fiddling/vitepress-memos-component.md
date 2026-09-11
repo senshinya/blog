@@ -669,12 +669,12 @@ KV 中存储一个 `index` key，value 是一个 uid 的数组，作为全部说
 </html>
 ```
 
-从 JS 代码中即可看出，后端包含如下两个端点
+从 JS 代码中即可看出，后端包含如下端点
 
 - `POST /api/auth`：页面鉴权
 - `GET /api/memos`：获取说说详情，支持分页
-- `POST /api/memos`: 发布新说说
-- `PUT /api/memos/{uid}`: 更新说说
+- `POST /api/memos`：发布新说说
+- `PUT /api/memos/{uid}`：更新说说
 - `DELETE /api/memos/{uid}`：删除说说
 
 随后编辑 `worker.js` 实现这些端点即可
@@ -934,7 +934,7 @@ Thanks to VitePress，我们可以很方便地通过 Vue 组件的方式，编�
 pnpm add marked
 ```
 
-在你的博客的主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和拓展名也许会有区别）的同级目录下，新建一个 `components` 文件夹（已有则无需新建），在其中新建 `memos.vue`
+在你的博客的主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和扩展名也许会有区别）的同级目录下，新建一个 `components` 文件夹（已有则无需新建），在其中新建 `memos.vue`
 
 ```js
 <template>
@@ -1189,7 +1189,7 @@ async function loadMoreMemos() {
 
 这个 `memos.json`，则是在项目编译时，从接口获取到的前十条说说。这也就是为什么，Worker 代码中会添加一个 `CALLBACK_URL`，这个 URL 是在你发布新说说，或者删改前十条说说时重新触发编译使用的，具体 URL 可以根据你的部署平台自行搜索。如果完全动态获取说说内容的话，这里可以不用设置这么一个回调
 
-下面的代码用于在编译时生成 `memos.json`，在主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和拓展名也许会有区别）的同级目录下，新建一个 `utils` 文件夹（已有则无需新建），在其中新建 `memos.js`
+下面的代码用于在编译时生成 `memos.json`，在主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和扩展名也许会有区别）的同级目录下，新建一个 `utils` 文件夹（已有则无需新建），在其中新建 `memos.js`
 
 ```js
 import https from 'https';
@@ -1248,9 +1248,9 @@ https.get(url, requestOptions, (resp) => {
 
 这样在 dev 阶段和 build 阶段都会首先调用 `memos.js`，在博客根目录下生成 `memos.json`。注意根据目录层级调整 `memos.vue` 中 import 的路径
 
-这样组件和数据都准备好了，下面这个组件注册为全局组件
+这样组件和数据都准备好了，下面将这个组件注册为全局组件
 
-在主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和拓展名也许会有区别）中引入这个组件，并注册
+在主题配置文件（通常为 `docs/.vitepress/theme/index.ts`，文件路径和扩展名也许会有区别）中引入这个组件，并注册
 
 ```js
 ...
@@ -1271,7 +1271,7 @@ export default {
 
 > 什么？你说你从来没有在 vitepress 中使用过单页？
 > 
-> 这样，你先在根目录下新建一个 pages 文件夹，再在 VitePress 核心配置文件中（注意不是主题配置文件，通常为 docs/.vitepress/config.ts，文件路径和拓展名也许会有区别）中新增一个 rewrites 规则 `'pages/:file.md': ':file.md'`，这样 pages 下的内容都可以直接通过 `/文件名` 访问了。关于 rewrites，见 [官方文档](https://vitepress.dev/guide/routing#route-rewrites)
+> 这样，你先在根目录下新建一个 pages 文件夹，再在 VitePress 核心配置文件（注意不是主题配置文件，通常为 docs/.vitepress/config.ts，文件路径和扩展名也许会有区别）中新增一个 rewrites 规则 `'pages/:file.md': ':file.md'`，这样 pages 下的内容都可以直接通过 `/文件名` 访问了。关于 rewrites，见 [官方文档](https://vitepress.dev/guide/routing#route-rewrites)
 
 pages 文件夹下新建 balabala.md，内容为
 

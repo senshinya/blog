@@ -2,7 +2,7 @@
 recommend: 6
 authorship: human-only
 title: "Xiaomi 17を普段使いに：ロック解除、ROM書き込み、root化とroot隠し"
-description: "Xiaomi 17のBootloaderを解除し、純正改変ROMを導入してrootを隠すまでの記録。銀行・決済アプリやプロキシを普段どおり使えるようにした手順もまとめます。"
+description: "いじればいじるほど、もっといじりたくなります。年を取ってもまだまだ元気、まだまだ元気です。"
 date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["試行錯誤", "root", "bootloader"]
@@ -31,7 +31,7 @@ image: "https://blog-img.774352199.xyz/qfxB0h.webp"
 初期の8e5端末の解除脆弱性は、2026年2月のセキュリティパッチで塞がれています。ネットで見つかる手順の多くは、その古い脆弱性向けです。それ以降のOSでは、主に[@AC 极光_Official](https://www.coolapk.com/u/17883039)の[ワンクリック解除スクリプト](https://www.coolapk.com/feed/73105378?s=ZTE1ODk2OGIyMTY3NjVnNmE4MzIyOTh6a1651)が使われています。
 ::
 
-17シリーズのHyperOS改変ROMでCoolapk上で活発なのは、[江南](https://www.coolapk.com/u/25341491)さんと[毒蛇](https://www.coolapk.com/u/35810773)さんです。2人とも高校生。今の若者はすごいですね。私は[毒蛇さんのROM](https://www.coolapk.com/feed/70200384?s=YTgxYmJmMWIyMTY3NjVnNmE4MzIzODJ6a1651)を選びました。root入りで、不要機能の削減や第三者製カーネルも含みます。スケジューリングの調整がよく、滑らかで省電力、バグも比較的少なそうです。Bootloaderへ再起動すれば、ワンクリックで書き込めます。
+Coolapkで17シリーズ向けのHyperOS改変ROMを活発に作っているのは、[江南](https://www.coolapk.com/u/25341491)さんと[毒蛇](https://www.coolapk.com/u/35810773)さんです。2人とも高校生。今の若者はすごいですね。私は[毒蛇さんのROM](https://www.coolapk.com/feed/70200384?s=YTgxYmJmMWIyMTY3NjVnNmE4MzIzODJ6a1651)を選びました。root入りで、不要機能の削減や第三者製カーネルも含みます。スケジューリングの調整がよく、滑らかで省電力、バグも比較的少なそうです。Bootloaderへ再起動すれば、ワンクリックで書き込めます。
 
 続いてKernelSU、LSPosed、Zygisk Nextなどのフレームワークを順番に入れます。
 

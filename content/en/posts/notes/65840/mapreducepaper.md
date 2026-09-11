@@ -10,7 +10,7 @@ image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 
 ### Introduction
 
-MapReduce is a software architecture model proposed by Google in its early years for parallel computation over large datasets. The idea is now used in many distributed systems.
+MapReduce is a software architecture model proposed by Google years ago for parallel computation over large datasets. The idea is now used in many distributed systems.
 
 Google published the theory in its 2004 paper, *MapReduce: Simplified Data Processing on Large Clusters*. The full paper is available [here](https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf). Just 13 pages, and far denser than plenty of other short papers I've read.
 

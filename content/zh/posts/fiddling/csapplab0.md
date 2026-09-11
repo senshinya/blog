@@ -12,7 +12,7 @@ image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 
 > 学 CSAPP 不做实验，就像四大名著不看红楼梦，说明这个人文学造诣和自我修养不足，他理解不了这种内在的阳春白雪的高雅艺术，他只能看到外表的辞藻堆砌，参不透其中深奥的精神内核，他整个人的层次就卡在这里了，只能度过一个相对失败的人生。
 
-劝退 CSAPP 实验人的最大因素，就是 Linux 环境。本科时候做过一次，用的是 Vmware Workstation，安装 Ubuntu Desktop。虽然我个人倒是没遇到过什么问题，但是身边的人遇到过一下问题：
+劝退 CSAPP 实验人的最大因素，就是 Linux 环境。本科时候做过一次，用的是 Vmware Workstation，安装 Ubuntu Desktop。虽然我个人倒是没遇到过什么问题，但是身边的人遇到过以下问题：
 
 *   虚拟机安装错误
 *   Vmware 与 Hyper-v 不兼容
@@ -25,7 +25,7 @@ image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 
 综上，我选择 WSL（Windows Subsystem for Linux，适用于 Windows 的 Linux 子系统）。推荐的操作系统是 Windows 10 Version 2004 以上，或者 Windows 11，以使用 WSL 2。低于此版本的 Windows，即使有 WSL 功能，也只是 WSL 1，使用翻译层将 Linux 系统调用转化成 Windows 系统调用，而 WSL 2 使用了一个轻量级的、无需维护的虚拟机，并在这个虚拟机中运行了一个完整的 Linux 内核。一个完整的 Linux 内核，对于 CSAPP 的实验至关重要。
 
-什么，你问我 MacOS 怎么办，Intel 芯片的 MacBook 可以安装 VirtualBox、VMWare Fusion 或者 Parallel Desktop，并在其上安装 Linux 发行版，也可以使用 Docker。至于 m1 芯片的 MacBook，**建议换电脑**（不是开玩笑，m1 真的没法做实验）。
+什么，你问我 MacOS 怎么办，Intel 芯片的 MacBook 可以安装 VirtualBox、VMWare Fusion 或者 Parallels Desktop，并在其上安装 Linux 发行版，也可以使用 Docker。至于 m1 芯片的 MacBook，**建议换电脑**（不是开玩笑，m1 真的没法做实验）。
 
 笑死，我发现我废话就真多。
 
@@ -76,7 +76,7 @@ $ ls
  course.py     desktop.ini     szxx.bat     szxx.txt
 ```
 
-同样，如果想要在 Windows 上查看 WSL 自己的文件系统中的文件（例如 ~），可以通过如下命令，例如我想查看用户文件夹 ~：
+同样，如果想要在 Windows 上查看 WSL 自己的文件系统中的文件，可以通过如下命令，例如查看用户文件夹 ~：
 
 ```shell
 $ cd ~
@@ -117,7 +117,7 @@ Unpacking: 100%
 
 sorry，串了。
 
-简而言之，就是 Ubuntu，或者说 Debian 系使用的软件包管理器 apt，维护了一个 URL 列表，在用户通过 apt install 安装软件包时，会请求那些 URL 中搜索下载并安装。这个 URL 列表，就是源（sources）默认的 URL 都是国外的地址，由于众所周知的原因，速度很慢，甚至连接不了。所以需要将其更换为国内的源。
+简而言之，就是 Ubuntu，或者说 Debian 系使用的软件包管理器 apt，维护了一个 URL 列表，在用户通过 apt install 安装软件包时，会从那些 URL 搜索、下载并安装软件包。这个 URL 列表，就是源（sources）。默认的 URL 都是国外的地址，由于众所周知的原因，速度很慢，甚至连接不了。所以需要将其更换为国内的源。
 
 方法如下：
 
@@ -188,4 +188,4 @@ CGDB
 
 #### 实验在哪？
 
-如果你是自学 CSAPP，可以到这个网站：[http://csapp.cs.cmu.edu/3e/labs.html](http://csapp.cs.cmu.edu/3e/labs.html) ，每个实验后的 Self-Study Handout 连接就是实验材料的下载。传入 WSL，就可以快乐实验了！
+如果你是自学 CSAPP，可以到这个网站：[http://csapp.cs.cmu.edu/3e/labs.html](http://csapp.cs.cmu.edu/3e/labs.html) ，每个实验后的 Self-Study Handout 链接就是实验材料的下载。传入 WSL，就可以快乐实验了！

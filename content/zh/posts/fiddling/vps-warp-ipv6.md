@@ -20,12 +20,12 @@ image: "https://blog-img.774352199.xyz/McjrrF.webp"
 
 这个套餐是自带 IPv6 的，对于各种流媒体解锁都有好处。当然依然有很多 VPS 没有 IPv6 地址，并且中国有句古话叫狡兔三窟，出门在外还是得套个马甲的。这时候就需要用到大善人 Cloudflare 家的 Warp 了
 
-此前使用的 warp 脚本是 [scarmen/warp](https://gitlab.com/fscarmen/warp)，直接启动全局模式，就会将整个 VPS 的全局出口都重定位到 warp。但是有两点问题：
+此前使用的 warp 脚本是 [fscarmen/warp](https://gitlab.com/fscarmen/warp)，直接启动全局模式，就会将整个 VPS 的全局出口都重定位到 warp。但是有两点问题：
 
 1. warp 降速，并非所有的出口流量都需要走 warp。通常只有一些如 Netflix、OpenAI 之类的对 IP 要求比较高的服务需要走 warp
 2. warp 接管全局流量后，即使是双栈出口，但是有时出口会优先走 IPv4。由于 DNS 解析发生在 warp 内部（远程 DNS 解析），无法做干预
 
-对于问题 1，warp 脚本可以开启非全局模式，并在本地开放一个 socks 代理，可以使用代理软件分流。对于问题 2，则可以通过代理软件让 DNS 解析发生在本地，完成解析后再将流量通过 warp 出口
+对于问题 1，warp 脚本可以开启非全局模式，并在本地开放一个 socks 代理，可以使用代理软件分流。对于问题 2，则可以通过代理软件让 DNS 解析发生在本地，完成解析后再将流量经 warp 发出
 
 非全局的 warp，可以在安装脚本时直接选择
 

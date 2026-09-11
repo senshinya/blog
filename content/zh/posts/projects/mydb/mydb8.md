@@ -57,7 +57,7 @@ static byte[] newRootRaw(long left, long right, long key)  {
 }
 ```
 
-该根节点的初始两个子节点为 left 和 right, 初始键值为 key。
+该根节点的初始两个子节点为 left 和 right，初始键值为 key。
 
 类似的，生成一个空的根节点数据：
 
@@ -73,7 +73,7 @@ static byte[] newNilRootRaw()  {
 
 Node 类有两个方法，用于辅助 B+ 树做插入和搜索操作，分别是 searchNext 方法和 leafSearchRange 方法。
 
-searchNext 寻找对应 key 的 UID, 如果找不到，则返回兄弟节点的 UID。
+searchNext 寻找对应 key 的 UID，如果找不到，则返回兄弟节点的 UID。
 
 ```java
 public SearchNextRes searchNext(long key) {
@@ -98,7 +98,7 @@ public SearchNextRes searchNext(long key) {
 }
 ```
 
-leafSearchRange 方法在当前节点进行范围查找，范围是 \[leftKey, rightKey\]，这里约定如果 rightKey 大于等于该节点的最大的 key, 则还同时返回兄弟节点的 UID，方便继续搜索下一个节点。
+leafSearchRange 方法在当前节点进行范围查找，范围是 \[leftKey, rightKey\]，这里约定如果 rightKey 大于等于该节点的最大的 key，则还同时返回兄弟节点的 UID，方便继续搜索下一个节点。
 
 ```java
 public LeafSearchRangeRes leafSearchRange(long leftKey, long rightKey) {
@@ -179,7 +179,7 @@ B+ 树在操作过程中，可能出现两种错误，分别是节点内部错�
 
 当节点内部错误发生时，即当 Ti 在对节点的数据进行更改时，MYDB 发生了崩溃。由于 IM 依赖于 DM，在数据库重启后，Ti 会被撤销（undo），对节点的错误影响会被消除。
 
-如果出现了节点间错误，那么一定是下面这种情况：某次对 u 节点的插入操作创建了新节点 v, 此时 sibling(u)=v，但是 v 却并没有被插入到父节点中。
+如果出现了节点间错误，那么一定是下面这种情况：某次对 u 节点的插入操作创建了新节点 v，此时 sibling(u)=v，但是 v 却并没有被插入到父节点中。
 
 ```
 [parent]

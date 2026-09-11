@@ -12,7 +12,7 @@ image: "https://blog-img.774352199.xyz/hZX6hr.webp"
 
 Many dynamic blogs have a microblog feature: essentially a special kind of post that takes advantage of dynamic publishing to let you write and publish immediately.
 
-Static blogs first compile HTML locally or on a server and then deploy it, so they are less immediate. Writing a long post at a computer and deploying with Git is no great hassle. Having to open a computer just to post a short thought is a bigger mental burden. Using Git on a phone is awkward too—not exactly elegant. I often end up deciding not to post at all.
+Static blogs first compile HTML locally or on a server and then deploy it, so they are less immediate. Writing a long post at a computer and deploying with Git is no great hassle. Having to get on a computer just to post a short thought is a bigger mental burden. Using Git on a phone is awkward too—not exactly elegant. I often end up deciding not to post at all.
 
 So I built the frontend and backend for a microblog system, visible on this blog’s [Memos](/en/memos) page. The backend runs on Cloudflare Workers, with storage conveniently next door in our generous benefactor’s KV, and a simple admin page. Since the blog uses VitePress, the frontend is a Vue component embedded in a dedicated page.
 

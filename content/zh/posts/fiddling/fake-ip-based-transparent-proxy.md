@@ -10,10 +10,10 @@ image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 
 ### 前言
 
-[上篇文章](/fiddling/debian-as-bypass-router) 中介绍了使用旁路由做局域网内透明代理的方案，对于大部分用户已经基本可用，但是该方案的 cons 也比较明显：
+[上篇文章](/fiddling/debian-as-bypass-router) 中介绍了使用旁路由做局域网内透明代理的方案，对于大部分用户已经基本可用，但是该方案的缺点也比较明显：
 
 1. 存在单点故障的可能，由于 DHCP 下发的网关直接指向了旁路由，一旦旁路由的 clash 不可用，即使不需要科学的网站也无法访问
-2. clash 包转发性能孱弱，远比不上硬件转发。而一旦网关设置为旁路由，由于 iptables 的设置，无论是否需要科学的流量都会走 clash 转发
+2. clash 包转发性能较弱，远比不上硬件转发。而一旦网关设置为旁路由，由于 iptables 的设置，无论是否需要科学的流量都会走 clash 转发
 3. 由于存在旁路由网关，端口映射需要同时在主路由和旁路由配置
 
 正好，最近看到了一个新兴的代理内核 sing-box（似乎也不新兴了，只是从 clash archive 后才火起来）。看了下 [Wiki](https://sing-box.sagernet.org/configuration)，支持的协议和功能十分全面，在性能优化上也比 clash 要好。新方案的代理核心就直接用 sing-box 了。
@@ -24,9 +24,9 @@ image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 
 ### 方案思路
 
-sing-box 和 clash 都内置了 DNS 模块，实现了 DNS Server 了功能，且都有 FakeIP。关于 FakeIP，可以理解为当<mark>客户端进行 DNS 查询时，DNS 模块立刻响应一个假的 IP 地址，并在后台进行实际的 DNS 查询过程，并维护这个假 IP 地址和实际 IP 的映射关系。当后续客户端拿着这个 FakeIP 来建立连接发送数据时，网关即可根据这个映射关系向真实的 IP 发起请求。</mark>更具体的描述可见 [RFC3089](https://datatracker.ietf.org/doc/html/rfc3089)。由于后续进行流量路由时需要用到 DNS 应答时存储的 FakeIP 和真实 IP 映射，所以单纯的 DNS Server 无法单独实现 FakeIP 机制。
+sing-box 和 clash 都内置了 DNS 模块，实现了 DNS Server 的功能，且都有 FakeIP。关于 FakeIP，可以理解为当<mark>客户端进行 DNS 查询时，DNS 模块立刻响应一个假的 IP 地址，并在后台进行实际的 DNS 查询过程，并维护这个假 IP 地址和实际 IP 的映射关系。当后续客户端拿着这个 FakeIP 来建立连接发送数据时，网关即可根据这个映射关系向真实的 IP 发起请求。</mark>更具体的描述可见 [RFC3089](https://datatracker.ietf.org/doc/html/rfc3089)。由于后续进行流量路由时需要用到 DNS 应答时存储的 FakeIP 和真实 IP 映射，所以单纯的 DNS Server 无法单独实现 FakeIP 机制。
 
-由于 FakeIP 通常位于一个保留网段（大部分配置为 `198.18.0.0/15`），分流特征及其明显，分流也十分简单。我们可以直接让软路由代理的 DNS 模块仅对需要代理的域名响应 FakeIP，在主路由中配置下一跳，仅让目标 IP 为 FakeIP 的流量通过软路由代理，非 FakeIP 的流量正常转发。具体如下
+由于 FakeIP 通常位于一个保留网段（大部分配置为 `198.18.0.0/15`），分流特征极其明显，分流也十分简单。我们可以直接让软路由代理的 DNS 模块仅对需要代理的域名响应 FakeIP，在主路由中配置下一跳，仅让目标 IP 为 FakeIP 的流量通过软路由代理，非 FakeIP 的流量正常转发。具体如下
 
  ![fakeIP 分流](https://blog-img.774352199.xyz/2025/e078ffe1fe41b2cbcb04b40a55cbbc56.png)
 
@@ -45,12 +45,12 @@ sing-box 和 clash 都内置了 DNS 模块，实现了 DNS Server 了功能，�
   5. 代理软件根据 FakeIP 映射，通过出口节点向国外 IP 发起请求
 ```
 
-这个方案解决了上篇文章的三个 cons：
+这个方案解决了上篇文章的三个缺点：
 
 
 1. 单点故障问题，避免了 sing-box 失效导致无法联网。基于上篇文章的方案，sing-box 的 DNS 解析应当位于 AdGuard 后，当 sing-box 失效时，AdGuard 发现上游 DNS 异常，会启用后备 DNS，即国内 DNS。由于不返回 FakeIP，所有流量在主路由分流时都会走默认路由
 2. 该方案无须科学的流量不会走代理软件转发，而是直接走路由转发
-3. 由于转发是由主路由路由表进行，所有客户端网关都为主路由，不存在二层 NAT，主路由端口映射不会失效
+3. 由于转发是由主路由的路由表决定的，所有客户端网关都为主路由，不存在两层 NAT，主路由端口映射不会失效
 
 ### 具体实现
 
@@ -165,7 +165,7 @@ iptables -t mangle -X clash || true
 iptables -t mangle -X clash_local || true
 ```
 
-iptables.sh 其实和上篇文章的 iptables.sh 高度相似，只是最终 clash 链的最终处理变为了：将目标地址为 198.18.0.0/15 的流量转发到 7893 的 tproxy 端口，其他流量则走默认规则。实际上就是将被主路由转发的 FakeIP 流量交给 sing-box 处理了。clean.sh 则完全没有变化。
+iptables.sh 其实和上篇文章的 iptables.sh 高度相似，只是 clash 链的最终处理变为了：将目标地址为 198.18.0.0/15 的流量转发到 7893 的 tproxy 端口，其他流量则走默认规则。实际上就是将被主路由转发的 FakeIP 流量交给 sing-box 处理了。clean.sh 则完全没有变化。
 
 这里两个处理链：clash 和 clash_local，我还是保留了 clash 的名称，因为实际上就是从 clash 方案简单修改来的。（偷懒）
 
@@ -366,7 +366,7 @@ iptables.sh 其实和上篇文章的 iptables.sh 高度相似，只是最终 cla
 
 注意几个注释的地方需要修改。默认配置中，会将中国域名的 DNS 解析直接通过 223.5.5.5 解析成 RealIP（见 DNS-rules\[2\]），其他域名解析为 FakeIP（见 DNS-rules\[3\]）。并在进行流量分流时，将所有中国 IP 和域名都走 DIRECT 直连（见 route-rules\[2\]），其他流量都走代理（见 route-final）。
 
-完全配置好以后，我们可以设置 sing-box 为开启自动启动，并立即启动起来。
+完全配置好以后，我们可以设置 sing-box 为开机自动启动，并立即启动起来。
 
 ```shell
 systemctl enable --now sing-box
@@ -382,6 +382,6 @@ journalctl -efu sing-box
 
 #### Telegram 问题
 
-此方案的缺点也很明显，由于基于 DNS 分流，不走 DNS 的直接 IP 流量都会被主路由直接直连，导致像 Telegram 之类的直接使用 IP 的 APP 无法正确分流。解决方法也很简单，将这个 IP 加到主路由下一跳网关的 IP List，iptables.sh 的转发列表，和 sing-box 配置中的 rules 中，指定该 IP 走代理即可。
+此方案的缺点也很明显，由于基于 DNS 分流，不走 DNS 的直接 IP 流量都会由主路由直接转发，导致像 Telegram 之类的直接使用 IP 的 APP 无法正确分流。解决方法也很简单，将这个 IP 加到主路由下一跳网关的 IP List，iptables.sh 的转发列表，和 sing-box 配置中的 rules 中，指定该 IP 走代理即可。
 
 当前我是写了个脚本帮我自动处理规则集中的 IP，生成对应的 IP List、iptables.sh 和可直接用于 sing-box 的 config.json 配置文件。待我加工加工，脱敏后开源，敬请期待吧。

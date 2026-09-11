@@ -8,7 +8,7 @@ tags: ["折腾", "环境搭建", "riscv", "spike", "riscv-pk"]
 image: "https://blog-img.774352199.xyz/rWNOKx.webp"
 ---
 
-闲的无聊看看 spike 源码，但是翻了很多教程都没有可以直接安装好 spike 和相关的工具链。于是自己动手丰衣足食，直接读相关仓库的 README，基本都可以安装成功，但是还是暗藏着一个小坑，记录一下。
+闲得无聊，想看看 spike 源码，但是翻了很多教程，都没能照着直接装好 spike 和相关的工具链。于是自己动手丰衣足食，直接读相关仓库的 README，基本都可以安装成功，但是还是暗藏着一个小坑，记录一下。
 
 ### 工具链（riscv-gnu-toolchain）的安装
 
@@ -35,7 +35,7 @@ clone 后按照工具链中的 `Installation (Newlib)` 一节基本可以安装�
 make
 ```
 
-建议首先在 /opt 下建立 riscv 文件夹，并保证 riscv 文件夹的所有人为普通用户自己。如非则需要 chown：
+建议首先在 /opt 下建立 riscv 文件夹，并保证 riscv 文件夹的所有者是自己的普通用户。如不是，则需要 chown：
 
 ```bash
 sudo chown 1000:1000 /opt/riscv
@@ -105,4 +105,4 @@ $ riscv64-unknown-elf-gcc -o hello hello.c
 spike pk hello
 ```
 
-可以看到终端输入了 Hello.，按多次 ctrl+c 可退出。
+可以看到终端输出了 Hello.，按多次 ctrl+c 可退出。

@@ -14,7 +14,7 @@ image: "https://blog-img.774352199.xyz/fOFucm.webp"
 
 ## 原理
 
-Apple 智能的整体地区管控，原理可以直接缩减如下：
+Apple 智能的整体地区管控，原理可以简化如下：
 
 ```
 MGGetStringAnswer("RegionCode") == "CH"  →  Apple 智能关闭
@@ -22,7 +22,7 @@ MGGetStringAnswer("RegionCode") == "CH"  →  Apple 智能关闭
 
 `RegionCode` 是实时从 IORegistry 的 `IOPlatformExpertDevice` 里读取的 `region-info` 属性，国行机器这个值是 `CH/A`。macOS 27 的 `eligibilityd` 基于 SwiftData 实时重算，所以以前的那些改 plist、锁 `uchg` 的老办法在这一代全部失效，改完一重启就会掉。
 
-要从根本上解决这个问题，就得在 IORegistry 层把 `region-info` 改掉。GitHub 上的 [RegionSpoof](https://github.com/SkyBlue997/enableMacosAI) 项目就是这个原理：通过加载一个 kext，匹配 `IOPlatformExpertDevice`，在 `start()` 里把 `region-info` 设置成 `LL/A`（美版）、`country-of-origin` 设置成 `USA`。全系统每个进程从源头读到的就是美版区域，资格、模型下发、前端 UI 对应都可用了，无需每个进程都注入一次。
+要从根本上解决这个问题，就得在 IORegistry 层把 `region-info` 改掉。GitHub 上的 [RegionSpoof](https://github.com/SkyBlue997/enableMacosAI) 项目就是这个原理：通过加载一个 kext，匹配 `IOPlatformExpertDevice`，在 `start()` 里把 `region-info` 设置成 `LL/A`（美版）、`country-of-origin` 设置成 `USA`。全系统每个进程从源头读到的就是美版区域，资格判定、模型下发、前端 UI 都能正常工作了，无需每个进程都注入一次。
 
 ::github{repo="SkyBlue997/enableMacosAI"}
 ::
@@ -116,7 +116,7 @@ WiFiAP (优先级 1)  >  Location 定位 (优先级 4)  >  GeoIP (优先级 5)
 
 ## 关闭 WiFi
 
-只要把 WiFi 关掉走有线，就能让 `countryd` 一个物理信号都获取不了，只能根据 GeoIP 判断
+只要把 WiFi 关掉走有线，就能让 `countryd` 一个物理定位信号都获取不了，只能根据 GeoIP 判断
 
 我用的是 iPhone USB 网络共享，加上 Mac 上的全局日本代理，WiFi 保持关闭。再去看 `countryd`，GeoIP 终于变成了日本：
 

@@ -15,7 +15,7 @@ image: "https://blog-img.774352199.xyz/NDPUwc.webp"
 
 等待上门时，把机器接上电源准备重置下系统清除数据，越操作越顺手，看着这十成新的机器，买来几乎没怎么玩过，忽的有些心疼。想了想，还是把回收取消了。最近愈发不想坐在电脑前玩上一两个小时的游戏了，一来失去了对超重量级叙事型游戏的耐心，二来租房里的这套桌椅也给我的肩颈腰臀腿带来了很大的挑战（不得不服老，三四年前还能坐着硬板凳玩原神到凌晨四点），决心回归一些心智负担较轻的、可以随时拿起随时放下的游戏。SteamDeck 这台机器正好可以满足我
 
-于是升级了下系统，把 p5r 和文明 7 下了回来，这俩游戏买来就一直没功夫玩。在 youtube 翻找游戏推荐时，撞见了一条 SteamDeck 安装  Switch 模拟器的视频，看了下大致介绍，似乎已经十分成熟，配合一些超分插帧的模组，大部分游戏甚至能稳 60 帧，体验比 Switch 还要好。十分心动，于是动手折腾了一遍，部分内容由于有时效性，安装过程中踩了些坑
+于是升级了下系统，把 p5r 和文明 7 下了回来，这俩游戏买来就一直没功夫玩。在 youtube 翻找游戏推荐时，撞见了一条 SteamDeck 安装 Switch 模拟器的视频，看了下大致介绍，似乎已经十分成熟，配合一些超分插帧的模组，大部分游戏甚至能稳 60 帧，体验比 Switch 还要好。十分心动，于是动手折腾了一遍，部分内容由于有时效性，安装过程中踩了些坑
 
 YouTube 视频在
 
@@ -52,7 +52,7 @@ YouTube 视频在
 随后从桌面或者应用菜单中启动 EmuDeck，在 Manage Emulators 中找到 Steam Rom Manager，如果有 Update Configuration 则执行一下，再执行一遍 Reset Configuration。返回，再进入 EmulationStation-DE，点击 Install，再执行一遍 Reset Configuration
 
 从 EmuDeck 的左侧菜单中启动 Steam ROM Manager，注意背景应当是 Steam Deck
-图案。Choose 选择自己的账号后 Save 点击 Next
+图案。在 Choose 中选择自己的账号，点击 Save，再点击 Next
 
 ### 安装 Eden 并导入游戏
 
@@ -87,7 +87,7 @@ Well……这里再放一个网站，供你们自行研究
 
 ### 连接 Eden 和 EmuDeck
 
-现在安装好了 Eden，需要让 EmuDeck 识别出来。从 EmuDeck 进入 Steam ROM Manager，进入 Settings，Select Theme 选择 Classic。在左侧菜单中找到 `Nintendo Switch - Eden`，右侧默认的 Executable 配置是一个默认值，而非你安装的 Eden 位置。将其改为 Application 中的 Eden.AppImage，反显的值应当是 `/home/deck/Applications/Eden.AppImage`，点击保存，回到 Settings 中将 Theme 改回 EmuDeck
+现在安装好了 Eden，需要让 EmuDeck 识别出来。从 EmuDeck 进入 Steam ROM Manager，进入 Settings，Select Theme 选择 Classic。在左侧菜单中找到 `Nintendo Switch - Eden`，右侧默认的 Executable 配置是一个默认值，而非你安装的 Eden 位置。将其改为 Application 中的 Eden.AppImage，显示的值应当是 `/home/deck/Applications/Eden.AppImage`，点击保存，回到 Settings 中将 Theme 改回 EmuDeck
 
 点击右下角 Parsers，将 Parsers 全部关闭后，单独打开 Eden。点击 Add Games，即可看到添加到 Eden 的游戏都展示了出来。只是有个问题，游戏的 DLC 和 Update 也被额外展示了一次。点击右下角 Exclude Games，将 DLC 和 Update 全部标灰，保证只有游戏本体亮起，即可 Save Excludes。点击 Save to Steam，等待片刻直到右上角显示 `Done adding/removing entries` 完成添加
 
@@ -143,7 +143,7 @@ Motion 1 配置陀螺仪，点击切换到 `Shake!`，再晃动 Steam Deck 机�
 
 从 Decky 进入 LSFG-VK 的菜单， FPS Multiplier 点击 + 号到 2X，开启 Present Mode，后续如果达不到 60 帧可以开启 Performance Mode，这个模式下会使用性能更高的模型，代价是移动视角时会出现鬼影，最后点击 Copy Launch Option
 
-对需要插帧的游戏（基本就是每个 Switch 游戏），进入菜单 - 属性 - 快捷方式 - 启动选项，在 `vblank_mode=0` 后粘贴刚刚的复制的内容，并删除重复的 `%command%`，最后的启动选项看起来是这样的 `vblank_mode=0 ~/lsfg %command% -f -g ...`
+对需要插帧的游戏（基本就是每个 Switch 游戏），进入菜单 - 属性 - 快捷方式 - 启动选项，在 `vblank_mode=0` 后粘贴刚刚复制的内容，并删除重复的 `%command%`，最后的启动选项看起来是这样的 `vblank_mode=0 ~/lsfg %command% -f -g ...`
 
 由于小黄鸭只能运行在 vulkan 下，还需要将 Eden 的运行模式改到 Vulkan。从 Emulation Station 启动 Eden，Emulation - Configure - Graphics，API 选择 Vulkan，VSync Mode 选择 Mailbox，点击 OK 保存
 
@@ -151,5 +151,5 @@ Motion 1 配置陀螺仪，点击切换到 `Shake!`，再晃动 Steam Deck 机�
 
 Enjoy
 
-::pic{src="https://blog-img.774352199.xyz/FeC82s.jpeg" width="1280" height="800" caption="本想截一个带新能叠加界面的截图，但默认截屏会隐藏浮层"}
+::pic{src="https://blog-img.774352199.xyz/FeC82s.jpeg" width="1280" height="800" caption="本想截一个带性能叠加界面的截图，但默认截屏会隐藏浮层"}
 ::

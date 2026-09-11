@@ -1,0 +1,278 @@
+{
+  "friends.md": {
+    "path": "/friends",
+    "zh": "友链",
+    "en": "Friends",
+    "ja": "友達"
+  },
+  "posts/daily/anti-chronic-gastritis.md": {
+    "path": "/daily/anti-chronic-gastritis",
+    "zh": "慢性胃炎治疗之路",
+    "en": "My Journey with Chronic Gastritis",
+    "ja": "慢性胃炎の治療記録"
+  },
+  "posts/daily/people-in-three-body.md": {
+    "path": "/daily/people-in-three-body",
+    "zh": "《三体》中的“大多数人”",
+    "en": "The “Majority” in The Three-Body Problem",
+    "ja": "『三体』における「大多数の人々」"
+  },
+  "posts/daily/plan2024.md": {
+    "path": "/daily/plan2024",
+    "zh": "2024 学习计划",
+    "en": "My Learning Plan for 2024",
+    "ja": "2024年の学習計画"
+  },
+  "posts/daily/work-for-3-years.md": {
+    "path": "/daily/work-for-3-years",
+    "zh": "在字节工作三年的同时仍保持一定程度的心理健康其实也并非完全不可能",
+    "en": "Working at ByteDance for Three Years and Staying Somewhat Sane Is Not Entirely Impossible",
+    "ja": "ByteDanceで3年働きながら、ある程度の正気を保つことも不可能ではない"
+  },
+  "posts/fiddling/astro-google-tag-manager.md": {
+    "path": "/fiddling/astro-google-tag-manager",
+    "zh": "Astro 接入 Google Analytics (Tag Manager)",
+    "en": "Adding Google Analytics to Astro with Tag Manager",
+    "ja": "AstroにGoogle Analyticsを導入する（Tag Manager編）"
+  },
+  "posts/fiddling/chitchat-about-programming-language.md": {
+    "path": "/fiddling/chitchat-about-programming-language",
+    "zh": "漫谈编程语言",
+    "en": "Some Thoughts on Programming Languages",
+    "ja": "プログラミング言語についての雑談"
+  },
+  "posts/fiddling/cross-city-network-setup.md": {
+    "path": "/fiddling/cross-city-network-setup",
+    "zh": "上海杭州异地组网记录",
+    "en": "Connecting My Shanghai and Hangzhou Networks",
+    "ja": "上海と杭州の自宅ネットワークをつなぐ"
+  },
+  "posts/fiddling/csapplab0.md": {
+    "path": "/fiddling/csapplab0",
+    "zh": "CSAPP LAB 环境搭建",
+    "en": "Setting Up the CSAPP Lab Environment",
+    "ja": "CSAPP Labの環境構築"
+  },
+  "posts/fiddling/debian-as-bypass-router.md": {
+    "path": "/fiddling/debian-as-bypass-router",
+    "zh": "debian 旁路由方案",
+    "en": "Using Debian as a Side Router",
+    "ja": "Debianをサイドルーターにする"
+  },
+  "posts/fiddling/fake-ip-based-transparent-proxy.md": {
+    "path": "/fiddling/fake-ip-based-transparent-proxy",
+    "zh": "基于 FakeIP 的透明代理分流",
+    "en": "Routing Transparent Proxy Traffic with FakeIP",
+    "ja": "FakeIPを使った透過プロキシの振り分け"
+  },
+  "posts/fiddling/fix-port-forward-in-bypass-router.md": {
+    "path": "/fiddling/fix-port-forward-in-bypass-router",
+    "zh": "旁路由端口映射失效解决",
+    "en": "Fixing Port Forwarding with a Side Router",
+    "ja": "サイドルーター環境でポート転送が効かない問題を解決する"
+  },
+  "posts/fiddling/go-os.md": {
+    "path": "/fiddling/go-os",
+    "zh": "一次失败的项目实践——春节七天乐（不起来）",
+    "en": "A Project That Failed: Seven Not-So-Happy Days over Chinese New Year",
+    "ja": "失敗に終わったプロジェクト：楽しくなかった春節の7日間"
+  },
+  "posts/fiddling/golang-deepcopy-between-different-type.md": {
+    "path": "/fiddling/golang-deepcopy-between-different-type",
+    "zh": "golang 支持不同类型结构体间的深拷贝",
+    "en": "Deep Copying Between Different Struct Types in Go",
+    "ja": "Goで異なる型の構造体をディープコピーする"
+  },
+  "posts/fiddling/heart-rate-to-grafana.md": {
+    "path": "/fiddling/heart-rate-to-grafana",
+    "zh": "My heart beats for U —— 心率同步 Grafana 展示",
+    "en": "My Heart Beats for U: Visualizing Heart Rate in Grafana",
+    "ja": "My Heart Beats for U：心拍数をGrafanaで可視化する"
+  },
+  "posts/fiddling/macos-26-trial.md": {
+    "path": "/fiddling/macos-26-trial",
+    "zh": "macOS 26 / iPadOS 26 尝鲜",
+    "en": "Trying Out macOS 26 and iPadOS 26",
+    "ja": "macOS 26とiPadOS 26を試してみた"
+  },
+  "posts/fiddling/macos-27-apple-intelligence-chatgpt.md": {
+    "path": "/fiddling/macos-27-apple-intelligence-chatgpt",
+    "zh": "国行 Mac 折腾 Apple 智能：从换区到把 ChatGPT 抠出来",
+    "en": "Getting Apple Intelligence Working on a China-Market Mac: Region Changes and Extracting ChatGPT",
+    "ja": "中国本土向けMacでApple Intelligenceを使う：地域変更からChatGPTの取り出しまで"
+  },
+  "posts/fiddling/moontv-vibe-coding.md": {
+    "path": "/fiddling/moontv-vibe-coding",
+    "zh": "MoonTV —— 一次 Vibe Coding 尝试",
+    "en": "MoonTV: An Experiment in Vibe Coding",
+    "ja": "MoonTV：Vibe Codingを試してみた"
+  },
+  "posts/fiddling/more-accurate-chnroute.md": {
+    "path": "/fiddling/more-accurate-chnroute",
+    "zh": "更精确的基于 BGP 的国内外 IP 分流",
+    "en": "More Accurate Routing for Chinese and Overseas IPs with BGP",
+    "ja": "BGPで中国国内・国外IPの振り分けをより正確にする"
+  },
+  "posts/fiddling/msfs2024-joystick-and-pico.md": {
+    "path": "/fiddling/msfs2024-joystick-and-pico",
+    "zh": "微软模拟飞行 2024 折腾记录",
+    "en": "Adventures with Microsoft Flight Simulator 2024",
+    "ja": "Microsoft Flight Simulator 2024をあれこれ試す"
+  },
+  "posts/fiddling/one-month-using-android.md": {
+    "path": "/fiddling/one-month-using-android",
+    "zh": "迁移安卓一月谈",
+    "en": "One Month After Switching to Android",
+    "ja": "Androidに乗り換えて1か月"
+  },
+  "posts/fiddling/one-trek-twenty-stacks.md": {
+    "path": "/fiddling/one-trek-twenty-stacks",
+    "zh": "一个 TREK 引发的二十个 stack",
+    "en": "One TREK, Twenty Stacks",
+    "ja": "TREKひとつのつもりが、20個のスタックに"
+  },
+  "posts/fiddling/opnsense-transparent-proxy.md": {
+    "path": "/fiddling/opnsense-transparent-proxy",
+    "zh": "实现 OPNsense 透明代理+分流",
+    "en": "Transparent Proxying and Traffic Routing with OPNsense",
+    "ja": "OPNsenseで透過プロキシとトラフィック振り分けを実現する"
+  },
+  "posts/fiddling/parser-type-variable-ambiguity.md": {
+    "path": "/fiddling/parser-type-variable-ambiguity",
+    "zh": "语法分析中类型名-变量名歧义消除",
+    "en": "Resolving Type Name and Variable Name Ambiguity in Parsing",
+    "ja": "構文解析で型名と変数名の曖昧さを解消する"
+  },
+  "posts/fiddling/spike-install.md": {
+    "path": "/fiddling/spike-install",
+    "zh": "RISC-V 工具链与模拟器（emulator）的安装",
+    "en": "Installing the RISC-V Toolchain and Emulator",
+    "ja": "RISC-Vツールチェーンとエミュレーターのインストール"
+  },
+  "posts/fiddling/tech-about-gfw.md": {
+    "path": "/fiddling/tech-about-gfw",
+    "zh": "GFW 原理考",
+    "en": "How the Great Firewall Works",
+    "ja": "GFWの仕組みを探る"
+  },
+  "posts/fiddling/this-in-javac-string-concat.md": {
+    "path": "/fiddling/this-in-javac-string-concat",
+    "zh": "Java 中 this 关键字导致编译期常量传播优化失效的问题",
+    "en": "How Java’s this Keyword Can Prevent Compile-Time Constant Propagation",
+    "ja": "Javaのthisキーワードでコンパイル時の定数伝播が効かなくなる問題"
+  },
+  "posts/fiddling/vitepress-memos-component.md": {
+    "path": "/fiddling/vitepress-memos-component",
+    "zh": "在 VitePress 中实现一个动态说说功能",
+    "en": "Adding a Microblog to VitePress",
+    "ja": "VitePressにひとこと投稿機能を実装する"
+  },
+  "posts/fiddling/vps-warp-ipv6.md": {
+    "path": "/fiddling/vps-warp-ipv6",
+    "zh": "VPS 套 Warp 分流指定出口 IPv6",
+    "en": "Routing Selected VPS Traffic Through WARP over IPv6",
+    "ja": "VPSの特定の通信をWARP経由のIPv6で外に出す"
+  },
+  "posts/fiddling/xiaomi17-root-and-hide-root.md": {
+    "path": "/fiddling/xiaomi17-root-and-hide-root",
+    "zh": "小米 17 折腾日用：解锁、刷机、root 与隐藏",
+    "en": "Making the Xiaomi 17 My Daily Driver: Unlocking, Flashing, Rooting, and Hiding Root",
+    "ja": "Xiaomi 17を普段使いに：ロック解除、ROM書き込み、root化とroot隠し"
+  },
+  "posts/notes/65840/mapreducelab.md": {
+    "path": "/notes/65840/mapreducelab",
+    "zh": "6.5840 实验一 —— MapReduce",
+    "en": "6.5840 Lab 1: MapReduce",
+    "ja": "6.5840 Lab 1：MapReduce"
+  },
+  "posts/notes/65840/mapreducepaper.md": {
+    "path": "/notes/65840/mapreducepaper",
+    "zh": "MapReduce 论文阅读",
+    "en": "Reading the MapReduce Paper",
+    "ja": "MapReduce論文を読む"
+  },
+  "posts/notes/65840/raftlab2a.md": {
+    "path": "/notes/65840/raftlab2a",
+    "zh": "6.5840 实验 2a —— Leader 选举",
+    "en": "6.5840 Lab 2A: Leader Election",
+    "ja": "6.5840 Lab 2A：リーダー選出"
+  },
+  "posts/notes/65840/reftextendedpaper.md": {
+    "path": "/notes/65840/reftextendedpaper",
+    "zh": "Raft 论文阅读",
+    "en": "Reading the Raft Paper",
+    "ja": "Raft論文を読む"
+  },
+  "posts/projects/mydb/mydb0.md": {
+    "path": "/projects/mydb/mydb0",
+    "zh": "MYDB 0. 项目结构和一些不得不说的话",
+    "en": "MYDB 0. Project Structure and a Few Things I Had to Say",
+    "ja": "MYDB 0. プロジェクト構成と、先に伝えておきたいこと"
+  },
+  "posts/projects/mydb/mydb1.md": {
+    "path": "/projects/mydb/mydb1",
+    "zh": "MYDB 1. 从最简单的 TM 开始",
+    "en": "MYDB 1. Starting with the Transaction Manager",
+    "ja": "MYDB 1. まずはシンプルなTMから"
+  },
+  "posts/projects/mydb/mydb10.md": {
+    "path": "/projects/mydb/mydb10",
+    "zh": "MYDB 10. 服务端客户端的实现及其通信规则",
+    "en": "MYDB 10. Implementing the Server, Client, and Wire Protocol",
+    "ja": "MYDB 10. サーバー・クライアントの実装と通信プロトコル"
+  },
+  "posts/projects/mydb/mydb2.md": {
+    "path": "/projects/mydb/mydb2",
+    "zh": "MYDB 2. 引用计数缓存框架和共享内存数组",
+    "en": "MYDB 2. A Reference-Counted Cache Framework and Shared Byte Arrays",
+    "ja": "MYDB 2. 参照カウント方式のキャッシュ基盤と共有バイト配列"
+  },
+  "posts/projects/mydb/mydb3.md": {
+    "path": "/projects/mydb/mydb3",
+    "zh": "MYDB 3. 数据页的缓存与管理",
+    "en": "MYDB 3. Caching and Managing Data Pages",
+    "ja": "MYDB 3. データページのキャッシュと管理"
+  },
+  "posts/projects/mydb/mydb4.md": {
+    "path": "/projects/mydb/mydb4",
+    "zh": "MYDB 4. 日志文件与恢复策略",
+    "en": "MYDB 4. Log Files and Recovery Strategies",
+    "ja": "MYDB 4. ログファイルと復旧戦略"
+  },
+  "posts/projects/mydb/mydb5.md": {
+    "path": "/projects/mydb/mydb5",
+    "zh": "MYDB 5. 页面索引与 DM 的实现",
+    "en": "MYDB 5. The Page Index and the Data Manager",
+    "ja": "MYDB 5. ページインデックスとDMの実装"
+  },
+  "posts/projects/mydb/mydb6.md": {
+    "path": "/projects/mydb/mydb6",
+    "zh": "MYDB 6. 记录的版本与事务隔离",
+    "en": "MYDB 6. Record Versions and Transaction Isolation",
+    "ja": "MYDB 6. レコードのバージョンとトランザクション分離"
+  },
+  "posts/projects/mydb/mydb7.md": {
+    "path": "/projects/mydb/mydb7",
+    "zh": "MYDB 7. 死锁检测与 VM 的实现",
+    "en": "MYDB 7. Deadlock Detection and the Version Manager",
+    "ja": "MYDB 7. デッドロック検出とVMの実装"
+  },
+  "posts/projects/mydb/mydb8.md": {
+    "path": "/projects/mydb/mydb8",
+    "zh": "MYDB 8. 索引管理",
+    "en": "MYDB 8. Index Management",
+    "ja": "MYDB 8. インデックス管理"
+  },
+  "posts/projects/mydb/mydb9.md": {
+    "path": "/projects/mydb/mydb9",
+    "zh": "MYDB 9. 字段与表管理",
+    "en": "MYDB 9. Field and Table Management",
+    "ja": "MYDB 9. フィールドとテーブルの管理"
+  },
+  "posts/fiddling/steamdeck-switch-60fps.md": {
+    "path": "/fiddling/steamdeck-switch-60fps",
+    "zh": "Steam Deck 的第二春：Switch 模拟器到插帧 60FPS 一条龙",
+    "en": "A Second Life for the Steam Deck: Switch Emulation and Frame Generation at 60 FPS",
+    "ja": "Steam Deckの第二の人生：Switchエミュレーター導入からフレーム補間で60FPSまで"
+  }
+}

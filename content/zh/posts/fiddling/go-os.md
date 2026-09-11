@@ -1,7 +1,7 @@
 ---
 authorship: human-only
 title: "一次失败的项目实践——春节七天乐（不起来）"
-description: "在一次春节假期中，灵感悄然降临。高铁上偶然阅读了关于在裸机上运行Go程序的文章，激发了对底层系统接口的探索欲望。作者的成功实践和实现，让人对将高级语言与操作系统结合的可能性感到兴奋。随着对相关研究的深入，发现这一概念早已有先例，这股热情在潜移默化中积聚，最终演变成了一场充满期待却未能如愿的项目实践。"
+description: "在一次春节假期中，灵感悄然降临。高铁上偶然阅读了关于在裸机上运行 Go 程序的文章，激发了对底层系统接口的探索欲望。作者的成功实践和实现，让人对将高级语言与操作系统结合的可能性感到兴奋。随着对相关研究的深入，发现这一概念早已有先例，这股热情在潜移默化中积聚，最终演变成了一场充满期待却未能如愿的项目实践。"
 date: 2023-02-02 23:24:55
 categories: [fiddling]
 tags: ["折腾", "golang", "os", "riscv"]
@@ -10,9 +10,9 @@ image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
 
 ### 缘起
 
-最初是在过年回家的高铁上，在知乎上看到了这篇文章：[将 Go 程序跑在裸机上](https://zhuanlan.zhihu.com/p/265806072)，大致想法是通过实现一遍系统接口，来接管 golang 程序的各种系统调用和中断之类的。感觉这个想法十分有趣。作者还用 golang 写了一个 x86 os：[eggos](https://zhuanlan.zhihu.com/p/265806072)，完成度相当之高。由于是从底层魔改了 golang 的运行时，用户程序完全无感知，所以各种 golang 的第三方库都可以直接使用。作者甚至实现了一个支持 TCP/IP 的协议栈，使得一些网络库可以直接使用。看的我心潮澎湃。
+最初是在过年回家的高铁上，在知乎上看到了这篇文章：[将 Go 程序跑在裸机上](https://zhuanlan.zhihu.com/p/265806072)，大致想法是通过实现一遍系统接口，来接管 golang 程序的各种系统调用和中断之类的。感觉这个想法十分有趣。作者还用 golang 写了一个 x86 os：[eggos](https://zhuanlan.zhihu.com/p/265806072)，完成度相当之高。由于是从底层魔改了 golang 的运行时，用户程序完全无感知，所以各种 golang 的第三方库都可以直接使用。作者甚至实现了一个支持 TCP/IP 的协议栈，使得一些网络库可以直接使用。看得我心潮澎湃。
 
-搜了搜一些前人的工作，发现这个想法很早就被人提出来过。2018 年 OSDI 会议上就有一篇论文，讲述了使用高级语言实现操作系统的好处和代价，幻灯片在 [这儿](https://www.usenix.org/sites/default/files/conference/protected-files/osdi18_slides_cutler.pdf)。另外，相关的实现这几年也是有的，比如 [gopher-os](https://github.com/gopher-os/gopher-os)，一个验证性质的内核，只是为了证明使用 golang 实现操作系统是可行的。另外还有 MIT 的一个博士论文项目 [Buscuit](https://github.com/mit-pdos/biscuit)，思路是 hack 编译器使得能够编译到裸机，这个项目完成度更高，实现了部分 POSIX 接口，甚至可以在上面跑 redis 和 nginx。
+搜了搜一些前人的工作，发现这个想法很早就被人提出来过。2018 年 OSDI 会议上就有一篇论文，讲述了使用高级语言实现操作系统的好处和代价，幻灯片在 [这儿](https://www.usenix.org/sites/default/files/conference/protected-files/osdi18_slides_cutler.pdf)。另外，相关的实现这几年也是有的，比如 [gopher-os](https://github.com/gopher-os/gopher-os)，一个验证性质的内核，只是为了证明使用 golang 实现操作系统是可行的。另外还有 MIT 的一个博士论文项目 [Biscuit](https://github.com/mit-pdos/biscuit)，思路是 hack 编译器使得能够编译到裸机，这个项目完成度更高，实现了部分 POSIX 接口，甚至可以在上面跑 redis 和 nginx。
 
 在研究资料过程中，发现了一个共同点：都是基于 x86 架构实现的。我之前用 c 写过一个小内核，是基于 RISC-V 架构，RISC-V 的汇编和各种机制都十分简单，写起来也很舒服。于是就有了这么个想法：用 go 实现一个 RISC-V 的操作系统。
 
@@ -38,7 +38,7 @@ image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
 
 在查了一些资料后，在 stackoverflow 上看到了这个 [提问](https://stackoverflow.com/questions/69111979/using-custom-linker-script-with-go-build)，使用外部链接器而非 go 自己内置的链接器，这样就可以指定链接脚本了。但是尝试了下之后，不太可行。go 的可执行文件中除了一些已知的 text 段、bss 段、rodata 段和 data 段，还有一些自己的乱七八糟的段，这些都必须在链接脚本里显式指定，几乎不太可能。
 
-于是更换思路，入口可以写一段 c 代码，这段 c 代码动态获取 go 代码的入口然后跳转过去。由于 go 代码的入口只存在于 elf 文件中，在加载后的内存映像中是没有这个信息的。所以可以把这个 elf 文件直接以二进制的形式链接到 c 程序的 data 段，可以为这段保存二进制的内存开始和结尾指定一个名字，我是用的是 `_binary_kernel_elf_start` 和 `_binary_kernel_elf_end`。这样在 c 代码中就可以快速找到了。而 c 代码的作用，就是解析这段内存中保存的 elf 文件，把需要载入内存的段复制到内存对应的地址处，再跳转到 elf 指定的 entry 处即可。
+于是更换思路，入口可以写一段 c 代码，这段 c 代码动态获取 go 代码的入口然后跳转过去。由于 go 代码的入口只存在于 elf 文件中，在加载后的内存映像中是没有这个信息的。所以可以把这个 elf 文件直接以二进制的形式链接到 c 程序的 data 段，可以为这段保存二进制的内存开始和结尾指定一个名字，我用的是 `_binary_kernel_elf_start` 和 `_binary_kernel_elf_end`。这样在 c 代码中就可以快速找到了。而 c 代码的作用，就是解析这段内存中保存的 elf 文件，把需要载入内存的段复制到内存对应的地址处，再跳转到 elf 指定的 entry 处即可。
 
 这里贴一下入口的汇编代码，大概就是设置好栈就跳转进 c 函数中，同时指定了 data 段中的两个符号间的一段内存是编译好的 go 可执行文件：
 
@@ -151,9 +151,9 @@ func kmain() {
 }
 ```
 
-预先分配了 stack 数组作为内核栈，kmain 啥也没干，就是无限循环。注意每个函数都有一个编译标识：`//go:nosplit`，表示让编译器不要插入检查这个函数的是否会栈溢出的代码，同时还有一个隐式的用途：阻止编译器在函数中插入 gc 检查点。如果触发了 gc，以现在这个啥也没有的裸机，gc 是完全不支持的（当然 gc 也不应该在内核中跑，更多的处理用户空间的堆）
+预先分配了 stack 数组作为内核栈，kmain 啥也没干，就是无限循环。注意每个函数都有一个编译标识：`//go:nosplit`，表示让编译器不要插入检查这个函数是否会栈溢出的代码，同时还有一个隐式的用途：阻止编译器在函数中插入 gc 检查点。如果触发了 gc，以现在这个啥也没有的裸机，gc 是完全不支持的（当然 gc 也不应该在内核中跑，更多地处理用户空间的堆）
 
-这样 Makefile 就可以这样写了：
+Makefile 就可以这样写了：
 
 ```make
 Image: kernel.elf
@@ -219,7 +219,7 @@ Type           Offset             VirtAddr           PhysAddr
   ...
 ```
 
-注意第三段的 Offset 是 0xffffffffffff1000 这个大的吓人的数。Offset 是这个段的内容在文件中存放的位置相对于文件开头的偏移。这个 elf 文件才几十 KB，哪来这么大的偏移？即使加载到内存中，virt 计算机的默认物理内存大小也只有 128 MB，直接炸裂
+注意第三段的 Offset 是 0xffffffffffff1000 这个大得吓人的数。Offset 是这个段的内容在文件中存放的位置相对于文件开头的偏移。这个 elf 文件才几十 KB，哪来这么大的偏移？即使加载到内存中，virt 计算机的默认物理内存大小也只有 128 MB，直接炸裂
 
 百思不得其解，于是开始试验起来，最后发现，只要加上 `-T` 这个链接参数，就会出现这种情况。但是不加又不行，这些内存段不能被加载到低地址上，因为那是 mmio 的位置。于是我去 go 的 github 仓库里发了个 issue：[cmd/link: wrong program header offset when cross-compile to riscv64 when setting -T text alignment](https://github.com/golang/go/issues/57983)。描述了一下后，得到的回答是：
 

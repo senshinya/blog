@@ -10,7 +10,7 @@ image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 
 ### 前言
 
-大部分旁路由方案都是基于 OpenWRT 搭建 —— 这是一个单独的 Linux 发行版，拥有自己的软件包系统。再其中大部分方案又是基于 LuCI —— 专用于 OpenWRT 的 Web GUI，教程中使用的软件也是 luci-app-xxx，专为 LuCI 打造。这些方案很好，但不够好：
+大部分旁路由方案都是基于 OpenWRT 搭建 —— 这是一个单独的 Linux 发行版，拥有自己的软件包系统。其中大部分方案又是基于 LuCI —— 专用于 OpenWRT 的 Web GUI，教程中使用的软件也是 luci-app-xxx，专为 LuCI 打造。这些方案很好，但不够好：
 
 1. 过于依赖 GUI 配置：LuCI 的软件包通常在 web 端只能进行有限的配置
 2. LuCI 不够稳定：不是 OpenWRT 不稳定，而是 LuCI 不稳定。我的 LuCI 曾因为 OpenClash 崩溃过三次（也可能是我的问题）
@@ -80,7 +80,7 @@ dns-nameservers 127.0.0.1
 sudo systemctl restart networking.service
 ```
 
-注意这个时候 SSH 连接可能会断开，因为设备 IP 已经改变了。应当通过新的 IP `192.168.7.2` 重新 SSH 登陆。
+注意这个时候 SSH 连接可能会断开，因为设备 IP 已经改变了。应当通过新的 IP `192.168.7.2` 重新 SSH 登录。
 
 `ip a` 查看配置结果：
 
@@ -121,7 +121,7 @@ sudo sysctl -p
 
 当客户端需要解析 DNS 时，监听在 53 端口上的 AdguardHome 会转发给其上游 Clash，然后 Clash 根据设置来进行分流，中国大陆部分使用国内的公共 DNS 服务器进行解析，非中国大陆部分通过代理向国外公共 DNS 服务器进行解析
 
-而当 Clash 出现异常时，AdguardHome 则直接向国内公共 DNS 服务器请求解析（实际上意义不大，即使解析出来的 IP，流量还是要通过 Clash）
+而当 Clash 出现异常时，AdguardHome 则直接向国内公共 DNS 服务器请求解析（实际上意义不大，即使解析出了 IP，流量还是要通过 Clash）
 
 #### 安装 AdguardHome
 
@@ -206,7 +206,7 @@ half-life: https://adguard.yojigen.tech/HalfLifeList.txt
 
 ### Clash 配置
 
-Clash 在整个方案中负责国内外 DNS 解析分流，另外就是老本行穿墙了。由于 Clash 原仓库已删库跑路，衣钵由 mihomo 集成（米哈游你坏事做尽）
+Clash 在整个方案中负责国内外 DNS 解析分流，另外就是老本行穿墙了。由于 Clash 原仓库已删库跑路，衣钵由 mihomo 继承（米哈游你坏事做尽）
 
 #### 安装 Clash
 
@@ -354,7 +354,7 @@ iptables -t mangle -X clash || true
 iptables -t mangle -X clash_local || true
 ```
 
-每行都有详细的注释，再细节可以去问 ChatGPT
+每行都有详细的注释，想了解更具体的内容，可以去问 ChatGPT
 
 #### clash 配置文件
 
@@ -504,7 +504,7 @@ chmod +x clean.sh
 
 #### 服务启动
 
-完全配置好以后，我们可以设置 `/etc/systemd/system/clash.service` 为开启自动启动，并立即启动起来。
+完全配置好以后，我们可以设置 `/etc/systemd/system/clash.service` 为开机自动启动，并立即启动起来。
 
 ```shell
 systemctl enable --now clash.service
