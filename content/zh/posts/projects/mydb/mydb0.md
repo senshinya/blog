@@ -7,6 +7,7 @@ date: 2021-11-27 14:43:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/xfci2J.webp"
+seoDescription: "介绍 Java 数据库项目 MYDB 的整体架构、客户端与服务端交互，以及事务、数据、版本、索引和表管理五层的职责与依赖，附编译、创建数据库和命令行运行示例。"
 ---
 
 项目地址：[https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

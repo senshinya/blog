@@ -6,6 +6,7 @@ date: 2023-05-24 17:51:09
 categories: [fiddling]
 tags: ["折腾", "环境搭建", "riscv", "spike", "riscv-pk"]
 image: "https://blog-img.774352199.xyz/rWNOKx.webp"
+seoDescription: "从源码安装 RISC-V GNU 工具链、Spike 模拟器与 riscv-pk，记录默认架构缺少 zifencei 扩展导致的编译问题，调整参数后用 Hello 程序验证完整运行流程。"
 ---
 
 闲得无聊，想看看 spike 源码，但是翻了很多教程，都没能照着直接装好 spike 和相关的工具链。于是自己动手丰衣足食，直接读相关仓库的 README，基本都可以安装成功，但是还是暗藏着一个小坑，记录一下。

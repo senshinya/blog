@@ -6,6 +6,7 @@ date: 2021-12-08 22:55:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/TRcbsj.webp"
+seoDescription: "Implement MYDB logging with checksums and incomplete-tail removal, then use write-ahead records, transaction states, redo, and undo for crash recovery."
 ---
 
 The code in this chapter is in [backend/dm/logger](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger) and [backend/dm/Recover.java](https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java).

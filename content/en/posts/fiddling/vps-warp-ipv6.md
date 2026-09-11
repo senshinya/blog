@@ -6,6 +6,7 @@ date: 2025-03-15 16:24:00
 categories: [fiddling]
 tags: ["Tinkering", "censorship circumvention", "warp", "traffic routing"]
 image: "https://blog-img.774352199.xyz/McjrrF.webp"
+seoDescription: "Route selected VPS traffic through WARP’s local SOCKS proxy, using Xray DNS and a chained freedom outbound to prefer IPv6 when the destination supports it."
 ---
 
 On an ordinary afternoon last week, Telegram, which had been sitting quietly in the background for ages, received a notification:

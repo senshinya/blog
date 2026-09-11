@@ -6,6 +6,7 @@ date: 2021-12-08 22:55:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/TRcbsj.webp"
+seoDescription: "MYDBのログにチェックサムと末尾の不完全データ除去を実装。データ変更前のログ保存、トランザクション状態、redoとundoによるクラッシュ復旧と並行実行の制約を説明します。"
 ---
 
 この章で扱うコードは[backend/dm/logger](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger)と[backend/dm/Recover.java](https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java)にあります。

@@ -6,6 +6,7 @@ date: 2026-06-11 10:00:00
 categories: [fiddling]
 tags: ["折腾", "macOS", "Apple 智能", "ChatGPT"]
 image: "https://blog-img.774352199.xyz/fOFucm.webp"
+seoDescription: "记录国行 Mac 在 macOS 27 上启用 Apple 智能与 ChatGPT 扩展的折腾过程，涉及 RegionSpoof 内核扩展、SIP 与 AMFI 设置，以及 countryd 定位和地区缓存排查。"
 ---
 
 又是一年科技春晚 WWDC，macOS 27 如约而至。该换的皮换了，该升的版本号升了，唯独 macOS 27 最大的升级：Apple 智能，国行机器依然无法使用，又是一次环大陆更新，依旧的二等公民。

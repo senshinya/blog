@@ -6,6 +6,7 @@ date: 2021-12-25 18:26:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
+seoDescription: "MYDBのJava Socketサーバーと対話型クライアントを実装。データとエラーの符号化、16進数の行単位通信、SQL実行、起動処理と要求・応答の流れをつなぎます。"
 ---
 
 この章で扱うコードは[backend/server](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server)、[client](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client)、[transport](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport)にあります。

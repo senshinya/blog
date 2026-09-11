@@ -7,6 +7,7 @@ date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["折腾", "root", "bootloader"]
 image: "https://blog-img.774352199.xyz/qfxB0h.webp"
+seoDescription: "记录小米 17 日用改造：解锁 Bootloader、刷入官改 ROM 并配置 KernelSU 等框架，整理 Root 隐藏模块、补丁日期与 Boot Hash 异常处理，以及银行和支付应用的使用结果。"
 ---
 
 ::quote{icon="tabler:device-mobile"}

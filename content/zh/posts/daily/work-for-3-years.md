@@ -6,6 +6,7 @@ date: 2024-09-28 16:26:00
 categories: [daily]
 tags: ["日常", "工作", "年度总结"]
 image: "https://blog-img.774352199.xyz/hnCaht.webp"
+seoDescription: "回顾在字节跳动工作三年的变化：从新人时期的热情、业务交接后的加班与焦虑，到组织调整和身体不适后的生活重整，记录对开发工作、健康与职业选择的反思。"
 ---
 
 ![标题源](https://blog-img.774352199.xyz/1726828874334.jpg)

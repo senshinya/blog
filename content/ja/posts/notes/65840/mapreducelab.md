@@ -6,6 +6,7 @@ date: 2022-01-20 22:29:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
+seoDescription: "MIT 6.5840のMapReduce課題をGoで実装。channel経由で状態更新を一つのgoroutineに集め、RPCでの割り当て、段階の切り替え、再試行、出力ファイルを扱います。"
 ---
 
 ### はじめに

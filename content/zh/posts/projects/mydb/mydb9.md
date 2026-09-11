@@ -6,6 +6,7 @@ date: 2021-12-25 15:44:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/zOMyv5.webp"
+seoDescription: "实现 MYDB 的 SQL 解析与表管理层，将语句拆成 token 和结构对象，持久化字段、索引及表链表信息，计算 WHERE 条件范围，并用 Booter 文件维护启动时的表入口。"
 ---
 
 本章涉及代码都在 [backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser) 与 [backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm) 中。

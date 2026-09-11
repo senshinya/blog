@@ -6,6 +6,7 @@ date: 2024-09-28 16:26:00
 categories: [daily]
 tags: ["Daily Life", "Work", "Year in Review"]
 image: "https://blog-img.774352199.xyz/hnCaht.webp"
+seoDescription: "I reflect on three years at ByteDance: growing responsibilities, overtime, organizational changes, health problems, and rebuilding a manageable daily routine."
 ---
 
 ![Where the title came from](https://blog-img.774352199.xyz/1726828874334.jpg)

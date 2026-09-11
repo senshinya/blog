@@ -6,6 +6,7 @@ date: 2022-01-16 17:32:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/ApIDdC.webp"
+seoDescription: "Notes on Google’s MapReduce paper: the programming model, master-worker scheduling, intermediate data flow, failure recovery, and backup tasks for stragglers."
 ---
 
 ### Introduction

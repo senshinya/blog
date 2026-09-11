@@ -6,6 +6,7 @@ date: 2021-11-30 23:18:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/WdIGoG.webp"
+seoDescription: "为 MYDB 数据管理层实现通用引用计数缓存，说明资源获取、并发加载、主动释放与关闭时回写的流程，并用 SubArray 包装共享字节数组区间，支持后续页面和数据项管理。"
 ---
 
 本章涉及代码都在 [backend/common](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common) 中。

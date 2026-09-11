@@ -6,6 +6,7 @@ date: 2023-05-24 17:51:09
 categories: [fiddling]
 tags: ["Tinkering", "environment setup", "riscv", "spike", "riscv-pk"]
 image: "https://blog-img.774352199.xyz/rWNOKx.webp"
+seoDescription: "Build the RISC-V GNU toolchain, Spike, and riscv-pk from source, fix the missing zifencei extension, and verify the setup by compiling and running Hello."
 ---
 
 I was bored and wanted to look through Spike's source, but none of the many tutorials I found got Spike and its toolchain installed out of the box. So I took matters into my own hands and read the repositories' READMEs. They mostly worked, with one small trap worth recording.

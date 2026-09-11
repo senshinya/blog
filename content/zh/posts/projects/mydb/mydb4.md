@@ -6,6 +6,7 @@ date: 2021-12-08 22:55:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/TRcbsj.webp"
+seoDescription: "实现 MYDB 日志文件的校验、追加与损坏尾部清理，按先写日志再修改数据的顺序处理操作，并结合事务状态和并发约束，通过 redo 与 undo 完成崩溃后的数据恢复。"
 ---
 
 本章涉及代码都在 [backend/dm/logger](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/logger) 和 [backend/dm/Recover.java](https://github.com/CN-GuoZiyang/MYDB/blob/master/src/main/java/top/guoziyang/mydb/backend/dm/Recover.java) 中。

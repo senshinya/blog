@@ -33,4 +33,5 @@ useLocaleFonts()
 	<!-- 保持 key 函数稳定；页面 VNode 需随 layout 切换重新创建。 -->
 	<NuxtPage :page-key="pageKey" />
 </NuxtLayout>
+<BlogLocaleSuggestion />
 </template>

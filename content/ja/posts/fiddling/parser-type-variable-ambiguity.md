@@ -7,6 +7,7 @@ date: 2025-03-15 20:35:00
 categories: [fiddling]
 tags: ["試行錯誤", "コンパイラ設計", "構文解析", "曖昧性の解消"]
 image: "https://blog-img.774352199.xyz/2VKHK9.webp"
+seoDescription: "Cのa*bが式と宣言の両方に読める曖昧さを、GLR解析の前後で処理。簡易シンボル表、型の印、変数による隠蔽とスコープの検査で、誤ったASTを除外する方法を説明します。"
 ---
 
 ### 導入

@@ -6,6 +6,7 @@ date: 2024-08-16 23:53:00
 categories: [fiddling]
 tags: ["折腾", "翻墙", "透明代理", "FakeIP"]
 image: "https://blog-img.774352199.xyz/S2HHD5.webp"
+seoDescription: "通过 sing-box 的 FakeIP DNS 与主路由下一跳规则，仅将需要代理的流量转入旁路由，改善全量转发和端口映射问题，并说明 AdGuard 回退及 Telegram 直连 IP 的处理。"
 ---
 
 ### 前言

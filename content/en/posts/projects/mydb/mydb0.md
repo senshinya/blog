@@ -7,6 +7,7 @@ date: 2021-11-27 14:43:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/xfci2J.webp"
+seoDescription: "An introduction to MYDB, a Java database, covering its five backend modules, client-server design, implementation order, and build and command-line examples."
 ---
 
 Project: [https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

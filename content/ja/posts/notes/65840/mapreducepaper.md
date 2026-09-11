@@ -6,6 +6,7 @@ date: 2022-01-16 17:32:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/ApIDdC.webp"
+seoDescription: "GoogleのMapReduce論文の読書メモ。単語カウントで処理モデルを確認し、タスク割り当て、中間データの受け渡し、障害時の再実行、遅いworkerへの対策を整理します。"
 ---
 
 ### はじめに

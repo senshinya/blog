@@ -6,6 +6,7 @@ date: 2022-04-16 00:01:28
 categories: [fiddling]
 tags: ["Tinkering", "java"]
 image: "https://blog-img.774352199.xyz/gKtkYe.webp"
+seoDescription: "Use javap to investigate why s and this.s produce different string comparisons, tracing constant folding, pool references, and runtime concatenation."
 ---
 
 The title is a little long, but this really is an interesting problem. Consider this code:

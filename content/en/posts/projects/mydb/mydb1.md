@@ -6,6 +6,7 @@ date: 2021-11-28 16:10:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/H4zZAK.webp"
+seoDescription: "Implement MYDB’s transaction manager in Java with an XID state file, covering ID allocation, begin, commit, abort, validation, and persistent file updates."
 ---
 
 All the code in this chapter is in [backend/tm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tm).

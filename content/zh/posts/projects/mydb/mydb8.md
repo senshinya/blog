@@ -6,6 +6,7 @@ date: 2021-12-24 21:01:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/f92X4o.webp"
+seoDescription: "基于 MYDB 的数据管理层实现 B+ 树索引，说明节点存储、根节点 UID 管理和范围查找，利用兄弟节点链接处理分裂后父子关系未同步的情况，并讨论索引恢复。"
 ---
 
 本章涉及代码都在 [backend/im](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im) 中。

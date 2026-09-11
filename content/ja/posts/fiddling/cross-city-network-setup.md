@@ -7,6 +7,7 @@ date: 2025-04-18 16:43:12
 categories: [fiddling]
 tags: ["試行錯誤", "透過プロキシ", "ソフトウェアルーター", "ネットワーク構築", "mihomo", "tailscale"]
 image: "https://blog-img.774352199.xyz/O6cAGh.webp"
+seoDescription: "上海と杭州の自宅LANをImmortalWRT、Nikki、Tailscaleで接続。透過プロキシ、杭州経由の通信、双方向のサブネットアクセスを設定し、導入時の問題も記録します。"
 ---
 
 ### はじめに

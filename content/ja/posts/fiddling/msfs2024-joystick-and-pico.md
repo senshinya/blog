@@ -6,6 +6,7 @@ date: 2025-12-14 14:31:00
 categories: [fiddling]
 tags: ["試行錯誤", "Microsoft Flight Simulator", "Thrustmaster", "pico"]
 image: "https://blog-img.774352199.xyz/lfhEuE.webp"
+seoDescription: "Microsoft Flight Simulator 2024を初体験。TCAエアバスの操作設定、PICO 4 Proの接続トラブル、Virtual DesktopとOpenXRでのVR飛行を記録します。"
 ---
 
 ### はじめに

@@ -6,6 +6,7 @@ date: 2021-12-25 18:26:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
+seoDescription: "Implement MYDB’s Java socket server and interactive client, with data and error encoding, hex-line transport, SQL execution, and request-response handling."
 ---
 
 The code in this chapter is in [backend/server](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server), [client](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client), and [transport](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport).

@@ -6,6 +6,7 @@ date: 2021-11-30 23:18:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/WdIGoG.webp"
+seoDescription: "Build MYDB’s reference-counted Java cache with coordinated loading and explicit release, then use SubArray to share byte-array regions across data objects."
 ---
 
 All the code in this chapter is in [backend/common](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common).

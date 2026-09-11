@@ -53,6 +53,8 @@ const { locale } = useI18n()
 #blog-sidebar {
 	display: flex;
 	flex-direction: column;
+	/* A focused sticky control must not anchor the article's scroll position. */
+	overflow-anchor: none;
 	color: var(--c-text-2);
 
 	@media not (max-width: 768px) {

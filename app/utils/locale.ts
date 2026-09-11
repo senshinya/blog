@@ -76,7 +76,7 @@ export function resolvePreferred(
  * trailingSlash: false，若不特殊处理，`/${locale}${basePath}` 在 basePath
  * 为 '/' 时会拼出带尾斜杠的 /en/，一个实际不存在（404 或被重定向）的 URL。
  *
- * 导出给 useLocaleAlternates 复用：它和这里的 decideLocale 都要把 basePath
+ * 导出给 useLocaleAlternates 复用：它和这里的 suggestLocale 都要把 basePath
  * 拼成同一个目标 URL —— 前者用来发 hreflang，后者用来决定跳转去哪，
  * 两处拼法一旦分裂，hreflang 就可能指向一个会跳转或 404 的地址，
  * 这种问题在浏览器里不报错、任何测试都测不出来，必须靠共用同一份实现来保证一致。
@@ -133,13 +133,13 @@ export function localeRedirectPath(target: string, fullPath: string, origin: str
 }
 
 /**
- * 返回应当跳转到的路径，undefined 表示留在原地。
+ * 返回可建议切换的路径；调用者必须等待用户主动选择。
  *
  * 留在原地的三种情形：没有可用偏好、偏好与当前语言一致、当前页没有偏好语言的译文。
  * 清单里查不到的路径视为所有语言都有 —— 那是应用页面（/archive 等），
  * i18n 会为每个语言生成。
  */
-export function decideLocale({ path, stored, browser, manifest, locales, defaultLocale }: DecideInput) {
+export function suggestLocale({ path, stored, browser, manifest, locales, defaultLocale }: DecideInput) {
 	const preferred = resolvePreferred(stored, browser, locales)
 	if (!preferred)
 		return undefined

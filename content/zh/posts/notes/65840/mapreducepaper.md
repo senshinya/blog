@@ -6,6 +6,7 @@ date: 2022-01-16 17:32:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/ApIDdC.webp"
+seoDescription: "阅读 Google 的 MapReduce 论文，以单词计数理解 Map 和 Reduce 模型，梳理 master 与 worker 的任务调度、中间数据传递、故障重试，以及应对慢节点的备份任务。"
 ---
 
 ### 前言

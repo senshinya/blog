@@ -6,6 +6,7 @@ date: 2022-04-11 00:13:13
 categories: [daily]
 tags: ["Daily Life", "The Three-Body Problem", "Reading"]
 image: "https://blog-img.774352199.xyz/LTzbFP.webp"
+seoDescription: "A personal reading of The Three-Body Problem trilogy, examining Luo Ji, Cheng Xin, and the tensions between majority rule, human compassion, and survival."
 ---
 
 > If China were to become a democracy one day, it would be hell on earth. I'd definitely leave China the next day.

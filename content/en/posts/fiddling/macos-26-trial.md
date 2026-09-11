@@ -7,6 +7,7 @@ date: 2025-06-10 20:18:00
 categories: [fiddling]
 tags: ["Tinkering", "macos", "ipados", "Liquid Glass"]
 image: "https://blog-img.774352199.xyz/TPSaLE.webp"
+seoDescription: "My first-preview impressions of macOS 26 and iPadOS 26: Liquid Glass visuals, Launchpad’s move into Spotlight, and the iPad’s new windowing controls."
 ---
 
 Another annual tech extravaganza, WWDC 25, took place in the early hours of this morning. As we all know, technology is fundamentally about changing skins. Apart from highlighting Apple Intelligence, which people in China <del>cannot use on China-market devices</del> consider beneath them, the biggest news was the latest release of every platform's OS, now uniformly named by year, and the accompanying Liquid Glass design language.

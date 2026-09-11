@@ -6,6 +6,7 @@ date: 2021-12-27 00:09:00
 categories: [fiddling]
 tags: ["折腾", "CSAPP", "实验", "环境搭建"]
 image: "https://blog-img.774352199.xyz/vqOC7N.webp"
+seoDescription: "面向 CSAPP 实验搭建 Windows 下的 WSL2 与 Ubuntu 环境，介绍文件共享、VS Code 远程开发、软件源配置和 GDB/CGDB 安装，并说明实验材料的获取方式。"
 ---
 
 ### 前言

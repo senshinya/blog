@@ -8,6 +8,10 @@ export interface UtilImgProps {
 	height?: string | number
 	alt?: string
 	densities?: string
+	responsive?: boolean
+	sizes?: string
+	loading?: 'lazy' | 'eager'
+	decoding?: 'async' | 'sync' | 'auto'
 	mirror?: ImgService
 	filter?: string
 }
@@ -26,12 +30,25 @@ const src = computed(() => {
 		return getImgUrl(props.src, props.mirror)
 	return props.src
 })
+const responsiveSource = computed(() => props.responsive ? responsiveImage(src.value, getImgMeta(props.src)?.w) : undefined)
+const intrinsicWidth = computed(() => props.width ?? getImgMeta(props.src)?.w)
+const intrinsicHeight = computed(() => props.height ?? getImgMeta(props.src)?.h)
 </script>
 
 <template>
+<img
+	v-if="responsive"
+	:src="responsiveSource?.src"
+	:srcset="responsiveSource?.srcset"
+	:sizes :alt :loading :decoding
+	:width="intrinsicWidth" :height="intrinsicHeight"
+	:style="{ filter }"
+	:referrerpolicy="mirror ? 'no-referrer' : undefined"
+>
 <component
 	:is="ImageComponent"
-	:src :alt :width :height :densities
+	v-else
+	:src :alt :width :height :densities :sizes :loading :decoding
 	:style="{ filter }"
 	:referrerpolicy="mirror ? 'no-referrer' : undefined"
 />

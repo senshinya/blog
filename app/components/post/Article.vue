@@ -11,7 +11,7 @@ const currentLanguage = computed(() =>
 
 <template>
 <UtilLink class="article-card card upraise" :data-transition-key="path" data-transition-enter>
-	<NuxtImg v-if="image" class="article-cover" :src="image" :alt="title" />
+	<UtilImg v-if="image" class="article-cover" :src="image" :alt="title" responsive sizes="(max-width: 768px) 100vw, 400px" loading="lazy" decoding="async" />
 	<article>
 		<h2 class="article-title text-creative">
 			{{ title }}

@@ -61,51 +61,51 @@ test('resolvePreferred prefers the stored value, then the browser list', async (
 })
 
 test('stored preference wins over the browser languages', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ stored: 'en', browser: ['ja'] })), '/en/daily/gastritis')
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ stored: 'en', browser: ['ja'] })), '/en/daily/gastritis')
 })
 
 test('falls back to browser languages when nothing is stored', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ browser: ['en-US', 'en'] })), '/en/daily/gastritis')
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ browser: ['en-US', 'en'] })), '/en/daily/gastritis')
 })
 
 test('stays put when the preferred locale already matches', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ path: '/en/daily/gastritis', stored: 'en' })), undefined)
-	assert.equal(decideLocale(input({ stored: 'zh' })), undefined)
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ path: '/en/daily/gastritis', stored: 'en' })), undefined)
+	assert.equal(suggestLocale(input({ stored: 'zh' })), undefined)
 })
 
 test('stays put when the page has no translation in the preferred locale', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ stored: 'ja' })), undefined)
-	assert.equal(decideLocale(input({ path: '/friends', stored: 'en' })), undefined)
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ stored: 'ja' })), undefined)
+	assert.equal(suggestLocale(input({ path: '/friends', stored: 'en' })), undefined)
 })
 
 test('treats paths outside the manifest as available in every locale', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ path: '/archive', stored: 'ja' })), '/ja/archive')
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ path: '/archive', stored: 'ja' })), '/ja/archive')
 })
 
 test('ignores browser languages the site does not support', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ browser: ['de-DE', 'fr'] })), undefined)
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ browser: ['de-DE', 'fr'] })), undefined)
 })
 
 test('maps regional browser tags onto the base locale', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ path: '/archive', browser: ['ja-JP'] })), '/ja/archive')
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ path: '/archive', browser: ['ja-JP'] })), '/ja/archive')
 })
 
 test('builds default-locale targets without a prefix', async () => {
-	const { decideLocale } = await import('./locale.ts')
-	assert.equal(decideLocale(input({ path: '/en/daily/gastritis', stored: 'zh' })), '/daily/gastritis')
+	const { suggestLocale } = await import('./locale.ts')
+	assert.equal(suggestLocale(input({ path: '/en/daily/gastritis', stored: 'zh' })), '/daily/gastritis')
 })
 
 test('does not redirect to protocol-relative or backslash paths after stripping the locale', async () => {
-	const { decideLocale } = await import('./locale.ts')
+	const { suggestLocale } = await import('./locale.ts')
 	for (const path of ['/en//example.org', '/en/\\example.org', '/en///example.org'])
-		assert.equal(decideLocale(input({ path, stored: 'zh' })), undefined)
+		assert.equal(suggestLocale(input({ path, stored: 'zh' })), undefined)
 })
 
 test('locale redirects preserve query values and comment anchors for full-page and SPA navigation', async () => {

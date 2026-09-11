@@ -35,6 +35,8 @@ const subtitle = computed(() => data.value?.license?.spdx_id ?? data.value?.lang
 		:alt="repo.split('/')[0]"
 		width="48"
 		height="48"
+		loading="lazy"
+		decoding="async"
 	/>
 	<Icon v-else class="github-avatar-fallback" name="tabler:brand-github" />
 

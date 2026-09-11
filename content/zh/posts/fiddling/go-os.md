@@ -6,6 +6,7 @@ date: 2023-02-02 23:24:55
 categories: [fiddling]
 tags: ["折腾", "golang", "os", "riscv"]
 image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
+seoDescription: "记录春节期间用 Go 开发 RISC-V 裸机内核 goose 的尝试，借助 C 加载 ELF 并编写汇编入口，最终定位到 -T 链接参数引发的程序头偏移异常，提交 issue 后搁置项目。"
 ---
 
 ### 缘起

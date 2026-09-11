@@ -14,6 +14,7 @@ export type Authorship = typeof AUTHORSHIP_TYPES[number]
 export interface ArticleSchema {
 	title?: string
 	description?: string
+	seoDescription?: string
 	date?: string
 	published?: string
 	categories?: string[]
@@ -35,6 +36,7 @@ export interface ArticleSchema {
 const articleSchema = z.object({
 	title: z.string().optional(),
 	description: z.string().optional(),
+	seoDescription: z.string().optional(),
 	date: z.string().optional(),
 	published: z.string().optional(),
 	categories: z.array(z.string()).default([blogConfig.defaultCategory]),

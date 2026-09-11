@@ -6,6 +6,7 @@ date: 2024-09-28 16:26:00
 categories: [daily]
 tags: ["日常", "仕事", "年間の振り返り"]
 image: "https://blog-img.774352199.xyz/hnCaht.webp"
+seoDescription: "ByteDanceで働いた3年間を振り返ります。新人時代の熱意、業務拡大に伴う残業と不安、組織の変化や体調悪化を経て、生活習慣と仕事への向き合い方を見直した記録です。"
 ---
 
 ![タイトルの元ネタ](https://blog-img.774352199.xyz/1726828874334.jpg)

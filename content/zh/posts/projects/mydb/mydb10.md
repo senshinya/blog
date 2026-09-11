@@ -6,6 +6,7 @@ date: 2021-12-25 18:26:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
+seoDescription: "为 MYDB 实现 Java Socket 服务端与交互式客户端，定义数据和错误的编码、十六进制行传输协议，经 Parser 与表管理器执行 SQL，并完成启动入口与请求响应流程。"
 ---
 
 本章涉及代码都在 [backend/server](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/server) 、 [client](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/client) 与 [transport](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/transport) 中。

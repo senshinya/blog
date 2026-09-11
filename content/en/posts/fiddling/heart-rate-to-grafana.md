@@ -6,6 +6,7 @@ date: 2025-03-31 23:51:00
 categories: [fiddling]
 tags: ["Tinkering", "Grafana", "heart rate", "Apple Watch"]
 image: "https://blog-img.774352199.xyz/F4qD2T.webp"
+seoDescription: "Sync Apple Health heart-rate data via Health Auto Export to a self-hosted API, store it in InfluxDB 2, and build a Grafana dashboard with a sample query."
 ---
 
 A little side project: periodically sync my heart rate from Apple Health to a server and plot it in Grafana. It looks roughly like this:

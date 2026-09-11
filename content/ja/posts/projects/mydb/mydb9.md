@@ -6,6 +6,7 @@ date: 2021-12-25 15:44:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/zOMyv5.webp"
+seoDescription: "MYDBのSQLパーサーとTBMを実装。文のトークン化、フィールドとテーブル情報の保存、索引を使うWHERE条件の計算、Booterによる先頭テーブルの管理を説明します。"
 ---
 
 この章で扱うコードは[backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser)と[backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm)にあります。

@@ -6,6 +6,7 @@ date: 2024-07-13 17:49:00
 categories: [fiddling]
 tags: ["試行錯誤", "debian", "サイドルーター", "検閲回避", "透過プロキシ", "mihomo"]
 image: "https://blog-img.774352199.xyz/pPRU5x.webp"
+seoDescription: "Debianの小型PCをサイドルーターにし、AdGuard HomeとmihomoでDNS振り分けと透過プロキシを構成。サブネット、iptables、systemdの設定を示します。"
 ---
 
 ### はじめに

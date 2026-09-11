@@ -7,6 +7,7 @@ date: 2025-03-15 20:35:00
 categories: [fiddling]
 tags: ["Tinkering", "compiler design", "parsing", "disambiguation"]
 image: "https://blog-img.774352199.xyz/2VKHK9.webp"
+seoDescription: "Resolve C type-name and variable-name ambiguity in GLR parsing with lightweight symbol tables, AST pruning, and scope checks for shadowing and declarations."
 ---
 
 ### Introduction

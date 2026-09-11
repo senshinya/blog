@@ -6,6 +6,7 @@ date: 2021-12-05 15:28:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/jlFC4E.webp"
+seoDescription: "MYDBのデータファイルを8KBページ単位で管理。ダーティページの書き戻し、先頭ページによる異常終了検知、空き領域オフセット、挿入と復旧用の操作をJavaで実装します。"
 ---
 
 この章で扱うコードは[backend/dm/pageCache](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache)と[backend/dm/page](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page)にあります。

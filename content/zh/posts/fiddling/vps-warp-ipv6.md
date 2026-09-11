@@ -6,6 +6,7 @@ date: 2025-03-15 16:24:00
 categories: [fiddling]
 tags: ["折腾", "翻墙", "warp", "分流"]
 image: "https://blog-img.774352199.xyz/McjrrF.webp"
+seoDescription: "在 VPS 上以 WARP 非全局 SOCKS 模式处理指定流量，结合 Xray 本地 DNS 与 freedom 链式出口优先选择 IPv6，记录分流配置和远程解析导致出口不稳定的解决思路。"
 ---
 
 上周一个普通的下午，一直挂在后台沉寂许久的 Telegram 收到了一条推送：

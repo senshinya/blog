@@ -6,6 +6,7 @@ date: 2021-12-27 00:09:00
 categories: [fiddling]
 tags: ["Tinkering", "CSAPP", "labs", "environment setup"]
 image: "https://blog-img.774352199.xyz/vqOC7N.webp"
+seoDescription: "Set up a CSAPP lab environment on Windows with WSL2 and Ubuntu, including VS Code integration, file sharing, package mirrors, and GDB and CGDB tools."
 ---
 
 ### Introduction

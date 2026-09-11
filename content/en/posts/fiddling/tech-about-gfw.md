@@ -6,6 +6,7 @@ date: 2024-06-23 15:31:32
 categories: [fiddling]
 tags: ["Tinkering", "firewall", "global Internet", "circumvention proxy"]
 image: "https://blog-img.774352199.xyz/sOpJuL.webp"
+seoDescription: "A technical overview of the Great Firewall from published research, covering traffic capture, TCP reassembly, protocol analysis, DNS poisoning, and resets."
 ---
 
 Technology itself isn’t to blame.
@@ -28,7 +29,7 @@ Early research in 2010 suggested that the GFW project was implemented under the 
 
 > The Virtual Computing Environment Testbed was jointly built by the National Computer Network Emergency Response Technical Team/Coordination Center of China (CNCERT/CC) and Harbin Institute of Technology (HIT). Drawing on CNCERT/CC’s network infrastructure and computing resources across all 31 provinces, it integrates distributed, autonomously managed resources into an open, secure, dynamic, controllable, large-scale virtual computing test platform for studying and validating aggregation and collaboration mechanisms in virtual computing environments.
 
-A paper published by the testbed project, [A Job-Level Task Scheduling Algorithm Based on Multisite Cooperation in a Computational Grid](https://dds.sciengine.com/cfs/files/pdfs/1674-5973/LcNrPPSfzafrc3Pmn.pdf), lists its 2005 configuration as follows:
+A paper published by the testbed project, [A Job-Level Task Scheduling Algorithm Based on Multisite Cooperation in a Computational Grid](https://doi.org/10.1360/112005-652), lists its 2005 configuration as follows:
 
 | Site | Location | System | Nodes | Processors per node | Memory per node |
 |  ----  | ----  |  ----  | ----  |  ----  | ----  |

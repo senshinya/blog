@@ -6,6 +6,7 @@ date: 2021-12-27 00:09:00
 categories: [fiddling]
 tags: ["試行錯誤", "CSAPP", "実験", "環境構築"]
 image: "https://blog-img.774352199.xyz/vqOC7N.webp"
+seoDescription: "Windows上でCSAPPの実験環境を構築。WSL2とUbuntuの導入、ファイル共有、VS Code連携、パッケージ源の変更、GDB・CGDBの準備と教材の入手方法を説明します。"
 ---
 
 ### はじめに

@@ -6,6 +6,7 @@ date: 2025-05-28 22:09:00
 categories: [fiddling]
 tags: ["折腾", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
 image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
+seoDescription: "记录 Astro 通过 Partytown 接入 Google Analytics 时统计归零的排查过程，说明脚本属性、window.gtag 定义和 forward 配置，恢复事件上报并将统计脚本移出主线程。"
 ---
 
 ### 前言

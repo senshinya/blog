@@ -6,6 +6,7 @@ date: 2021-12-23 21:20:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/BF3yDW.webp"
+seoDescription: "完成 MYDB 的版本管理器 VM，检测可重复读中的版本跳跃，以等待图和深度优先搜索识别死锁，并将自动回滚、锁释放、记录可见性检查及事务读写接口串联起来。"
 ---
 
 本章涉及代码都在 [backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm) 中。

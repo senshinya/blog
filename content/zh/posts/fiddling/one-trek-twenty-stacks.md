@@ -6,6 +6,7 @@ date: 2026-05-11 22:43:00
 categories: [fiddling]
 tags: ["折腾", "vps", "自托管"]
 image: "https://blog-img.774352199.xyz/BBdDWW.webp"
+seoDescription: "从自托管 TREK 开始，在 Netcup ARM VPS 部署二十多个 Docker 服务，记录 Caddy、Authelia、邮件与备份配置，以及博客迁往 SvelteKit 和 PocketBase 的过程。"
 ---
 
 前几天刷 GitHub trending，看到一个叫 TREK 的项目，让一群人在同一张地图上排路线、订住宿、列预算，做完还能丢给别人接着改。点进 demo 站玩了一圈，很精致。

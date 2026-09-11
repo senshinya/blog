@@ -6,6 +6,7 @@ date: 2021-12-24 21:01:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/f92X4o.webp"
+seoDescription: "MYDBのDM上にB+木索引を実装。ノード保存、ルートUID管理、範囲検索を説明し、分裂後に親への登録が未完了でも兄弟リンクで検索を続ける仕組みと復旧を扱います。"
 ---
 
 この章で扱うコードはすべて[backend/im](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im)にあります。

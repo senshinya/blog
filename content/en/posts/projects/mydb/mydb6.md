@@ -6,6 +6,7 @@ date: 2021-12-18 14:58:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/8YzotA.webp"
+seoDescription: "Implement MYDB record visibility with XMIN, XMAX, and active-transaction snapshots, explaining two-phase locking, MVCC, read committed, and repeatable read."
 ---
 
 All the code in this chapter is in [backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm).

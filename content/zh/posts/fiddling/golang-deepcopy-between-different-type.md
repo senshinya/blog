@@ -6,6 +6,7 @@ date: 2022-08-15 01:05:01
 categories: [fiddling]
 tags: ["折腾", "golang", "反射", "深拷贝"]
 image: "https://blog-img.774352199.xyz/Blhm0I.webp"
+seoDescription: "针对分层架构中 VO、DO、PO 的结构体转换，用 Go 反射实现跨类型递归深拷贝，支持结构体、Slice、Map 和指针转换，并为源中缺失的目标字段赋零值。"
 ---
 
 最近在做系统重构，忙得不可开交～博客荒废了好一阵子

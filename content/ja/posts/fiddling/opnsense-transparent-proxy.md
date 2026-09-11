@@ -6,6 +6,7 @@ date: 2025-01-16 23:09:00
 categories: [fiddling]
 tags: ["試行錯誤", "検閲回避", "透過プロキシ", "OPNsense", "トラフィック振り分け"]
 image: "https://blog-img.774352199.xyz/xA8C1E.webp"
+seoDescription: "OPNsenseにmihomo、AdGuard Home、tun2socksを組み込み透過プロキシを構築。IPリストを使うファイアウォール規則とDNS転送、サービス起動を設定します。"
 ---
 
 ### はじめに

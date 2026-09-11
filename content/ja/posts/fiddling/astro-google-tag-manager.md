@@ -6,6 +6,7 @@ date: 2025-05-28 22:09:00
 categories: [fiddling]
 tags: ["試行錯誤", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
 image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
+seoDescription: "AstroとPartytownでGoogle Analyticsへの送信が止まった問題を調査。window.gtagの定義、スクリプト属性、forward配列の設定で計測を復旧した手順です。"
 ---
 
 ### はじめに

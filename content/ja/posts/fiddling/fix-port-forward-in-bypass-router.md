@@ -6,6 +6,7 @@ date: 2024-08-15 23:50:00
 categories: [fiddling]
 tags: ["試行錯誤", "サイドルーター", "NAT", "ポート転送"]
 image: "https://blog-img.774352199.xyz/mRqws9.webp"
+seoDescription: "サイドルーター導入後にポート転送が失敗する通信経路を確認。メインルーターからサイドルーター、端末へと二段階で転送し、往復経路をそろえるiptables設定を紹介します。"
 ---
 
 ### はじめに

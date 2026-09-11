@@ -6,6 +6,7 @@ date: 2024-08-15 23:50:00
 categories: [fiddling]
 tags: ["Tinkering", "side router", "NAT", "port forwarding"]
 image: "https://blog-img.774352199.xyz/mRqws9.webp"
+seoDescription: "Trace broken port forwarding through a side-router setup, then configure forwarding on both routers with iptables to align incoming and return traffic."
 ---
 
 ### Introduction

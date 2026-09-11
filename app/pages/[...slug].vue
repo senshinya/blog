@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import blogConfig from '~~/blog.config'
+import { articleSeries } from '~/utils/articleSeries'
 import { stripLocale } from '~/utils/locale'
 
 const LOCALES = blogConfig.locales.map(l => l.code)
 
 const route = useRoute()
+const { locale } = useI18n()
 const collection = useContentCollection()
 const contentPath = useContentPath()
 const discussionKey = computed(() => stripLocale(contentPath.value, LOCALES, 'zh').basePath)
@@ -16,6 +18,7 @@ const { data: post } = await useAsyncData(
 	{ watch: [collection] },
 )
 
+const hasSeries = computed(() => !!post.value?.stem.startsWith('posts/') && articleSeries.some(series => series.paths.includes(post.value!.path)))
 const excerpt = computed(() => post.value?.description || '')
 const asideWidgetNames = computed<WidgetName[]>(() => {
 	if (!post.value)
@@ -29,8 +32,15 @@ if (post.value) {
 		title: post.value.title,
 		ogType: 'article',
 		ogImage: post.value.image,
-		description: post.value.description,
+		description: post.value.seoDescription || post.value.description,
+		ogDescription: post.value.seoDescription || post.value.description,
+		twitterDescription: post.value.seoDescription || post.value.description,
 	})
+
+	if (post.value.stem.startsWith('posts/')) {
+		const schema = articleSchemaData(post.value, route.path, blogConfig.locales.find(l => l.code === locale.value)!.language, blogConfig)
+		useSchemaOrg([definePerson(schema.person), defineArticle(schema.article)])
+	}
 }
 else {
 	const event = useRequestEvent()
@@ -61,8 +71,9 @@ else {
 		tag="article"
 	/>
 
+	<PostSeries v-if="hasSeries" :path="post.path" />
 	<PostFooter v-bind="post" />
-	<PostSurround />
+	<PostSurround v-if="!hasSeries" />
 </template>
 
 <ZError

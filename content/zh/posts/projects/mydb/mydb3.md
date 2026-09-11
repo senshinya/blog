@@ -6,6 +6,7 @@ date: 2021-12-05 15:28:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/jlFC4E.webp"
+seoDescription: "在 MYDB 中将数据库文件按 8KB 页面读写与缓存，使用脏页标记控制回写，通过第一页校验识别异常关闭，并实现普通页面的空闲偏移管理、数据插入和恢复接口。"
 ---
 
 本章涉及代码都在 [backend/dm/pageCache](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageCache) 和 [backend/dm/page](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/page) 中。

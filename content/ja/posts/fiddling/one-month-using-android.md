@@ -6,6 +6,7 @@ date: 2025-06-05 23:26:00
 categories: [fiddling]
 tags: ["試行錯誤", "Android", "Oppo", "Apple", "スマートフォン"]
 image: "https://blog-img.774352199.xyz/19NIhZ.webp"
+seoDescription: "iPhoneからOPPO Find X8 Ultraへ移行して1か月。iCloud写真保存、自宅へのプロキシ接続、家計簿、TickTick、スマートウォッチの乗り換えを振り返ります。"
 ---
 
 ### はじめに

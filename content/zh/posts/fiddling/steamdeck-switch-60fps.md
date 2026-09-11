@@ -7,6 +7,7 @@ date: 2026-09-09 23:59:00
 categories: [fiddling]
 tags: ["Steam Deck", "Switch", "EmuDeck", "Eden", "Lossless Scaling"]
 image: "https://blog-img.774352199.xyz/NDPUwc.webp"
+seoDescription: "在 Steam Deck 上配置 EmuDeck 与 Eden，完成 Switch 游戏入库、按键映射和陀螺仪设置，再通过 Decky LSFG-VK 使用小黄鸭插帧，记录接近 60FPS 的配置与画面取舍。"
 ---
 
 ### 引子

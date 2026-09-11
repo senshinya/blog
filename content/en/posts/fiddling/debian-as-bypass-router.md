@@ -6,6 +6,7 @@ date: 2024-07-13 17:49:00
 categories: [fiddling]
 tags: ["Tinkering", "debian", "side router", "censorship circumvention", "transparent proxy", "mihomo"]
 image: "https://blog-img.774352199.xyz/pPRU5x.webp"
+seoDescription: "Build a Debian side router with AdGuard Home and mihomo for DNS routing and transparent proxying, covering subnets, iptables rules, and systemd services."
 ---
 
 ### Introduction

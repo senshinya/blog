@@ -7,6 +7,7 @@ date: 2026-09-09 23:59:00
 categories: [fiddling]
 tags: ["Steam Deck", "Switch", "EmuDeck", "Eden", "Lossless Scaling"]
 image: "https://blog-img.774352199.xyz/NDPUwc.webp"
+seoDescription: "Steam DeckにEmuDeckとEdenを導入し、ゲーム登録、ボタン、ジャイロを設定。Decky LSFG-VKのフレーム補間で60FPSを目指す構成と画質の調整を紹介します。"
 ---
 
 ### はじめに

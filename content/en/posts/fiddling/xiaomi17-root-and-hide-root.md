@@ -7,6 +7,7 @@ date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["Tinkering", "root", "bootloader"]
 image: "https://blog-img.774352199.xyz/qfxB0h.webp"
+seoDescription: "My Xiaomi 17 setup covers bootloader unlocking, a modified ROM, KernelSU and root hiding, with fixes for patch-date and boot-hash mismatches in app checks."
 ---
 
 ::quote{icon="tabler:device-mobile"}

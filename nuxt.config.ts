@@ -291,6 +291,9 @@ export default defineNuxtConfig({
 	},
 
 	hooks: {
+		'pages:extend': (pages) => {
+			pages.push({ name: 'page-page', path: '/page/:page', file: resolve('./app/pages/index.vue') })
+		},
 		'ready': () => {
 			console.info(`
 ================================

@@ -7,6 +7,7 @@ date: 2025-03-15 20:35:00
 categories: [fiddling]
 tags: ["折腾", "编译原理", "语法分析", "歧义消除"]
 image: "https://blog-img.774352199.xyz/2VKHK9.webp"
+seoDescription: "针对 C 语法中 a*b 既可能是表达式也可能是声明的歧义，在 GLR 构建中与构建后维护简易符号表，结合类型标记、变量遮蔽和作用域检查，剪除错误 AST 分支。"
 ---
 
 ### 引

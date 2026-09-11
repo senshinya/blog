@@ -6,6 +6,7 @@ date: 2022-12-03 21:40:09
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/7mmvIZ.webp"
+seoDescription: "阅读 Raft 扩展版论文，整理复制状态机、任期与 Leader 选举、日志复制和提交安全性，并梳理联合共识下的成员变更、快照压缩及客户端请求处理规则。"
 ---
 
 ### 前言

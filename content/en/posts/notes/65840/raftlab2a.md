@@ -6,6 +6,7 @@ date: 2022-12-16 02:06:10
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/c11Uk4.webp"
+seoDescription: "Build Raft leader election for MIT 6.5840 Lab 2A in Go, using channels for state updates, randomized election timers, RequestVote, and heartbeat RPCs."
 ---
 
 ### Introduction
@@ -18,7 +19,7 @@ Of course, as the starting point for all four sub-labs, 2A needs more than just 
 
 ### Understanding the Lab
 
-The instructions are at [https://pdos.csail.mit.edu/6.824/labs/lab-raft.html](https://pdos.csail.mit.edu/6.824/labs/lab-raft.html). Unlike Lab 1, this one gives us almost nothing to work from. The code to implement lives in `src/raft/raft.go`, where the initial Raft struct is just a skeleton:
+The instructions are at [MIT 6.824 Spring 2022 — Lab 2A](http://nil.csail.mit.edu/6.824/2022/labs/lab-raft.html). Unlike Lab 1, this one gives us almost nothing to work from. The code to implement lives in `src/raft/raft.go`, where the initial Raft struct is just a skeleton:
 
 ```go
 type Raft struct {

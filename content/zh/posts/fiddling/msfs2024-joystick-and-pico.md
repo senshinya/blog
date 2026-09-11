@@ -6,6 +6,7 @@ date: 2025-12-14 14:31:00
 categories: [fiddling]
 tags: ["折腾", "微软模拟飞行", "图马思特", "pico"]
 image: "https://blog-img.774352199.xyz/lfhEuE.webp"
+seoDescription: "记录微软模拟飞行 2024 的初体验与设备配置：从串流加载和新手教程，到图马思特 TCA 空客摇杆键位调整，再到 PICO 4 Pro 搭配 Virtual Desktop 的 VR 飞行。"
 ---
 
 ### 前言

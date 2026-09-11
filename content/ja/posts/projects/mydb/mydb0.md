@@ -7,6 +7,7 @@ date: 2021-11-27 14:43:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/xfci2J.webp"
+seoDescription: "Java製データベースMYDBの全体構成を紹介。トランザクション、データ、バージョン、索引、テーブルの各管理層と依存関係を説明し、ビルドから接続までの実行例を示します。"
 ---
 
 プロジェクト：[https://github.com/CN-GuoZiyang/MYDB](https://github.com/CN-GuoZiyang/MYDB)

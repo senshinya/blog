@@ -6,6 +6,7 @@ date: 2022-08-15 01:05:01
 categories: [fiddling]
 tags: ["Tinkering", "golang", "reflection", "deep copy"]
 image: "https://blog-img.774352199.xyz/Blhm0I.webp"
+seoDescription: "Use Go reflection to deep-copy structs across entity types, handling slices, maps, pointer conversions, and zero values for missing source fields."
 ---
 
 I have been swamped with a system refactor lately. The blog has been gathering dust for a while.

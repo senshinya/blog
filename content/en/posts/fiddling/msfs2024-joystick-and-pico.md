@@ -6,6 +6,7 @@ date: 2025-12-14 14:31:00
 categories: [fiddling]
 tags: ["Tinkering", "Microsoft Flight Simulator", "Thrustmaster", "pico"]
 image: "https://blog-img.774352199.xyz/lfhEuE.webp"
+seoDescription: "My Microsoft Flight Simulator 2024 setup, from streaming and tutorials to Thrustmaster TCA controls and PICO 4 Pro VR through Virtual Desktop and OpenXR."
 ---
 
 ### Introduction

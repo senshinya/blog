@@ -6,6 +6,7 @@ date: 2024-07-13 17:49:00
 categories: [fiddling]
 tags: ["折腾", "debian", "旁路由", "翻墙", "透明代理", "mihomo"]
 image: "https://blog-img.774352199.xyz/pPRU5x.webp"
+seoDescription: "将 Debian 小主机配置为家庭旁路由，以 AdGuard Home 和 mihomo 处理 DNS 分流、广告过滤与透明代理，给出主路由网段、iptables 规则及 systemd 服务配置。"
 ---
 
 ### 前言

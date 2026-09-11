@@ -45,6 +45,10 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 		select('.blog-stats dt, .blog-stats dd', 'locale-metric', 'stat')
 		select('.post-title, .travels-header > h1, .feed-title, .travel-cover-title, .travel-day-title', 'locale-heading', 'heading')
 		select('.md-excerpt .dynamic, .travels-desc, .travel-cover-subtitle, .travel-cover-desc, .travel-para', 'locale-body', 'intro')
+		select('.series-summary', 'locale-label', 'series-summary')
+		select('.series-details[open] .series-chapters a', 'locale-body', 'series-chapter')
+		select('.series-details[open] .series-overview', 'locale-label', 'series-overview')
+		select('.series-neighbors a', 'locale-body', 'series-neighbor')
 		document.querySelectorAll<HTMLElement>('#main-content > .article > *').forEach((el, index) => {
 			mark(el, `body-${index}`, el.matches('pre') ? 'locale-stable' : 'locale-body')
 		})
@@ -158,6 +162,7 @@ async function animateFallback() {
 		'.sidebar-nav .nav-text',
 		'.widget-header, .blog-stats dt, .blog-stats dd, .filter-text',
 		'.post-title, .travels-header > h1',
+		'.series-summary, .series-details[open] .series-chapters a, .series-details[open] .series-overview, .series-neighbors a',
 		'#main-content > .article > :not(pre):not(figure):not(:has(img)), .md-excerpt .dynamic, .travels-desc',
 		'.article-title, .article-description, .article-info, .travel-title, .travel-subtitle, .travel-summary, .travel-meta',
 	]

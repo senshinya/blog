@@ -6,6 +6,7 @@ date: 2025-03-31 23:51:00
 categories: [fiddling]
 tags: ["折腾", "Grafana", "心率", "Apple Watch"]
 image: "https://blog-img.774352199.xyz/F4qD2T.webp"
+seoDescription: "将 Apple 健康心率经 Health Auto Export 定时发送到自建接口，存入 InfluxDB 2 并用 Grafana 展示，包含 Docker 服务部署、同步配置和看板查询示例。"
 ---
 
 整了个小活：把苹果健康的心率定时同步到服务器上，并由 Grafana 绘制展示，效果大概如下：

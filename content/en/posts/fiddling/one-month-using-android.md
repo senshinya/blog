@@ -6,6 +6,7 @@ date: 2025-06-05 23:26:00
 categories: [fiddling]
 tags: ["Tinkering", "Android", "Oppo", "Apple", "smartphone"]
 image: "https://blog-img.774352199.xyz/19NIhZ.webp"
+seoDescription: "One month after moving from iPhone to OPPO Find X8 Ultra, I review iCloud photo backups, home proxy access, bookkeeping, TickTick, and a replacement watch."
 ---
 
 ### Introduction

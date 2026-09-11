@@ -6,6 +6,7 @@ date: 2025-07-20 23:32:00
 categories: [fiddling]
 tags: ["試行錯誤", "moontv", "vibe coding", "cursor"]
 image: "https://blog-img.774352199.xyz/nIeONi.webp"
+seoDescription: "CursorでLibreTVをNext.jsとReactのMoonTVへ作り直した体験。AIによる開発、プレーヤーの状態依存、複数環境への対応、公開後の不具合報告への対応を振り返ります。"
 ---
 
 半年ほど前から[LibreTV](https://github.com/LibreSpark/LibreTV)を追っていました。各種収集サイトの動画をまとめて検索・再生できるプロジェクトです。彼女がドラマを見るための環境を用意したくて注目し、その後HTML5プレイヤーの変更など、コードの貢献もかなりしました。仕組みにも詳しくなりましたが、使ううちに欠点も見えてきました。完全なフロントエンド構成なので視聴履歴などはブラウザーのlocalstorageに保存され、ブラウザーを変えると消えます。すべて素のJSで、いろいろな人の手が入りコードも混沌としていました。静的チェックがないため、触るのが怖い箇所も多く、大改修は難しい状態でした。

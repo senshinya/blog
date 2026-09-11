@@ -6,6 +6,7 @@ date: 2024-08-15 23:50:00
 categories: [fiddling]
 tags: ["折腾", "旁路由", "NAT", "端口映射"]
 image: "https://blog-img.774352199.xyz/mRqws9.webp"
+seoDescription: "分析旁路由作为网关时端口映射失效的往返路径，通过主路由转发到旁路由、旁路由再转发到目标主机的双层配置修复连接，并给出 Debian 下的 iptables 设置。"
 ---
 
 ### 前言

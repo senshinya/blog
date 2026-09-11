@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
 	totalPages: number
+	pageHref?: (page: number) => string
 	expandPages?: number
 	sticky?: boolean
 	avoid?: boolean
@@ -45,14 +46,25 @@ if (import.meta.client) {
 >
 	<ZButton
 		:disabled="page <= 1"
+		:to="pageHref && page > 1 ? pageHref(page - 1) : undefined"
 		class="pagination-button rtl-flip"
 		icon="tabler:arrow-left"
 		:aria-label="$t('ui.pagination.prev')"
-		@click="page--"
+		@click="!pageHref && page--"
 	/>
 	<template v-for="i in pageArr" :key="i">
+		<NuxtLink
+			v-if="Number.isFinite(i) && pageHref"
+			:to="pageHref(i)"
+			class="pagination-num"
+			:class="{ active: i === page }"
+			:aria-current="i === page ? 'page' : undefined"
+			:aria-label="$t('ui.pagination.page', { n: i })"
+		>
+			{{ i }}
+		</NuxtLink>
 		<button
-			v-if="Number.isFinite(i)"
+			v-else-if="Number.isFinite(i)"
 			class="pagination-num"
 			:class="{ active: i === page }"
 			:aria-label="$t('ui.pagination.page', { n: i })"
@@ -66,10 +78,11 @@ if (import.meta.client) {
 	</template>
 	<ZButton
 		:disabled="page >= totalPages"
+		:to="pageHref && page < totalPages ? pageHref(page + 1) : undefined"
 		class="pagination-button rtl-flip"
 		icon="tabler:arrow-right"
 		:aria-label="$t('ui.pagination.next')"
-		@click="page++"
+		@click="!pageHref && page++"
 	/>
 </nav>
 <div ref="pagination-anchor" />
@@ -126,6 +139,8 @@ if (import.meta.client) {
 	}
 
 	> .pagination-num {
+		display: grid;
+		place-items: center;
 		width: 3em;
 		transition: background-color 0.2s;
 

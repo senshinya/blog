@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import blogConfig from '~~/blog.config'
 import { getTravelBySlug } from '~/travels'
 import { buildPath } from '~/utils/locale'
 
@@ -27,6 +28,14 @@ useSeoMeta({
 	ogType: 'article',
 	ogImage: travel.coverImage,
 })
+
+const schema = articleSchemaData({
+	title: travel.title,
+	description: travel.description,
+	image: travel.coverImage,
+	published: travel.published,
+}, route.path, blogConfig.locales.find(l => l.code === locale.value)!.language, blogConfig)
+useSchemaOrg([definePerson(schema.person), defineArticle(schema.article)])
 
 const photoCount = travel.days.reduce((sum, day) => sum + day.photos.length, 0)
 

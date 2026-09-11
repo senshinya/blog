@@ -6,6 +6,7 @@ date: 2024-09-01 22:03:10
 categories: [daily]
 tags: ["Daily Life", "Gastritis"]
 image: "https://blog-img.774352199.xyz/0Hr9l5.webp"
+seoDescription: "My experience with chronic gastritis, from nausea and gastroscopy to prescribed treatment, lingering discomfort, and changes to sleep, meals, and drinking."
 ---
 
 I've had a sensitive stomach since I was little. Through primary school, middle school, and high school, I saw countless doctors and took countless medicines, but it never really got better. Anything cold or spicy would leave me bloated, with acid reflux and nausea. Even when I ate properly, nerves before an exam or interview could make me feel sick.

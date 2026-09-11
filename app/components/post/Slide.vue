@@ -49,7 +49,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 				:title="article.description"
 				:to="resolveContentPath(article.path, locale)"
 			>
-				<NuxtImg class="cover" :src="article.image" :alt="compConf.showTitle ? '' : article.title" />
+				<UtilImg responsive sizes="(max-width: 768px) 50vw, 320px" loading="eager" decoding="async" class="cover" :src="article.image" :alt="compConf.showTitle ? '' : article.title" />
 
 				<div v-if="compConf.showTitle" class="stable-info text-creative">
 					{{ article.title }}

@@ -6,6 +6,7 @@ date: 2022-12-03 21:40:09
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/7mmvIZ.webp"
+seoDescription: "Raft拡張版論文の読書メモ。任期とリーダー選出、ログ複製、コミットの安全性を確認し、共同合意によるメンバー変更、スナップショット、クライアント処理まで整理します。"
 ---
 
 ### はじめに

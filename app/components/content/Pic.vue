@@ -8,6 +8,10 @@ const props = withDefaults(defineProps<UtilImgProps & {
 }>(), {
 	caption: '',
 	zoom: true,
+	responsive: true,
+	loading: 'lazy',
+	decoding: 'async',
+	sizes: '(max-width: 768px) calc(100vw - 48px), (max-width: 1280px) 65vw, 800px',
 })
 
 const slots = defineSlots<{
@@ -34,7 +38,7 @@ const { open } = modalStore.use(
 		class="image"
 		:style="{ cursor: zoom && 'zoom-in' }"
 		:alt="caption || alt"
-		:src :width :height :mirror :filter :densities
+		:src :width :height :mirror :filter :densities :responsive :sizes :loading :decoding
 		@click="zoom && open()"
 	/>
 	<figcaption v-if="caption || $slots.caption" aria-hidden>

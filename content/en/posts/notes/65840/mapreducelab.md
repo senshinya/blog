@@ -6,6 +6,7 @@ date: 2022-01-20 22:29:00
 categories: [notes]
 tags: ["mapreduce", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
+seoDescription: "Implement MIT’s MapReduce lab in Go with a channel-based coordinator, RPC task assignment, phase transitions, timeout retries, and atomic output renaming."
 ---
 
 ### Introduction

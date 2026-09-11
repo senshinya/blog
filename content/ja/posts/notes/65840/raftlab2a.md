@@ -6,6 +6,7 @@ date: 2022-12-16 02:06:10
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/c11Uk4.webp"
+seoDescription: "MIT 6.5840 Lab 2AでRaftのリーダー選出とハートビートを実装。channelで状態更新を集約し、ランダムなタイマーとRequestVoteなどのRPCを処理します。"
 ---
 
 ### はじめに
@@ -18,7 +19,7 @@ Lab 2ではRaft全体を4段階に分け、それぞれを小課題として実�
 
 ### 課題を読む
 
-説明書は[https://pdos.csail.mit.edu/6.824/labs/lab-raft.html](https://pdos.csail.mit.edu/6.824/labs/lab-raft.html)にあります。Lab 1と違い、今回は参考になる実装がほとんどありません。実装するのは`src/raft/raft.go`で、Raft構造体もごく基本的な骨組みだけです。
+説明書は[MIT 6.824 2022 年春学期 Lab 2A](http://nil.csail.mit.edu/6.824/2022/labs/lab-raft.html)にあります。Lab 1と違い、今回は参考になる実装がほとんどありません。実装するのは`src/raft/raft.go`で、Raft構造体もごく基本的な骨組みだけです。
 
 ```go
 type Raft struct {

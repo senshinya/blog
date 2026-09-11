@@ -6,6 +6,7 @@ date: 2021-11-28 16:10:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/H4zZAK.webp"
+seoDescription: "实现 MYDB 的事务管理器 TM，用 XID 文件记录事务的活跃、提交和撤销状态，说明文件格式与校验、事务编号分配、状态查询，以及通过 FileChannel 持久化更新。"
 ---
 
 本章涉及代码都在 [backend/tm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tm) 中。

@@ -6,6 +6,7 @@ date: 2021-12-18 14:58:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/8YzotA.webp"
+seoDescription: "从事务读写冲突与两段锁讲起，说明 MYDB 的 MVCC 记录结构，利用 XMIN、XMAX 和活跃事务快照判断版本可见性，实现读提交与可重复读两种隔离级别。"
 ---
 
 本章涉及代码都在 [backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm) 中。

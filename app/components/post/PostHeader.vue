@@ -28,7 +28,7 @@ const { copy, copied } = useCopy(shareText)
 
 <template>
 <div class="post-header" :class="{ 'has-cover': image }" :data-transition-key="path" data-transition-enter>
-	<Pic v-if="image" class="post-cover" :src="image" :alt="title" :filter="coverFilter" />
+	<Pic v-if="image" class="post-cover" :src="image" :alt="title" :filter="coverFilter" loading="eager" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 65vw, 900px" />
 	<div class="post-nav">
 		<div class="operations">
 			<Icon v-show="false" name="tabler:check" />

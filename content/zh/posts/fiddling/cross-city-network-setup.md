@@ -7,6 +7,7 @@ date: 2025-04-18 16:43:12
 categories: [fiddling]
 tags: ["折腾", "透明代理", "软路由", "组网", "mihomo", "tailscale"]
 image: "https://blog-img.774352199.xyz/O6cAGh.webp"
+seoDescription: "用 ImmortalWRT、Nikki 和 Tailscale 连接上海与杭州的家庭网络，配置透明代理、指定流量经杭州出口和双向子网互访，并记录安装扩容、DNS 与公网 IP 环境中的问题。"
 ---
 
 ### 前言

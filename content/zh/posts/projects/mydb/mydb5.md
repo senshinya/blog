@@ -6,6 +6,7 @@ date: 2021-12-11 15:16:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/22PSG1.webp"
+seoDescription: "完成 MYDB 的 DM 数据管理层，用页面空闲空间索引选择插入位置，以 DataItem 包装共享数据和修改日志流程，整合缓存、读写、启动恢复检查及正常关闭处理。"
 ---
 
 本章涉及代码都在 [backend/dm/pageIndex](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageIndex)、[backend/dm/dataItem](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/dataItem) 和 [backend/dm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm) 中。

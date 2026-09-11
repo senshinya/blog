@@ -7,6 +7,7 @@ date: 2026-08-17 23:59:21
 categories: [fiddling]
 tags: ["試行錯誤", "root", "bootloader"]
 image: "https://blog-img.774352199.xyz/qfxB0h.webp"
+seoDescription: "Xiaomi 17のロック解除、改変ROM、KernelSUとroot隠しの設定記録。セキュリティパッチ日付やBoot Hashの不一致を調べ、銀行・決済アプリの動作を確認します。"
 ---
 
 ::quote{icon="tabler:device-mobile"}

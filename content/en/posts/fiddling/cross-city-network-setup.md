@@ -7,6 +7,7 @@ date: 2025-04-18 16:43:12
 categories: [fiddling]
 tags: ["Tinkering", "transparent proxy", "software router", "networking", "mihomo", "tailscale"]
 image: "https://blog-img.774352199.xyz/O6cAGh.webp"
+seoDescription: "I linked two home LANs with ImmortalWRT, Nikki, and Tailscale, adding transparent proxying, a shared Hangzhou exit, and bidirectional subnet access."
 ---
 
 ### Introduction

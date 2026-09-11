@@ -6,6 +6,7 @@ date: 2025-03-15 16:24:00
 categories: [fiddling]
 tags: ["試行錯誤", "検閲回避", "warp", "トラフィック振り分け"]
 image: "https://blog-img.774352199.xyz/McjrrF.webp"
+seoDescription: "VPSの選んだ通信をWARPのローカルSOCKSへ転送。XrayでDNSを先に解決し、freedom出口を連結することで、接続先が対応していればIPv6を優先する設定です。"
 ---
 
 先週の何でもない午後、ずっとバックグラウンドで静かにしていたTelegramに通知が届きました。

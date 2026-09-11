@@ -6,6 +6,7 @@ date: 2021-12-24 21:01:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/f92X4o.webp"
+seoDescription: "Implement MYDB’s B+ tree index over the data manager, covering node storage, root tracking, range searches, and sibling links that handle incomplete splits."
 ---
 
 All the code in this chapter is in [backend/im](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/im).

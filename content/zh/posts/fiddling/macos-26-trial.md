@@ -7,6 +7,7 @@ date: 2025-06-10 20:18:00
 categories: [fiddling]
 tags: ["折腾", "macos", "ipados", "Liquid Glass"]
 image: "https://blog-img.774352199.xyz/TPSaLE.webp"
+seoDescription: "体验 macOS 26 与 iPadOS 26 首个开发者预览版，记录 Liquid Glass 图标和窗口效果、Launchpad 整合进 Spotlight 的不便，以及 iPad 新窗口模式的多任务体验。"
 ---
 
 又是一年科技春晚 WWDC 25 在今日凌晨召开，众所周知科技以换皮为本，除了重点介绍<del>国行用不到</del>国人不屑于使用的 Apple Intelligence 之外，最大的更新就是各平台系统发布了最新版并统一以年份命名，以及随之而来的 Liquid Glass 设计语言了。

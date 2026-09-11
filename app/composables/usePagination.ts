@@ -2,6 +2,7 @@ interface UsePaginationOptions {
 	initialPage?: number
 	perPage?: number
 	bindQuery?: string
+	bindRoute?: boolean
 }
 
 export function usePagination<T>(list: MaybeRefOrGetter<readonly T[]>, options?: UsePaginationOptions) {
@@ -11,6 +12,7 @@ export function usePagination<T>(list: MaybeRefOrGetter<readonly T[]>, options?:
 		initialPage = 1,
 		perPage = appConfig.pagination.perPage || 10,
 		bindQuery,
+		bindRoute = false,
 	} = options || {}
 
 	const totalPages = computed(() => Math.ceil(toValue(list).length / perPage) || initialPage)
@@ -26,9 +28,15 @@ export function usePagination<T>(list: MaybeRefOrGetter<readonly T[]>, options?:
 		set() { },
 	})
 
-	const page = bindQuery
-		? useHydratedQuery(bindQuery, useRouteQuery(bindQuery, initialPage.toString(), { transform: transformPage, mode }))
-		: ref(initialPage)
+	const { locale } = useI18n()
+	const page = bindRoute
+		? computed({
+				get: () => parsePageNumber(route.params.page) ?? initialPage,
+				set: (value: number) => { navigateTo({ path: paginationPath(value, locale.value), query: { ...route.query, page: undefined } }) },
+			})
+		: bindQuery
+			? useHydratedQuery(bindQuery, useRouteQuery(bindQuery, initialPage.toString(), { transform: transformPage, mode }))
+			: ref(initialPage)
 
 	const listPaged = computed(() => {
 		const start = (page.value - 1) * perPage

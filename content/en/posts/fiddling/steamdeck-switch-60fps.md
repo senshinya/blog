@@ -7,6 +7,7 @@ date: 2026-09-09 23:59:00
 categories: [fiddling]
 tags: ["Steam Deck", "Switch", "EmuDeck", "Eden", "Lossless Scaling"]
 image: "https://blog-img.774352199.xyz/NDPUwc.webp"
+seoDescription: "Set up EmuDeck and Eden on Steam Deck, map controls and gyro, then use Decky LSFG-VK frame generation to target 60 FPS, with performance and image tradeoffs."
 ---
 
 ### Introduction

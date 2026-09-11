@@ -6,6 +6,7 @@ date: 2025-01-29 21:58:00
 categories: [fiddling]
 tags: ["試行錯誤", "VitePress", "Memos", "CloudFlare"]
 image: "https://blog-img.774352199.xyz/hZX6hr.webp"
+seoDescription: "VitePressにひとこと投稿機能を追加。WorkersとKVで管理APIを作り、Vueで表示します。ビルド時の先読み、ページ分割、更新時のコールバックも組み込みます。"
 ---
 
 ### はじめに

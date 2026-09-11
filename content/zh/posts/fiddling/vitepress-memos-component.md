@@ -6,6 +6,7 @@ date: 2025-01-29 21:58:00
 categories: [fiddling]
 tags: ["折腾", "VitePress", "Memos", "CloudFlare"]
 image: "https://blog-img.774352199.xyz/hZX6hr.webp"
+seoDescription: "为 VitePress 实现可随时发布的动态说说，用 Cloudflare Workers 和 KV 提供管理接口，Vue 组件展示内容，并结合构建时预取、分页加载和回调更新减少请求。"
 ---
 
 ### 前言

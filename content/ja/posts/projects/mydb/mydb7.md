@@ -6,6 +6,7 @@ date: 2021-12-23 21:20:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/BF3yDW.webp"
+seoDescription: "MYDBのVM層を完成させる実装。バージョンの飛び越しを検査し、待ちグラフの深さ優先探索でデッドロックを検出。自動ロールバック、ロック解放、可視性判定を組み込みます。"
 ---
 
 この章で扱うコードはすべて[backend/vm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/vm)にあります。

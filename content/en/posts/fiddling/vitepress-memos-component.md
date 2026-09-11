@@ -6,6 +6,7 @@ date: 2025-01-29 21:58:00
 categories: [fiddling]
 tags: ["Tinkering", "VitePress", "Memos", "CloudFlare"]
 image: "https://blog-img.774352199.xyz/hZX6hr.webp"
+seoDescription: "Add a VitePress microblog with a Vue component, Cloudflare Workers and KV, an editing interface, build-time prefetching, and paginated content loading."
 ---
 
 ### Introduction

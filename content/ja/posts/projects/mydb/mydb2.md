@@ -6,6 +6,7 @@ date: 2021-11-30 23:18:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/WdIGoG.webp"
+seoDescription: "MYDB向けの参照カウント式キャッシュを実装。並行ロード、明示的な解放、終了時の書き戻しを扱い、SubArrayで同じバイト配列の一部を共有する方法も説明します。"
 ---
 
 この章で扱うコードはすべて[backend/common](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/common)にあります。

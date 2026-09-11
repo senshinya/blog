@@ -6,6 +6,7 @@ date: 2021-12-11 15:16:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/22PSG1.webp"
+seoDescription: "Complete MYDB’s data manager with a free-space page index, cached DataItems, logged updates, record insertion, startup recovery checks, and orderly shutdown."
 ---
 
 The code in this chapter is in [backend/dm/pageIndex](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/pageIndex), [backend/dm/dataItem](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm/dataItem), and [backend/dm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/dm).

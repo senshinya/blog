@@ -6,6 +6,7 @@ date: 2022-04-16 00:01:28
 categories: [fiddling]
 tags: ["折腾", "java"]
 image: "https://blog-img.774352199.xyz/gKtkYe.webp"
+seoDescription: "通过字符串拼接后相等比较结果不同的 Java 示例，用 javap 查看字节码，分析 s 与 this.s 对常量传播的影响，以及常量池引用和运行时拼接生成新字符串的差别。"
 ---
 
 名字起得有点长了，但是这确实是个挺有趣的问题。如下代码：

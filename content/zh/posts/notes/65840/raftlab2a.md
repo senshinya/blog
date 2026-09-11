@@ -6,6 +6,7 @@ date: 2022-12-16 02:06:10
 categories: [notes]
 tags: ["raft", "6.5840", "6.824"]
 image: "https://blog-img.774352199.xyz/c11Uk4.webp"
+seoDescription: "实现 MIT 6.5840 Raft 实验 2A 的 Leader 选举与心跳，用 channel 统一处理状态变更，围绕随机选举超时、RequestVote 和 AppendEntries 搭建并发处理框架。"
 ---
 
 ### 前言
@@ -18,7 +19,7 @@ Of course，2a 作为奠定整个四个子实验基础的起始实验，不仅�
 
 ### 实验讲解
 
-实验指导书在 [https://pdos.csail.mit.edu/6.824/labs/lab-raft.html](https://pdos.csail.mit.edu/6.824/labs/lab-raft.html)。和实验一不一样，这次几乎没有任何参考。我们需要实现的代码在 `src/raft/raft.go` 中，其中的 Raft 结构体只有一个很基础的骨架：
+实验指导书在 [MIT 6.824 2022 年春季实验 2A](http://nil.csail.mit.edu/6.824/2022/labs/lab-raft.html)。和实验一不一样，这次几乎没有任何参考。我们需要实现的代码在 `src/raft/raft.go` 中，其中的 Raft 结构体只有一个很基础的骨架：
 
 ```go
 type Raft struct {

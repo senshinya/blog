@@ -6,6 +6,7 @@ date: 2021-12-25 15:44:00
 categories: [projects]
 tags: ["java", "mydb"]
 image: "https://blog-img.774352199.xyz/zOMyv5.webp"
+seoDescription: "Build MYDB’s SQL parser and table manager, storing field and table metadata, resolving indexed WHERE ranges, and updating the table-list head with Booter."
 ---
 
 The code in this chapter is in [backend/parser](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/parser) and [backend/tbm](https://github.com/CN-GuoZiyang/MYDB/tree/master/src/main/java/top/guoziyang/mydb/backend/tbm).

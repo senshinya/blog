@@ -6,6 +6,7 @@ date: 2025-06-05 23:26:00
 categories: [fiddling]
 tags: ["折腾", "Android", "Oppo", "苹果", "Apple", "手机"]
 image: "https://blog-img.774352199.xyz/19NIhZ.webp"
+seoDescription: "从 iPhone 换到 OPPO Find X8 Ultra 一个月，记录照片继续备份 iCloud、Surfboard 回家代理、钱迹记账、滴答清单和手表替换中的选择与使用体验。"
 ---
 
 ### 前言

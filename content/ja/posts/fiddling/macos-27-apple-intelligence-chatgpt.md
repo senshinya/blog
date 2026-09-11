@@ -6,6 +6,7 @@ date: 2026-06-11 10:00:00
 categories: [fiddling]
 tags: ["試行錯誤", "macOS", "Apple Intelligence", "ChatGPT"]
 image: "https://blog-img.774352199.xyz/fOFucm.webp"
+seoDescription: "中国本土向けMacのmacOS 27でApple Intelligenceを有効にした記録。RegionSpoofやSIPの設定、ChatGPT拡張を阻むcountrydの位置判定とキャッシュを調べます。"
 ---
 
 今年もテック界の年越し番組、WWDCがやってきて、macOS 27も予定どおり登場しました。見た目は変わり、バージョン番号も上がりましたが、最大の更新であるApple Intelligenceだけは、中国本土向け端末で依然使えません。またも中国本土を避けて一周する更新で、相変わらず二等市民扱いです。

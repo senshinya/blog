@@ -7,6 +7,7 @@ date: 2023-04-08 13:16:36
 categories: [fiddling]
 tags: ["Tinkering", "type systems", "programming languages"]
 image: "https://blog-img.774352199.xyz/uO420B.webp"
+seoDescription: "Using a hypothetical language design, I compare runtimes, types, arrays, parameter passing, inheritance, and generics across C, Java, Go, and other languages."
 ---
 
 This post introduces some basic concepts, implementation approaches, and the current state of programming-language theory by talking through how to design a language.

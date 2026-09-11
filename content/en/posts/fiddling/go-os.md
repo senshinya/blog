@@ -6,6 +6,7 @@ date: 2023-02-02 23:24:55
 categories: [fiddling]
 tags: ["Tinkering", "golang", "os", "riscv"]
 image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
+seoDescription: "I tried building a RISC-V kernel in Go with a C ELF loader and assembly entry point, then traced a blocking ELF offset error to the linker’s -T option."
 ---
 
 ### How it started

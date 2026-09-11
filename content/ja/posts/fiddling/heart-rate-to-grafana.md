@@ -6,6 +6,7 @@ date: 2025-03-31 23:51:00
 categories: [fiddling]
 tags: ["試行錯誤", "Grafana", "心拍数", "Apple Watch"]
 image: "https://blog-img.774352199.xyz/F4qD2T.webp"
+seoDescription: "Appleヘルスケアの心拍数をHealth Auto Exportから自前のAPIへ定期送信。InfluxDB 2への保存、Dockerでのサービス配置、Grafanaのグラフ作成を紹介します。"
 ---
 
 ちょっとしたものを作りました。Appleヘルスケアの心拍数を定期的にサーバーへ同期して、Grafanaでグラフにします。こんな感じです。
