@@ -4,7 +4,7 @@ title: "Adding a Microblog to VitePress"
 description: "A microblog lets you share short thoughts whenever they occur, without the overhead of publishing a full static-blog post. This implementation uses Cloudflare Workers for the backend and KV for storage and management. A Vue component embedded in VitePress displays the updates, adding a lively, interactive element to the blog."
 date: 2025-01-29 21:58:00
 categories: [fiddling]
-tags: ["Tinkering", "VitePress", "Memos", "CloudFlare"]
+tags: ["VitePress","Vue","Cloudflare Workers","Cloudflare KV","Microblogging"]
 image: "https://blog-img.774352199.xyz/hZX6hr.webp"
 seoDescription: "Add a VitePress microblog with a Vue component, Cloudflare Workers and KV, an editing interface, build-time prefetching, and paginated content loading."
 ---

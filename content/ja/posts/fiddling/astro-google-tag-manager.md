@@ -4,7 +4,7 @@ title: "AstroにGoogle Analyticsを導入する（Tag Manager編）"
 description: "ブログをAstroに移行したところ、従来のGoogle Analytics導入方法では性能面が気になるようになりました。headタグにJavaScriptを直接追加してイベントを送ることはできますが、ページの性能に影響します。そこでpartytownでスクリプトをメインスレッドから切り離し、読み込みを妨げないようにしました。サンプルコードに手を加えることでGoogle Analyticsの導入に成功し、性能とアクセス解析を両立できました。"
 date: 2025-05-28 22:09:00
 categories: [fiddling]
-tags: ["試行錯誤", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
+tags: ["Astro","Google Analytics","Google Tag Manager","Partytown","アクセス解析"]
 image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 seoDescription: "AstroとPartytownでGoogle Analyticsへの送信が止まった問題を調査。window.gtagの定義、スクリプト属性、forward配列の設定で計測を復旧した手順です。"
 ---

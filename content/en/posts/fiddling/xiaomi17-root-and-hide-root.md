@@ -5,7 +5,7 @@ title: "Making the Xiaomi 17 My Daily Driver: Unlocking, Flashing, Rooting, and 
 description: "The more I tinker, the more I want to tinker. Still going strong in my old age, still going strong!"
 date: 2026-08-17 23:59:21
 categories: [fiddling]
-tags: ["Tinkering", "root", "bootloader"]
+tags: ["Xiaomi 17","Bootloader","Android Root","Firmware flashing","Root hiding"]
 image: "https://blog-img.774352199.xyz/qfxB0h.webp"
 seoDescription: "My Xiaomi 17 setup covers bootloader unlocking, a modified ROM, KernelSU and root hiding, with fixes for patch-date and boot-hash mismatches in app checks."
 ---

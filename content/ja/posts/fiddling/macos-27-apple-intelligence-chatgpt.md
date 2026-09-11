@@ -4,7 +4,7 @@ title: "中国本土向けMacでApple Intelligenceを使う：地域変更から
 description: "今年もWWDCでmacOS 27の新しいApple Intelligenceが登場しました。macOS 26時代の回避方法はもう使えず、引き続きAppleとの知恵比べです。"
 date: 2026-06-11 10:00:00
 categories: [fiddling]
-tags: ["試行錯誤", "macOS", "Apple Intelligence", "ChatGPT"]
+tags: ["macOS 27","Apple Intelligence","ChatGPT","中国本土向けMac"]
 image: "https://blog-img.774352199.xyz/fOFucm.webp"
 seoDescription: "中国本土向けMacのmacOS 27でApple Intelligenceを有効にした記録。RegionSpoofやSIPの設定、ChatGPT拡張を阻むcountrydの位置判定とキャッシュを調べます。"
 ---

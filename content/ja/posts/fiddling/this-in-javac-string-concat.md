@@ -4,7 +4,7 @@ title: "Javaのthisキーワードでコンパイル時の定数伝播が効か�
 description: "Javaでは`this`を使うことで、コンパイラの定数最適化が効かなくなる場合があります。このコード例の`ab1`と`ab2`は同じstatic final変数`s`を参照しているように見えますが、比較結果は異なります。静的変数を直接参照して文字列を連結する`ab1`に対し、`this`経由の`ab2`では同じ定数伝播の最適化が行われません。わずかな構文の違いが、コンパイル結果を変える例です。"
 date: 2022-04-16 00:01:28
 categories: [fiddling]
-tags: ["試行錯誤", "java"]
+tags: ["Java","javac","文字列連結","定数伝播","バイトコード"]
 image: "https://blog-img.774352199.xyz/gKtkYe.webp"
 seoDescription: "Javaの文字列結合でsとthis.sの比較結果が異なる理由を、javapのバイトコードで確認。定数伝播、定数プールの参照、実行時の文字列生成の違いを追います。"
 ---

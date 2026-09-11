@@ -4,7 +4,7 @@ title: "My Journey with Chronic Gastritis"
 description: "Chronic gastritis has been a long, uneven journey: stomach trouble throughout childhood, a surprising reprieve at university, then a return of symptoms after years of late nights and drinking. Frequent nausea and reflux eventually became too much to live with. After repeated examinations and some reflection, I finally began taking the recovery process seriously."
 date: 2024-09-01 22:03:10
 categories: [daily]
-tags: ["Daily Life", "Gastritis"]
+tags: ["Chronic gastritis","Medical care experiences","Gastroscopy","Health journal"]
 image: "https://blog-img.774352199.xyz/0Hr9l5.webp"
 seoDescription: "My experience with chronic gastritis, from nausea and gastroscopy to prescribed treatment, lingering discomfort, and changes to sleep, meals, and drinking."
 ---

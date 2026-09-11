@@ -4,7 +4,7 @@ title: "MYDB 6. レコードのバージョンとトランザクション分離"
 description: "VMは二相ロックでスケジュールの直列化可能性を保証し、多版型同時実行制御（MVCC）を導入して読み取りと書き込みの相互ブロックを解消します。また、データベース操作の競合を定義し、特に更新と読み取りの関係を整理することで、トランザクションの分離レベルを理解する土台を作ります。"
 date: 2021-12-18 14:58:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","MVCC","トランザクション分離","二相ロック"]
 image: "https://blog-img.774352199.xyz/8YzotA.webp"
 seoDescription: "MYDBのMVCCを実装。XMIN、XMAXとトランザクションのスナップショットで、READ COMMITTEDとREPEATABLE READの可視性を判定する仕組みを説明します。"
 ---

@@ -4,7 +4,7 @@ title: "MYDB 7. 死锁检测与 VM 的实现"
 description: "VM 需要处理 MVCC 导致的版本跳跃及死锁问题。通过简单的标记方式，MYDB 能轻松撤销或回滚事务，确保 aborted 事务的数据不会影响其他事务。这种设计使得事务在处理并发时更为高效和可靠，避免了传统 2PL 方法常见的死锁风险，提升了整体系统的稳定性和性能。"
 date: 2021-12-23 21:20:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","死锁检测","版本管理"]
 image: "https://blog-img.774352199.xyz/BF3yDW.webp"
 seoDescription: "完成 MYDB 的版本管理器 VM，检测可重复读中的版本跳跃，以等待图和深度优先搜索识别死锁，并将自动回滚、锁释放、记录可见性检查及事务读写接口串联起来。"
 ---

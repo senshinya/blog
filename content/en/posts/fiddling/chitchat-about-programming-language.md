@@ -6,7 +6,7 @@ seoTitle: "Programming language design: type systems, runtimes and implementatio
 description: "Designing a new programming language is challenging and fun. Setting aside complicated compiler theory and implementation details to focus on where code runs helps clarify how languages are built. Starting from the RISC-VI instruction set, this discussion explores the underlying architecture, layered computer systems, and virtual-machine model, reflecting on the nature of programming languages as well as their implementation."
 date: 2023-04-08 13:16:36
 categories: [fiddling]
-tags: ["Tinkering", "type systems", "programming languages"]
+tags: ["Programming language design","Type systems","Compiler design","RISC-V"]
 image: "https://blog-img.774352199.xyz/uO420B.webp"
 seoDescription: "Using a hypothetical language design, I compare runtimes, types, arrays, parameter passing, inheritance, and generics across C, Java, Go, and other languages."
 ---

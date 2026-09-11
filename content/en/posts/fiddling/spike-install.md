@@ -4,7 +4,7 @@ title: "Installing the RISC-V Toolchain and Emulator"
 description: "To install the RISC-V toolchain, first obtain the riscv-gnu-toolchain source. Using `--depth=1` when cloning reduces the download size. Check the README’s Prerequisites section and install the required dependencies. On Debian, a simple package installation command prepares the environment for building the toolchain."
 date: 2023-05-24 17:51:09
 categories: [fiddling]
-tags: ["Tinkering", "environment setup", "riscv", "spike", "riscv-pk"]
+tags: ["RISC-V","Spike","riscv-pk","Cross-compilation","Toolchain"]
 image: "https://blog-img.774352199.xyz/rWNOKx.webp"
 seoDescription: "Build the RISC-V GNU toolchain, Spike, and riscv-pk from source, fix the missing zifencei extension, and verify the setup by compiling and running Hello."
 ---

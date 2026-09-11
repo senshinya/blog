@@ -4,7 +4,7 @@ title: "MYDB 5. 页面索引与 DM 的实现"
 description: "页面索引是 DM 层的重要组成部分，通过缓存每一页的空闲空间来优化插入操作。这一机制使得上层模块能够迅速定位合适的页面，避免了冗长的搜索过程，提高了数据处理的效率。在实现方面，页面索引与数据项（DataItem）的抽象紧密结合，为数据库的高效运行提供了支撑。"
 date: 2021-12-11 15:16:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","页面索引","数据管理"]
 image: "https://blog-img.774352199.xyz/22PSG1.webp"
 seoDescription: "完成 MYDB 的 DM 数据管理层，用页面空闲空间索引选择插入位置，以 DataItem 包装共享数据和修改日志流程，整合缓存、读写、启动恢复检查及正常关闭处理。"
 ---

@@ -6,7 +6,7 @@ seoTitle: "Tailscale 与 mihomo 异地组网：上海杭州双城网络记录"
 description: "随着工作调动，npy 从北京迁至上海，顺便处理了宽带安装。尽管选择了电信 500M 的宽带，费用却高于杭州的 1000M，令人无奈。在此背景下，我决定构建一个跨城市的网络环境，期望实现上海透明代理、部分流量从杭州出口及两地局域网互通的目标。杭州的网络架构相对简单，通过软路由与无线 AP 的组合，搭建了一套可以支持日常流量回家的系统，准备迎接接下来的网络挑战。"
 date: 2025-04-18 16:43:12
 categories: [fiddling]
-tags: ["折腾", "透明代理", "软路由", "组网", "mihomo", "tailscale"]
+tags: ["Tailscale","mihomo","异地组网","透明代理","家庭网络"]
 image: "https://blog-img.774352199.xyz/O6cAGh.webp"
 seoDescription: "用 ImmortalWRT、Nikki 和 Tailscale 连接上海与杭州的家庭网络，配置透明代理、指定流量经杭州出口和双向子网互访，并记录安装扩容、DNS 与公网 IP 环境中的问题。"
 ---

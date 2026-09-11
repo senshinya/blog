@@ -4,7 +4,7 @@ title: "Androidに乗り換えて1か月"
 description: "OnePlusからiPhoneへと何度も機種変更するうち、いじる楽しさからエコシステムへの依存へと関心が変わりました。最近、彼女の一言をきっかけに写真を改善しようとOPPO Find X8 Ultraを購入。Apple環境からの移行では、Androidアプリの質のばらつきと代替探しの難しさを改めて感じました。1か月をかけて、異なるプラットフォームの摩擦に折り合いをつけた記録です。"
 date: 2025-06-05 23:26:00
 categories: [fiddling]
-tags: ["試行錯誤", "Android", "Oppo", "Apple", "スマートフォン"]
+tags: ["Android","OPPO","iOS","スマートフォン使用感","エコシステム移行"]
 image: "https://blog-img.774352199.xyz/19NIhZ.webp"
 seoDescription: "iPhoneからOPPO Find X8 Ultraへ移行して1か月。iCloud写真保存、自宅へのプロキシ接続、家計簿、TickTick、スマートウォッチの乗り換えを振り返ります。"
 ---

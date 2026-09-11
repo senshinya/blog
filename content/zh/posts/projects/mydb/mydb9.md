@@ -4,7 +4,7 @@ title: "MYDB 9. 字段与表管理"
 description: "表管理器（TBM）的职责是管理字段和表结构。通过对类 SQL 语句的结构化解析，Parser 能将语句信息封装为相应的类，从而简化后续操作。章节内容也包括 MYDB 使用的 SQL 语句语法，为理解整个管理过程提供了基础。"
 date: 2021-12-25 15:44:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","SQL 解析","表管理"]
 image: "https://blog-img.774352199.xyz/zOMyv5.webp"
 seoDescription: "实现 MYDB 的 SQL 解析与表管理层，将语句拆成 token 和结构对象，持久化字段、索引及表链表信息，计算 WHERE 条件范围，并用 Booter 文件维护启动时的表入口。"
 ---

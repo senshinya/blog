@@ -5,7 +5,7 @@ seoTitle: "Microsoft Flight Simulator 2024: TCA joystick and PICO 4 Pro VR setup
 description: "A friend’s comment got me interested in simulation games. After buying Microsoft Flight Simulator, I discovered streamed maps and models, another account login, oddly hidden tutorials, and awkward keyboard controls. A flight stick and some tinkering with Pico VR finally rounded out the experience."
 date: 2025-12-14 14:31:00
 categories: [fiddling]
-tags: ["Tinkering", "Microsoft Flight Simulator", "Thrustmaster", "pico"]
+tags: ["Microsoft Flight Simulator 2024","Thrustmaster TCA","PICO VR","Flight simulation"]
 image: "https://blog-img.774352199.xyz/lfhEuE.webp"
 seoDescription: "My Microsoft Flight Simulator 2024 setup, from streaming and tutorials to Thrustmaster TCA controls and PICO 4 Pro VR through Virtual Desktop and OpenXR."
 ---

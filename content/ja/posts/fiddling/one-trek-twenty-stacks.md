@@ -5,7 +5,7 @@ seoTitle: "TREK から 20 個の Docker サービスへ：ARM VPS のセルフ�
 description: "GitHub Trendingで旅行計画ツールを見つけ、自分でも動かしたくなりました。どうせ新しいVPSを借りるなら、ついでにもう少し、いや、だいぶ色々入れてしまおうと。"
 date: 2026-05-11 22:43:00
 categories: [fiddling]
-tags: ["試行錯誤", "vps", "セルフホスティング"]
+tags: ["TREK","Docker Compose","Dockge","VPS","セルフホスティング"]
 image: "https://blog-img.774352199.xyz/BBdDWW.webp"
 seoDescription: "TREKの自前運用をきっかけにARM VPSへ約20個のDockerサービスを配置。認証、メール、バックアップの構成と、SvelteKit・PocketBaseへのブログ移行を記録します。"
 ---

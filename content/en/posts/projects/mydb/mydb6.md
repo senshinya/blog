@@ -4,7 +4,7 @@ title: "MYDB 6. Record Versions and Transaction Isolation"
 description: "VM uses two-phase locking to ensure serializable schedules and introduces multiversion concurrency control (MVCC) to eliminate blocking between reads and writes. This chapter also defines conflicts between database operations, focusing on the interaction between updates and reads as a foundation for understanding transaction isolation levels."
 date: 2021-12-18 14:58:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","MVCC","Transaction isolation","Two-phase locking"]
 image: "https://blog-img.774352199.xyz/8YzotA.webp"
 seoDescription: "Implement MYDB record visibility with XMIN, XMAX, and active-transaction snapshots, explaining two-phase locking, MVCC, read committed, and repeatable read."
 ---

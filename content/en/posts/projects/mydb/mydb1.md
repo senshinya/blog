@@ -4,7 +4,7 @@ title: "MYDB 1. Starting with the Transaction Manager"
 description: "MYDB manages transactions through an XID file. Each transaction has a unique XID, incrementing from 1; XID 0 denotes a super transaction whose state is always committed. TransactionManager maintains this file and records three states: active, committed, and aborted. This mechanism supports accurate transaction state queries and management, providing a foundation for system stability and reliability."
 date: 2021-11-28 16:10:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","Transaction management","XID"]
 image: "https://blog-img.774352199.xyz/H4zZAK.webp"
 seoDescription: "Implement MYDB’s transaction manager in Java with an XID state file, covering ID allocation, begin, commit, abort, validation, and persistent file updates."
 ---

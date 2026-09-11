@@ -5,7 +5,7 @@ seoTitle: "From TREK to twenty Docker services: self-hosting on an ARM VPS"
 description: "I found a trip-planning tool on GitHub Trending and wanted to host my own instance. Since I was getting a new VPS anyway, I might as well install a little extra. Well, quite a lot extra."
 date: 2026-05-11 22:43:00
 categories: [fiddling]
-tags: ["Tinkering", "vps", "self-hosting"]
+tags: ["TREK","Docker Compose","Dockge","VPS","Self-hosting"]
 image: "https://blog-img.774352199.xyz/BBdDWW.webp"
 seoDescription: "Hosting TREK grew into twenty Docker stacks on an ARM VPS, with Caddy, Authelia, email and backups, plus a blog migration to SvelteKit and PocketBase."
 ---

@@ -5,7 +5,7 @@ seoTitle: "Debian サブゲートウェイ：mihomo・AdGuard Home と透過プ�
 description: "Debianをサイドルーターに使うと、OpenWrtやLuCIに依存せず、より安定した柔軟な構成を作れます。Debianを直接設定することでシステムを細かく制御でき、GUIの制約や不安定さを避けられます。一般的なサイドルーター構成と比べて透過プロキシを安定して運用しやすく、性能や効率を重視する場合の選択肢になります。"
 date: 2024-07-13 17:49:00
 categories: [fiddling]
-tags: ["試行錯誤", "debian", "サイドルーター", "検閲回避", "透過プロキシ", "mihomo"]
+tags: ["Debian","サイドルーター","mihomo","AdGuard Home","透過プロキシ"]
 image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 seoDescription: "Debianの小型PCをサイドルーターにし、AdGuard HomeとmihomoでDNS振り分けと透過プロキシを構成。サブネット、iptables、systemdの設定を示します。"
 ---

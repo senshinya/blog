@@ -6,7 +6,7 @@ seoTitle: "Connecting Shanghai and Hangzhou with Tailscale and mihomo"
 description: "My girlfriend moved from Beijing to Shanghai for work, and I helped arrange broadband too. Shanghai Telecom’s 500M connection costs more than a 1000M line in Hangzhou, frustratingly. I set out to connect the two cities’ networks: transparent proxying in Shanghai, selected traffic exiting through Hangzhou, and access between both LANs. Hangzhou already had a simple setup with a software router and an AP, configured to route my everyday traffic home and ready for the next networking adventure."
 date: 2025-04-18 16:43:12
 categories: [fiddling]
-tags: ["Tinkering", "transparent proxy", "software router", "networking", "mihomo", "tailscale"]
+tags: ["Tailscale","mihomo","Site-to-site networking","Transparent proxy","Home networking"]
 image: "https://blog-img.774352199.xyz/O6cAGh.webp"
 seoDescription: "I linked two home LANs with ImmortalWRT, Nikki, and Tailscale, adding transparent proxying, a shared Hangzhou exit, and bidirectional subnet access."
 ---

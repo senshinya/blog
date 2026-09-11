@@ -4,7 +4,7 @@ title: "Java 中 this 关键字导致编译期常量传播优化失效的问题"
 description: "在 Java 中，使用 `this` 关键字时，编译器对常量的优化可能会失效。代码示例中，尽管 `ab1` 和 `ab2` 看似引用了相同的 `final` 静态变量 `s`，但在比较时却产生了不同的结果。`ab1` 通过直接引用静态变量进行字符串连接，而 `ab2` 则是通过 `this` 关键字，导致编译器无法进行相同的常量传播优化，从而影响了字符串的比较结果。这一现象揭示了在 Java 中细微的语法差异可能引发的编译行为变化。"
 date: 2022-04-16 00:01:28
 categories: [fiddling]
-tags: ["折腾", "java"]
+tags: ["Java","javac","字符串拼接","常量传播","字节码"]
 image: "https://blog-img.774352199.xyz/gKtkYe.webp"
 seoDescription: "通过字符串拼接后相等比较结果不同的 Java 示例，用 javap 查看字节码，分析 s 与 this.s 对常量传播的影响，以及常量池引用和运行时拼接生成新字符串的差别。"
 ---

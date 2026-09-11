@@ -4,7 +4,7 @@ title: "FakeIPを使った透過プロキシの振り分け"
 description: "FakeIPを使った透過プロキシ構成で、従来のサイドルーターの単一障害点、性能不足、複雑なポート転送を改善します。プロキシコアをsing-boxに変えることで、転送性能を高めながら設定も簡単にできます。対応プロトコルが豊富で、従来のClashより最適化も進んでいます。同じ構成はClashでも実現できますが、sing-boxは柔軟な選択肢になります。"
 date: 2024-08-16 23:53:00
 categories: [fiddling]
-tags: ["試行錯誤", "検閲回避", "透過プロキシ", "FakeIP"]
+tags: ["FakeIP","sing-box","透過プロキシ","ポリシーベースルーティング","トラフィック振り分け"]
 image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 seoDescription: "sing-boxのFakeIPとメインルーターのネクストホップ設定で通信を選別。必要な通信をサイドルーターへ送り、DNSのフォールバックやTelegramのIP指定通信にも対応します。"
 ---

@@ -5,7 +5,7 @@ seoTitle: "心率数据同步 Grafana：My heart beats for U"
 description: "通过将苹果健康的心率数据定时同步到服务器，使用 Grafana 进行可视化展示，创造了一种直观的健康监测方式。利用 Health Auto Export 应用的 Restful API，将心率信息发送到指定的 http 接口，存储在 InfluxDB 中，最终在 Grafana 中呈现出清晰的看板，便于追踪和分析个人的心率变化。"
 date: 2025-03-31 23:51:00
 categories: [fiddling]
-tags: ["折腾", "Grafana", "心率", "Apple Watch"]
+tags: ["Apple Watch","Health Auto Export","InfluxDB","Grafana","心率监测"]
 image: "https://blog-img.774352199.xyz/F4qD2T.webp"
 seoDescription: "将 Apple 健康心率经 Health Auto Export 定时发送到自建接口，存入 InfluxDB 2 并用 Grafana 展示，包含 Docker 服务部署、同步配置和看板查询示例。"
 ---

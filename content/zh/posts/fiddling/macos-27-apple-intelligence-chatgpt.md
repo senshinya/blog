@@ -4,7 +4,7 @@ title: "国行 Mac 折腾 Apple 智能：从换区到把 ChatGPT 抠出来"
 description: "又一年 WWDC，macOS 27 又端上了全新的 Apple 智能。macOS 26 时代的法子已经无法偷渡，只能继续和苹果斗智斗勇了"
 date: 2026-06-11 10:00:00
 categories: [fiddling]
-tags: ["折腾", "macOS", "Apple 智能", "ChatGPT"]
+tags: ["macOS 27","Apple Intelligence","ChatGPT","国行 Mac"]
 image: "https://blog-img.774352199.xyz/fOFucm.webp"
 seoDescription: "记录国行 Mac 在 macOS 27 上启用 Apple 智能与 ChatGPT 扩展的折腾过程，涉及 RegionSpoof 内核扩展、SIP 与 AMFI 设置，以及 countryd 定位和地区缓存排查。"
 ---

@@ -5,7 +5,7 @@ title: "A Second Life for the Steam Deck: Switch Emulation and Frame Generation 
 description: "This counts as NTR too, surely."
 date: 2026-09-09 23:59:00
 categories: [fiddling]
-tags: ["Steam Deck", "Switch", "EmuDeck", "Eden", "Lossless Scaling"]
+tags: ["Steam Deck","Nintendo Switch","EmuDeck","Eden","Lossless Scaling","Frame generation"]
 image: "https://blog-img.774352199.xyz/NDPUwc.webp"
 seoDescription: "Set up EmuDeck and Eden on Steam Deck, map controls and gyro, then use Decky LSFG-VK frame generation to target 60 FPS, with performance and image tradeoffs."
 ---

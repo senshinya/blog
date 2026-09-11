@@ -4,7 +4,7 @@ title: "VPS 套 Warp 分流指定出口 IPv6"
 description: "在一个平常的下午，Telegram 推送消息引发了对一个新套餐的热情，电信 CN2 直连、2.5G 带宽的优惠让人兴奋不已。这个套餐自带 IPv6，适合解锁流媒体，但仍需谨慎使用，毕竟并不是所有流量都需要通过 Warp 来处理。先前使用的脚本虽然方便，但在速度和流量分配上存在不足，显然需要寻找更灵活的解决方案。"
 date: 2025-03-15 16:24:00
 categories: [fiddling]
-tags: ["折腾", "翻墙", "warp", "分流"]
+tags: ["Cloudflare WARP","IPv6","VPS","策略路由","流量分流"]
 image: "https://blog-img.774352199.xyz/McjrrF.webp"
 seoDescription: "在 VPS 上以 WARP 非全局 SOCKS 模式处理指定流量，结合 Xray 本地 DNS 与 freedom 链式出口优先选择 IPv6，记录分流配置和远程解析导致出口不稳定的解决思路。"
 ---

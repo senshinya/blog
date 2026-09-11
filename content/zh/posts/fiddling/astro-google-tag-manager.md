@@ -4,7 +4,7 @@ title: "Astro 接入 Google Analytics (Tag Manager)"
 description: "在将博客迁移至 Astro 框架后，常规的 Google Analytics 接入方法因性能因素而不再适用。尽管可以在 head 标签中直接添加 js 代码进行事件上报，这会影响页面性能。为了保持 Astro 的高效表现，采用了 partytown 技术，将脚本从主线程中剥离，确保加载过程不受影响。在此基础上，结合 demo 代码成功实现了 Google Analytics 的无缝接入，达成了性能与数据分析的平衡。"
 date: 2025-05-28 22:09:00
 categories: [fiddling]
-tags: ["折腾", "Astro", "Google Tag Manager", "Google Analytics", "GTM", "partytown"]
+tags: ["Astro","Google Analytics","Google Tag Manager","Partytown","网站分析"]
 image: "https://blog-img.774352199.xyz/Q0w4RN.webp"
 seoDescription: "记录 Astro 通过 Partytown 接入 Google Analytics 时统计归零的排查过程，说明脚本属性、window.gtag 定义和 forward 配置，恢复事件上报并将统计脚本移出主线程。"
 ---

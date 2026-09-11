@@ -4,7 +4,7 @@ title: "MoonTV —— 一次 Vibe Coding 尝试"
 description: "MoonTV 是一款全新的影视聚合平台，基于 NextJS 和 React 构建，旨在为用户提供便利的追剧体验。项目起源于对 LibreTV 的改进尝试，经过几个月的开发，已经取得了不小的成功，获得了大量关注和使用。借助 Cursor 的强大能力，开发过程变得高效而顺畅，尽管也遇到了一些技术挑战，如多平台适配和复杂的数据依赖管理。随着用户的不断增加，MoonTV 正在逐步完善，响应用户反馈，力求提升整体体验。"
 date: 2025-07-20 23:32:00
 categories: [fiddling]
-tags: ["折腾", "moontv", "vibe coding", "cursor"]
+tags: ["MoonTV","LunaTV","Vibe Coding","Cursor","AI 辅助开发"]
 image: "https://blog-img.774352199.xyz/nIeONi.webp"
 seoDescription: "回顾用 Cursor 将 LibreTV 重写为 Next.js 与 React 项目 MoonTV 的过程，记录 AI 编程、播放器状态依赖、多平台部署适配及开源用户反馈中的经验与限制。"
 ---

@@ -5,7 +5,7 @@ title: "Xiaomi 17を普段使いに：ロック解除、ROM書き込み、root�
 description: "いじればいじるほど、もっといじりたくなります。年を取ってもまだまだ元気、まだまだ元気です。"
 date: 2026-08-17 23:59:21
 categories: [fiddling]
-tags: ["試行錯誤", "root", "bootloader"]
+tags: ["Xiaomi 17","Bootloader","Android Root","ファームウェア書き換え","Rootの隠蔽"]
 image: "https://blog-img.774352199.xyz/qfxB0h.webp"
 seoDescription: "Xiaomi 17のロック解除、改変ROM、KernelSUとroot隠しの設定記録。セキュリティパッチ日付やBoot Hashの不一致を調べ、銀行・決済アプリの動作を確認します。"
 ---

@@ -5,7 +5,7 @@ seoTitle: "微软模拟飞行 2024：TCA 摇杆与 PICO 4 Pro VR 配置"
 description: "被朋友一句话勾起了玩模拟游戏的念头，随手买了微软模拟飞行，才发现地图和模型实时串流、账号还得二次登录，新手教程藏得奇怪，键盘操控生涩，最后入手摇杆并折腾 Pico VR 才算完整体验。"
 date: 2025-12-14 14:31:00
 categories: [fiddling]
-tags: ["折腾", "微软模拟飞行", "图马思特", "pico"]
+tags: ["Microsoft Flight Simulator 2024","Thrustmaster TCA","PICO VR","飞行模拟"]
 image: "https://blog-img.774352199.xyz/lfhEuE.webp"
 seoDescription: "记录微软模拟飞行 2024 的初体验与设备配置：从串流加载和新手教程，到图马思特 TCA 空客摇杆键位调整，再到 PICO 4 Pro 搭配 Virtual Desktop 的 VR 飞行。"
 ---

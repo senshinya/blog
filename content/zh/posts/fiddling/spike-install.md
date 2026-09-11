@@ -4,7 +4,7 @@ title: "RISC-V 工具链与模拟器（emulator）的安装"
 description: "在安装 RISC-V 工具链时，首先需要获取 riscv-gnu-toolchain 的源码，建议使用带有 `--depth=1` 的 clone 命令，以减少下载体积。安装过程中，注意查看 README 中的 Prerequisites 部分，确保前置依赖都已正确安装。在 Debian 系统中，可以通过简单的命令安装所需的依赖包，确保工具链的顺利搭建。"
 date: 2023-05-24 17:51:09
 categories: [fiddling]
-tags: ["折腾", "环境搭建", "riscv", "spike", "riscv-pk"]
+tags: ["RISC-V","Spike","riscv-pk","交叉编译","工具链"]
 image: "https://blog-img.774352199.xyz/rWNOKx.webp"
 seoDescription: "从源码安装 RISC-V GNU 工具链、Spike 模拟器与 riscv-pk，记录默认架构缺少 zifencei 扩展导致的编译问题，调整参数后用 Hello 程序验证完整运行流程。"
 ---

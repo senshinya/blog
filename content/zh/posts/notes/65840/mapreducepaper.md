@@ -4,7 +4,7 @@ title: "MapReduce 论文阅读"
 description: "MapReduce 是一种高效的并行计算模型，旨在简化大规模数据集的处理。通过定义 Map 和 Reduce 两个关键函数，用户能轻松地将复杂任务分解为简单的操作。该模型的架构能够自动管理数据分发和任务调度，使得开发者可以专注于算法本身，而无需过多关注底层细节。这种方法在分布式系统中的广泛应用，展现了其强大的灵活性和实用性。"
 date: 2022-01-16 17:32:00
 categories: [notes]
-tags: ["mapreduce", "6.5840", "6.824"]
+tags: ["MapReduce","分布式系统","论文阅读","并行计算","容错"]
 image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 seoDescription: "阅读 Google 的 MapReduce 论文，以单词计数理解 Map 和 Reduce 模型，梳理 master 与 worker 的任务调度、中间数据传递、故障重试，以及应对慢节点的备份任务。"
 ---

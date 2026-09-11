@@ -4,7 +4,7 @@ title: "MYDB 2. 引用计数缓存框架和共享内存数组"
 description: "数据管理器（DM）作为上层模块与文件系统之间的桥梁，负责分页和缓存管理，同时确保数据安全与恢复能力。特别是，在缓存策略上，DM 采用了引用计数的框架，而非传统的 LRU，旨在提升缓存的通用性与效率，为后续的数据操作奠定基础。"
 date: 2021-11-30 23:18:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","引用计数","缓存设计","共享内存"]
 image: "https://blog-img.774352199.xyz/WdIGoG.webp"
 seoDescription: "为 MYDB 数据管理层实现通用引用计数缓存，说明资源获取、并发加载、主动释放与关闭时回写的流程，并用 SubArray 包装共享字节数组区间，支持后续页面和数据项管理。"
 ---

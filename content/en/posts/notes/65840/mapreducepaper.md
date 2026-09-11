@@ -4,7 +4,7 @@ title: "Reading the MapReduce Paper"
 description: "MapReduce is an efficient parallel computing model designed to simplify processing large datasets. By defining the two key functions, Map and Reduce, users can break complex tasks into simple operations. The framework automatically handles data distribution and task scheduling, allowing developers to focus on the algorithm rather than low-level details. Its widespread use in distributed systems demonstrates its flexibility and practical value."
 date: 2022-01-16 17:32:00
 categories: [notes]
-tags: ["mapreduce", "6.5840", "6.824"]
+tags: ["MapReduce","Distributed systems","Paper notes","Parallel computing","Fault tolerance"]
 image: "https://blog-img.774352199.xyz/ApIDdC.webp"
 seoDescription: "Notes on Google’s MapReduce paper: the programming model, master-worker scheduling, intermediate data flow, failure recovery, and backup tasks for stragglers."
 ---

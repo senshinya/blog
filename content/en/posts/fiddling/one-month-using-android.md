@@ -4,7 +4,7 @@ title: "One Month After Switching to Android"
 description: "My frequent phone changes took me from OnePlus to iPhone, and from enjoying tinkering to relying on an ecosystem. At my girlfriend’s suggestion, I recently bought an OPPO Find X8 Ultra to improve my photos. Migrating apps out of Apple’s ecosystem reminded me how uneven Android’s app selection remains and how difficult finding replacements can be. A month of migration has been an exercise in friction and adaptation between platforms."
 date: 2025-06-05 23:26:00
 categories: [fiddling]
-tags: ["Tinkering", "Android", "Oppo", "Apple", "smartphone"]
+tags: ["Android","OPPO","iOS","Smartphone impressions","Ecosystem migration"]
 image: "https://blog-img.774352199.xyz/19NIhZ.webp"
 seoDescription: "One month after moving from iPhone to OPPO Find X8 Ultra, I review iCloud photo backups, home proxy access, bookkeeping, TickTick, and a replacement watch."
 ---

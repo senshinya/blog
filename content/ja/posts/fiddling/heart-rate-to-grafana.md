@@ -5,7 +5,7 @@ seoTitle: "心拍数を Grafana に同期する：My heart beats for U"
 description: "Appleヘルスケアの心拍数を定期的にサーバーへ同期し、Grafanaで可視化して直感的に確認できるようにしました。Health Auto ExportのREST API機能でHTTPエンドポイントへデータを送り、InfluxDBに保存します。Grafanaのダッシュボードから、自分の心拍数の変化を追ったり分析したりできます。"
 date: 2025-03-31 23:51:00
 categories: [fiddling]
-tags: ["試行錯誤", "Grafana", "心拍数", "Apple Watch"]
+tags: ["Apple Watch","Health Auto Export","InfluxDB","Grafana","心拍数モニタリング"]
 image: "https://blog-img.774352199.xyz/F4qD2T.webp"
 seoDescription: "Appleヘルスケアの心拍数をHealth Auto Exportから自前のAPIへ定期送信。InfluxDB 2への保存、Dockerでのサービス配置、Grafanaのグラフ作成を紹介します。"
 ---

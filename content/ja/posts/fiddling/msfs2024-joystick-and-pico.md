@@ -5,7 +5,7 @@ seoTitle: "Microsoft Flight Simulator 2024：TCA 操縦桿と PICO 4 Pro VR の�
 description: "友人の一言からシミュレーターに興味が湧き、Microsoft Flight Simulatorを購入。地図やモデルはリアルタイム配信、アカウントは再ログインが必要、チュートリアルは見つけにくく、キーボード操作も難しい。結局フライトスティックを買い、Pico VRまで設定してようやく一通り体験できました。"
 date: 2025-12-14 14:31:00
 categories: [fiddling]
-tags: ["試行錯誤", "Microsoft Flight Simulator", "Thrustmaster", "pico"]
+tags: ["Microsoft Flight Simulator 2024","Thrustmaster TCA","PICO VR","フライトシミュレーション"]
 image: "https://blog-img.774352199.xyz/lfhEuE.webp"
 seoDescription: "Microsoft Flight Simulator 2024を初体験。TCAエアバスの操作設定、PICO 4 Proの接続トラブル、Virtual DesktopとOpenXRでのVR飛行を記録します。"
 ---

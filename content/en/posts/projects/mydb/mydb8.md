@@ -4,7 +4,7 @@ title: "MYDB 8. Index Management"
 description: "MYDB implements a clustered index using a B+ tree. IM interacts directly with the Data Manager (DM), bypassing the Version Manager (VM), so index data is written directly to the database file. This chapter details the binary-tree index structure and its basic node fields, including the leaf flag, key count, and sibling identifier, establishing the framework for indexed lookups."
 date: 2021-12-24 21:01:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","B+ tree","Database indexing"]
 image: "https://blog-img.774352199.xyz/f92X4o.webp"
 seoDescription: "Implement MYDB’s B+ tree index over the data manager, covering node storage, root tracking, range searches, and sibling links that handle incomplete splits."
 ---

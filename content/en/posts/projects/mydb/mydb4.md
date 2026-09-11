@@ -4,7 +4,7 @@ title: "MYDB 4. Log Files and Recovery Strategies"
 description: "Log files are essential to MYDB’s design, allowing data to be recovered after a crash. DM logs every operation on underlying data, forming a continuous sequence of records. Stored in a specific binary format with checksums and individual operation records, these logs let the database accurately reconstruct its data on restart and maintain consistency and integrity."
 date: 2021-12-08 22:55:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","Database logging","Crash recovery"]
 image: "https://blog-img.774352199.xyz/TRcbsj.webp"
 seoDescription: "Implement MYDB logging with checksums and incomplete-tail removal, then use write-ahead records, transaction states, redo, and undo for crash recovery."
 ---

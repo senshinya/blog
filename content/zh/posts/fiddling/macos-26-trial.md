@@ -5,7 +5,7 @@ title: "macOS 26 / iPadOS 26 尝鲜"
 description: "macOS 和 iPadOS 26 带来了全新的 Liquid Glass 设计语言，界面风格焕然一新，图标和窗口效果更具现代感，尤其是在 iPad 上实现的窗口化应用模式，标志着其向生产力工具的转变。然而，部分设计如透明的控制中心和对启动台的整合引发了一些争议，用户体验仍需进一步优化。这次更新虽有不足，却为未来的发展奠定了基础，值得期待。"
 date: 2025-06-10 20:18:00
 categories: [fiddling]
-tags: ["折腾", "macos", "ipados", "Liquid Glass"]
+tags: ["macOS 26","iPadOS 26","Liquid Glass","Apple Intelligence","系统体验"]
 image: "https://blog-img.774352199.xyz/TPSaLE.webp"
 seoDescription: "体验 macOS 26 与 iPadOS 26 首个开发者预览版，记录 Liquid Glass 图标和窗口效果、Launchpad 整合进 Spotlight 的不便，以及 iPad 新窗口模式的多任务体验。"
 ---

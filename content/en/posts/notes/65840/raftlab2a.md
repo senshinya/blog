@@ -4,7 +4,7 @@ title: "6.5840 Lab 2A: Leader Election"
 description: "Lab 2A focuses on implementing Raft leader election and heartbeats so that elections and term changes work correctly even under extreme conditions. The lab has four stages and lays the foundation for the distributed key-value store that follows. A design without explicit locks simplifies the Raft struct. The lab instructions provide the necessary background, but compared with the previous lab, this one relies on almost no reference material and places greater emphasis on implementing the system independently."
 date: 2022-12-16 02:06:10
 categories: [notes]
-tags: ["raft", "6.5840", "6.824"]
+tags: ["MIT 6.5840","Raft","Go","Leader election","Distributed consensus"]
 image: "https://blog-img.774352199.xyz/c11Uk4.webp"
 seoDescription: "Build Raft leader election for MIT 6.5840 Lab 2A in Go, using channels for state updates, randomized election timers, RequestVote, and heartbeat RPCs."
 ---

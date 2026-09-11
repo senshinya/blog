@@ -4,7 +4,7 @@ title: "Routing Selected VPS Traffic Through WARP over IPv6"
 description: "A Telegram notification on an ordinary afternoon introduced a tempting VPS deal: a direct China Telecom CN2 route and 2.5G bandwidth. The plan includes IPv6, useful for unlocking streaming services, but not every connection needs to go through WARP. My previous script was convenient, yet its effects on speed and traffic routing called for a more flexible solution."
 date: 2025-03-15 16:24:00
 categories: [fiddling]
-tags: ["Tinkering", "censorship circumvention", "warp", "traffic routing"]
+tags: ["Cloudflare WARP","IPv6","VPS","Policy-based routing","Traffic routing"]
 image: "https://blog-img.774352199.xyz/McjrrF.webp"
 seoDescription: "Route selected VPS traffic through WARP’s local SOCKS proxy, using Xray DNS and a chained freedom outbound to prefer IPv6 when the destination supports it."
 ---

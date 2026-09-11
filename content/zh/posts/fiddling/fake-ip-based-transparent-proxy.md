@@ -4,7 +4,7 @@ title: "基于 FakeIP 的透明代理分流"
 description: "基于 FakeIP 的透明代理分流方案旨在解决传统旁路由的单点故障、性能不足及复杂的端口映射问题。通过引入新的代理内核 sing-box，不仅提升了转发性能，还简化了配置流程。sing-box 提供了更丰富的协议支持，其优化效果明显优于原先的 clash，成为实现高效透明代理的新选择。虽然这也可以通过 clash 实现，但 sing-box 的引入无疑为用户带来了更灵活的体验。"
 date: 2024-08-16 23:53:00
 categories: [fiddling]
-tags: ["折腾", "翻墙", "透明代理", "FakeIP"]
+tags: ["FakeIP","sing-box","透明代理","策略路由","流量分流"]
 image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 seoDescription: "通过 sing-box 的 FakeIP DNS 与主路由下一跳规则，仅将需要代理的流量转入旁路由，改善全量转发和端口映射问题，并说明 AdGuard 回退及 Telegram 直连 IP 的处理。"
 ---

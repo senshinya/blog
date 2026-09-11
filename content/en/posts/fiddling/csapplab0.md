@@ -4,7 +4,7 @@ title: "Setting Up the CSAPP Lab Environment"
 description: "The labs are an essential part of learning CSAPP, but setting up Linux can be discouraging. Virtual machines bring installation errors, compatibility problems, and broken networking. WSL (Windows Subsystem for Linux), especially on Windows 10 version 2004 and later, provides a simpler, more direct Linux environment without the complexity and performance bottlenecks of a traditional VM."
 date: 2021-12-27 00:09:00
 categories: [fiddling]
-tags: ["Tinkering", "CSAPP", "labs", "environment setup"]
+tags: ["CSAPP","WSL2","Linux","GDB","Lab environment"]
 image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 seoDescription: "Set up a CSAPP lab environment on Windows with WSL2 and Ubuntu, including VS Code integration, file sharing, package mirrors, and GDB and CGDB tools."
 ---

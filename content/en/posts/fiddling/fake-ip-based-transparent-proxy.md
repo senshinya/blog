@@ -4,7 +4,7 @@ title: "Routing Transparent Proxy Traffic with FakeIP"
 description: "This FakeIP-based transparent proxy design addresses the single point of failure, poor performance, and awkward port forwarding of a traditional side router. Switching to the sing-box proxy core improves forwarding performance and simplifies configuration, with broader protocol support and better optimization than the previous Clash setup. Clash can implement the same design, but sing-box provides a flexible alternative."
 date: 2024-08-16 23:53:00
 categories: [fiddling]
-tags: ["Tinkering", "censorship circumvention", "transparent proxy", "FakeIP"]
+tags: ["FakeIP","sing-box","Transparent proxy","Policy-based routing","Traffic routing"]
 image: "https://blog-img.774352199.xyz/S2HHD5.webp"
 seoDescription: "Use sing-box FakeIP DNS and next-hop routing to send selected traffic through a side router, with AdGuard fallback and extra rules for IP-based clients."
 ---

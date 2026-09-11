@@ -4,7 +4,7 @@ title: "MYDB 8. 索引管理"
 description: "MYDB 基于 B+ 树实现了聚簇索引。通过 IM 直接与数据管理（DM）交互，省略了版本管理（VM）层，确保索引数据直接写入数据库文件。章节中详细描述了二叉树索引的结构，涵盖节点的基本组成元素，包括叶子标记、键数量及兄弟节点标识等，为实现索引查找提供了基础框架。"
 date: 2021-12-24 21:01:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","B+ 树","数据库索引"]
 image: "https://blog-img.774352199.xyz/f92X4o.webp"
 seoDescription: "基于 MYDB 的数据管理层实现 B+ 树索引，说明节点存储、根节点 UID 管理和范围查找，利用兄弟节点链接处理分裂后父子关系未同步的情况，并讨论索引恢复。"
 ---

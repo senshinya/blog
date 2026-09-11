@@ -5,7 +5,7 @@ title: "Trying Out macOS 26 and iPadOS 26"
 description: "macOS and iPadOS 26 introduce the Liquid Glass design language, refreshing icons and windows with a more modern look. Windowed apps on iPad are a step toward making it a productivity device. The transparent Control Center and the integration of Launchpad have been controversial, however, and the experience still needs work. Despite its shortcomings, this update lays groundwork for a promising future."
 date: 2025-06-10 20:18:00
 categories: [fiddling]
-tags: ["Tinkering", "macos", "ipados", "Liquid Glass"]
+tags: ["macOS 26","iPadOS 26","Liquid Glass","Apple Intelligence","Operating system impressions"]
 image: "https://blog-img.774352199.xyz/TPSaLE.webp"
 seoDescription: "My first-preview impressions of macOS 26 and iPadOS 26: Liquid Glass visuals, Launchpad’s move into Spotlight, and the iPad’s new windowing controls."
 ---

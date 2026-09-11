@@ -4,7 +4,7 @@ title: "实现 OPNsense 透明代理+分流"
 description: "OPNsense 作为一款开源的防火墙和路由系统，因其美观的用户界面和全面的功能而备受关注。在经历了一系列路由方案后，用户们逐渐认识到其在透明代理和流量分流方面的强大潜力。通过结合 BGP 分流转发方式，OPNsense 提供了更高的安全性和稳定性，成为了理想的网络管理解决方案。尤其是其自动更新 IP 列表的功能，使得网络管理变得更加便捷。"
 date: 2025-01-16 23:09:00
 categories: [fiddling]
-tags: ["折腾", "翻墙", "透明代理", "OPNsense", "分流"]
+tags: ["OPNsense","FreeBSD","mihomo","tun2socks","透明代理","流量分流"]
 image: "https://blog-img.774352199.xyz/xA8C1E.webp"
 seoDescription: "在 OPNsense 主路由中集成 mihomo、AdGuard Home 与 tun2socks，通过防火墙别名订阅中国 IP 列表，实现 DNS 转发和国内外流量分流，并配置服务启动与监控。"
 ---

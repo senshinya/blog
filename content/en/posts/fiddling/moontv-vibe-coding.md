@@ -4,7 +4,7 @@ title: "MoonTV: An Experiment in Vibe Coding"
 description: "MoonTV is a new video aggregation platform built with Next.js and React to make following shows convenient. It began as an attempt to improve LibreTV and has attracted substantial attention and usage over several months of development. Cursor made development efficient, although multi-platform support and complex data dependencies posed challenges. As its user base grows, MoonTV continues improving in response to feedback."
 date: 2025-07-20 23:32:00
 categories: [fiddling]
-tags: ["Tinkering", "moontv", "vibe coding", "cursor"]
+tags: ["MoonTV","LunaTV","Vibe Coding","Cursor","AI-assisted development"]
 image: "https://blog-img.774352199.xyz/nIeONi.webp"
 seoDescription: "I built MoonTV with Cursor, Next.js, and React, learning where AI helped and where player state, deployment differences, and user reports needed manual work."
 ---

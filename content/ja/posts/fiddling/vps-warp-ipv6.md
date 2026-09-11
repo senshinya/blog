@@ -4,7 +4,7 @@ title: "VPSの特定の通信をWARP経由のIPv6で外に出す"
 description: "ある平凡な午後、Telegramの通知で魅力的なVPSプランを見つけました。中国電信CN2直結、帯域2.5Gという好条件です。IPv6付きで動画配信サービスの地域制限解除にも便利ですが、すべての通信をWARP経由にする必要はありません。以前のスクリプトは手軽な一方、速度と振り分けに不満があり、もっと柔軟な方法を探すことにしました。"
 date: 2025-03-15 16:24:00
 categories: [fiddling]
-tags: ["試行錯誤", "検閲回避", "warp", "トラフィック振り分け"]
+tags: ["Cloudflare WARP","IPv6","VPS","ポリシーベースルーティング","トラフィック振り分け"]
 image: "https://blog-img.774352199.xyz/McjrrF.webp"
 seoDescription: "VPSの選んだ通信をWARPのローカルSOCKSへ転送。XrayでDNSを先に解決し、freedom出口を連結することで、接続先が対応していればIPv6を優先する設定です。"
 ---

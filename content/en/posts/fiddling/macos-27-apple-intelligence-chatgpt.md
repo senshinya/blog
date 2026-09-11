@@ -4,7 +4,7 @@ title: "Getting Apple Intelligence Working on a China-Market Mac: Region Changes
 description: "Another WWDC brings new Apple Intelligence features in macOS 27. The workarounds from macOS 26 no longer get through, so the battle of wits with Apple continues."
 date: 2026-06-11 10:00:00
 categories: [fiddling]
-tags: ["Tinkering", "macOS", "Apple Intelligence", "ChatGPT"]
+tags: ["macOS 27","Apple Intelligence","ChatGPT","Mainland China Mac"]
 image: "https://blog-img.774352199.xyz/fOFucm.webp"
 seoDescription: "My macOS 27 experiments on a China-market Mac: RegionSpoof for Apple Intelligence, SIP and AMFI settings, and countryd checks blocking the ChatGPT extension."
 ---

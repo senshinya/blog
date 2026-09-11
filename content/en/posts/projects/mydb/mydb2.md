@@ -4,7 +4,7 @@ title: "MYDB 2. A Reference-Counted Cache Framework and Shared Byte Arrays"
 description: "The Data Manager (DM) bridges higher-level modules and the filesystem, handling paging and caching while ensuring data safety and recovery. Its cache uses reference counting rather than traditional LRU, aiming for a reusable, efficient foundation for subsequent data operations."
 date: 2021-11-30 23:18:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","Reference counting","Cache design","Shared memory"]
 image: "https://blog-img.774352199.xyz/WdIGoG.webp"
 seoDescription: "Build MYDB’s reference-counted Java cache with coordinated loading and explicit release, then use SubArray to share byte-array regions across data objects."
 ---

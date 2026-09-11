@@ -4,7 +4,7 @@ title: "How the Great Firewall Works"
 description: "The GFW does more than monitor an exit gateway: it inspects international traffic through passive taps, copying inbound and outbound IP packets to a cluster for analysis and filtering. Understanding where and how this happens matters when studying censorship circumvention. Examining the GFW’s network topology helps explain its blocking mechanisms and how to work around them."
 date: 2024-06-23 15:31:32
 categories: [fiddling]
-tags: ["Tinkering", "firewall", "global Internet", "circumvention proxy"]
+tags: ["GFW","DNS poisoning","TCP","Internet censorship"]
 image: "https://blog-img.774352199.xyz/sOpJuL.webp"
 seoDescription: "A technical overview of the Great Firewall from published research, covering traffic capture, TCP reassembly, protocol analysis, DNS poisoning, and resets."
 ---

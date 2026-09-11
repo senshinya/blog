@@ -4,7 +4,7 @@ title: "MYDB 9. Field and Table Management"
 description: "The Table Manager (TBM) manages field and table structures. Parser turns SQL-like statements into structured representations, wrapping their information in the corresponding classes to simplify subsequent operations. This chapter also covers MYDB’s SQL syntax as a foundation for understanding the management process."
 date: 2021-12-25 15:44:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","SQL parsing","Table management"]
 image: "https://blog-img.774352199.xyz/zOMyv5.webp"
 seoDescription: "Build MYDB’s SQL parser and table manager, storing field and table metadata, resolving indexed WHERE ranges, and updating the table-list head with Booter."
 ---

@@ -4,7 +4,7 @@ title: "MYDB 3. Caching and Managing Data Pages"
 description: "DM abstracts the filesystem into pages and uses them as the unit of reading, writing, and caching. The default page size is 8K, with larger pages available to improve write performance under heavy loads. With the general-purpose cache framework already in place, we now define the page structure and implement efficient page caching."
 date: 2021-12-05 15:28:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","Data pages","Cache management"]
 image: "https://blog-img.774352199.xyz/jlFC4E.webp"
 seoDescription: "Implement MYDB’s 8 KB page cache, dirty-page writeback, first-page shutdown checks, free-space offsets, and data insertion and recovery operations in Java."
 ---

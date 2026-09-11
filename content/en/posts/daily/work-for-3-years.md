@@ -4,7 +4,7 @@ title: "Working at ByteDance for Three Years and Staying Somewhat Sane Is Not En
 description: "Three years at ByteDance have made time feel strangely accelerated. Amid the changes, I have still managed to hold on to some mental balance. Looking back at the new graduate gazing at distant mountains from the balcony of our Hangzhou office, I can trace how curiosity, workplace challenges, and shifting expectations taught me to find a rhythm of my own."
 date: 2024-09-28 16:26:00
 categories: [daily]
-tags: ["Daily Life", "Work", "Year in Review"]
+tags: ["ByteDance","Software engineering careers","Career retrospective","Mental health"]
 image: "https://blog-img.774352199.xyz/hnCaht.webp"
 seoDescription: "I reflect on three years at ByteDance: growing responsibilities, overtime, organizational changes, health problems, and rebuilding a manageable daily routine."
 ---

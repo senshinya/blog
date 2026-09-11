@@ -4,7 +4,7 @@ title: "MYDB 6. 记录的版本与事务隔离"
 description: "VM 通过两段锁协议确保调度序列的可串行化，并引入多版本并发控制（MVCC），以消除读写阻塞问题。此外还定义了数据库操作中的冲突，特别关注更新与读取操作的相互影响，为理解事务间的隔离级别奠定基础。"
 date: 2021-12-18 14:58:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","MVCC","事务隔离","两段锁"]
 image: "https://blog-img.774352199.xyz/8YzotA.webp"
 seoDescription: "从事务读写冲突与两段锁讲起，说明 MYDB 的 MVCC 记录结构，利用 XMIN、XMAX 和活跃事务快照判断版本可见性，实现读提交与可重复读两种隔离级别。"
 ---

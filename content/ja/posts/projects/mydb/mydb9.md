@@ -4,7 +4,7 @@ title: "MYDB 9. フィールドとテーブルの管理"
 description: "テーブルマネージャー（TBM）は、フィールドとテーブルの構造を管理します。ParserはSQL風の文を構造化して解析し、文に含まれる情報を対応するクラスへまとめることで、その後の操作を簡単にします。この章ではMYDBのSQL構文も紹介し、管理処理全体を理解する土台を作ります。"
 date: 2021-12-25 15:44:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","SQL解析","テーブル管理"]
 image: "https://blog-img.774352199.xyz/zOMyv5.webp"
 seoDescription: "MYDBのSQLパーサーとTBMを実装。文のトークン化、フィールドとテーブル情報の保存、索引を使うWHERE条件の計算、Booterによる先頭テーブルの管理を説明します。"
 ---

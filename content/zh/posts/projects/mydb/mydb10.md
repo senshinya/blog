@@ -4,7 +4,7 @@ title: "MYDB 10. 服务端客户端的实现及其通信规则"
 description: "MYDB 采用 C/S 结构，类似于 MySQL，允许多个客户端通过 socket 连接到服务器，执行 SQL 查询并返回结果。通信采用了一种特殊的二进制格式，尽管也可以选择明文传输，以简化实现。服务端与客户端之间的基本传输结构确保了数据的有效交流和处理。"
 date: 2021-12-25 18:26:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","Socket","客户端服务端","通信协议"]
 image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
 seoDescription: "为 MYDB 实现 Java Socket 服务端与交互式客户端，定义数据和错误的编码、十六进制行传输协议，经 Parser 与表管理器执行 SQL，并完成启动入口与请求响应流程。"
 ---

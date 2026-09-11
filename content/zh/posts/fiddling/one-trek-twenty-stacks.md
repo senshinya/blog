@@ -5,7 +5,7 @@ seoTitle: "从 TREK 到二十个 Docker 服务：ARM VPS 自托管记录"
 description: "刷 GitHub trending 刷到一个旅行规划工具，想自己部署一套。既然都要开新 VPS，那就顺手多装亿点点。"
 date: 2026-05-11 22:43:00
 categories: [fiddling]
-tags: ["折腾", "vps", "自托管"]
+tags: ["TREK","Docker Compose","Dockge","VPS","自托管"]
 image: "https://blog-img.774352199.xyz/BBdDWW.webp"
 seoDescription: "从自托管 TREK 开始，在 Netcup ARM VPS 部署二十多个 Docker 服务，记录 Caddy、Authelia、邮件与备份配置，以及博客迁往 SvelteKit 和 PocketBase 的过程。"
 ---

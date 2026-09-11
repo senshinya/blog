@@ -5,7 +5,7 @@ seoTitle: "Debian 旁路由配置：mihomo、AdGuard Home 与透明代理"
 description: "Debian 旁路由方案为用户提供了一种更为稳定和灵活的选择，摆脱了对 OpenWRT 和 LuCI 的依赖。通过直接在 Debian 上进行配置，用户可以享受更高的系统控制权，避免了 GUI 带来的种种限制和不稳定性。相比于常见的旁路由方案，Debian 的方法使得透明代理的设置更加可靠，为那些追求性能和效率的用户提供了新的可能性。"
 date: 2024-07-13 17:49:00
 categories: [fiddling]
-tags: ["折腾", "debian", "旁路由", "翻墙", "透明代理", "mihomo"]
+tags: ["Debian","旁路由","mihomo","AdGuard Home","透明代理"]
 image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 seoDescription: "将 Debian 小主机配置为家庭旁路由，以 AdGuard Home 和 mihomo 处理 DNS 分流、广告过滤与透明代理，给出主路由网段、iptables 规则及 systemd 服务配置。"
 ---

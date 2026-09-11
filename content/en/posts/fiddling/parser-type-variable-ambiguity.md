@@ -5,7 +5,7 @@ title: "Resolving Type Name and Variable Name Ambiguity in Parsing"
 description: "Distinguishing user-defined type names from ordinary variables is a challenge during parsing. A statement such as `a*b;` can be either an arithmetic expression or a declaration. Grammar rules, especially those involving type specifiers, can misidentify variables as types, affecting correctness and readability. The prevalence of declarations without initializers makes this ambiguity especially common."
 date: 2025-03-15 20:35:00
 categories: [fiddling]
-tags: ["Tinkering", "compiler design", "parsing", "disambiguation"]
+tags: ["Parsing","GLR","Symbol table","Scope","Disambiguation"]
 image: "https://blog-img.774352199.xyz/2VKHK9.webp"
 seoDescription: "Resolve C type-name and variable-name ambiguity in GLR parsing with lightweight symbol tables, AST pruning, and scope checks for shadowing and declarations."
 ---

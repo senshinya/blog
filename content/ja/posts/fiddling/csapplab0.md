@@ -4,7 +4,7 @@ title: "CSAPP Labの環境構築"
 description: "CSAPPの学習では実験が欠かせませんが、Linux環境の構築が壁になりがちです。とくに仮想マシンでは、インストール失敗、互換性、ネットワーク接続などの問題に悩まされます。Windows 10バージョン2004以降なら、WSL（Windows Subsystem for Linux）が有力な選択肢です。従来の仮想マシンの複雑さや性能面の負担を避けながら、Linux環境を手軽に利用できます。"
 date: 2021-12-27 00:09:00
 categories: [fiddling]
-tags: ["試行錯誤", "CSAPP", "実験", "環境構築"]
+tags: ["CSAPP","WSL2","Linux","GDB","実験環境"]
 image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 seoDescription: "Windows上でCSAPPの実験環境を構築。WSL2とUbuntuの導入、ファイル共有、VS Code連携、パッケージ源の変更、GDB・CGDBの準備と教材の入手方法を説明します。"
 ---

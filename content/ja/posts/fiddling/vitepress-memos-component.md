@@ -4,7 +4,7 @@ title: "VitePressにひとこと投稿機能を実装する"
 description: "ひとこと投稿機能があれば、静的ブログの記事公開に伴う手間や心理的な負担を減らし、短い思いつきをいつでも共有できます。Cloudflare Workersでバックエンドを実装し、KVで投稿を保存・管理します。フロントエンドはVitePressにVueコンポーネントを埋め込み、投稿を手軽に表示してブログに動きと交流の場を加えます。"
 date: 2025-01-29 21:58:00
 categories: [fiddling]
-tags: ["試行錯誤", "VitePress", "Memos", "CloudFlare"]
+tags: ["VitePress","Vue","Cloudflare Workers","Cloudflare KV","マイクロブログ"]
 image: "https://blog-img.774352199.xyz/hZX6hr.webp"
 seoDescription: "VitePressにひとこと投稿機能を追加。WorkersとKVで管理APIを作り、Vueで表示します。ビルド時の先読み、ページ分割、更新時のコールバックも組み込みます。"
 ---

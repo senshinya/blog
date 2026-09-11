@@ -4,7 +4,7 @@ title: "6.5840 Lab 1：MapReduce"
 description: "Lab 1では、masterとworkerという2つの主要な部分からなるMapReduceシステムを実装します。GoのRPCと並行プログラミングを十分に使いこなし、MapReduceの処理の流れも深く理解する必要があります。実装は2つの版を作り、mutexでロックする方式から、よりすっきりしたchannelによる明示的なロックを使わない方式へと改めました。後者のほうが設計もシンプルで分かりやすくなっています。実習を理解する鍵は、関連資料、特にフローチャートとその説明をしっかり読むことです。"
 date: 2022-01-20 22:29:00
 categories: [notes]
-tags: ["mapreduce", "6.5840", "6.824"]
+tags: ["MIT 6.5840","MapReduce","Go","RPC","並行プログラミング"]
 image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
 seoDescription: "MIT 6.5840のMapReduce課題をGoで実装。channel経由で状態更新を一つのgoroutineに集め、RPCでの割り当て、段階の切り替え、再試行、出力ファイルを扱います。"
 ---

@@ -5,7 +5,7 @@ seoTitle: "用 BGP 数据生成更精确的中国 IP 分流规则"
 description: "基于 BGP 的国内外 IP 分流方案，提升了透明代理的效率和精准度。通过对国外 IP 进行 FakeIP 标记，主路由能够更智能地进行流量分流，确保网络连接的顺畅性。sing-box 的 DNS 模块配置也进行了相应优化，使得在处理 DNS 请求时，更加灵活且高效，进一步提升整体网络体验。"
 date: 2024-10-07 16:51:00
 categories: [fiddling]
-tags: ["折腾", "软路由", "透明代理", "分流", "BGP"]
+tags: ["BGP","IP 地址库","策略路由","流量分流"]
 image: "https://blog-img.774352199.xyz/MOmM1s.webp"
 seoDescription: "针对基于域名和 GeoIP 规则的国内外分流误差，采用 BGP 路由公告整理的中国 IP 列表，结合 bash、ipset 和 iptables 设置分流，并通过定时任务更新规则。"
 ---

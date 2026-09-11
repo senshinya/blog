@@ -5,7 +5,7 @@ seoTitle: "Bare-metal Go on RISC-V: debugging a kernel linker failure"
 description: "Inspiration struck during Chinese New Year: an article read on the train about running Go on bare metal sparked an interest in low-level system interfaces. Its successful implementation suggested exciting possibilities for combining a high-level language with an OS. Further research revealed earlier work on the idea, and that growing enthusiasm became a project full of anticipation that ultimately did not work out."
 date: 2023-02-02 23:24:55
 categories: [fiddling]
-tags: ["Tinkering", "golang", "os", "riscv"]
+tags: ["Go","RISC-V","Operating systems","Bare-metal programming","Runtime"]
 image: "https://blog-img.774352199.xyz/xB1Ni5.webp"
 seoDescription: "I tried building a RISC-V kernel in Go with a C ELF loader and assembly entry point, then traced a blocking ELF offset error to the linker’s -T option."
 ---

@@ -5,7 +5,7 @@ title: "Steam Deck 的第二春：Switch 模拟器到插帧 60FPS 一条龙"
 description: "这何尝不是一种 NTR"
 date: 2026-09-09 23:59:00
 categories: [fiddling]
-tags: ["Steam Deck", "Switch", "EmuDeck", "Eden", "Lossless Scaling"]
+tags: ["Steam Deck","Nintendo Switch","EmuDeck","Eden","Lossless Scaling","帧生成"]
 image: "https://blog-img.774352199.xyz/NDPUwc.webp"
 seoDescription: "在 Steam Deck 上配置 EmuDeck 与 Eden，完成 Switch 游戏入库、按键映射和陀螺仪设置，再通过 Decky LSFG-VK 使用小黄鸭插帧，记录接近 60FPS 的配置与画面取舍。"
 ---

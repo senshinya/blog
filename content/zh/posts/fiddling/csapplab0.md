@@ -4,7 +4,7 @@ title: "CSAPP LAB 环境搭建"
 description: "在学习 CSAPP 的过程中，实验环节的重要性不可忽视。然而，许多学生在搭建 Linux 环境时遇到各种麻烦，尤其是在使用虚拟机的情况下。诸如安装错误、兼容性问题、网络连接不畅等问题层出不穷，往往让人望而却步。为了解决这些障碍，WSL（Windows Subsystem for Linux）成为了一个理想的选择，尤其适用于 Windows 10 版本 2004 及以上的用户。WSL 提供了一个更为简洁、直接的方式来体验 Linux 环境，同时避免了虚拟机带来的复杂性和性能瓶颈。"
 date: 2021-12-27 00:09:00
 categories: [fiddling]
-tags: ["折腾", "CSAPP", "实验", "环境搭建"]
+tags: ["CSAPP","WSL2","Linux","GDB","实验环境"]
 image: "https://blog-img.774352199.xyz/vqOC7N.webp"
 seoDescription: "面向 CSAPP 实验搭建 Windows 下的 WSL2 与 Ubuntu 环境，介绍文件共享、VS Code 远程开发、软件源配置和 GDB/CGDB 安装，并说明实验材料的获取方式。"
 ---

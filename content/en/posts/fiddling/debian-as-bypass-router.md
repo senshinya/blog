@@ -5,7 +5,7 @@ seoTitle: "Debian gateway setup with mihomo, AdGuard Home and transparent proxyi
 description: "Using Debian as a side router offers a more stable and flexible alternative without depending on OpenWrt and LuCI. Configuring Debian directly gives you greater control over the system and avoids the limitations and instability of a GUI. Compared with common side-router setups, this approach makes transparent proxying more reliable and offers another option for those who value performance and efficiency."
 date: 2024-07-13 17:49:00
 categories: [fiddling]
-tags: ["Tinkering", "debian", "side router", "censorship circumvention", "transparent proxy", "mihomo"]
+tags: ["Debian","Side router","mihomo","AdGuard Home","Transparent proxy"]
 image: "https://blog-img.774352199.xyz/pPRU5x.webp"
 seoDescription: "Build a Debian side router with AdGuard Home and mihomo for DNS routing and transparent proxying, covering subnets, iptables rules, and systemd services."
 ---

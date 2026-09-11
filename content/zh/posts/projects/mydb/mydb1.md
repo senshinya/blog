@@ -4,7 +4,7 @@ title: "MYDB 1. 从最简单的 TM 开始"
 description: "MYDB 中，事务的管理是通过 XID 文件实现的，每个事务都有一个唯一的 XID，从 1 开始递增，XID 0 被定义为超级事务，状态始终为已提交。TransactionManager 负责维护这一文件，并记录事务的三种状态：活动、已提交和已中止。这一机制确保了事务的状态能够被准确查询和管理，为系统的稳定性和可靠性提供了基础。"
 date: 2021-11-28 16:10:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","事务管理","XID"]
 image: "https://blog-img.774352199.xyz/H4zZAK.webp"
 seoDescription: "实现 MYDB 的事务管理器 TM，用 XID 文件记录事务的活跃、提交和撤销状态，说明文件格式与校验、事务编号分配、状态查询，以及通过 FileChannel 持久化更新。"
 ---

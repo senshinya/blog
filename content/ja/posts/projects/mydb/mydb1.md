@@ -4,7 +4,7 @@ title: "MYDB 1. まずはシンプルなTMから"
 description: "MYDBではXIDファイルでトランザクションを管理します。各トランザクションには1から増える一意のXIDがあり、XID 0は常にコミット済みのスーパートランザクションです。TransactionManagerがこのファイルを管理し、実行中・コミット済み・中止済みという3つの状態を記録します。この仕組みにより状態を正確に照会・管理でき、システムの安定性と信頼性を支えます。"
 date: 2021-11-28 16:10:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","トランザクション管理","XID"]
 image: "https://blog-img.774352199.xyz/H4zZAK.webp"
 seoDescription: "MYDBのTMをJavaで実装。XIDファイルに実行中・コミット済み・中止済みの状態を記録し、ID発行、ファイル検証、状態照会、FileChannelによる書き込みを説明します。"
 ---

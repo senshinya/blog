@@ -4,7 +4,7 @@ title: "MYDB 10. サーバー・クライアントの実装と通信プロトコ
 description: "MYDBはMySQLに似たC/S構成を採用し、複数のクライアントがソケットでサーバーへ接続してSQLを実行し、結果を受け取れます。通信には専用のバイナリー形式を使いますが、実装を簡単にするならプレーンテキストも選択肢です。サーバーとクライアントの基本的な転送構造によって、データのやり取りと処理を行います。"
 date: 2021-12-25 18:26:00
 categories: [projects]
-tags: ["java", "mydb"]
+tags: ["MYDB","Java","Socket","クライアントサーバー構成","通信プロトコル"]
 image: "https://blog-img.774352199.xyz/PAHrUZ.webp"
 seoDescription: "MYDBのJava Socketサーバーと対話型クライアントを実装。データとエラーの符号化、16進数の行単位通信、SQL実行、起動処理と要求・応答の流れをつなぎます。"
 ---

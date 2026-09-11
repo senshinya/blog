@@ -4,7 +4,7 @@ title: "Transparent Proxying and Traffic Routing with OPNsense"
 description: "OPNsense is an open-source firewall and router with an attractive interface and a comprehensive feature set. After trying several routing setups, I came to appreciate its potential for transparent proxying and traffic routing. Combining it with BGP-based routing offers better security and stability, while its automatically updated IP lists make network management more convenient."
 date: 2025-01-16 23:09:00
 categories: [fiddling]
-tags: ["Tinkering", "censorship circumvention", "transparent proxy", "OPNsense", "traffic routing"]
+tags: ["OPNsense","FreeBSD","mihomo","tun2socks","Transparent proxy","Traffic routing"]
 image: "https://blog-img.774352199.xyz/xA8C1E.webp"
 seoDescription: "Configure OPNsense with mihomo, AdGuard Home, and tun2socks for transparent proxying, using IP-list aliases and firewall rules to route selected traffic."
 ---

@@ -4,7 +4,7 @@ title: "6.5840 实验一 —— MapReduce"
 description: "实验一的目标是实现一个 MapReduce 系统，分为 master 和 worker 两个核心部分。这个过程对 golang 的 RPC 和并发编程要求较高，同时需要深入理解 MapReduce 的流程。实验经历了两个版本的实现，从基于 mutex 锁的版本到更优雅的基于 channel 的无锁版本，后者的设计更加简洁明了。理解实验的关键在于认真阅读相关文档，特别是其中的流程图和说明。"
 date: 2022-01-20 22:29:00
 categories: [notes]
-tags: ["mapreduce", "6.5840", "6.824"]
+tags: ["MIT 6.5840","MapReduce","Go","RPC","并发编程"]
 image: "https://blog-img.774352199.xyz/ibVwPJ.webp"
 seoDescription: "用 Go 完成 MIT 6.5840 MapReduce 实验，通过 channel 将协调器状态修改集中到单协程，讲解 RPC 任务分发、阶段切换、超时重试及临时文件重命名的输出处理。"
 ---
