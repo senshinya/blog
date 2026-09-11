@@ -4,6 +4,7 @@ import { localePageKey } from '~/utils/locale'
 
 const { locale } = useI18n()
 const locales = blogConfig.locales.map(language => language.code)
+const pageKey = (route: { path: string }) => localePageKey(route.path, locales, 'zh')
 
 // key 与 useLocaleAlternates() 发的 hreflang alternate link 区分开 —— 两者都是
 // rel="alternate"，若不给 key，Unhead 可能把它们当同一条互相去重
@@ -29,7 +30,7 @@ useLocaleFonts()
 
 <template>
 <NuxtLayout>
-	<!-- 缓存固定的入口 VNode，避免内联 pageKey 的引用变化重启加载条；路由仍由 NuxtPage 内部更新。 -->
-	<NuxtPage v-once :page-key="route => localePageKey(route.path, locales, 'zh')" />
+	<!-- 保持 key 函数稳定；页面 VNode 需随 layout 切换重新创建。 -->
+	<NuxtPage :page-key="pageKey" />
 </NuxtLayout>
 </template>

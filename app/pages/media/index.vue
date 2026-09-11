@@ -61,6 +61,8 @@ const total = ref(0)
 const loading = ref(true) // 客户端取数，首帧先显示加载态
 const loadingMore = ref(false)
 const error = ref<Error>()
+const results = useTemplateRef<HTMLElement>('results')
+const loadingHeight = ref(0)
 
 function fetchPage(offset: number) {
 	// 手动拼 query 而非用 $fetch 的 query 选项：反代前缀里嵌了完整的 https://，
@@ -80,7 +82,12 @@ let reqId = 0
 
 async function reload() {
 	const id = ++reqId
+	// Keep the last settled result area through rapid filter changes. Skeletons
+	// replace the cards immediately, but must not move the footer a second time.
+	if (!loading.value)
+		loadingHeight.value = results.value?.getBoundingClientRect().height ?? 0
 	loading.value = true
+	loadingMore.value = false
 	error.value = undefined
 	items.value = []
 	total.value = 0
@@ -102,7 +109,7 @@ async function reload() {
 }
 
 async function loadMore() {
-	if (loadingMore.value || items.value.length >= total.value)
+	if (loading.value || loadingMore.value || items.value.length >= total.value)
 		return
 	const id = reqId
 	loadingMore.value = true
@@ -186,47 +193,52 @@ watch([categoryKey, statusKey], reload)
 		</div>
 	</div>
 
-	<!-- 整页报错只在「一条都没加载出来」时顶替内容；「加载更多」失败不清空已有列表 -->
-	<ZError v-if="error && !items.length" :message="$t('page.media.loadError', { message: error.message })" />
+	<div
+		ref="results"
+		class="media-results"
+		:class="{ 'media-results-loading': loading && loadingHeight > 0 }"
+		:style="loading && loadingHeight > 0 ? { height: `${loadingHeight}px` } : undefined"
+		:aria-busy="loading"
+	>
+		<!-- 整页报错只在「一条都没加载出来」时顶替内容；「加载更多」失败不清空已有列表 -->
+		<ZError v-if="error && !items.length" :message="$t('page.media.loadError', { message: error.message })" />
 
-	<template v-else-if="loading">
-		<span class="media-loading-status" role="status">
-			{{ $t('page.media.loading') }}
-		</span>
-		<ol class="media-grid media-skeleton-grid" aria-hidden="true">
-			<li v-for="index in 8" :key="index" :style="entranceDelay(Math.min(index - 1, 3) * 0.03)">
-				<MediaCardSkeleton />
-			</li>
-		</ol>
-	</template>
+		<template v-else-if="loading">
+			<ol class="media-grid media-skeleton-grid" aria-hidden="true">
+				<li v-for="index in 8" :key="index" :style="entranceDelay(Math.min(index - 1, 3) * 0.03)">
+					<MediaCardSkeleton />
+				</li>
+			</ol>
+		</template>
 
-	<p v-else-if="!items.length" class="media-tip">
-		{{ $t('page.media.empty') }}
-	</p>
+		<p v-else-if="!items.length" class="media-tip">
+			{{ $t('page.media.empty') }}
+		</p>
 
-	<template v-else>
-		<TransitionGroup tag="ol" class="media-grid" name="float-in">
-			<li
-				v-for="item, index in items"
-				:key="item.subject_id"
-				:style="getFixedDelay(index % PAGE_SIZE * 0.03)"
-			>
-				<MediaCard :item />
-			</li>
-		</TransitionGroup>
+		<template v-else>
+			<TransitionGroup tag="ol" class="media-grid" name="float-in">
+				<li
+					v-for="item, index in items"
+					:key="item.subject_id"
+					:style="getFixedDelay(index % PAGE_SIZE * 0.03)"
+				>
+					<MediaCard :item />
+				</li>
+			</TransitionGroup>
 
-		<div class="media-footer">
-			<ZButton
-				v-if="items.length < total"
-				:icon="loadingMore ? 'line-md:loading-loop' : 'tabler:chevron-down'"
-				:text="loadingMore ? $t('page.media.loadingMore') : $t('page.media.loadMore')"
-				@click="loadMore"
-			/>
-			<p v-else class="media-tip">
-				{{ $t('page.media.count', { n: total }) }}
-			</p>
-		</div>
-	</template>
+			<div class="media-footer">
+				<ZButton
+					v-if="items.length < total"
+					:icon="loadingMore ? 'line-md:loading-loop' : 'tabler:chevron-down'"
+					:text="loadingMore ? $t('page.media.loadingMore') : $t('page.media.loadMore')"
+					@click="loadMore"
+				/>
+				<p v-else class="media-tip">
+					{{ $t('page.media.count', { n: total }) }}
+				</p>
+			</div>
+		</template>
+	</div>
 </div>
 </template>
 
@@ -337,6 +349,14 @@ watch([categoryKey, statusKey], reload)
 	}
 }
 
+.media-results {
+	display: flow-root;
+}
+
+.media-results-loading {
+	overflow: hidden;
+}
+
 .media-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
@@ -362,15 +382,6 @@ watch([categoryKey, statusKey], reload)
 	.media-skeleton-grid > li {
 		animation: none;
 	}
-}
-
-.media-loading-status {
-	position: absolute;
-	overflow: hidden;
-	width: 1px;
-	height: 1px;
-	clip-path: inset(50%);
-	white-space: nowrap;
 }
 
 .media-tip {

@@ -25,11 +25,14 @@ const mounted = useMounted()
 <BlogFooter />
 <BlogPanel :has-aside="mounted && !!slots?.aside" />
 <BikariyaModals />
+<ClientOnly>
+	<PopoverSearchHost />
+</ClientOnly>
 </template>
 
 <!-- eslint-disable-next-line vue/enforce-style-attribute -->
 <style>
-#blog-root {
+#blog-root:has(> #main-content) {
 	--aside-width: 280px;
 	--sidebar-width: var(--aside-width);
 

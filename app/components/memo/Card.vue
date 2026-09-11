@@ -7,7 +7,7 @@ import type { ParsedMemo } from '~/utils/memo'
  *
  * 详情页（pages/memos/[id]）渲染的是同一条正文，但评论常驻、没有折叠控件。
  */
-const props = defineProps<ParsedMemo & { viewerReactions?: string[] }>()
+const props = defineProps<ParsedMemo & { viewerReactions?: string[], tag?: 'li' | 'div' }>()
 
 const api = useCommentApi()
 const session = useCommentSession()
@@ -171,7 +171,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 
 <template>
 <!-- id 供侧栏 widget 的 /memos#<id> 深链跳转 -->
-<li :id ref="card" class="memo" data-transition-enter>
+<component :is="props.tag ?? 'li'" :id ref="card" class="memo" data-transition-enter>
 	<MemoBody
 		:id="props.id"
 		:blocks="props.blocks"
@@ -219,7 +219,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 			/>
 		</div>
 	</div>
-</li>
+</component>
 </template>
 
 <style scoped>

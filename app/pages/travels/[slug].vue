@@ -138,6 +138,28 @@ onKeyStroke(['ArrowRight', 'ArrowDown'], (e) => {
 
 /** 窄屏上地图是吸顶条，占着一截高度，给个收起开关 */
 const mapCollapsed = ref(false)
+const resizingMap = ref(false)
+
+async function toggleMap() {
+	const container = scroller.value
+	if (!container || resizingMap.value)
+		return
+	const top = container.getBoundingClientRect().top
+	const chapter = screens.value.find((screen) => {
+		const rect = screen.getBoundingClientRect()
+		return rect.top <= top + 1 && rect.bottom > top + 1
+	}) ?? screens.value[0]
+	const offset = chapter ? Math.max(0, top - chapter.getBoundingClientRect().top) : 0
+	resizingMap.value = true
+	mapCollapsed.value = !mapCollapsed.value
+	await nextTick()
+	if (chapter && container.isConnected) {
+		const distance = chapter.getBoundingClientRect().top - container.getBoundingClientRect().top
+		container.scrollTop += distance + Math.min(offset, Math.max(0, chapter.offsetHeight - container.clientHeight))
+	}
+	await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+	resizingMap.value = false
+}
 
 // 封面屏是静态元素、日子屏是 v-for 出来的，两者不能共用一个 ref 名
 // （v-for 的 ref 收集成数组，静态 ref 会把它覆盖掉）。统一在挂载后查一次 DOM。
@@ -164,7 +186,7 @@ useIntersectionObserver(
 			activeIndex.value = index
 		}
 	},
-	{ rootMargin: '-45% 0px -45% 0px' },
+	{ root: scroller, rootMargin: '-35% 0px -35% 0px' },
 )
 
 /**
@@ -189,7 +211,7 @@ function startsNewDay(index: number) {
 </script>
 
 <template>
-<div ref="scroller" class="travel" :class="{ 'viewer-open': viewerOpen }">
+<div class="travel" :class="{ 'viewer-open': viewerOpen }">
 	<NuxtLink class="travel-back" :to="buildPath('/travels', locale, 'zh')">
 		<Icon name="tabler:arrow-left" />
 		{{ $t('page.travels.title') }}
@@ -203,13 +225,13 @@ function startsNewDay(index: number) {
 			<button
 				class="travel-map-toggle mobile-only"
 				:aria-label="mapCollapsed ? $t('page.travels.expandMap') : $t('page.travels.collapseMap')"
-				@click="mapCollapsed = !mapCollapsed"
+				@click="toggleMap"
 			>
 				<Icon :name="mapCollapsed ? 'tabler:map' : 'tabler:chevron-up'" />
 			</button>
 		</aside>
 
-		<main class="travel-screens">
+		<main ref="scroller" class="travel-screens" :class="{ resizing: resizingMap }">
 			<!-- 封面屏：封面图整幅铺在这一屏做背景，压暗到能压住文字，不裁成卡片 -->
 			<section
 				class="travel-screen travel-cover"
@@ -355,15 +377,24 @@ function startsNewDay(index: number) {
 
 <style scoped>
 .travel {
-	overflow-y: auto;
-
-	/* 页面自己当滚动容器：整页吸附靠它，不必去改全局 html/body 的样式 */
+	overflow: hidden;
 	height: 100dvh;
 	background-color: var(--c-bg);
+}
+
+.travel-screens {
+	overflow-anchor: none;
+	overflow-y: auto;
+	height: 100%;
+	min-height: 0;
+	overscroll-behavior-y: contain;
 	scroll-snap-type: y mandatory;
 
-	/* 看图时锁住翻屏：滚轮改为一张一张翻照片（见 onViewerWheel） */
-	&.viewer-open {
+	&.resizing {
+		scroll-snap-type: none;
+	}
+
+	.viewer-open & {
 		overflow: hidden;
 	}
 }
@@ -397,6 +428,7 @@ function startsNewDay(index: number) {
 
 	display: grid;
 	grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+	height: 100%;
 }
 
 .travel-map-col {
@@ -414,9 +446,8 @@ function startsNewDay(index: number) {
 	/* 一屏一天：高度锁死一个视口，滚动只会停在整屏上，屏与屏的内容不会同框 */
 	display: flex;
 	flex-direction: column;
-	height: calc(100dvh - var(--travel-map-h));
+	height: 100%;
 	padding: clamp(2rem, 4vw, 4rem) clamp(1.5rem, 4vw, 4rem);
-	scroll-margin-top: var(--travel-map-h);
 	scroll-snap-align: start;
 	scroll-snap-stop: always; /* 一次滚动只翻一屏，不许一口气飞过好几天 */
 }
@@ -693,12 +724,12 @@ function startsNewDay(index: number) {
 }
 
 @media (max-width: 768px) {
-	/* 单列：地图改为吸顶条。这里必须是 block 而不是 grid —— */
-	/* grid item 的 sticky 只在自己那一行的范围内生效，一滚就跑没了 */
+	/* 地图和正文各占一行，章节吸附只由正文容器负责。 */
 	.travel-body {
-		--travel-map-h: 35vh;
+		--travel-map-h: 35dvh;
 
-		display: block;
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: var(--travel-map-h) minmax(0, 1fr);
 	}
 
 	/* 地图收起时，每屏能用的高度跟着长回来 */
@@ -707,9 +738,9 @@ function startsNewDay(index: number) {
 	}
 
 	.travel-map-col {
+		order: 0;
 		height: var(--travel-map-h);
 		border-bottom: 1px solid var(--c-border);
-		transition: height var(--delay);
 		z-index: 2;
 	}
 
@@ -731,7 +762,14 @@ function startsNewDay(index: number) {
 	}
 
 	.travel-screen {
+		height: auto;
+		min-height: 100%;
 		padding: 1.2rem 1rem;
+	}
+
+	.travel-day-content {
+		flex: none;
+		overflow: visible;
 	}
 
 	/* 窄屏放不下 13rem 两列，退到两列小图 */
@@ -743,6 +781,17 @@ function startsNewDay(index: number) {
 	.travel-viewer {
 		inset: var(--travel-map-h) 0 0;
 		padding: 3rem 1rem 1.5rem;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.travel-scroll-hint,
+	.travel-viewer img {
+		animation: none !important;
+	}
+
+	.travel-viewer,
+	.travel-viewer * {
+		transition: none !important;
 	}
 }
 </style>

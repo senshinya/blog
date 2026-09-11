@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 
-defineProps<{
+const props = defineProps<{
 	el: HTMLImageElement
 	caption?: string | Component
 	open?: boolean
+	duration?: number
 	style?: CSSProperties
 }>()
 
 defineEmits<{
 	close: []
 }>()
+
+const reducedMotion = usePreferredReducedMotion()
+const motionDuration = computed(() => reducedMotion.value === 'reduce' ? 0 : props.duration ?? 400)
 </script>
 
 <template>
 <BikariyaImageViewer
 	v-bind="$attrs"
 	:target="el"
+	:duration="motionDuration"
 	:open
 	:style
 	clamp
@@ -72,6 +77,11 @@ defineEmits<{
 		align-self: stretch;
 		padding: 0.5em;
 		cursor: pointer;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.tooltip {
+		transition: none;
 	}
 }
 </style>

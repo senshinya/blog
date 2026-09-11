@@ -53,14 +53,33 @@ function getIndent() {
 	return compConf.value.indent
 }
 
-onMounted(async () => {
-	rawHtml.value = await shiki.codeToHtml(props.code.trimEnd(), {
-		language: props.language,
-		transformerOptions: [compConf.value.enableIndentGuide ? 'ignoreRenderWhitespace' : 'ignoreRenderIndentGuides'],
-		shikiOptions: { meta: { indent: getIndent() } },
-		embeddedLanguages: true,
-	})
+let highlightStarted = false
+let disposed = false
+onScopeDispose(() => {
+	disposed = true
 })
+
+// Keep distant blocks as plaintext so article mounts do not create thousands of spans.
+const { stop: stopObserving } = useIntersectionObserver(codeblock, async (entries) => {
+	if (disposed || highlightStarted || !entries.some(entry => entry.isIntersecting))
+		return
+
+	highlightStarted = true
+	stopObserving()
+	try {
+		const html = await shiki.codeToHtml(props.code.trimEnd(), {
+			language: props.language,
+			transformerOptions: [compConf.value.enableIndentGuide ? 'ignoreRenderWhitespace' : 'ignoreRenderIndentGuides'],
+			shikiOptions: { meta: { indent: getIndent() } },
+			embeddedLanguages: true,
+		})
+		if (!disposed)
+			rawHtml.value = html
+	}
+	catch {
+		// Language downloads can fail offline; keep the escaped plaintext fallback.
+	}
+}, { rootMargin: '200px' })
 </script>
 
 <template>

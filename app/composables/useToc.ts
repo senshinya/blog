@@ -46,7 +46,7 @@ export function useToc(toc: MaybeRefOrGetter<Toc | undefined>, scrollableEl?: Ma
 		if (el && active) {
 			el.scrollTo({
 				top: active.offsetTop - el.clientHeight / 4,
-				behavior: 'smooth',
+				behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
 			})
 		}
 	}

@@ -1,40 +1,12 @@
 <script setup lang="ts">
-import { delay } from 'es-toolkit/promise'
-import { ENTRANCE_SKIP_KEY } from '~/composables/useEntranceDelay'
-
-const props = defineProps<{
+defineProps<{
 	excerpt: string
 }>()
-
-const appConfig = useAppConfig()
-const localeSwitch = useState<boolean>(ENTRANCE_SKIP_KEY, () => false).value
-
-const excerpt = ref(props.excerpt)
-const caret = ref('')
-
-if (appConfig.component.excerpt?.animation !== false && !localeSwitch) {
-	excerpt.value = ''
-	onMounted(async () => {
-		caret.value = appConfig.component.excerpt?.caret ?? '_'
-		for (const char of props.excerpt) {
-			excerpt.value += char
-			await delay(50)
-		}
-		caret.value = ''
-	})
-}
-
-if (import.meta.dev) {
-	watch(() => props.excerpt, (newExcerpt) => {
-		excerpt.value = newExcerpt
-	})
-}
 </script>
 
 <template>
 <div class="md-excerpt gradient-card">
-	<span class="dynamic"><Icon name="tabler:sparkles-2" />{{ excerpt }}{{ caret }}</span>
-	<span class="static"><Icon name="tabler:sparkles-2" />{{ props.excerpt }}</span>
+	<span class="dynamic"><Icon name="tabler:sparkles-2" />{{ excerpt }}</span>
 </div>
 </template>
 
@@ -45,17 +17,7 @@ if (import.meta.dev) {
 	padding: 0.5rem;
 	font-size: 0.9em;
 	transition: opacity 0.2s;
-
-	> .static {
-		opacity: 0;
-		pointer-events: none;
-		user-select: none;
-	}
-
-	> .dynamic {
-		position: absolute;
-		width: calc(100% - 1rem);
-	}
+	animation: var(--entrance, content-in 0.2s ease-out both);
 
 	.iconify {
 		margin-inline-end: 0.3em;
@@ -63,6 +25,12 @@ if (import.meta.dev) {
 
 	&:hover {
 		opacity: 1;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.md-excerpt {
+		transition: none;
+		animation: none;
 	}
 }
 </style>

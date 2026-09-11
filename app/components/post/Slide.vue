@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ArticleProps } from '~/types/article'
-import Autoplay from 'embla-carousel-autoplay'
 import emblaCarouselVue from 'embla-carousel-vue'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { resolveContentPath } from '~/utils/locale'
@@ -13,11 +12,11 @@ const compConf = computed(() => appConfig.component.slide)
 
 // @keep-sorted
 const [carouselEl, carouselApi] = emblaCarouselVue({
+	align: 'start',
 	containScroll: false,
 	loop: true,
 	skipSnaps: true,
 }, [
-	Autoplay({ stopOnInteraction: false, stopOnMouseEnter: true }),
 	WheelGesturesPlugin(),
 ])
 
@@ -40,7 +39,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 		</div>
 	</div>
 
-	<!-- Embla synchronously centers and loops the slides before exposing its API. -->
+	<!-- Keep the server-rendered row visible; start alignment preserves it on hydration. -->
 	<div ref="carouselEl" class="z-slide-body" dir="ltr" :data-ready="!!carouselApi || undefined">
 		<div class="slide-list">
 			<UtilLink
@@ -121,23 +120,11 @@ useEventListener(carouselEl, 'wheel', (e) => {
 	--fadeout-width: 1.5rem;
 
 	position: relative;
-	visibility: hidden;
 	overflow: hidden;
-	opacity: 0;
 	padding: 2px 0;
 	mask-image: linear-gradient(to var(--end), transparent, #FFF var(--fadeout-width), #FFF calc(100% - var(--fadeout-width)), transparent);
-	transition: opacity 0.22s ease;
 	cursor: grab;
 	user-select: none;
-
-	&[data-ready] {
-		visibility: visible;
-		opacity: 1;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		transition: none;
-	}
 
 	.slide-list {
 		display: flex;
@@ -164,7 +151,7 @@ useEventListener(carouselEl, 'wheel', (e) => {
 	width: max(12rem, 28%);
 	max-width: 80%;
 	aspect-ratio: 1.77;
-	margin: 0 min(0.5em, 1%);
+	margin-right: min(1em, 2%);
 	border-radius: 0.5rem;
 	scroll-snap-align: center;
 	scroll-snap-stop: always;

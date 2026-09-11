@@ -124,13 +124,15 @@ test('hydrates memo cards with the signed-in viewer reaction projection', async 
 
 	assert.match(page, /const pageKeys = computed\(\(\) => parsedMemos\.value\.map\(memo => `\/memos\/\$\{memo\.id\}`\)\)/)
 	assert.match(page, /const viewerReactions = usePageViewerReactions\(pageKeys\)/)
-	assert.match(page, /:viewer-reactions="viewerReactions\[`\/memos\/\$\{memo\.id\}`\]"/)
+	assert.match(page, /:viewer-reactions="memo \? viewerReactions\[`\/memos\/\$\{memo\.id\}`\] : undefined"/)
+	const slot = await readFile(new URL('../../components/memo/LoadingCard.vue', import.meta.url), 'utf8')
+	assert.match(slot, /<MemoCard v-bind="memo" tag="div" :viewer-reactions/)
 })
 
 test('memo card prefers the freshest personal reaction state', async () => {
 	const card = await readFile(cardPath, 'utf8')
 
-	assert.match(card, /defineProps<ParsedMemo & \{ viewerReactions\?: string\[\] \}>\(\)/)
+	assert.match(card, /defineProps<ParsedMemo & \{ viewerReactions\?: string\[\]/)
 	assert.match(card, /reacted\.value\?\.viewer_reactions \?\? page\.value\?\.viewer_reactions \?\? props\.viewerReactions/)
 	assert.doesNotMatch(card, /<MemoBody v-bind="props"/)
 })
@@ -139,4 +141,16 @@ test('keeps the reaction border clear of the animated tail clip', async () => {
 	const card = await readFile(cardPath, 'utf8')
 
 	assert.match(card, /\.tail-in\s*\{[^}]*padding-bottom:\s*1px;/)
+})
+
+test('initial and subsequent memo requests both use ten items', async () => {
+	const sizes: number[] = []
+	const { mount, pending } = createMemoHarness(async (_url, { query }) => {
+		sizes.push((query as { pageSize: number }).pageSize)
+		return { memos: [{ name: `memo-${sizes.length}` }], nextPageToken: 'next' }
+	})
+	const page = mount()
+	await Promise.all(pending)
+	await page.loadMore()
+	assert.deepEqual(sizes, [10, 10])
 })

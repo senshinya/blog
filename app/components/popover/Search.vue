@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import type { SearchResult } from 'minisearch'
-import type { ModalEmits, ModalProps } from '#modals'
 import MiniSearch from 'minisearch'
 import blogConfig from '~~/blog.config'
 
-const props = defineProps<ModalProps>()
+const props = defineProps<{ open: boolean }>()
 
-defineEmits<ModalEmits>()
+defineEmits<{ close: [], afterLeave: [] }>()
 
 // appConfig 上从来没有 language 字段——之前这里恒为 undefined，Segmenter
 // 实际跟的是运行环境（浏览器/Node）的默认 locale，不是站点语言，
@@ -69,7 +68,11 @@ useResizeObserver(resultContent, ([entry]) => {
 const activeIndex = ref(0)
 const activeItem = () => listResult.value?.children[activeIndex.value] as HTMLAnchorElement | undefined
 
-whenever(() => props.open, focusInput)
+whenever(() => props.open, () => focusInput())
+onMounted(() => {
+	if (props.open)
+		focusInput()
+})
 
 let selectedId: string | undefined
 function onResultsUpdated(items: SearchResult[]) {
@@ -111,7 +114,7 @@ function openActiveItem() {
 </script>
 
 <template>
-<Transition name="float-in">
+<Transition name="search-popover" appear @after-leave="$emit('afterLeave')">
 	<div v-if="open" class="blog-search">
 		<form class="input" @submit.prevent>
 			<Icon v-show="false" name="line-md:loading-alt-loop" />
@@ -168,20 +171,38 @@ function openActiveItem() {
 
 <style scoped>
 .blog-search {
-	--float-distance: 20vh;
+	--float-distance: 10px;
 
 	contain: paint;
 	position: fixed;
-	inset: 0;
+	inset: 10dvh 0 auto;
 	width: 90%;
 	height: fit-content;
 	max-width: 768px;
-	margin: auto;
+	margin: 0 auto;
 	border: 1px solid var(--c-primary);
 	border-radius: 1em;
 	box-shadow: var(--box-shadow-2), var(--box-shadow-3);
 	outline: 0.2em solid var(--c-primary-soft);
 	background-color: var(--ld-bg-card);
+}
+
+.search-popover-enter-active,
+.search-popover-leave-active {
+	transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.search-popover-enter-from,
+.search-popover-leave-to {
+	opacity: 0;
+	transform: translateY(var(--float-distance));
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.search-popover-enter-active,
+	.search-popover-leave-active {
+		transition: none;
+	}
 }
 
 .input {
@@ -215,8 +236,7 @@ function openActiveItem() {
 }
 
 .search-result {
-	max-height: 75vh;
-	max-height: 75dvh;
+	max-height: calc(80dvh - 6rem);
 	scroll-padding: var(--fadeout-height);
 }
 

@@ -173,6 +173,11 @@
 	#blog-sidebar,
 	#blog-aside,
 	.article-card,
+	.memo,
+	.travel-card,
+	.bg-mask,
+	.bikariya-overlay,
+	.blog-header .split-char,
 	.article-item,
 	.feed-card,
 	.search-item,
@@ -195,19 +200,16 @@
 	}
 }
 
-/* 侧栏 widget 换页时的进出场：以顶边为轴展开 / 向上收拢。 */
-/* 用 scaleY 而非 max-height，是因为 max-height 得先猜一个「够大」的值， */
-/* 内容比它矮时缓动会提前跑完，动画尾巴发木。 */
+/* 侧栏组件短淡入，文字保持原始比例。 */
 .aside-widget-enter-active,
 .aside-widget-leave-active {
-	transform-origin: top;
-	transition: transform 0.25s, opacity 0.25s;
+	transition: transform 0.2s ease-out, opacity 0.2s ease-out;
 }
 
 .aside-widget-enter-from,
 .aside-widget-leave-to {
 	opacity: 0;
-	transform: scaleY(0);
+	transform: translateY(6px);
 }
 
 /* 留在原地的 widget 平滑让位（FLIP），否则会在进出场的瞬间硬跳 */
@@ -231,7 +233,7 @@
 	}
 
 	&::view-transition-group(*) {
-		animation-duration: 0.28s;
+		animation-duration: 0.18s;
 		animation-timing-function: cubic-bezier(0.22, 0.68, 0, 1);
 	}
 
@@ -258,52 +260,11 @@
 	}
 
 	&::view-transition-old(.locale-part) {
-		animation: locale-copy-out 0.143s both;
+		animation: locale-copy-out 0.12s both;
 	}
 
 	&::view-transition-new(.locale-part) {
-		animation: locale-copy-in 0.22s both;
-	}
-
-	&::view-transition-old(.locale-nav),
-	&::view-transition-new(.locale-nav) {
-		--locale-lift: 2px;
-
-		animation-duration: 0.12s;
-	}
-
-	&::view-transition-old(.locale-heading),
-	&::view-transition-new(.locale-heading) {
-		--locale-lift: 4px;
-	}
-
-	&::view-transition-old(.locale-body),
-	&::view-transition-new(.locale-body) {
-		--locale-lift: 3px;
-	}
-
-	&::view-transition-old(.locale-copy),
-	&::view-transition-new(.locale-copy) {
-		--locale-lift: 6px;
-	}
-
-	&::view-transition-old(.locale-step-1),
-	&::view-transition-new(.locale-step-1) {
-		animation-delay: 18ms;
-	}
-
-	&::view-transition-old(.locale-step-2),
-	&::view-transition-new(.locale-step-2) {
-		animation-delay: 36ms;
-	}
-
-	&::view-transition-old(.locale-label),
-	&::view-transition-new(.locale-label),
-	&::view-transition-old(.locale-metric),
-	&::view-transition-new(.locale-metric) {
-		--locale-lift: 0px;
-
-		animation-duration: 0.12s;
+		animation: locale-copy-in 0.18s both;
 	}
 
 	&::view-transition-old(.locale-stable),
@@ -328,14 +289,12 @@
 @keyframes locale-copy-out {
 	to {
 		opacity: 0;
-		transform: translateY(calc(-1 * var(--locale-lift, 0px)));
 	}
 }
 
 @keyframes locale-copy-in {
 	from {
 		opacity: 0;
-		transform: translateY(var(--locale-lift, 0));
 	}
 }
 

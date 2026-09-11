@@ -3,12 +3,14 @@ import { stripLocale } from './locale'
 
 const locales = blogConfig.locales.map(locale => locale.code)
 let stopPrevious: (() => void) | undefined
+let sequence = 0
 
 /**
  * B: snapshots keep asynchronous locale navigation atomic, without cloning live
  * Vue nodes or fading images. Names are paired by content path, never card order.
  */
 export async function runLocaleMotion(update: () => Promise<void>) {
+	const current = ++sequence
 	stopPrevious?.()
 	if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
 		await update()
@@ -16,7 +18,9 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 	}
 	if (!document.startViewTransition || !CSS.supports('view-transition-class', 'locale-copy')) {
 		await update()
-		return animateFallback()
+		if (current === sequence)
+			return animateFallback()
+		return
 	}
 
 	const root = document.documentElement
@@ -27,26 +31,12 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 	let anchor: string | undefined
 	let anchorTop = 0
 
-	function mark(el: HTMLElement, key: string, kind: string) {
-		if (styles.has(el))
-			return
-		const rect = el.getBoundingClientRect()
-		if (!rect.width || !rect.height || getComputedStyle(el).visibility === 'hidden')
-			return
-		if (!names.has(key))
-			names.set(key, `locale-${names.size}`)
-		const text = el.textContent ?? ''
-		// Identical source text (dates, code, untranslated memos) does not blink.
-		const unchanged = texts.get(key) === text
-		texts.set(key, text)
-		styles.set(el, el.style.cssText)
-		el.style.setProperty('view-transition-name', names.get(key)!)
-		el.style.setProperty('view-transition-class', `locale-part ${unchanged ? 'locale-stable' : kind}`)
-		if (el.closest('#main-content'))
-			anchors.set(key, { top: rect.top, bottom: rect.bottom })
-	}
-
-	function collect() {
+	function collect(restoreAnchor = false) {
+		const candidates = new Map<HTMLElement, { el: HTMLElement, key: string, kind: string }>()
+		const mark = (el: HTMLElement, key: string, kind: string) => {
+			if (!candidates.has(el))
+				candidates.set(el, { el, key, kind })
+		}
 		const select = (selector: string, kind: string, prefix: string) => {
 			document.querySelectorAll<HTMLElement>(selector).forEach((el, index) => mark(el, `${prefix}-${index}`, kind))
 		}
@@ -74,6 +64,38 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 			})
 			card.querySelectorAll<HTMLElement>('.article-cover, .travel-cover').forEach((el, part) => mark(el, `image-${key}-${part}`, 'locale-stable'))
 		})
+
+		// Translation can move the anchor outside the viewport. Restore its scroll
+		// position first so visibility uses the final viewport, including fixed UI.
+		if (restoreAnchor && anchor) {
+			const target = [...candidates.values()].find(candidate => candidate.key === anchor)
+			if (target)
+				window.scrollBy({ top: target.el.getBoundingClientRect().top - anchorTop, behavior: 'instant' })
+		}
+		anchors.clear()
+		const snapshots = []
+		for (const candidate of candidates.values()) {
+			const { el, key } = candidate
+			const rect = el.getBoundingClientRect()
+			if (!rect.width || !rect.height || rect.bottom <= 0 || rect.top >= window.innerHeight
+				|| rect.right <= 0 || rect.left >= window.innerWidth || getComputedStyle(el).visibility === 'hidden') {
+				continue
+			}
+			if (el.closest('#main-content'))
+				anchors.set(key, { top: rect.top, bottom: rect.bottom })
+			snapshots.push({ ...candidate, text: el.textContent ?? '', style: el.style.cssText })
+		}
+		// Finish geometry/computed-style reads before mutating any live styles.
+		// Long articles only allocate snapshots for content intersecting the viewport.
+		for (const { el, key, kind, text, style } of snapshots) {
+			if (!names.has(key))
+				names.set(key, `locale-${names.size}`)
+			const unchanged = texts.get(key) === text
+			texts.set(key, text)
+			styles.set(el, style)
+			el.style.setProperty('view-transition-name', names.get(key)!)
+			el.style.setProperty('view-transition-class', `locale-part ${unchanged ? 'locale-stable' : kind}`)
+		}
 	}
 
 	function restoreStyles() {
@@ -108,9 +130,7 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 		restoreStyles()
 		if (stopped)
 			return
-		collect()
-		if (anchor && anchors.has(anchor))
-			window.scrollBy({ top: anchors.get(anchor)!.top - anchorTop, behavior: 'instant' })
+		collect(true)
 	})
 	const stop = () => {
 		if (stopped)
@@ -132,27 +152,25 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 	await transition.updateCallbackDone
 }
 
-/** Older browsers still get the short, module-specific entrance. */
+/** Older browsers use the same short text fade without translating glyphs. */
 async function animateFallback() {
-	const groups: [string, number, number][] = [
-		['.sidebar-nav .nav-text', 2, 120],
-		['.widget-header, .blog-stats dt, .blog-stats dd, .filter-text', 0, 120],
-		['.post-title, .travels-header > h1', 4, 220],
-		['#main-content > .article > :not(pre):not(figure):not(:has(img)), .md-excerpt .dynamic, .travels-desc', 3, 220],
-		['.article-card > article, .travel-card > article, .article-item .article-title', 6, 220],
+	const selectors = [
+		'.sidebar-nav .nav-text',
+		'.widget-header, .blog-stats dt, .blog-stats dd, .filter-text',
+		'.post-title, .travels-header > h1',
+		'#main-content > .article > :not(pre):not(figure):not(:has(img)), .md-excerpt .dynamic, .travels-desc',
+		'.article-title, .article-description, .article-info, .travel-title, .travel-subtitle, .travel-summary, .travel-meta',
 	]
-	const animations: Animation[] = []
-	for (const [selector, distance, duration] of groups) {
-		document.querySelectorAll<HTMLElement>(selector).forEach((el, index) => {
-			const rect = el.getBoundingClientRect()
-			if (rect.bottom < 0 || rect.top > window.innerHeight)
-				return
-			animations.push(el.animate([
-				{ opacity: 0, transform: `translateY(${distance}px)` },
-				{ opacity: 1, transform: 'translateY(0)' },
-			], { duration, delay: distance === 6 ? Math.min(index, 2) * 18 : 0, fill: 'backwards' }))
-		})
-	}
+	const candidates = new Set(selectors.flatMap(selector => [...document.querySelectorAll<HTMLElement>(selector)]))
+	const visible = [...candidates].filter((el) => {
+		const rect = el.getBoundingClientRect()
+		return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight
+			&& rect.right > 0 && rect.left < window.innerWidth && getComputedStyle(el).visibility !== 'hidden'
+	})
+	const animations = visible.map(el => el.animate([
+		{ opacity: 0 },
+		{ opacity: 1 },
+	], { duration: 140, fill: 'backwards' }))
 	const stop = () => animations.forEach(animation => animation.cancel())
 	stopPrevious = stop
 	await Promise.allSettled(animations.map(animation => animation.finished))

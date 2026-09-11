@@ -9,7 +9,7 @@ interface MemoPage {
 }
 
 const API = 'https://memos.shinya.click/api/v1/memos'
-const PAGE_SIZE = 20
+const PAGE_SIZE = 10
 
 const appConfig = useAppConfig()
 const { t } = useI18n()
@@ -22,6 +22,7 @@ useSeoMeta({
 
 const loadingMore = ref(false)
 const revealing = ref(false)
+const morphingCards = ref(0)
 const memoList = useTemplateRef('memoList')
 const memoFooter = useTemplateRef('memoFooter')
 let cancelReveal = () => {}
@@ -68,7 +69,7 @@ const nextPageToken = computed(() => feed.value?.nextPageToken ?? '')
 const loading = computed(() => status.value === 'idle' || status.value === 'pending')
 
 async function loadMore() {
-	if (disposed || loadingMore.value || revealing.value || !nextPageToken.value)
+	if (disposed || loadingMore.value || revealing.value || morphingCards.value > 0 || !nextPageToken.value)
 		return
 	loadingMore.value = true
 	paginationController = new AbortController()
@@ -107,6 +108,7 @@ async function loadMore() {
 }
 
 const parsedMemos = computed(() => memos.value.map(parseMemo))
+const memoSlots = computed(() => loading.value ? Array<undefined>(PAGE_SIZE).fill(undefined) : parsedMemos.value)
 const pageKeys = computed(() => parsedMemos.value.map(memo => `/memos/${memo.id}`))
 const viewerReactions = usePageViewerReactions(pageKeys)
 </script>
@@ -121,7 +123,7 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 	</TransitionGroup>
 </template>
 
-<div class="memos proper-height" :data-revealing="revealing || undefined">
+<div class="memos proper-height" :data-revealing="revealing || morphingCards > 0 || undefined">
 	<header class="memos-header">
 		<h1 class="text-creative">
 			{{ $t('page.memos.title') }}
@@ -137,27 +139,25 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 
 	<ZError v-if="error" :message="$t('page.memos.loadError', { message: error.message })" />
 
-	<p v-else-if="loading" class="memos-tip">
-		{{ $t('page.memos.loading') }}
-	</p>
-
 	<template v-else>
-		<ol ref="memoList" class="memo-list">
-			<MemoCard
-				v-for="memo, index in parsedMemos"
-				:key="memo.id"
-				v-bind="memo"
-				:viewer-reactions="viewerReactions[`/memos/${memo.id}`]"
+		<ol ref="memoList" class="memo-list" :aria-busy="loading" :aria-label="loading ? $t('page.memos.loading') : undefined">
+			<MemoLoadingCard
+				v-for="memo, index in memoSlots"
+				:key="index < PAGE_SIZE ? index : memo?.id"
+				:memo
+				:index
+				:viewer-reactions="memo ? viewerReactions[`/memos/${memo.id}`] : undefined"
 				:style="entranceDelay(Math.min(index % PAGE_SIZE, 4) * 0.03)"
+				@morphing="morphingCards += $event ? 1 : -1"
 			/>
 		</ol>
 
-		<div ref="memoFooter" class="memos-footer">
+		<div v-if="!loading" ref="memoFooter" class="memos-footer">
 			<button
 				v-if="nextPageToken"
 				type="button"
 				class="memos-load-more"
-				:disabled="loadingMore || revealing"
+				:disabled="loadingMore || revealing || morphingCards > 0"
 				:aria-busy="loadingMore"
 				@click="loadMore"
 			>
@@ -267,12 +267,6 @@ const viewerReactions = usePageViewerReactions(pageKeys)
 }
 
 .memos-end {
-	color: var(--c-text-3);
-}
-
-.memos-tip {
-	font-size: 0.9em;
-	text-align: center;
 	color: var(--c-text-3);
 }
 </style>

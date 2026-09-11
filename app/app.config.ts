@@ -31,12 +31,6 @@ export default defineAppConfig({
 			tabSize: 3,
 		},
 
-		/** 文章开头摘要 */
-		excerpt: {
-			animation: true,
-			caret: '_',
-		},
-
 		/** 精选文章 Slide */
 		slide: {
 			/** 适合封面图无字时启用 */
