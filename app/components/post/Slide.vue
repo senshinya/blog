@@ -40,7 +40,8 @@ useEventListener(carouselEl, 'wheel', (e) => {
 		</div>
 	</div>
 
-	<div ref="carouselEl" class="z-slide-body" dir="ltr">
+	<!-- Embla synchronously centers and loops the slides before exposing its API. -->
+	<div ref="carouselEl" class="z-slide-body" dir="ltr" :data-ready="!!carouselApi || undefined">
 		<div class="slide-list">
 			<UtilLink
 				v-for="(article, index) in list"
@@ -120,11 +121,23 @@ useEventListener(carouselEl, 'wheel', (e) => {
 	--fadeout-width: 1.5rem;
 
 	position: relative;
+	visibility: hidden;
 	overflow: hidden;
+	opacity: 0;
 	padding: 2px 0;
 	mask-image: linear-gradient(to var(--end), transparent, #FFF var(--fadeout-width), #FFF calc(100% - var(--fadeout-width)), transparent);
+	transition: opacity 0.22s ease;
 	cursor: grab;
 	user-select: none;
+
+	&[data-ready] {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 
 	.slide-list {
 		display: flex;

@@ -26,6 +26,12 @@ function normalizeBasePath(basePath: string) {
 	return basePath.replace(/\/+$/, '') || '/'
 }
 
+/** Memo content is shared across languages; keep its expanded discussions alive. */
+export function localePageKey(path: string, locales: readonly string[], defaultLocale: string) {
+	const { basePath } = stripLocale(path, locales, defaultLocale)
+	return basePath === '/memos' || basePath.startsWith('/memos/') ? basePath : normalizeBasePath(path)
+}
+
 /**
  * 把路径拆成语言码与不带前缀的基准路径。无前缀即默认语言。
  *

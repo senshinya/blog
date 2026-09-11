@@ -95,7 +95,9 @@ const copyFields = computed(() => [
 	</template>
 </Tab>
 
-<PostComment :title="$t('page.friends.title')" :reactions="false" />
+<template #comments>
+	<PostComment key="friends" :title="$t('page.friends.title')" :reactions="false" />
+</template>
 </template>
 
 <style scoped>

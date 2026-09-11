@@ -7,6 +7,7 @@ const LOCALES = blogConfig.locales.map(l => l.code)
 const route = useRoute()
 const collection = useContentCollection()
 const contentPath = useContentPath()
+const discussionKey = computed(() => stripLocale(contentPath.value, LOCALES, 'zh').basePath)
 
 const dataKey = computed(() => `content:${contentPath.value}`)
 const { data: post } = await useAsyncData(
@@ -44,6 +45,10 @@ else {
 	<component :is="widget.comp" v-for="widget in widgets" :key="`${contentPath}:${widget.name}`" />
 </template>
 
+<template #comments>
+	<PostComment v-if="post" :key="discussionKey" :title="post.title" />
+</template>
+
 <template v-if="post">
 	<PostHeader v-bind="post" />
 	<PostExcerpt v-if="excerpt" :excerpt />
@@ -58,7 +63,6 @@ else {
 
 	<PostFooter v-bind="post" />
 	<PostSurround />
-	<PostComment :title="post.title" />
 </template>
 
 <ZError

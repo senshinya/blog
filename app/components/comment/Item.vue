@@ -78,7 +78,7 @@ function measure() {
 	clipped.value = !unclipped.value && el.scrollHeight > max + 8
 }
 onMounted(() => nextTick(measure))
-watch(() => node.value.body_html, () => nextTick(measure))
+watch(() => node.value.body_html, measure, { flush: 'post' })
 
 async function remove() {
 	if (!confirmingDelete.value) {

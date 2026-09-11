@@ -2,6 +2,7 @@
 import type { CommentSessionRequest } from '~/composables/useCommentSessionScope'
 import type { Comment, Thread, ThreadPage } from '~/utils/comment'
 import blogConfig from '~~/blog.config'
+import { animateCommentTranslation, captureCommentText } from '~/utils/commentTranslationMotion'
 
 /**
  * 评论区。文章页和碎语详情页共用，差别只在要不要标题和页面级 reaction。
@@ -82,6 +83,8 @@ const focusMode = ref(false)
 let threadRequestVersion = 0
 let activeThreadRequest: CommentSessionRequest | undefined
 let activeMoreRequest: CommentSessionRequest | undefined
+let cancelTextMotion = () => {}
+onScopeDispose(() => cancelTextMotion())
 
 function abortRequest(request: CommentSessionRequest | undefined) {
 	if (!request)
@@ -91,6 +94,7 @@ function abortRequest(request: CommentSessionRequest | undefined) {
 }
 
 function startThreadRequest() {
+	cancelTextMotion()
 	abortRequest(activeThreadRequest)
 	abortRequest(activeMoreRequest)
 	activeMoreRequest = undefined
@@ -117,25 +121,68 @@ function finishMoreRequest(request: CommentSessionRequest) {
 		activeMoreRequest = undefined
 }
 
-const tree = computed(() => buildCommentTree(thread.value?.comments ?? []))
+// Item updates reactions on the tree's copied nodes, so those changes must also
+// participate in refresh invalidation alongside edits to the flat thread.
+const tree = computed(() => reactive(buildCommentTree(thread.value?.comments ?? [])))
+let threadDataRevision = 0
+watch([thread, tree], () => threadDataRevision++, { deep: true, flush: 'sync' })
 const total = computed(() => thread.value?.total_comments ?? 0)
 const pageSubscribed = computed(() => thread.value?.page?.viewer_subscribed ?? true)
 
-async function loadThread() {
+function readingAnchor() {
+	const comments = [...(root.value?.querySelectorAll<HTMLElement>('.comment') ?? [])]
+	const element = comments.find(comment => comment.getBoundingClientRect().top >= 0 && comment.getBoundingClientRect().top < window.innerHeight)
+		?? comments.find(comment => comment.getBoundingClientRect().top < 0 && comment.getBoundingClientRect().bottom > 0)
+	return element ? { element, top: element.getBoundingClientRect().top } : undefined
+}
+
+async function loadThread(preserveReading = false) {
 	const version = ++threadRequestVersion
 	const request = startThreadRequest()
+	const dataRevision = threadDataRevision
+	const retainedCount = preserveReading ? thread.value?.comments.length ?? 0 : 0
 	status.value = 'pending'
 	try {
-		const next = await api.request<Thread>('/api/pages/thread', {
+		let next = await api.request<Thread>('/api/pages/thread', {
 			query: { key: key.value, order: order.value, limit: 50 },
 			signal: request.controller.signal,
 		})
+		// Translate every loaded page before replacing the visible discussion.
+		while (next.comments.length < retainedCount && next.next_cursor) {
+			if (version !== threadRequestVersion || !sessionScope.current(request))
+				return
+			const more = await api.request<Thread>('/api/pages/thread', {
+				query: { key: key.value, order: order.value, limit: 50, cursor: next.next_cursor },
+				signal: request.controller.signal,
+			})
+			next = { ...more, page: more.page ?? next.page, comments: mergeComments(next.comments, more.comments) }
+		}
 		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
+		// Retained controls can finish a write while this snapshot is in flight.
+		// Keep their current projection visible until a newer read has settled.
+		if (dataRevision !== threadDataRevision) {
+			await loadThread(preserveReading)
+			return
+		}
+		const anchor = preserveReading ? readingAnchor() : undefined
+		const previousText = preserveReading ? captureCommentText(root.value) : undefined
 		thread.value = next
 		focusMode.value = false
-		status.value = 'ready'
 		emit('page', thread.value.page)
+		if (preserveReading) {
+			// Flush the host's content measurement and outer height before scrolling.
+			await nextTick()
+			await nextTick()
+			if (version !== threadRequestVersion || !sessionScope.current(request))
+				return
+			if (anchor?.element.isConnected)
+				window.scrollBy({ top: anchor.element.getBoundingClientRect().top - anchor.top, behavior: 'instant' })
+			if (previousText)
+				cancelTextMotion = animateCommentTranslation(previousText)
+		}
+		if (version === threadRequestVersion && sessionScope.current(request))
+			status.value = 'ready'
 	}
 	catch {
 		if (version !== threadRequestVersion || !sessionScope.current(request))
@@ -148,9 +195,10 @@ async function loadThread() {
 }
 
 /** 邮件里的地址是 /posts/xxx#comment-43 */
-async function loadFocus(id: number) {
+async function loadFocus(id: number, preserveReading = false) {
 	const version = ++threadRequestVersion
 	const request = startThreadRequest()
+	const dataRevision = threadDataRevision
 	status.value = 'pending'
 	try {
 		const next = await api.request<Thread>('/api/pages/thread/focus', {
@@ -159,14 +207,26 @@ async function loadFocus(id: number) {
 		})
 		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
+		if (dataRevision !== threadDataRevision) {
+			await loadFocus(id, preserveReading)
+			return
+		}
+		const anchor = preserveReading ? readingAnchor() : undefined
+		const previousText = preserveReading ? captureCommentText(root.value) : undefined
 		thread.value = next
 		focusMode.value = true
-		status.value = 'ready'
 		emit('page', thread.value.page)
+		await nextTick()
 		await nextTick()
 		if (version !== threadRequestVersion || !sessionScope.current(request))
 			return
-		document.getElementById(`comment-${id}`)?.scrollIntoView({ block: 'center' })
+		if (anchor?.element.isConnected)
+			window.scrollBy({ top: anchor.element.getBoundingClientRect().top - anchor.top, behavior: 'instant' })
+		if (previousText)
+			cancelTextMotion = animateCommentTranslation(previousText)
+		status.value = 'ready'
+		if (!preserveReading)
+			document.getElementById(`comment-${id}`)?.scrollIntoView({ block: 'center' })
 	}
 	catch {
 		if (version !== threadRequestVersion || !sessionScope.current(request))
@@ -317,16 +377,16 @@ watch(tree, () => nextTick(layout))
 watch([key, locale], ([nextKey], [previousKey]) => {
 	if (status.value === 'idle')
 		return
-	thread.value = undefined
 	if (nextKey !== previousKey) {
+		thread.value = undefined
 		focusId.value = parseCommentHash(route.hash)
 		focusMode.value = Boolean(focusId.value)
 	}
 	// 重取第一页或当前定向线程，同时取消旧语言的分页，避免混入另一种语言。
 	if (focusMode.value && focusId.value)
-		void loadFocus(focusId.value)
+		void loadFocus(focusId.value, nextKey === previousKey)
 	else
-		void loadThread()
+		void loadThread(nextKey === previousKey)
 })
 
 watch(sessionEpoch, () => {
@@ -341,7 +401,13 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 </script>
 
 <template>
-<section :id="anchorId" ref="root" class="z-comment">
+<section
+	:id="anchorId"
+	ref="root"
+	class="z-comment"
+	:aria-busy="status === 'pending'"
+	:data-refreshing="status === 'pending' && !!thread || undefined"
+>
 	<!-- 页面级 reaction 是对文章的，不是对对话的：给它一句归属说明，
 		用一条细线跟评论分开，而不是让它裸浮在编辑框上方 -->
 	<div v-if="reactions" class="page-react">
@@ -472,7 +538,7 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 		</div>
 	</div>
 
-	<div v-if="status === 'pending'" class="skeleton">
+	<div v-if="!thread && (status === 'idle' || status === 'pending')" class="skeleton">
 		<div v-for="i in 2" :key="i" class="sk-row">
 			<div class="sk sk-avatar" />
 			<div class="sk-lines">
@@ -481,7 +547,7 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 		</div>
 	</div>
 
-	<div v-else-if="status === 'error'" class="state error">
+	<div v-else-if="status === 'error' && !thread" class="state error">
 		<span class="big">{{ $t('comment.loadError') }}</span>
 		<span class="small">{{ $t('comment.loadErrorHint') }}</span>
 		<button type="button" class="btn-github" @click="loadThread()">
@@ -511,11 +577,15 @@ watch(dataRevision, () => void loadThread(), { flush: 'sync' })
 		/>
 	</ol>
 
+	<button v-if="status === 'error' && thread" type="button" class="more" @click="loadThread(true)">
+		{{ $t('comment.retry') }}
+	</button>
+
 	<button
-		v-if="status === 'ready' && thread?.next_cursor && !focusMode"
+		v-if="thread?.next_cursor && !focusMode"
 		type="button"
 		class="more"
-		:disabled="loadingMore"
+		:disabled="loadingMore || status === 'pending'"
 		@click="loadMore()"
 	>
 		{{ loadingMore ? $t('comment.loading') : $t('comment.loadMore') }}

@@ -176,7 +176,7 @@ const zh = {
 			loading: '加载中…',
 			loadingMore: '加载中',
 			loadMore: '加载更多',
-			count: '共 {n} 条，没有更多了',
+			noMore: '没有更多了',
 			notFound: '碎语不存在',
 			feedbackPrompt: '给这条 memo 一个反馈',
 			image: '图片',
@@ -298,6 +298,7 @@ const zh = {
 		},
 		blogLog: {
 			title: '更新日志',
+			aiDisclosure: '添加 AI 创作声明',
 			multilingual: '支持中英日切换，地图与评论同步适配',
 			commentMigration: '评论系统从 giscus 迁移至自建系统',
 			contentMigration: '迁移到 Nuxt 4 + Nuxt Content v3，内容回归 Markdown',

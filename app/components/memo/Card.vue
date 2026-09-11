@@ -70,6 +70,7 @@ function onPage(p: ThreadPage | null) {
 	reacted.value = undefined
 	// 展开时线程已经把权威状态带回来了，那一发就不必再打
 	resolving ??= Promise.resolve()
+	nextTick(measureTail)
 }
 
 function resolvePage() {
@@ -170,7 +171,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 
 <template>
 <!-- id 供侧栏 widget 的 /memos#<id> 深链跳转 -->
-<li :id ref="card" class="memo">
+<li :id ref="card" class="memo" data-transition-enter>
 	<MemoBody
 		:id="props.id"
 		:blocks="props.blocks"
@@ -242,6 +243,11 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 .tail {
 	overflow: hidden;
 	transition: height 0.3s;
+
+	/* In-place comment translations must settle height before restoring scroll. */
+	&:has(.z-comment[data-refreshing]) {
+		transition: none;
+	}
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;

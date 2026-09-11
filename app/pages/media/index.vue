@@ -7,6 +7,7 @@ const BGM_API = 'https://api.bgm.tv/v0/users'
 
 const appConfig = useAppConfig()
 const { t } = useI18n()
+const entranceDelay = useEntranceDelay()
 useSeoMeta({
 	title: () => t('page.media.title'),
 	description: () => t('page.media.description', { site: appConfig.title }),
@@ -192,8 +193,8 @@ watch([categoryKey, statusKey], reload)
 		<span class="media-loading-status" role="status">
 			{{ $t('page.media.loading') }}
 		</span>
-		<ol class="media-grid" aria-hidden="true">
-			<li v-for="index in 8" :key="index">
+		<ol class="media-grid media-skeleton-grid" aria-hidden="true">
+			<li v-for="index in 8" :key="index" :style="entranceDelay(Math.min(index - 1, 3) * 0.03)">
 				<MediaCardSkeleton />
 			</li>
 		</ol>
@@ -348,6 +349,19 @@ watch([categoryKey, statusKey], reload)
 	display: flex;
 	justify-content: center;
 	margin: 2rem 0;
+}
+
+.media-skeleton-grid > li {
+	--float-distance: 6px;
+
+	animation: var(--entrance, float-in 0.22s var(--motion-easing) backwards);
+	animation-delay: var(--delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.media-skeleton-grid > li {
+		animation: none;
+	}
 }
 
 .media-loading-status {

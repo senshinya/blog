@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { finishWidgetEntrance, prepareWidgetLeave } from '~/utils/widgetMotion'
+
 defineProps<{
 	title?: string
 	card?: boolean
@@ -10,6 +12,9 @@ defineProps<{
 }>()
 
 const body = useTemplateRef('widget-body')
+
+onMounted(() => finishWidgetEntrance(body.value?.parentElement))
+onBeforeUnmount(() => prepareWidgetLeave(body.value?.parentElement))
 
 defineExpose({ body })
 </script>

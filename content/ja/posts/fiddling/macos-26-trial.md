@@ -1,4 +1,5 @@
 ---
+recommend: 5
 authorship: human-only
 title: "macOS 26とiPadOS 26を試してみた"
 description: "macOSとiPadOS 26では、新しいデザイン言語Liquid Glassが導入され、アイコンやウインドウの印象が一新されました。とくにiPadのアプリをウインドウで扱えるようになったことは、生産性向上のための端末へ進む大きな一歩です。一方、透明なコントロールセンターやLaunchpadの統合には賛否があり、使い勝手には改善の余地もあります。課題はありつつも、今後につながる更新だと感じました。"

@@ -11,6 +11,10 @@ const mounted = useMounted()
 <BlogSidebar />
 <main id="main-content">
 	<slot />
+	<!-- 评论只在客户端取数；等待页面注册插槽后挂载，避免异步正文的 hydration 错位。 -->
+	<ClientOnly>
+		<slot name="comments" />
+	</ClientOnly>
 </main>
 <!-- 与正文同高的容器限制侧栏 sticky 边界，让页脚进入视口时将侧栏向上顶走。 -->
 <div class="blog-aside-track">

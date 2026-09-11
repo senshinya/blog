@@ -61,9 +61,11 @@ function getArticleYear(article: ArticleProps) {
 
 <template>
 <template #aside>
-	<WidgetBlogStats key="blog-stats" />
-	<WidgetBlogLog key="blog-log" />
-	<WidgetBlogTech key="blog-tech" />
+	<TransitionGroup name="aside-widget">
+		<WidgetBlogStats key="blog-stats" />
+		<WidgetBlogLog key="blog-log" />
+		<WidgetBlogTech key="blog-tech" />
+	</TransitionGroup>
 </template>
 
 <div class="archive proper-height">

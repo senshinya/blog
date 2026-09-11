@@ -1,4 +1,5 @@
 ---
+recommend: 6
 authorship: human-only
 title: "小米 17 折腾日用：解锁、刷机、root 与隐藏"
 description: "越折腾越想折腾，老当益壮啊老当益壮"

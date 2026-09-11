@@ -1,4 +1,5 @@
 ---
+recommend: 4
 authorship: human-only
 title: "Connecting My Shanghai and Hangzhou Networks"
 description: "My girlfriend moved from Beijing to Shanghai for work, and I helped arrange broadband too. Shanghai Telecom’s 500M connection costs more than a 1000M line in Hangzhou, frustratingly. I set out to connect the two cities’ networks: transparent proxying in Shanghai, selected traffic exiting through Hangzhou, and access between both LANs. Hangzhou already had a simple setup with a software router and an AP, configured to route my everyday traffic home and ready for the next networking adventure."

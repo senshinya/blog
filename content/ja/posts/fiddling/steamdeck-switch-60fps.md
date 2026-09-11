@@ -1,4 +1,5 @@
 ---
+recommend: 7
 authorship: human-only
 title: "Steam Deckの第二の人生：Switchエミュレーター導入からフレーム補間で60FPSまで"
 description: "これも一種のNTRですよね"

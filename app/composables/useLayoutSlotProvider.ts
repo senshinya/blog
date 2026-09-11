@@ -22,8 +22,8 @@ export function provideLayoutSlots() {
 		provide<LayoutSlotsProvider>(layoutSlotsKey, {
 			...provider,
 			slots,
-			// aside 跨页面复用同类型 widget；文章目录仍由文章路径的 key 区分。
-			getOwner: name => name === 'aside' ? 0 : provider.getOwner?.(name),
+			// 布局内的侧栏、评论由内容 key 区分实例，不随语言页面重建。
+			getOwner: name => name === 'aside' || name === 'comments' ? 0 : provider.getOwner?.(name),
 		})
 		provider.ready.then(() => {
 			slots.value = provider.slots.value

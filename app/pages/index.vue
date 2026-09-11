@@ -39,9 +39,11 @@ const { data: previewCount } = useAsyncData(
 
 <template>
 <template #aside>
-	<WidgetBlogStats key="blog-stats" />
-	<WidgetMemos key="memos" />
-	<WidgetBlogTech key="blog-tech" />
+	<TransitionGroup name="aside-widget">
+		<WidgetBlogStats key="blog-stats" />
+		<WidgetMemos key="memos" />
+		<WidgetBlogTech key="blog-tech" />
+	</TransitionGroup>
 </template>
 
 <BlogHeader class="hide-above-mobile" :to="buildPath('/', locale, 'zh')" tag="h1" />

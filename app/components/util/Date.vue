@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
 	format?: dateTimeFormatOptions
 	absolute?: boolean
 	relative?: boolean
+	relativeStyle?: 'long' | 'short' | 'narrow'
 	nospace?: boolean
 	tipFormat?: dateTimeFormatOptions
 	tipTransform?: (formattedDate: string) => string
@@ -61,6 +62,7 @@ const tooltip = computed(() => mounted.value && zdt.value
 		:datetime="toInstantString(zdt)"
 		:locale="currentLanguage"
 		:relative
+		:relative-style="relativeStyle"
 		:year="zdt.year === today.year ? undefined : '2-digit'"
 		month="long"
 		day="numeric"

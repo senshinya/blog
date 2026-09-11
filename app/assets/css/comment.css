@@ -1326,6 +1326,13 @@
 	}
 
 	/* ── 空 / 加载 / 出错 ────────────────────────────────────── */
+	/* 同一块占位空间，空评论落定时不让碎语卡片再收缩一次。 */
+	.skeleton,
+	.state:not(.error) {
+		justify-content: center;
+		min-height: 9.25rem;
+	}
+
 	.state {
 		display: flex;
 		flex-direction: column;

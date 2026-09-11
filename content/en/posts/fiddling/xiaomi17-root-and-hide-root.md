@@ -1,4 +1,5 @@
 ---
+recommend: 6
 authorship: human-only
 title: "Making the Xiaomi 17 My Daily Driver: Unlocking, Flashing, Rooting, and Hiding Root"
 description: "Unlocking the Xiaomi 17 bootloader, flashing a modified stock ROM, rooting and hiding root, and getting banking, payment, and proxy apps working normally again."

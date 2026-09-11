@@ -60,6 +60,9 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 		})
 		select('.post-cover, .travel-photos, .travel-map-col, #main-content > .article img', 'locale-stable', 'media')
 		select('.reading-preferences', 'locale-stable', 'preferences')
+		document.querySelectorAll<HTMLElement>('.z-comment .comment').forEach((comment) => {
+			mark(comment, comment.id, 'locale-stable')
+		})
 
 		document.querySelectorAll<HTMLElement>('.article-card, .travel-card, .article-item').forEach((card, index) => {
 			const link = card.matches('a') ? card : card.querySelector('a')
@@ -80,11 +83,22 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 	}
 
 	collect()
-	// Keep the paragraph/card crossing the top edge in place as translations reflow.
+	// Discussions have gaps between rows; prefer the first visible comment even
+	// when the paragraph anchor line falls in a gap.
 	for (const [key, rect] of anchors) {
-		if (rect.top <= 80 && rect.bottom > 80 && (!anchor || rect.top > anchorTop)) {
+		if (key.startsWith('comment-') && rect.top >= 0 && rect.top < window.innerHeight) {
 			anchor = key
 			anchorTop = rect.top
+			break
+		}
+	}
+	// Keep the paragraph/card crossing the top edge in place as translations reflow.
+	if (!anchor) {
+		for (const [key, rect] of anchors) {
+			if (rect.top <= 80 && rect.bottom > 80 && (!anchor || rect.top > anchorTop)) {
+				anchor = key
+				anchorTop = rect.top
+			}
 		}
 	}
 	root.classList.add('locale-motion')
@@ -104,6 +118,9 @@ export async function runLocaleMotion(update: () => Promise<void>) {
 		stopped = true
 		transition.skipTransition()
 		restoreStyles()
+		// Removing --entrance: none must not restart entrances after the snapshot.
+		document.querySelectorAll<HTMLElement>('[data-transition-enter]')
+			.forEach(element => element.dataset.nativeEntered = '')
 		root.classList.remove('locale-motion')
 		if (stopPrevious === stop)
 			stopPrevious = undefined

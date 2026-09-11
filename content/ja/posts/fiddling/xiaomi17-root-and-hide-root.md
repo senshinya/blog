@@ -1,4 +1,5 @@
 ---
+recommend: 6
 authorship: human-only
 title: "Xiaomi 17を普段使いに：ロック解除、ROM書き込み、root化とroot隠し"
 description: "Xiaomi 17のBootloaderを解除し、純正改変ROMを導入してrootを隠すまでの記録。銀行・決済アプリやプロキシを普段どおり使えるようにした手順もまとめます。"

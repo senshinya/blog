@@ -3,6 +3,16 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 const LOCALES = ['zh', 'en', 'ja'] as const
+
+test('memo language routes retain page identity without merging different memos or article locales', async () => {
+	const { localePageKey } = await import('./locale.ts')
+	assert.equal(localePageKey('/en/memos', LOCALES, 'zh'), '/memos')
+	assert.equal(localePageKey('/ja/memos/', LOCALES, 'zh'), '/memos')
+	assert.equal(localePageKey('/en/memos/AbC', LOCALES, 'zh'), '/memos/AbC')
+	assert.notEqual(localePageKey('/memos/AbC', LOCALES, 'zh'), localePageKey('/memos/abc', LOCALES, 'zh'))
+	assert.equal(localePageKey('/en/daily/post/', LOCALES, 'zh'), '/en/daily/post')
+	assert.equal(localePageKey('/en/memos-example', LOCALES, 'zh'), '/en/memos-example')
+})
 const MANIFEST = {
 	'/daily/gastritis': ['en', 'zh'],
 	'/friends': ['zh'],

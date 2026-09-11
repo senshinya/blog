@@ -174,7 +174,7 @@ const ja: MessageSchema = {
 			loading: '読み込み中…',
 			loadingMore: '読み込み中',
 			loadMore: 'もっと見る',
-			count: '全{n}件、これで全部です',
+			noMore: 'これで全部です',
 			notFound: 'この呟きは存在しません',
 			feedbackPrompt: 'この呟きに感想を聞かせてください',
 			image: '画像',
@@ -296,6 +296,7 @@ const ja: MessageSchema = {
 		},
 		blogLog: {
 			title: '更新履歴',
+			aiDisclosure: 'AI による執筆の明示を追加',
 			multilingual: '中国語・英語・日本語に対応、地図とコメントも多言語化',
 			commentMigration: 'コメントシステムを giscus から自前システムに移行',
 			contentMigration: 'Nuxt 4 + Nuxt Content v3 に移行、コンテンツは Markdown に回帰',
