@@ -32,7 +32,7 @@ const { locale } = useI18n()
 		display: flex;
 		flex-wrap: wrap;
 		gap: 5vw clamp(2rem, 5%, 5vw);
-		padding-block: 3rem;
+		padding-block: 0 3rem;
 
 		hgroup {
 			margin: 0.5em;

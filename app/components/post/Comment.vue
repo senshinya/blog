@@ -19,6 +19,6 @@ withDefaults(defineProps<{
 
 <style scoped>
 .z-comment {
-	margin: 3rem 1rem;
+	margin: 3rem 1rem 0;
 }
 </style>
