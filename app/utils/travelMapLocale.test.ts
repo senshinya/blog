@@ -1,8 +1,29 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 // eslint-disable-next-line test/no-import-node-test -- Use the project's built-in Node test runner.
 import test from 'node:test'
 import { createExpression, latest } from '@maplibre/maplibre-gl-style-spec'
+import { parseAllDocuments } from 'yaml'
 import { getTravelMapLabelField } from './travelMapLocale.ts'
+
+test('MapLibre resolutions exclude GHSA-jrc7-96c5-q579 affected versions', () => {
+	const documents = parseAllDocuments(readFileSync(new URL('../../pnpm-lock.yaml', import.meta.url), 'utf8'))
+	const packages = documents.flatMap(document => Object.keys(document.toJSON().packages ?? {}))
+		.filter(name => name.startsWith('maplibre-gl@'))
+	assert.ok(packages.length > 0)
+	for (const name of packages) {
+		const [major, minor, patch] = name.split('@')[1]!.split('.').map(Number)
+		assert.ok(major! > 6 || (major === 6 && (minor! > 4 || (minor === 4 && patch! >= 1))), `${name} is vulnerable`)
+	}
+})
+
+test('travel map configures the bundled v6 worker before creating a map', () => {
+	const source = readFileSync(new URL('../components/travel/Map.vue', import.meta.url), 'utf8')
+	assert.ok(source.includes('import workerUrl from \'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url\''))
+	const configureWorker = source.indexOf('maplibre.setWorkerUrl(workerUrl)')
+	assert.ok(configureWorker > source.indexOf('await import(\'maplibre-gl\')'))
+	assert.ok(configureWorker < source.indexOf('new maplibre.Map('))
+})
 
 function label(locale: string, properties: Record<string, string>) {
 	const compiled = createExpression(getTravelMapLabelField(locale), latest.layout_symbol['text-field'])

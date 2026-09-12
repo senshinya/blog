@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Map as MapLibreMap, Marker } from 'maplibre-gl'
 import type { TravelPhoto } from '~/types/travel'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { getTravelMapLabelField } from '~/utils/travelMapLocale'
 // 样式静态引入：它会跟着本组件的 CSS chunk 走，只有游记详情页会加载。
 // 不用 await import(...css)：Vite 的依赖预打包偶尔会让这条动态 CSS 路径取不到模块。
@@ -205,6 +206,7 @@ useVisibleTask(container, async (isActive) => {
 		if (!isActive() || !container.value)
 			return
 
+		maplibre.setWorkerUrl(workerUrl)
 		map = new maplibre.Map({
 			container: container.value!,
 			style: styleUrl(),
