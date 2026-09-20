@@ -107,6 +107,9 @@ useResourceFonts({ monospace: true })
 		font-family: var(--font-monospace);
 		font-size: 0.8rem;
 		color: var(--c-text-3);
+
+		/* 卡片被指到时这里会抬到 text-2（规则在 MemoCard），没有过渡就是硬切一下 */
+		transition: color 0.2s;
 	}
 }
 
