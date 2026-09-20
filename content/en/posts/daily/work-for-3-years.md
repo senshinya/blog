@@ -35,8 +35,9 @@ I kept working with that Beijing team. The platform was essentially for reportin
 
 I arrived just as the platform was going through a major release. A developer in Beijing guided me remotely. My initial tasks were small changes around the edges, mostly to learn the process.
 
-> [!TIP]
-> Initial requirements review → detailed requirements review → technical review, where engineering gets involved → development → showcase, where QA gets involved → testing → Launch Review → release
+::alert{type="tip"}
+Initial requirements review → detailed requirements review → technical review, where engineering gets involved → development → showcase, where QA gets involved → testing → Launch Review → release
+::
 
 Everything was orderly: one task after another, no distractions. At first, I didn't even know what to say in a technical review and would book a meeting room just to sit there stiffly. Later...
 
@@ -96,8 +97,9 @@ After losing weight alarmingly fast, 6 kg in a month, I took a hard look at thin
 
 Now I get up at 8:30, go to the office for breakfast, leave straight after dinner at six-something, run for half an hour after work, and try to get to bed before midnight. That last part is still a work in progress.
 
-> [!CAUTION]
-> Keep grinding? How am I supposed to do that if I grind myself into an early grave?
+::alert{type="warning"}
+Keep grinding? How am I supposed to do that if I grind myself into an early grave?
+::
 
 Fortunately, the upheaval also drove out quite a few product managers, and the workload dropped sharply. Management did switch to “if there's no work to stir up, stir up trouble for people,” adding yet more checkpoints and rules. Our current skip-level manager also has a distinctly Alibaba flavor, with a fondness for baffling team-building activities and personal talent shows. Another form of torture, really. Still, the platform now needs only occasional maintenance, and there aren't so many little things to deal with.
 
