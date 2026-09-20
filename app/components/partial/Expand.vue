@@ -15,7 +15,7 @@ const expand = defineModel<boolean>()
 		</div>
 	</Transition>
 
-	<button class="toggle-btn" :class="{ 'in-place': inPlace }" @click="expand = !expand">
+	<button class="toggle-btn sweep-hover" :class="{ 'in-place': inPlace }" @click="expand = !expand">
 		<Icon class="toggle-icon" :class="{ expand }" name="tabler:chevrons-down" />
 		<span>{{ expand ? $t('ui.expand.collapseLabel', { name }) : $t('ui.expand.expandLabel', { name }) }}</span>
 	</button>

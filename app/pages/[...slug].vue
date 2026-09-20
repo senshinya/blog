@@ -78,6 +78,9 @@ else {
 		tag="article"
 	/>
 
+	<!-- 紧跟 .article：命名时间轴只对后继兄弟可见。 -->
+	<PostProgress />
+
 	<PostSeries v-if="hasSeries" :path="post.path" />
 	<PostFooter v-bind="post" />
 	<PostSurround v-if="!hasSeries" />

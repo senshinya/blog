@@ -51,7 +51,9 @@ function createMediaHarness() {
 		URLSearchParams,
 		useTemplateRef: () => ref({ getBoundingClientRect: () => ({ height }) }),
 		useAppConfig: () => ({ title: 'Blog', bangumi: { uid: 'user', apiProxy: '' } }),
-		useI18n: () => ({ t: (key: string) => key }),
+		useI18n: () => ({ t: (key: string) => key, locale: ref('zh') }),
+		// 滑动指示器只做视觉，取数逻辑不依赖它；桩掉 DOM 测量即可。
+		useTabIndicator: () => ({ indicatorStyle: ref({}), indicatorReady: ref(false) }),
 		useEntranceDelay: () => () => ({}),
 		useSeoMeta: () => {},
 		useRoute: () => ({ query: {} }),

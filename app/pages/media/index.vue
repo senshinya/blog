@@ -6,7 +6,7 @@ const PAGE_SIZE = 20
 const BGM_API = 'https://api.bgm.tv/v0/users'
 
 const appConfig = useAppConfig()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const entranceDelay = useEntranceDelay()
 useSeoMeta({
 	title: () => t('page.media.title'),
@@ -45,6 +45,10 @@ const categories = computed(() => BGM_CATEGORIES.map(c => ({
 })))
 const category = computed(() => categories.value.find(c => c.key === categoryKey.value)!)
 const statusType = computed(() => BGM_STATUS_TYPES[BGM_STATUS_KEYS.indexOf(statusKey.value)]!)
+
+// 状态标签下的滑动指示器：跟着「当前状态 + 当前语言」重新测量（换语言会改变标签宽度）
+const statusTabs = useTemplateRef('status-tabs')
+const { indicatorStyle, indicatorReady } = useTabIndicator(statusTabs, () => [statusKey.value, categoryKey.value, locale.value])
 
 // 点击只写回 query（默认值省略以保持裸 /media；push 让每个组合可后退），状态由上面的 computed 派生
 function applyFilter(cat: string, stat: BgmStatusKey) {
@@ -178,7 +182,7 @@ watch([categoryKey, statusKey], reload)
 			</span>
 		</div>
 
-		<div class="filter-status">
+		<div ref="status-tabs" class="filter-status">
 			<button
 				v-for="label, i in category.statusLabels"
 				:key="i"
@@ -190,6 +194,14 @@ watch([categoryKey, statusKey], reload)
 			>
 				{{ label }}
 			</button>
+
+			<!-- 一条指示器服务三个标签，切换时滑过去；aria 状态已由 aria-pressed 表达 -->
+			<span
+				class="filter-status-indicator"
+				:style="indicatorStyle"
+				:data-ready="indicatorReady || undefined"
+				aria-hidden="true"
+			/>
 		</div>
 	</div>
 
@@ -306,15 +318,16 @@ watch([categoryKey, statusKey], reload)
 	font-variant-numeric: tabular-nums;
 }
 
+/* position: relative —— useTabIndicator 量的 offsetLeft 以此为原点 */
 .filter-status {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1.25em;
+	position: relative;
 	margin-top: 0.9rem;
 }
 
 .filter-status-tab {
-	position: relative;
 	padding: 0.1em 0;
 	background: none;
 	font-size: 0.85em;
@@ -330,22 +343,32 @@ watch([categoryKey, statusKey], reload)
 		font-weight: 550;
 		color: var(--c-primary);
 	}
+}
 
-	/* 激活项底部 2px 下划线，切换时淡入淡出 */
-	&::after {
-		content: "";
-		position: absolute;
-		opacity: 0;
-		inset-inline: 0;
-		bottom: -4px;
-		height: 2px;
-		border-radius: 2px;
-		background-color: var(--c-primary);
-		transition: opacity 0.2s;
+/* 三个标签共用这一条 2px 下划线。宽 1px，位置与宽度都靠 transform 表达， */
+/* 切换时它是滑过去的，而不是在新位置重新亮起来。 */
+.filter-status-indicator {
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline-start: 0;
+	width: 1px;
+	height: 2px;
+	/* 纵向位置由 useTabIndicator 量出的 offsetTop + offsetHeight 给出，这里只补下沉距离 */
+	margin-block-start: 4px;
+	background-color: var(--c-primary);
+	transform-origin: left center;
+	transition: opacity 0.2s;
+	pointer-events: none;
+
+	/* 首帧就位后才接管 transform，避免开局从最左侧滑入 */
+	&[data-ready] {
+		transition: transform var(--motion-duration) var(--motion-easing), opacity 0.2s;
 	}
 
-	&.active::after {
-		opacity: 1;
+	@media (prefers-reduced-motion: reduce) {
+		&, &[data-ready] {
+			transition: none;
+		}
 	}
 }
 

@@ -49,7 +49,7 @@ useResourceFonts(() => ({ monospace: !!memos.value.length }))
 <template>
 <BlogWidget card :class="{ 'skip-entrance': skipEntrance }" :title="$t('widget.memos.title')">
 	<template #action>
-		<UtilLink :to="buildPath('/memos', locale, 'zh')" class="more">
+		<UtilLink :to="buildPath('/memos', locale, 'zh')" class="more sweep-hover">
 			{{ $t('widget.memos.viewAll') }}<Icon name="tabler:chevron-right" />
 		</UtilLink>
 	</template>
@@ -163,11 +163,9 @@ useResourceFonts(() => ({ monospace: !!memos.value.length }))
 .more {
 	display: flex;
 	align-items: center;
+	/* 抵消 .sweep-hover 的 padding-inline，文字仍与卡片右缘对齐 */
+	margin-inline-end: -0.4em;
 	font-size: 0.85em;
 	color: var(--c-text-3);
-
-	&:hover {
-		color: var(--c-primary);
-	}
 }
 </style>

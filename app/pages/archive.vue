@@ -81,46 +81,48 @@ function getArticleYear(article: ArticleProps) {
 		</ZSecret>
 	</PostFilter>
 
-	<UtilListTransition v-slot="{ items }" :items="listGrouped">
-		<section
-			v-for="[year, yearGroup] in items"
-			:key="year"
-			class="archive-group"
-			:class="{ 'hide-info': column > 1 }"
-			:style="{
-				'--archive-item-gap': `${spacing}em`,
-				'--archive-item-column': column,
-			}"
-		>
-			<div class="archive-title" :data-list-key="`year:${year}`">
-				<h2 class="archive-year">
-					{{ year }}
-				</h2>
+	<PostArchivePreview>
+		<UtilListTransition v-slot="{ items }" :items="listGrouped">
+			<section
+				v-for="[year, yearGroup] in items"
+				:key="year"
+				class="archive-group"
+				:class="{ 'hide-info': column > 1 }"
+				:style="{
+					'--archive-item-gap': `${spacing}em`,
+					'--archive-item-column': column,
+				}"
+			>
+				<div class="archive-title" :data-list-key="`year:${year}`">
+					<h2 class="archive-year">
+						{{ year }}
+					</h2>
 
-				<div v-if="birthYear" class="archive-age">
-					<span>{{ Number(year) - birthYear }}</span>
-					<span class="age-label">{{ $t('page.archive.age') }}</span>
+					<div v-if="birthYear" class="archive-age">
+						<span>{{ Number(year) - birthYear }}</span>
+						<span class="age-label">{{ $t('page.archive.age') }}</span>
+					</div>
+
+					<div class="archive-info">
+						<span>{{ $t('post.words', { n: yearlyWordCount[year] }) }}</span>
+						<span>{{ $t('page.archive.postCount', { n: yearGroup?.length }, yearGroup?.length ?? 0) }}</span>
+					</div>
 				</div>
 
-				<div class="archive-info">
-					<span>{{ $t('post.words', { n: yearlyWordCount[year] }) }}</span>
-					<span>{{ $t('page.archive.postCount', { n: yearGroup?.length }, yearGroup?.length ?? 0) }}</span>
-				</div>
-			</div>
-
-			<menu class="archive-list">
-				<PostArchive
-					v-for="article, index in yearGroup"
-					:key="article.path"
-					:data-list-key="article.path"
-					v-bind="article"
-					:to="resolveContentPath(article.path, locale)"
-					:show-category="column < 3"
-					:style="entranceDelay(index * 0.03)"
-				/>
-			</menu>
-		</section>
-	</UtilListTransition>
+				<menu class="archive-list">
+					<PostArchive
+						v-for="article, index in yearGroup"
+						:key="article.path"
+						:data-list-key="article.path"
+						v-bind="article"
+						:to="resolveContentPath(article.path, locale)"
+						:show-category="column < 3"
+						:style="entranceDelay(index * 0.03)"
+					/>
+				</menu>
+			</section>
+		</UtilListTransition>
+	</PostArchivePreview>
 
 	<div v-if="showTuning" ref="tuning-panel" class="archive-tuning card">
 		<ZSlider

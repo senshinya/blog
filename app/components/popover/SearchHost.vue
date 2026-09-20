@@ -18,7 +18,7 @@ function finishLeave() {
 
 <template>
 <Transition>
-	<div v-if="open" class="bikariya-overlay" :style="{ zIndex: zIndex - 1 }" @click="layoutStore.close" />
+	<div v-if="open" class="bikariya-overlay search-overlay" :style="{ zIndex: zIndex - 1 }" @click="layoutStore.close" />
 </Transition>
 <LazyPopoverSearch
 	v-if="mounted"
@@ -28,3 +28,15 @@ function finishLeave() {
 	@after-leave="finishLeave"
 />
 </template>
+
+<style scoped>
+/* 面板重虚化、遮罩轻虚化，两级景深把注意力压到搜索框上。 */
+/* 全屏 backdrop-filter 在低功耗设备上是笔真开销，移动端直接省掉这一层。 */
+.search-overlay {
+	backdrop-filter: blur(2px);
+
+	@media (max-width: 768px) {
+		backdrop-filter: none;
+	}
+}
+</style>

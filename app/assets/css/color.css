@@ -10,6 +10,7 @@
 	--c-bg-2: hsl(var(--hue-theme) 10% 95%);
 	--c-bg-3: hsl(var(--hue-theme) 10% 92%);
 	--c-bg-soft: hsl(var(--hue-theme) 20% 20% / 10%);
+	--c-dot: hsl(var(--hue-theme) 20% 20% / 6%);
 	--c-border: hsl(var(--hue-theme) 10% 91%);
 	--c-bg-a50: hsl(var(--hue-theme) 20% 98% / 50%);
 	--c-bg-a80: hsl(var(--hue-theme) 20% 98% / 80%);
@@ -40,6 +41,7 @@
 	--c-bg-2: hsl(var(--hue-theme) 10% 14%);
 	--c-bg-3: hsl(var(--hue-theme) 10% 18%);
 	--c-bg-soft: hsl(var(--hue-theme) 100% 95% / 15%);
+	--c-dot: hsl(var(--hue-theme) 100% 95% / 7%);
 	--c-border: hsl(var(--hue-theme) 10% 20%);
 	--c-bg-a50: hsl(var(--hue-theme) 10% 10% / 50%);
 	--c-bg-a80: hsl(var(--hue-theme) 10% 10% / 80%);

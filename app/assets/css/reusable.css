@@ -39,6 +39,65 @@
 	}
 }
 
+/* 次要入口的 hover 手感：底色沿阅读方向扫入，尾随图标让出半步。 */
+/* 只给"末位图标"加位移：ZExpand 那类图标在前的按钮会自动只拿到扫光，不会和它自己的翻转打架。 */
+.sweep-hover {
+	position: relative;
+	padding-inline: 0.4em;
+	border-radius: 0.4em;
+	transition: color 0.2s;
+	isolation: isolate;
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: -0.15em -0.05em;
+		border-radius: inherit;
+		background-color: var(--c-primary-soft);
+		transform: scaleX(0);
+		transform-origin: var(--start) center;
+		transition: transform 0.25s var(--motion-easing);
+		z-index: -1;
+	}
+
+	> .iconify:last-child {
+		transition: translate 0.25s var(--motion-easing);
+	}
+
+	&:focus-visible {
+		color: var(--c-primary);
+
+		&::before {
+			transform: scaleX(1);
+		}
+
+		> .iconify:last-child {
+			translate: calc(0.2em * var(--dir));
+		}
+	}
+
+	/* 触摸屏上 hover 会黏住，限定指针设备。 */
+	@media (hover: hover) {
+		&:hover {
+			color: var(--c-primary);
+
+			&::before {
+				transform: scaleX(1);
+			}
+
+			> .iconify:last-child {
+				translate: calc(0.2em * var(--dir));
+			}
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&::before, > .iconify:last-child {
+			transition: none;
+		}
+	}
+}
+
 .scrollbar-hidden.scrollbar-hidden {
 	--scrollbar-height: 0px;
 	--guessed-scrollbar-width: 0px;

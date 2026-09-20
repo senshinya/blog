@@ -8,7 +8,8 @@ defineProps<{
 </script>
 
 <template>
-<li class="article-item" data-transition-enter>
+<!-- data-cover 供 PostArchivePreview 事件委托取用；没有封面的文章不带此属性，自然不触发 -->
+<li class="article-item" data-transition-enter :data-cover="image">
 	<UtilDate class="dim-hover" :date format="monthDay" />
 
 	<div class="gradient-card" :style="{ '--c-accent': getCategoryColor(categories?.[0]) }">

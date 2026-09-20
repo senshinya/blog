@@ -184,7 +184,25 @@ function openActiveItem() {
 	border-radius: 1em;
 	box-shadow: var(--box-shadow-2), var(--box-shadow-3);
 	outline: 0.2em solid var(--c-primary-soft);
-	background-color: var(--ld-bg-card);
+	/* 半透明面板 + 背后虚化：页面透出一点，面板才像浮在上面的一层，而不是一个贴图对话框。 */
+	/* 不用 --ld-bg-blur：它在浅色下是不透明的，虚化会白做。--c-bg-a80 两套配色都带透明度。 */
+	background-color: var(--c-bg-a80);
+	backdrop-filter: blur(1rem) saturate(1.5);
+}
+
+/* 结果逐条浮入。列表按 item.id 复用 DOM，故连续输入时只有真正新增的条目会播， */
+/* 留下的条目原地不动。延迟封顶 8 档，避免长列表末尾等得发木。 */
+.search-result > :deep(.search-item) {
+	animation: search-item-in 0.22s var(--motion-easing) backwards;
+	animation-delay: calc(min(sibling-index() - 1, 8) * 0.02s);
+}
+
+/* 不支持 sibling-index() 时整条 animation-delay 失效，退化成无错峰的同步浮入。 */
+@keyframes search-item-in {
+	from {
+		opacity: 0;
+		translate: 0 6px;
+	}
 }
 
 .search-popover-enter-active,
