@@ -14,7 +14,6 @@ const session = useCommentSession()
 const { user, epoch: sessionEpoch } = session
 const sessionScope = useCommentSessionScope(sessionEpoch)
 const sessionKey = computed(() => `${sessionEpoch.value}:${user.value?.id ?? 'anonymous'}`)
-const cardEl = useTemplateRef('card')
 
 /**
  * page key 与详情页、与 /api/pages/counts 用的是同一个值，
@@ -104,25 +103,13 @@ const reactions = computed(() => reacted.value?.reactions ?? page.value?.reactio
 const viewerReactions = computed(() => reacted.value?.viewer_reactions ?? page.value?.viewer_reactions ?? props.viewerReactions)
 
 /**
- * 零互动的碎语不留页脚的高度。这类占了列表的绝大多数，留一条空条等于每张卡片
- * 底下白挂一截；鼠标移上来才长出来。
+ * 高度过渡。卡片会在两个时刻变高矮：展开/收起评论、线程取数落定。
  *
- * 触屏没有 hover，那种设备上只能常驻，否则这些条目等于没有入口
- * （同 .ghost 在 @media (hover: none) 下的处理）。
- */
-const hasFoot = computed(() => expanded.value
-	|| count.value.comments > 0
-	|| Object.keys(reactions.value).length > 0)
-
-const hovered = useElementHover(cardEl)
-// 查 (hover: none) 而不是 (hover: hover)：媒体查询在服务端一律为 false，
-// 后者会让预渲染的 HTML 里所有页脚都是展开的，水合后再齐刷刷收回去闪一下
-const noHover = useMediaQuery('(hover: none)')
-const showFoot = computed(() => hasFoot.value || hovered.value || noHover.value)
-
-/**
- * 高度过渡。卡片会在三个时刻变高矮：计数到位后页脚浮现、展开/收起评论、
- * 线程取数落定。量出内容真实高度再过渡，而不是猜一个 max-height ——
+ * 页脚不在其列 —— 它常驻。先前是零互动的碎语把 .tail 压到 height: 0、鼠标移上去才长出来，
+ * 省下了那条空带，代价是纵向扫过列表时每张卡片依次撑开又收回，下面的内容一路被推着走。
+ * 现在高度不参与 hover，浮现交给标签折叠与变色（见 style），位移恒为零。
+ *
+ * 量出内容真实高度再过渡，而不是猜一个 max-height ——
  * 猜小了截断，猜大了缓动会提前跑完、动画尾巴发木。（同 widget/Memos.vue 的做法。）
  *
  * 测量出来之前不落 style，保持 auto：ResizeObserver 的回调挂在渲染流水线上，
@@ -130,8 +117,7 @@ const showFoot = computed(() => hasFoot.value || hovered.value || noHover.value)
  * 而 auto 只是少一次进场动画。
  */
 const tailEl = useTemplateRef('tail')
-// offsetHeight 是 border-box，把 .tail-in 自己的 padding-top 一起算进去。
-// 那段间距不能靠 .memo 的 gap —— gap 在容器高度归零时仍然占位
+// offsetHeight 是 border-box，把 .tail-in 自己的 padding-top 一起算进去
 const tailHeight = ref(0)
 
 function measureTail() {
@@ -146,13 +132,10 @@ useResizeObserver(tailEl, measureTail)
  * Vue 挂载评论区是同步的，而 RO 要等到这一帧渲染结束才回调。中间那一拍里
  * .tail 还钉在「只有页脚」的旧高度上，overflow: hidden 会把新挂上的东西整个裁掉。
  */
-watch([expanded, showFoot], () => nextTick(measureTail))
+watch(expanded, () => nextTick(measureTail))
 
-const tailStyle = computed(() => {
-	if (!showFoot.value)
-		return { height: '0px' }
-	return tailHeight.value ? { height: `${tailHeight.value}px` } : undefined
-})
+const tailStyle = computed(() =>
+	tailHeight.value ? { height: `${tailHeight.value}px` } : undefined)
 
 // 不滚动：评论区就长在刚按下的那个按钮正下方，滚一下反而会把页脚推出视口。
 // （giscus 时代要滚，是因为反应栏藏在 iframe 里、离得远。）
@@ -171,7 +154,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 
 <template>
 <!-- id 供侧栏 widget 的 /memos#<id> 深链跳转 -->
-<component :is="props.tag ?? 'li'" :id ref="card" class="memo" data-transition-enter>
+<component :is="props.tag ?? 'li'" :id class="memo" data-transition-enter>
 	<MemoBody
 		:id="props.id"
 		:blocks="props.blocks"
@@ -181,8 +164,7 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 		:tags="props.tags"
 	/>
 
-	<!-- 页脚和评论区一起装在这个高度可变的容器里，任何一处变化都走同一条过渡。
-		始终渲染而不是 v-if：要能量到高度，才有得从 0 过渡过去 -->
+	<!-- 页脚和评论区一起装在这个高度可变的容器里，展开/收起走同一条过渡 -->
 	<div class="tail" :style="tailStyle">
 		<div ref="tail" class="tail-in">
 			<footer class="memo-foot">
@@ -205,7 +187,8 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 					@click="expanded ? expanded = false : open()"
 				>
 					<Icon :name="expanded ? 'tabler:chevron-up' : 'tabler:message-circle'" />
-					<span>{{ expanded ? $t('memo.collapse') : (count.comments || $t('memo.comments')) }}</span>
+					<!-- 有数字就是数据，常驻；没有时那两个字只是占位标签，静息收起只留图标 -->
+					<span :class="{ label: !expanded && !count.comments }">{{ expanded ? $t('memo.collapse') : (count.comments || $t('memo.comments')) }}</span>
 				</button>
 			</footer>
 
@@ -227,8 +210,8 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	display: flex;
 	flex-direction: column;
 
-	/* 不用 gap：.tail 高度归零时 gap 仍然占位，零互动的卡片底下就还留着一条缝。 */
-	/* 那 0.5rem 挪进 .tail-in 的 padding，跟着一起被裁掉 */
+	/* 不用 gap：收起评论区时 .tail 的高度过渡回页脚那一档，而 gap 不参与过渡、全程占着 */
+	/* 固定的一条，收尾那一帧会看见它突然接上。那 0.5rem 挪进 .tail-in 的 padding */
 	gap: 0;
 	margin-bottom: 1rem;
 	padding: 1rem;
@@ -276,7 +259,9 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 .comments {
 	display: flex;
 	align-items: center;
-	gap: 3px;
+
+	/* 那 3px 挂在 span 自己身上，不放在 gap 里 —— 标签收起后 gap 仍然占位，图标会右移 3px */
+	gap: 0;
 	margin-inline-start: auto;
 	padding: 2px;
 	background: none;
@@ -289,8 +274,53 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	}
 
 	> span {
+		margin-inline-start: 3px;
 		font-variant-numeric: tabular-nums;
 	}
+
+	/* 「评论」两个字是占位标签，不是数据 —— 有评论数时这里是数字，常驻； */
+	/* 没有时静息只留图标，鼠标移上来才展开。 */
+	/* 折叠靠 max-width 与 margin 一起归零，同 comment.css 里 reaction tray 的手法。 */
+	/* 用 max-width 而不是 display: none：标签仍在流里，line-height 照旧撑着按钮高度， */
+	/* 图标的上下位置一格不动 */
+	> span.label {
+		display: inline-block;
+		overflow: hidden;
+		opacity: 0;
+		max-width: 0;
+		margin-inline-start: 0;
+		white-space: nowrap;
+
+		/* 0.3s 是这套界面里「浮现」的速度，与上面 .tail 的高度过渡同档 */
+		/* 0.2s 那一档留给变色 */
+		transition: max-width 0.3s, margin-inline-start 0.3s, opacity 0.3s;
+	}
+}
+
+.memo:hover .comments > span.label,
+.comments:focus-visible > span.label {
+	opacity: 1;
+	max-width: 4em;
+	margin-inline-start: 3px;
+}
+
+/* 触屏没有 hover，标签得常驻，否则这个入口只剩一个没有说明的图标 */
+@media (hover: none) {
+	.comments > span.label {
+		opacity: 1;
+		max-width: 4em;
+		margin-inline-start: 3px;
+	}
+}
+
+/* 两级反馈：指针落在卡片上，日期与整排控件一起从 text-3 抬到 text-2； */
+/* 指针再落到其中某一个上，那一个才转主色。 */
+/* :not(:hover):not(:focus-visible) 是把第二级让出去 —— chip 与 date-link 的 hover */
+/* 分别写在 comment.css 和 MemoBody 里，源码顺序不由这里决定，光靠特异度赢不稳 */
+.memo:hover :deep(.date-link:not(:hover) > .date),
+.memo:hover :deep(.c-reactions .chip:not(.on):not(:hover):not(:focus-visible)),
+.memo:hover .comments:not(:hover):not(:focus-visible) {
+	color: var(--c-text-2);
 }
 
 /* 卡片有自己的描边环，评论区落在卡片底色上而不是页面底色上 —— */
