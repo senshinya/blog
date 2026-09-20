@@ -192,7 +192,9 @@ useEventListener(carouselEl, 'wheel', (e) => {
 		opacity: 0;
 		inset: 0;
 		padding: 1em;
-		backdrop-filter: brightness(0.8) saturate(10) contrast(0.8) blur(2em);
+		/* 蒙版色取自封面本身（blur 先糊成均色，saturate 再提纯）。 */
+		/* 饱和度曾是 10：封面里极淡的色偏会被放大十倍，同一组图看起来像在随机换色。 */
+		backdrop-filter: brightness(0.8) saturate(3) contrast(0.8) blur(2em);
 
 		> .title {
 			text-wrap: balance;
