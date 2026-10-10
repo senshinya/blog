@@ -323,11 +323,10 @@ function onReaction(payload: { reactions: Record<string, number>, viewer_reactio
 	color: var(--c-text-2);
 }
 
-/* 卡片有自己的描边环，评论区落在卡片底色上而不是页面底色上 —— */
-/* 导线、折叠钮、长正文渐隐都要用它，故在这里重新声明一次 */
+/* 卡片只有描边环、没有底色，评论区脚下仍是页面底色，--surface 沿用 comment.css 的默认值。 */
+/* 别在这里改成 --ld-bg-card：暗色下它比页面底色亮一档，最后一条回复左侧的不透明补丁 */
+/* （.branchline）和折叠钮都会变成一块灰色色块 */
 .memo-thread {
-	--surface: var(--ld-bg-card);
-
 	padding-top: 1rem;
 	border-top: 1px solid var(--c-border);
 }
