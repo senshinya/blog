@@ -2,6 +2,11 @@ export interface TravelPhoto {
 	src: string
 	alt: string
 	caption?: string
+	/**
+	 * 实况照片的动态部分：H.264 编码、去掉音轨、faststart 的 MP4。
+	 * `src` 仍然要填，它是这段视频的封面，缩略图、地图 popup、LQIP 和宽高都取它的。
+	 */
+	video?: string
 	lat?: number
 	lng?: number
 }

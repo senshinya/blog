@@ -58,6 +58,9 @@ const viewerOpen = ref(false)
 const viewerPhotos = computed(() => travel.days[viewerScreen.value]?.photos ?? [])
 const viewerPhoto = computed(() => viewerPhotos.value[viewerIndex.value])
 
+/** 偏好减少动态时，实况照片不自动播放，改给出播放控件让人自己点 */
+const reducedMotion = usePreferredReducedMotion()
+
 /** 地图要聚焦的照片：看图器开着时就是它正在看的那张 */
 const focusedPhoto = computed(() => viewerOpen.value ? viewerPhoto.value : undefined)
 
@@ -353,7 +356,26 @@ function startsNewDay(index: number) {
 						（游记别处的图都有 aspect-ratio 的盒子兜着，不跳；正文那 37 张则跳得更凶。）
 						--lqip 只是在占好的位置上先糊一层主色，它本身修不了跳变。
 					-->
+					<!-- 实况照片：封面就是 src 那张图，宽高和 LQIP 也取它的，占位与静图一致 -->
+					<video
+						v-if="viewerPhoto.video"
+						:key="viewerPhoto.video"
+						class="travel-viewer-img"
+						:src="viewerPhoto.video"
+						:poster="getTravelImg(viewerPhoto.src, TravelImgWidth.viewer)"
+						:aria-label="viewerPhoto.alt"
+						:width="getImgMeta(viewerPhoto.src)?.w"
+						:height="getImgMeta(viewerPhoto.src)?.h"
+						:style="getLqipStyle(viewerPhoto.src)"
+						:autoplay="reducedMotion !== 'reduce'"
+						:controls="reducedMotion === 'reduce'"
+						muted
+						loop
+						playsinline
+						disablepictureinpicture
+					/>
 					<img
+						v-else
 						:key="viewerPhoto.src"
 						class="travel-viewer-img"
 						:src="getTravelImg(viewerPhoto.src, TravelImgWidth.viewer)"
@@ -803,7 +825,8 @@ function startsNewDay(index: number) {
 }
 @media (prefers-reduced-motion: reduce) {
 	.travel-scroll-hint,
-	.travel-viewer img {
+	.travel-viewer img,
+	.travel-viewer video {
 		animation: none !important;
 	}
 
