@@ -107,8 +107,11 @@ async function collectUrls() {
 	for (const dir of SCAN_DIRS) {
 		for (const file of await walk(dir)) {
 			const text = await fs.readFile(file, 'utf-8')
-			for (const url of text.match(pattern) ?? [])
-				urls.add(url)
+			for (const url of text.match(pattern) ?? []) {
+				// 游记实况照片的 video: 也在这个图床上，但 Transformations 不处理视频
+				if (!/\.(?:mp4|mov|webm)$/i.test(url))
+					urls.add(url)
+			}
 		}
 	}
 

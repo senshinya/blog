@@ -58,6 +58,9 @@ const viewerOpen = ref(false)
 const viewerPhotos = computed(() => travel.days[viewerScreen.value]?.photos ?? [])
 const viewerPhoto = computed(() => viewerPhotos.value[viewerIndex.value])
 
+/** 偏好减少动态时，实况照片和视频都不自动播放，实况照片改为给出播放控件让人自己点 */
+const reducedMotion = usePreferredReducedMotion()
+
 /** 地图要聚焦的照片：看图器开着时就是它正在看的那张 */
 const focusedPhoto = computed(() => viewerOpen.value ? viewerPhoto.value : undefined)
 
@@ -353,7 +356,45 @@ function startsNewDay(index: number) {
 						（游记别处的图都有 aspect-ratio 的盒子兜着，不跳；正文那 37 张则跳得更凶。）
 						--lqip 只是在占好的位置上先糊一层主色，它本身修不了跳变。
 					-->
+					<!--
+						独立视频：点开缩略图本身就是一次用户手势，带声音的自动播放一般放行；
+						滚轮、方向键翻过来的那一张若被浏览器拦下，就停在封面上，控件里点一下即可。
+					-->
+					<video
+						v-if="viewerPhoto.video"
+						:key="viewerPhoto.video"
+						class="travel-viewer-img"
+						:src="viewerPhoto.video"
+						:poster="getTravelImg(viewerPhoto.src, TravelImgWidth.viewer)"
+						:aria-label="viewerPhoto.alt"
+						:width="getImgMeta(viewerPhoto.src)?.w"
+						:height="getImgMeta(viewerPhoto.src)?.h"
+						:style="getLqipStyle(viewerPhoto.src)"
+						:autoplay="reducedMotion !== 'reduce'"
+						controls
+						playsinline
+						preload="metadata"
+					/>
+					<!-- 实况照片：封面就是 src 那张图，宽高和 LQIP 也取它的，占位与静图一致 -->
+					<video
+						v-else-if="viewerPhoto.live"
+						:key="viewerPhoto.live"
+						class="travel-viewer-img"
+						:src="viewerPhoto.live"
+						:poster="getTravelImg(viewerPhoto.src, TravelImgWidth.viewer)"
+						:aria-label="viewerPhoto.alt"
+						:width="getImgMeta(viewerPhoto.src)?.w"
+						:height="getImgMeta(viewerPhoto.src)?.h"
+						:style="getLqipStyle(viewerPhoto.src)"
+						:autoplay="reducedMotion !== 'reduce'"
+						:controls="reducedMotion === 'reduce'"
+						muted
+						loop
+						playsinline
+						disablepictureinpicture
+					/>
 					<img
+						v-else
 						:key="viewerPhoto.src"
 						class="travel-viewer-img"
 						:src="getTravelImg(viewerPhoto.src, TravelImgWidth.viewer)"
@@ -803,7 +844,8 @@ function startsNewDay(index: number) {
 }
 @media (prefers-reduced-motion: reduce) {
 	.travel-scroll-hint,
-	.travel-viewer img {
+	.travel-viewer img,
+	.travel-viewer video {
 		animation: none !important;
 	}
 

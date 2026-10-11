@@ -2,6 +2,18 @@ export interface TravelPhoto {
 	src: string
 	alt: string
 	caption?: string
+	/**
+	 * 实况照片的动态部分：H.264 编码、去掉音轨、faststart 的 MP4。
+	 * 缩略图悬停时、看图器里静音循环播放，像一张会动的照片。
+	 */
+	live?: string
+	/**
+	 * 独立视频：H.264 + AAC、faststart 的 MP4。保留声音，看图器里带播放控件，不循环。
+	 * 与 `live` 二选一，同时填时按视频处理。
+	 *
+	 * 两种情况下 `src` 都要填，它是封面：缩略图、地图 popup、LQIP 和宽高都取它的。
+	 */
+	video?: string
 	lat?: number
 	lng?: number
 }
