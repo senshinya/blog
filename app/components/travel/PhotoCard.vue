@@ -14,13 +14,16 @@ defineEmits<{
 }>()
 
 // 实况照片在缩略图上只在鼠标悬停时播放：一屏十几个视频同时自动播放，带宽和解码都扛不住。
-// 触屏没有悬停，点开看图器就会播放
+// 触屏没有悬停，点开看图器就会播放。独立视频不做悬停预览：它可能很长，
+// 又带声音，缩略图上只给一个播放角标，点开再看
+const live = computed(() => props.photo.video ? undefined : props.photo.live)
+
 const playing = ref(false)
 /** 视频真正出帧之后才显示，缓冲期间露的是封面 */
 const ready = ref(false)
 
 function onPointerEnter(event: PointerEvent) {
-	if (props.photo.video && event.pointerType === 'mouse')
+	if (live.value && event.pointerType === 'mouse')
 		playing.value = true
 }
 
@@ -47,7 +50,7 @@ function onPointerLeave() {
 	<video
 		v-if="playing"
 		:class="{ ready }"
-		:src="photo.video"
+		:src="live"
 		muted
 		loop
 		autoplay
@@ -57,7 +60,11 @@ function onPointerLeave() {
 		@playing="ready = true"
 		@click="$emit('open')"
 	/>
-	<Icon v-if="photo.video" class="travel-photo-live" name="tabler:live-photo" />
+	<!-- 圆底单独套一层：图标是 CSS mask 画的，背景色就是它的笔色，不能直接给它上底色 -->
+	<span v-if="photo.video" class="travel-photo-play">
+		<Icon name="tabler:player-play-filled" />
+	</span>
+	<Icon v-else-if="photo.live" class="travel-photo-live" name="tabler:live-photo" />
 	<!-- aria-hidden：这行字和 img 的 alt 是同一句，读屏会念两遍 -->
 	<span v-if="photo.alt" class="travel-photo-alt" aria-hidden>{{ photo.alt }}</span>
 </li>
@@ -119,6 +126,22 @@ function onPointerLeave() {
 	font-size: 1.1rem;
 	color: #FFF;
 	filter: drop-shadow(0 0 0.15rem #0009);
+	pointer-events: none;
+}
+
+/* 独立视频：居中一个播放钮，一眼就和照片、实况照片分开 */
+.travel-photo-play {
+	display: flex;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	padding: 0.5rem;
+	border-radius: 50%;
+	background-color: #0006;
+	backdrop-filter: blur(0.3rem);
+	font-size: 1.6rem;
+	color: #FFF;
+	translate: -50% -50%;
 	pointer-events: none;
 }
 
