@@ -8,10 +8,13 @@ description: |-
   于是，我们就去了日本。
 published: 2025-05-19
 totaldays: 3
-coverImage: https://blog-img.774352199.xyz/X1lM9m.webp
+coverImage: https://blog-img.774352199.xyz/46z6bG.png
+coverCaption: 春日大社
+ending: 快乐的时光总是匆匆。
 days:
   - day: 0
     title: 浦东机场的不眠之夜
+    shortTitle: 不眠之夜
     descriptions:
       - 周五晚上一下班就乘高铁前往上海浦东机场，机票定在了周六早上六点。头一次赶这么早的飞机，毫无经验，订了一家离机场很远的酒店，最后一合计，得，不如在机场凑合一夜了。
       - 如果我能提前知道在浦东机场过夜有多么困难，我宁愿在酒店躺上几个小时，也不愿意在硬板凳上坐到天亮。
@@ -49,35 +52,42 @@ days:
         lng: 121.808594
   - day: 1
     title: 云上
+    shortTitle: 云上
     descriptions:
       - 🛫 ——> 🛬
       - 第二次尝试睡觉失败
       - 本身就是一个睡眠浅的人，发动机的轰鸣声、飞机的震动，都让我无法入睡，只得对着窗外发呆。S 君和 K 君倒是睡得很熟，年轻就是好，倒头就睡
     photos:
       - src: https://blog-img.774352199.xyz/2s45dj.webp
+        mapView: day
         alt: 起飞 🛫 咯
         caption: 最喜欢这样阴云密布的天气起飞，这意味着飞机会穿过云层，飞到云海之上
         lat: 31.15092
         lng: 121.809425
       - src: https://blog-img.774352199.xyz/FByyUH.webp
+        mapView: day
         alt: 云上，但不是贵州
         lat: 30.9678027
         lng: 122.13342
       - src: https://blog-img.774352199.xyz/PhKuO2.webp
+        mapView: day
         alt: 云上其二
         lat: 30.9699416
         lng: 122.14048
       - src: https://blog-img.774352199.xyz/8wSA4R.webp
+        mapView: day
         alt: 小岛
         caption: 百无聊赖地飞了半天后看到的第一片小岛
         lat: 32.8994638
         lng: 129.580627
       - src: https://blog-img.774352199.xyz/HAAY0y.webp
+        mapView: day
         alt: 四国岛其一
         caption: 终于看到了大片的陆地，飞到四国岛上空了
         lat: 34.1282
         lng: 134.566483
       - src: https://blog-img.774352199.xyz/gRislE.webp
+        mapView: day
         alt: 四国岛其二
         caption: 日本的地形确实很不平坦，大片连绵起伏的山峦，只有少数连成一片的平原。日本的城市规模都比较小，一小片平原上可能就能挤下三四座城市，在中国大概就是一个城市及其下属区县的范围
         lat: 34.2280305
@@ -94,6 +104,7 @@ days:
         lng: 135.3321027
   - day: 1
     title: 我大抵确实是醒着的罢
+    shortTitle: 京都散步
     descriptions:
       - 由于日本的宾馆只能下午三点入住的落后规定，三人开始在京都四处流浪
       - 人已经没意识了，但身体还在四处溜达
@@ -144,6 +155,7 @@ days:
         lng: 135.7615305
   - day: 2
     title: 🦌 城奈良 —— 春日大社和东大寺
+    shortTitle: 奈良与鹿
     descriptions:
       - 关西娱乐体验游必去的一站就是奈良，和自然亲密接触
       - 整座城市都充满了独特的自然气息 —— 鹿便便味
@@ -205,6 +217,7 @@ days:
         lng: 135.8396138
   - day: 2
     title: 若草山上便便多
+    shortTitle: 若草山
     descriptions:
       - 从东大寺出门向东南方向往山上走，就是若草山了
       - 🍠 意义上的若草山范围很小，只有面朝西侧的一个小坡。整个坡几乎没有可以坐下的地方，全是🦌便便。身在坡上，耳中所闻皆是中文，和在国内一样
@@ -251,6 +264,7 @@ days:
         lng: 135.828862
   - day: 3
     title: 当归
+    shortTitle: 当归
     descriptions:
       - 最后一天倒是没有特别的规划，于是把最后一天定为血拼日
       - 快乐的时光总是匆匆，仿佛是不愿我们离去，飞机专门晚点了四个小时

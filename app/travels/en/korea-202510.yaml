@@ -171,26 +171,31 @@ days:
         lat: 35.161683
         lng: 129.160558
       - src: https://blog-img.774352199.xyz/8ZSo2E.jpg
+        mapView: day
         alt: The Songdo cable car and the coast
         caption: 'The car left the station and the hillside, the water and the city opposite opened out together.'
         lat: 35.070572
         lng: 129.022419
       - src: https://blog-img.774352199.xyz/nysbC8.jpg
+        mapView: day
         alt: A cable car coming the other way
         caption: 'Another cabin slid past in front of the rocks, adding a little movement to an otherwise still seascape.'
         lat: 35.070572
         lng: 129.022419
       - src: https://blog-img.774352199.xyz/fy4Cp5.jpg
+        mapView: day
         alt: Feet in a glass-floored cabin
         caption: The sea is directly under the glass. My feet knew it was safe; my eyes were less convinced.
         lat: 35.067303
         lng: 129.021761
       - src: https://blog-img.774352199.xyz/Eau0rl.jpg
+        mapView: day
         alt: The cable line towards the city
         caption: The line points straight at the skyline. You can see the destination; judging the distance is harder.
         lat: 35.062472
         lng: 129.020742
       - src: https://blog-img.774352199.xyz/NuI5Rl.jpg
+        mapView: day
         alt: A cabin above the water
         caption: 'Shot vertically, the cable car looks as though it climbs straight out of the sea and in among the towers.'
         lat: 35.062472
@@ -511,11 +516,13 @@ days:
         lat: 37.451325
         lng: 126.45215
       - src: https://blog-img.774352199.xyz/HOkZq2.jpg
+        mapView: day
         alt: City lights under the wing
         caption: 'The plane passed over Shanghai, the vertical frame keeping only the wing and the lights below.'
         lat: 31.254803
         lng: 121.780378
       - src: https://blog-img.774352199.xyz/Yelkjk.jpg
+        mapView: day
         alt: A night arrival in Shanghai
         caption: "One more shot, held horizontally, with the runway and the city's night glow together under the wing."
         lat: 31.254803
