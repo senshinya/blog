@@ -1,0 +1,225 @@
+.travel-editorial .photo-source {
+	display: contents;
+}
+
+.travel-editorial .mobile-atlas {
+	display: none;
+}
+
+/* Mobile keeps one map behind the scrolling foreground; desktop retains its atlas. */
+@media (max-width: 700px) {
+	.travel-editorial .mobile-atlas {
+		display: block;
+		position: fixed;
+		opacity: 0;
+		inset: var(--bar) 0 0;
+		transition: opacity 240ms ease;
+		pointer-events: none;
+		z-index: 1;
+	}
+	.travel-editorial .mobile-atlas[data-visible="true"][data-ready="true"] {
+		opacity: 1;
+	}
+	.travel-editorial .mobile-atlas > .map-canvas {
+		visibility: visible;
+		pointer-events: none;
+	}
+	.travel-editorial .mobile-map-credit {
+		position: fixed;
+		right: 10px;
+		bottom: 6px;
+		font-size: 9px;
+		color: var(--muted);
+		pointer-events: none;
+		z-index: 3;
+	}
+	.travel-editorial .reading-stage {
+		isolation: isolate;
+	}
+	.travel-editorial .reading-stage > .reading-map {
+		--map-clear-top: 45%;
+		--map-clear-bottom: 68%;
+		display: block;
+		position: absolute;
+		visibility: hidden;
+		inset: 0 -20px;
+		width: auto;
+		height: auto;
+		margin: 0;
+		background: var(--paper);
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		pointer-events: none;
+		z-index: 0;
+	}
+	.travel-editorial .reading-map:after {
+		content: none;
+	}
+	.travel-editorial .reading-stage:has(.photo-caption):after {
+		content: "";
+		position: absolute;
+		inset: calc(var(--map-description-start, 65%) - 48px) -20px 0;
+		background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--paper) 60%, transparent) 48px, color-mix(in oklab, var(--paper) 60%, transparent) calc(100% - var(--map-wash-tail, 24px)), transparent);
+		pointer-events: none;
+		z-index: 0;
+	}
+	.travel-editorial .reading-stage:has(> .reading-map) .chapter-prose:has(p) {
+		position: relative;
+		isolation: isolate;
+	}
+	.travel-editorial .reading-stage:has(> .reading-map) .chapter-prose:has(p):before {
+		content: "";
+		position: absolute;
+		inset: -48px -20px;
+		background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--paper) 60%, transparent) 48px, color-mix(in oklab, var(--paper) 60%, transparent) calc(100% - 48px), transparent);
+		pointer-events: none;
+		z-index: -1;
+	}
+	.travel-editorial .reading-map img {
+		position: absolute;
+		opacity: 0;
+		width: 1px;
+		height: 1px;
+		max-height: none;
+		pointer-events: none;
+	}
+	.travel-editorial .reading-map img.ready {
+		opacity: 0;
+	}
+	.travel-editorial .reading-map img:before {
+		content: none;
+	}
+	.travel-editorial .photo-static {
+		display: flex;
+		justify-content: center;
+		cursor: default;
+	}
+	.travel-editorial .photo-static img {
+		width: auto;
+		max-width: 100%;
+		background: transparent;
+	}
+	.travel-editorial .photo-static:after {
+		content: none;
+		display: none;
+	}
+	.travel-editorial .reading-map .map-peek-credit {
+		top: auto;
+		right: 20px;
+		bottom: calc(100% - var(--map-clear-bottom) + 31px);
+		padding: 0;
+		background: transparent;
+		font-size: 8px;
+		z-index: 2;
+	}
+	.travel-editorial .reading-stage > .cover, .travel-editorial .reading-stage > .chapter-head, .travel-editorial .reading-stage > .story-photo {
+		position: relative;
+		background: transparent;
+		pointer-events: none;
+		z-index: 1;
+	}
+	.travel-editorial .cover h1, .travel-editorial .cover blockquote, .travel-editorial .cover .byline, .travel-editorial .cover-meta, .travel-editorial .photo-open, .travel-editorial .photo-number, .travel-editorial .photo-title, .travel-editorial .photo-caption, .travel-editorial .photo-place, .travel-editorial .chapter-head h2, .travel-editorial .chapter-head .kicker, .travel-editorial .chapter-prose, .travel-editorial .chapter-summary, .travel-editorial .map-detail {
+		pointer-events: auto;
+	}
+	.travel-editorial .reading-stage > .cover {
+		display: flex;
+		flex-direction: column;
+		height: var(--reading-viewport, calc(100dvh - var(--bar)));
+		padding-block: 20px;
+	}
+	.travel-editorial .cover-photo {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 24px;
+		min-height: 0;
+		margin-top: 16px;
+	}
+	.travel-editorial .cover-photo > div {
+		width: 100%;
+	}
+	.travel-editorial .cover-photo > div:first-child {
+		flex: 1;
+		min-height: 0;
+	}
+	.travel-editorial .cover-photo > div:last-child {
+		flex: none;
+	}
+	.travel-editorial .cover-photo .photo-composition {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 0;
+	}
+	.travel-editorial .cover-photo .cover-image {
+		height: 100%;
+		max-height: 460px;
+	}
+	.travel-editorial .reading-stage:has(.map-detail.open) > .cover {
+		height: auto;
+		min-height: var(--reading-viewport, calc(100dvh - var(--bar)));
+	}
+	.travel-editorial .cover:has(.map-detail.open) .cover-photo > div:first-child {
+		flex: none;
+	}
+	.travel-editorial .cover:has(.map-detail.open) .photo-composition, .travel-editorial .cover:has(.map-detail.open) .cover-image {
+		height: auto;
+	}
+	.travel-editorial .story-scroll {
+		container: travel-reader / size;
+	}
+	.travel-editorial .reading-stage > .chapter-head {
+		justify-content: flex-start;
+		min-height: var(--reading-viewport, calc(100dvh - var(--bar)));
+	}
+	.travel-editorial .story-photo figcaption, .travel-editorial .story-photo.portrait figcaption {
+		background: transparent;
+	}
+	.travel-editorial .photo-heading.has-map {
+		grid-template-columns: 1fr;
+		min-height: 0;
+		padding-right: 0;
+	}
+	.travel-editorial .photo-heading .photo-place {
+		min-height: 0;
+	}
+	.travel-editorial .reading-stage:has(.map-detail.open) > .reading-map {
+		visibility: hidden;
+	}
+	.travel-editorial .reading-stage:has(.map-detail.open) .photo-heading {
+		min-height: 0;
+		padding-right: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.travel-editorial .mobile-atlas {
+		transition: none;
+	}
+}
+
+/* Compact rhythm follows the actual reading area, including browser chrome. */
+@media (max-width: 700px) {
+	@container travel-reader (max-height: 566px) {
+		.travel-editorial .reading-stage > .chapter-head {
+			padding-block: 16px;
+		}
+		.travel-editorial .chapter-head .kicker {
+			margin-bottom: 10px;
+		}
+		.travel-editorial .chapter-head h2 {
+			margin-bottom: 14px;
+			line-height: 1.5;
+		}
+		.travel-editorial .chapter-prose {
+			line-height: 1.7;
+		}
+		.travel-editorial .chapter-prose p + p {
+			margin-top: 8px;
+		}
+		.travel-editorial .chapter-summary {
+			margin-top: 12px;
+		}
+	}
+}

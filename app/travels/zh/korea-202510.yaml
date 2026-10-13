@@ -171,26 +171,31 @@ days:
         lat: 35.161683
         lng: 129.160558
       - src: https://blog-img.774352199.xyz/8ZSo2E.jpg
+        mapView: day
         alt: 松岛缆车与海岸
         caption: 缆车离开站台，山岸、海面和对面的城市一起铺开。
         lat: 35.070572
         lng: 129.022419
       - src: https://blog-img.774352199.xyz/nysbC8.jpg
+        mapView: day
         alt: 迎面驶来的缆车
         caption: 另一辆缆车从岩岸前滑过，给安静的海面添了一点动感。
         lat: 35.070572
         lng: 129.022419
       - src: https://blog-img.774352199.xyz/fy4Cp5.jpg
+        mapView: day
         alt: 玻璃底缆车里的双脚
         caption: 玻璃底下就是海。脚知道它很安全，眼睛还是不太愿意相信。
         lat: 35.067303
         lng: 129.021761
       - src: https://blog-img.774352199.xyz/Eau0rl.jpg
+        mapView: day
         alt: 通向城市的缆车线
         caption: 线路一路指向城市天际线，目的地看得见，距离却不好判断。
         lat: 35.062472
         lng: 129.020742
       - src: https://blog-img.774352199.xyz/NuI5Rl.jpg
+        mapView: day
         alt: 海面上方的缆车
         caption: 竖着拍一张，缆车像是直接从海面升进了高楼之间。
         lat: 35.062472
@@ -511,11 +516,13 @@ days:
         lat: 37.451325
         lng: 126.45215
       - src: https://blog-img.774352199.xyz/HOkZq2.jpg
+        mapView: day
         alt: 机翼下的城市灯光
         caption: 飞机掠过上海上空，竖幅里只留下机翼和脚下的灯。
         lat: 31.254803
         lng: 121.780378
       - src: https://blog-img.774352199.xyz/Yelkjk.jpg
+        mapView: day
         alt: 夜航抵达上海
         caption: 再横着拍一张，跑道和城市夜光一起出现在机翼下面。
         lat: 31.254803

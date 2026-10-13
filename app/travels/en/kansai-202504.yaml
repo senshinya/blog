@@ -8,10 +8,13 @@ description: |-
   So we went to Japan.
 published: 2025-05-19
 totaldays: 3
-coverImage: https://blog-img.774352199.xyz/X1lM9m.webp
+coverImage: https://blog-img.774352199.xyz/46z6bG.png
+coverCaption: Kasuga Taisha
+ending: Happy days always pass too quickly.
 days:
   - day: 0
     title: A Sleepless Night at Pudong Airport
+    shortTitle: Sleepless night
     descriptions:
       - 'We took the high-speed train to Shanghai Pudong Airport straight after work on Friday. Our flight was at six on Saturday morning. I had never caught such an early flight and had no idea what I was doing, so I booked a hotel miles from the airport. After working out the logistics, we thought, fine, we might as well spend the night at the airport.'
       - 'Had I known how miserable an overnight stay at Pudong would be, I would have chosen a few hours lying down in a hotel over sitting on a hard bench until dawn.'
@@ -49,35 +52,42 @@ days:
         lng: 121.808594
   - day: 1
     title: Above the Clouds
+    shortTitle: Above the clouds
     descriptions:
       - 🛫 ——> 🛬
       - 'Attempt number two at sleeping: failed.'
       - 'I am a light sleeper to begin with. Between the roar of the engines and the vibrations, sleep was impossible, so I could only stare out the window. S and K slept soundly. Ah, to be young and fall asleep the moment your head drops.'
     photos:
       - src: https://blog-img.774352199.xyz/2s45dj.webp
+        mapView: day
         alt: And we’re off! 🛫
         caption: 'Overcast weather is my favourite kind for a takeoff, because it means the plane will climb through the cloud layer and out above the sea of clouds.'
         lat: 31.15092
         lng: 121.809425
       - src: https://blog-img.774352199.xyz/FByyUH.webp
+        mapView: day
         alt: Above the clouds, though not the Guizhou kind that hosts iCloud
         lat: 30.9678027
         lng: 122.13342
       - src: https://blog-img.774352199.xyz/PhKuO2.webp
+        mapView: day
         alt: 'Above the clouds, take two'
         lat: 30.9699416
         lng: 122.14048
       - src: https://blog-img.774352199.xyz/8wSA4R.webp
+        mapView: day
         alt: Little islands
         caption: The first little island after what felt like ages of flying with nothing to look at.
         lat: 32.8994638
         lng: 129.580627
       - src: https://blog-img.774352199.xyz/HAAY0y.webp
+        mapView: day
         alt: 'Shikoku, take one'
         caption: 'Land at last, and plenty of it: we were over Shikoku.'
         lat: 34.1282
         lng: 134.566483
       - src: https://blog-img.774352199.xyz/gRislE.webp
+        mapView: day
         alt: 'Shikoku, take two'
         caption: 'Japan really is not a flat country. Mile after mile of folded hills, with only a few stretches of connected plain. Japanese cities are fairly small, and a single small plain might hold three or four of them, which back home would be roughly one city and the counties under it.'
         lat: 34.2280305
@@ -94,6 +104,7 @@ days:
         lng: 135.3321027
   - day: 1
     title: I Was Awake. Probably.
+    shortTitle: Kyoto on foot
     descriptions:
       - 'Thanks to Japan’s positively backward rule that hotels will not let you check in until 3 p.m., the three of us began wandering Kyoto.'
       - The mind had left the building. The body kept wandering.
@@ -144,6 +155,7 @@ days:
         lng: 135.7615305
   - day: 2
     title: 'Nara, City of 🦌: Kasuga Taisha and Tōdai-ji'
+    shortTitle: Nara and deer
     descriptions:
       - 'For a fun, hands-on Kansai trip, Nara is an essential stop: a chance to get close to nature.'
       - 'The whole city is filled with a distinctive scent of nature: deer poop.'
@@ -205,6 +217,7 @@ days:
         lng: 135.8396138
   - day: 2
     title: 'Mount Wakakusa: So Much Poop'
+    shortTitle: Mount Wakakusa
     descriptions:
       - 'Leave Tōdai-ji and head uphill to the southeast, and you will reach Mount Wakakusa.'
       - 'The Mount Wakakusa of Xiaohongshu fame is a very small area: just one west-facing slope. There was almost nowhere to sit because it was covered in deer poop. Everyone around us was speaking Chinese; we could have been back home.'
@@ -251,6 +264,7 @@ days:
         lng: 135.828862
   - day: 3
     title: Time to Go Home
+    shortTitle: Homeward
     descriptions:
       - 'We had no particular plans for the last day, so we declared it shopping day.'
       - 'Good times always fly by. As if reluctant to let us leave, our flight made a special effort to be four hours late.'

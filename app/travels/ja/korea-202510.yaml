@@ -171,26 +171,31 @@ days:
         lat: 35.161683
         lng: 129.160558
       - src: https://blog-img.774352199.xyz/8ZSo2E.jpg
+        mapView: day
         alt: 松島のロープウェイと海岸
         caption: 駅を離れると、山の斜面、海、向かいの街が一度に広がりました。
         lat: 35.070572
         lng: 129.022419
       - src: https://blog-img.774352199.xyz/nysbC8.jpg
+        mapView: day
         alt: 向かいから来るゴンドラ
         caption: 別のゴンドラが岩場の前を滑るように通り、静かな海に少し動きが加わりました。
         lat: 35.070572
         lng: 129.022419
       - src: https://blog-img.774352199.xyz/fy4Cp5.jpg
+        mapView: day
         alt: ガラス張りの床の上の足
         caption: ガラスの下はすぐ海です。足は安全だと分かっていても、目はまだ信じ切れません。
         lat: 35.067303
         lng: 129.021761
       - src: https://blog-img.774352199.xyz/Eau0rl.jpg
+        mapView: day
         alt: 街へ向かうロープウェイのルート
         caption: 路線はまっすぐ街のスカイラインへ。行き先は見えても、距離はよく分かりません。
         lat: 35.062472
         lng: 129.020742
       - src: https://blog-img.774352199.xyz/NuI5Rl.jpg
+        mapView: day
         alt: 海の上を進むロープウェイ
         caption: 縦に一枚。ゴンドラが海からそのまま高層ビルの間へ上がっていくように見えました。
         lat: 35.062472
@@ -511,11 +516,13 @@ days:
         lat: 37.451325
         lng: 126.45215
       - src: https://blog-img.774352199.xyz/HOkZq2.jpg
+        mapView: day
         alt: 翼の下の街の明かり
         caption: 上海上空を飛びながら、縦の画面に翼と眼下の明かりだけを収めました。
         lat: 31.254803
         lng: 121.780378
       - src: https://blog-img.774352199.xyz/Yelkjk.jpg
+        mapView: day
         alt: 夜の便で上海に到着
         caption: 今度は横にもう一枚。翼の下に滑走路と街の夜の光が一緒に入りました。
         lat: 31.254803

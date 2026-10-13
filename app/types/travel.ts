@@ -14,6 +14,8 @@ export interface TravelPhoto {
 	 * 两种情况下 `src` 都要填，它是封面：缩略图、地图 popup、LQIP 和宽高都取它的。
 	 */
 	video?: string
+	/** 海上、飞行等途中照片可展示当天全部点位的范围。省略时聚焦拍摄位置。 */
+	mapView?: 'day'
 	lat?: number
 	lng?: number
 }
@@ -27,6 +29,8 @@ export interface TravelPhoto {
 export interface TravelDay {
 	day: number
 	title: string
+	/** Compact chapter label for the reading navigation. */
+	shortTitle?: string
 	descriptions: string[]
 	photos: TravelPhoto[]
 }
@@ -45,5 +49,7 @@ export interface Travel {
 	published: string
 	totaldays: number
 	coverImage: string
+	coverCaption?: string
+	ending?: string
 	days: TravelDay[]
 }
