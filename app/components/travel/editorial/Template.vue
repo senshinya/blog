@@ -3,6 +3,7 @@ import type { TravelAtlas } from './atlas'
 import type { ViewerCaptionRects, ViewerRect } from './viewer-geometry'
 import type { Travel } from '~/types/travel'
 import blogConfig from '~~/blog.config'
+import { useTravelFocus } from '~/composables/useTravelFocus'
 import { contentResourceLinks } from '~/utils/contentResources'
 import { countTravelLocations, flattenTravelPhotos, hasTravelCoordinates, travelCoordinateLabel } from '~/utils/travelStory'
 import { orientedViewerRect } from './viewer-geometry'
@@ -18,6 +19,7 @@ const photos = computed(() => flattenTravelPhotos(props.travel))
 const chapters = computed(() => props.travel.days.map((day, index) => ({ ...day, photos: photos.value.filter(photo => photo.chapter === index), label: day.shortTitle ?? day.title })))
 const coverPhoto = computed(() => ({ ...photos.value.find(photo => photo.src === props.travel.coverImage), src: props.travel.coverImage, alt: photos.value.find(photo => photo.src === props.travel.coverImage)?.alt ?? props.travel.title }))
 const root = useTemplateRef<HTMLElement>('root')
+useTravelFocus(root)
 const scroller = useTemplateRef<HTMLElement>('scroller')
 const canvas = useTemplateRef<HTMLElement>('canvas')
 const mobileBackdrop = useTemplateRef<HTMLElement>('mobileBackdrop')
@@ -56,7 +58,6 @@ let disposed = false
 let openingMap = 0
 let inlineReadingTop = 0
 let connectorFrame = 0
-let mapTrigger: HTMLElement | null = null
 
 useHead(() => ({
 	link: contentResourceLinks({ serif: true }, locale.value),
@@ -116,10 +117,6 @@ function closeMap() {
 		scroller.value.scrollTop = inlineReadingTop
 	atlas?.update()
 	queueConnector()
-	nextTick(() => {
-		if (!disposed && mapTrigger?.isConnected)
-			mapTrigger.focus({ preventScroll: true })
-	})
 }
 async function openMap(key: string) {
 	if (mobile.value || viewerClosing.value)
@@ -132,7 +129,6 @@ async function openMap(key: string) {
 	}
 	if (exploring.value)
 		closeMap()
-	mapTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
 	cancel()
 	inlineReadingTop = scroller.value?.scrollTop ?? 0
 	const request = ++openingMap
@@ -144,7 +140,6 @@ async function openMap(key: string) {
 		return
 	const container = mobile.value || viewerOpen.value ? root.value?.querySelector<HTMLElement>(`[data-map-detail="${key}"]`) : undefined
 	atlas.explore(key, container ?? undefined)
-	canvas.value?.querySelector<HTMLCanvasElement>('.maplibregl-canvas')?.focus({ preventScroll: true })
 	connector.value = null
 }
 function toggleExplore() {
@@ -159,10 +154,9 @@ function navigate(key: string) {
 }
 function skipToContent() {
 	navigate('intro')
-	scroller.value?.focus({ preventScroll: true })
 }
-useEventListener(root, 'keydown', (event: KeyboardEvent) => {
-	if (exploring.value && event.key === 'Escape') {
+useEventListener('keydown', (event: KeyboardEvent) => {
+	if (!event.defaultPrevented && event.key === 'Escape' && (viewerOpen.value || exploring.value)) {
 		event.preventDefault()
 		event.stopPropagation()
 		if (viewerOpen.value)
@@ -236,7 +230,6 @@ async function closeViewer() {
 	await nextTick()
 	if (disposed)
 		return
-	root.value?.querySelector<HTMLButtonElement>(`#photo-${viewerIndex.value} .photo-zoom`)?.focus({ preventScroll: true })
 	atlas?.update()
 	queueConnector()
 }

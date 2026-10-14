@@ -17,10 +17,6 @@ const emit = defineEmits<{ navigate: [key: string], palette: [value: string], ap
 const { t, locale } = useI18n()
 const chapterOpen = ref(false)
 const themeOpen = ref(false)
-const chapterMenu = useTemplateRef<HTMLElement>('chapterMenu')
-const themeMenu = useTemplateRef<HTMLElement>('themeMenu')
-const chapterTrigger = useTemplateRef<HTMLButtonElement>('chapterTrigger')
-const themeTrigger = useTemplateRef<HTMLButtonElement>('themeTrigger')
 const selectedKey = computed(() => props.chapter < 0 ? 'intro' : `chapter-${props.chapter}`)
 const chapters = computed(() => [
 	{ key: 'intro', number: t('page.travels.editorial.opening'), title: props.travel.title, detail: t('page.travels.editorial.opening') },
@@ -31,15 +27,11 @@ const currentLabel = computed(() => props.chapter < 0
 	: `${String(props.chapter + 1).padStart(2, '0')} / ${props.travel.days[props.chapter]?.shortTitle ?? props.travel.days[props.chapter]?.title}`)
 const themeLabel = computed(() => `${t(`page.travels.editorial.${props.palette}`)} / ${t(`page.travels.editorial.${props.appearance}`)}${props.appearance === 'system' ? ` (${t(`page.travels.editorial.${props.theme}`)})` : ''}`)
 
-function closeMenus(restore?: 'chapter' | 'theme') {
+function closeMenus() {
 	chapterOpen.value = false
 	themeOpen.value = false
-	if (restore === 'chapter')
-		chapterTrigger.value?.focus({ preventScroll: true })
-	if (restore === 'theme')
-		themeTrigger.value?.focus({ preventScroll: true })
 }
-async function openMenu(kind: 'chapter' | 'theme', last = false) {
+function openMenu(kind: 'chapter' | 'theme') {
 	const wasOpen = kind === 'chapter' ? chapterOpen.value : themeOpen.value
 	closeMenus()
 	if (wasOpen)
@@ -48,47 +40,18 @@ async function openMenu(kind: 'chapter' | 'theme', last = false) {
 	if (kind === 'chapter')
 		chapterOpen.value = true
 	else themeOpen.value = true
-	await nextTick()
-	const menu = kind === 'chapter' ? chapterMenu.value : themeMenu.value
-	const buttons = menu?.querySelectorAll<HTMLButtonElement>('button')
-	const selected = menu?.querySelector<HTMLButtonElement>(kind === 'chapter' ? '[aria-selected="true"]' : '[aria-checked="true"]')
-	;(last ? buttons?.[buttons.length - 1] : selected ?? buttons?.[0])?.focus({ preventScroll: true })
-}
-function menuKeys(event: KeyboardEvent, kind: 'chapter' | 'theme') {
-	const menu = kind === 'chapter' ? chapterMenu.value : themeMenu.value
-	const buttons = [...menu?.querySelectorAll<HTMLButtonElement>('button') ?? []]
-	const current = buttons.indexOf(document.activeElement as HTMLButtonElement)
-	let target: number | undefined
-	if (event.key === 'ArrowDown')
-		target = (current + 1) % buttons.length
-	if (event.key === 'ArrowUp')
-		target = (current - 1 + buttons.length) % buttons.length
-	if (event.key === 'Home')
-		target = 0
-	if (event.key === 'End')
-		target = buttons.length - 1
-	if (target !== undefined) {
-		event.preventDefault()
-		buttons[target]?.focus({ preventScroll: true })
-	}
-	if (event.key === 'Escape') {
-		event.preventDefault()
-		event.stopPropagation()
-		closeMenus(kind)
-	}
-}
-function closeOnFocusOut(event: FocusEvent, kind: 'chapter' | 'theme') {
-	if ((event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null))
-		return
-	if (kind === 'chapter')
-		chapterOpen.value = false
-	else themeOpen.value = false
 }
 function navigate(key: string) {
-	closeMenus('chapter')
+	closeMenus()
 	emit('navigate', key)
 }
 onMounted(() => {
+	useEventListener('keydown', (event: KeyboardEvent) => {
+		if (event.key === 'Escape' && (chapterOpen.value || themeOpen.value)) {
+			event.preventDefault()
+			closeMenus()
+		}
+	})
 	useEventListener(document, 'pointerdown', (event) => {
 		const target = event.target as Element
 		if (!target.closest('.chapter-nav'))
@@ -107,11 +70,11 @@ onMounted(() => {
 		</NuxtLink>
 		<strong>{{ travel.title }}</strong>
 	</div>
-	<div class="chapter-nav" @focusout="closeOnFocusOut($event, 'chapter')">
-		<button ref="chapterTrigger" class="chapter-trigger" aria-haspopup="listbox" aria-controls="travel-chapter-menu" :aria-expanded="chapterOpen" :aria-label="`${$t('page.travels.editorial.chapters')}：${currentLabel}${progress ? ` · ${$t('page.travels.editorial.photoProgress', progress)}` : ''}`" @click="openMenu('chapter')" @keydown.down.prevent="openMenu('chapter')" @keydown.up.prevent="openMenu('chapter', true)">
+	<div class="chapter-nav">
+		<button class="chapter-trigger" aria-haspopup="listbox" aria-controls="travel-chapter-menu" :aria-expanded="chapterOpen" :aria-label="`${$t('page.travels.editorial.chapters')}：${currentLabel}${progress ? ` · ${$t('page.travels.editorial.photoProgress', progress)}` : ''}`" @click="openMenu('chapter')">
 			<span>{{ currentLabel }}</span><small v-if="progress" class="chapter-photo-progress" :aria-label="$t('page.travels.editorial.photoProgress', progress)">{{ progress.current }} / {{ progress.total }}</small><TravelEditorialIcon name="down" />
 		</button>
-		<div id="travel-chapter-menu" ref="chapterMenu" class="chapter-menu" :hidden="!chapterOpen" @keydown="menuKeys($event, 'chapter')">
+		<div id="travel-chapter-menu" class="chapter-menu" :hidden="!chapterOpen">
 			<div class="chapter-menu-heading" aria-hidden="true">
 				{{ $t('page.travels.editorial.chapters') }}
 			</div>
@@ -123,11 +86,11 @@ onMounted(() => {
 		</div>
 	</div>
 	<div class="nav-right">
-		<div class="theme-control" @focusout="closeOnFocusOut($event, 'theme')">
-			<button ref="themeTrigger" class="theme-trigger" aria-haspopup="menu" aria-controls="travel-theme-menu" :aria-expanded="themeOpen" :aria-label="`${$t('page.travels.editorial.theme')}：${themeLabel}`" @click="openMenu('theme')" @keydown.down.prevent="openMenu('theme')" @keydown.up.prevent="openMenu('theme', true)">
+		<div class="theme-control">
+			<button class="theme-trigger" aria-haspopup="menu" aria-controls="travel-theme-menu" :aria-expanded="themeOpen" :aria-label="`${$t('page.travels.editorial.theme')}：${themeLabel}`" @click="openMenu('theme')">
 				<TravelEditorialIcon :name="appearance" /><span>{{ $t(`page.travels.editorial.${palette}`) }}</span>
 			</button>
-			<div id="travel-theme-menu" ref="themeMenu" class="theme-menu" role="menu" :hidden="!themeOpen" :aria-label="$t('page.travels.editorial.theme')" @keydown="menuKeys($event, 'theme')">
+			<div id="travel-theme-menu" class="theme-menu" role="menu" :hidden="!themeOpen" :aria-label="$t('page.travels.editorial.theme')">
 				<p id="travel-palette-label" class="theme-section-label">
 					{{ $t('page.travels.editorial.palette') }}
 				</p>

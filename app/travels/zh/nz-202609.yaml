@@ -1,4 +1,4 @@
-# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前四章。
+# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前五章。
 # 电车说明：https://www.christchurchattractions.nz/
 # 沿途观光铁路：https://www.greatjourneysnz.com/routes/coastal-pacific/
 slug: nz-202609
@@ -27,7 +27,7 @@ days:
     photos:
       - src: https://blog-img.774352199.xyz/wdxqwl.webp
         alt: A350
-        caption: 南航的 A350，第一次乘坐，安全感很足。不知何时能体验 A380，几乎每个机场都能看到沙特还是阿联酋航空的 A380，十分气派。
+        caption: 南航的 A350，第一次乘坐，安全感很足。不知何时能体验 A380，几乎每个机场都能看到不知是沙特还是阿联酋航空的 A380，十分气派。
         lat: 23.4009417
         lng: 113.3044056
       - src: https://blog-img.774352199.xyz/ioiXvL.webp
@@ -57,9 +57,9 @@ days:
         caption: 拿行李过海关，乘坐穿梭巴士到了国内航站楼重新办理托运。第一次使用自助托运的机器，有些手忙脚乱。图片是捷星航空的托运处，不知何故人员寥寥。
         lat: -37.0066528
         lng: 174.7895972
-      - src: https://blog-img.774352199.xyz/feyXih.webp
+      - src: https://blog-img.774352199.xyz/60FQv9.webp
         alt: 抵达基督城
-        caption: 转乘新西兰航空飞到了基督城。机上似乎有一队青年运动员，人高马大的，很是活跃，还给乘客发小饼干。一直很想吐槽国内对基督城的直译：克赖斯特彻奇，中式片假名。
+        caption: 转乘新西兰航空飞到了基督城。机上似乎有一队青年运动员，人高马大的，很是活跃，还给乘客发小饼干。一直想吐槽国内对基督城的直译：克赖斯特彻奇，中式片假名。
         lat: -43.488758
         lng: 172.540039
   - day: 2
@@ -255,10 +255,10 @@ days:
     descriptions:
       - 阿卡罗阿的郊外山坡上，有一座羊驼牧场，牧场的员工大都是台湾人，交流起来没有障碍。
       - 他们热情地向我们介绍每匹羊驼的名字、个性、脾气和爱好，如同介绍自己的好朋友。
-      - 随后，驱车前往特卡波。那里位于麦肯齐国际暗夜保护区，我平生第一次看到了银河。
+      - 随后，驱车前往特卡波。那里位于麦肯齐国际暗夜保护区，我生平第一次看到了银河。
     photos:
       - src: https://blog-img.774352199.xyz/3q4cfe.webp
-        alt: 被撸也要干饭
+        alt: 被rua也要干饭
         caption: 羊驼的毛十分厚实，手指能直接插进去狠狠地 rua。羊驼的脾气也很温顺，只是自顾自地吃饭。
         lat: -43.7912528
         lng: 172.9052889
@@ -315,6 +315,107 @@ days:
         lng: 170.4738472
       - src: https://blog-img.774352199.xyz/S16Xz3.webp
         alt: 银河其二
-        caption: 甚至不需要专业的相机，只需手机夜景模式随手一拍。
+        caption: 甚至不需要专业的相机，只需打开手机夜景模式随手一拍。
         lat: -44.0047083
         lng: 170.4738306
+
+  - day: 5
+    title: 雪山
+    shortTitle: 雪山
+    descriptions:
+      - 头天晚上和同事 C 聊天，当得知我要去库克雪山徒步时，他极力推荐我报名冰山直升机项目：在山脚机场乘坐飞机绕山飞行，最终降落在山脊雪面上。由于是临时起意，直升机都被订完了，最终我们预订了滑雪飞机 55 分钟的体验。
+    photos:
+      - src: https://blog-img.774352199.xyz/FaRPbt.webp
+        alt: 沿途其一
+        caption: 晨雾尚未散去。
+        lat: -44.1846583
+        lng: 170.1189583
+      - src: https://blog-img.774352199.xyz/ItLLGS.webp
+        alt: 沿途其二
+        caption: 库克雪山的腰间缠着一层云，司导说我们运气很好，这个景色并不常见。
+        lat: -44.0518806
+        lng: 170.1341083
+      - src: https://blog-img.774352199.xyz/nztrGr.webp
+        alt: 雪山下的机场
+        caption: 库克山机场位于山谷中央，只有一条短短的跑道，用于起降小型滑雪飞机。
+        lat: -43.7661061
+        lng: 170.1325589
+      - src: https://blog-img.774352199.xyz/xZhoLo.webp
+        alt: 滑雪小飞机
+        caption: 滑雪飞机很小，连带驾驶员只能承载七八个人，登机都得将座椅放倒，弯腰低头。
+        lat: -43.7660642
+        lng: 170.1325042
+      - src: https://blog-img.774352199.xyz/mHHv4c.webp
+        alt: 舷窗雪山
+        caption: 起飞后，npy 一直拿着 pocket 录制窗外风景，全然不知这个 pocket 即将迎来怎样的命运。
+        lat: -43.7668333
+        lng: 170.1350861
+      - src: https://blog-img.774352199.xyz/ZGoUPG.webp
+        alt: 河谷
+        caption: 此时是初春，由于冰雪初融，山谷中的河流还处于枯水期，远比河床要细小得多。
+        lat: -43.657775
+        lng: 170.2068333
+      - src: https://blog-img.774352199.xyz/RhqV9j.webp
+        alt: 层雪叠嶂
+        lat: -43.6391194
+        lng: 170.1855472
+      - src: https://blog-img.774352199.xyz/LDAIdq.webp
+        alt: 飞越雪顶
+        caption: 云海上长出了雪山。
+        lat: -43.5263139
+        lng: 170.1342917
+      - src: https://blog-img.774352199.xyz/gkPGVP.webp
+        alt: 积雪覆盖下的蓝冰
+        lat: -43.5103639
+        lng: 170.2130889
+      - src: https://blog-img.774352199.xyz/BoFh2i.webp
+        alt: 降落！
+        caption: 我们最终在一片较为平坦的山坡上降落，积雪深及脚踝，周围一点声音也没有，十分空灵。只有纯粹的白，和纯粹的蓝。
+        lat: -43.4900156
+        lng: 170.2653103
+      - src: https://blog-img.774352199.xyz/qQ4VyE.webp
+        alt: 与飞行员的合影
+        caption: |-
+          和飞行员闲聊了几句。他并不以此为业，飞行只是他的爱好，他已经驾驶飞机七年了。在库克山飞这样的观光飞机，他并不会获得任何报酬。
+          respect + 羡慕。
+        lat: -43.490075
+        lng: 170.2653361
+      - src: https://blog-img.774352199.xyz/ZKOo6W.webp
+        alt: 重新起飞
+        lat: -43.4864056
+        lng: 170.2369083
+      - src: https://blog-img.774352199.xyz/NK4b3Z.webp
+        alt: 补给小屋
+        lat: -43.6354306
+        lng: 170.1740889
+      - src: https://blog-img.774352199.xyz/sqm69k.webp
+        alt: 山谷风光
+        caption: 落地后我们又前往了塔斯曼冰川步道。这是一条很短的徒步路线，会爬一座小山，俯瞰蓝冰湖，往返仅约一小时，比较休闲。
+        lat: -43.6977806
+        lng: 170.1657556
+      - src: https://blog-img.774352199.xyz/XGhlDa.webp
+        alt: “蓝”湖
+        caption: 登山过程中，可以看到一汪小湖。旁边的标识牌说它叫蓝湖。这个名字来自于一百多年前，这个湖由冰川融水注满，呈现出湛蓝色。然而近几十年来，冰川活动导致它无法再获得冰川融水，现在的湖被雨水注满，只能呈现出浅绿色。人们只能从它的名字中窥见那一抹蓝色。
+        lat: -43.6964278
+        lng: 170.1666417
+      - src: https://blog-img.774352199.xyz/2ZutqI.webp
+        alt: 塔斯曼冰河湖
+        caption: 步道的尽头是塔斯曼冰河湖，是由塔斯曼冰川后退而形成的，在上个世纪九十年代才形成湖泊。湖的尽头就是塔斯曼冰川，湖面上漂浮着无数冰块，都是从冰川上崩解而来。
+        lat: -43.6959306
+        lng: 170.1683667
+      - src: https://blog-img.774352199.xyz/thdo3p.webp
+        alt: 高山三文鱼
+        caption: 返程途中路过了普卡基湖畔的高山三文鱼店。这个店也十分有名，店里和湖边排满了来购买三文鱼的游客。这里的三文鱼是养在冰川融水中，据说十分鲜美。我们也跟风买了一盒。
+        lat: -44.1899222
+        lng: 170.1398306
+      - src: https://blog-img.774352199.xyz/bOh9j3.webp
+        alt: 最贵鸟食
+        caption: 由于我们都吃不惯生食，最终这些三文鱼都便宜了海鸥们（姑且将其称为海鸥）。这绝对是我喂鸟用过的最贵的鸟食了，一盒 20 刀。
+        live: https://blog-img.774352199.xyz/Deehu5.mp4
+        lat: -44.001594
+        lng: 170.472519
+      - src: https://blog-img.774352199.xyz/wOOQ30.webp
+        alt: 香料饭
+        caption: 晚饭在特卡波湖畔的一家印度餐厅解决。我点了一份印度香饭。说实话味道十分恐怖，像是在往嘴里塞各种香料，饭里的肉味米味，全部被香料那直冲天灵盖的味道盖住。难怪英国要殖民印度，香料和不要钱似的。
+        lat: -44.0038222
+        lng: 170.4768222
