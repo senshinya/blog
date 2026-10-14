@@ -17,6 +17,13 @@ test('tilted bounds retain their center without inflating the actual image dimen
 	assert.equal(viewerMorph(rect, { left: 112, top: 224, width: 400, height: 200 }), 'translate3d(-200px, -250px, 0) rotate(1.2deg) scale(0.5, 0.5)')
 })
 
+test('hover-scaled bounds preserve the displayed image size and center for the viewer morph', () => {
+	const rect = orientedViewerRect({ left: 10, top: 20, width: 210, height: 112 }, { width: 200, height: 100 }, 0.35, 1.015)
+	for (const [key, value] of Object.entries({ left: 13.5, top: 25.25, width: 203, height: 101.5, rotation: 0.35 }))
+		assert.ok(Math.abs(rect[key as keyof typeof rect]! - value) < 1e-9, key)
+	assert.equal(viewerMorph(rect, { left: 112, top: 224, width: 400, height: 200 }), 'translate3d(-197px, -248px, 0) rotate(0.35deg) scale(0.5075, 0.5075)')
+})
+
 test('fits portrait images inside the viewport without changing their aspect ratio', () => {
 	assert.deepEqual(fitViewerImage({ width: 400, height: 800 }, { width: 1000, height: 500 }), { width: 250, height: 500 })
 })

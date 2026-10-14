@@ -170,10 +170,11 @@ function photoRect(index: number): ViewerRect | undefined {
 	if (!image || !frame)
 		return
 	const style = getComputedStyle(image)
+	const frameStyle = getComputedStyle(frame)
 	return orientedViewerRect(image.getBoundingClientRect(), {
 		width: Number.parseFloat(style.width),
 		height: Number.parseFloat(style.height),
-	}, Number.parseFloat(getComputedStyle(frame).rotate) || 0)
+	}, Number.parseFloat(frameStyle.rotate) || 0, Number.parseFloat(frameStyle.scale) || 1)
 }
 function captionRects(index: number): ViewerCaptionRects {
 	const figure = root.value?.querySelector(`#photo-${index} .story-photo`)

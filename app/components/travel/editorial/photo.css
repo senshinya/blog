@@ -12,15 +12,48 @@
 	--photo-height-limit: 720px;
 	display: block;
 	position: relative;
-	overflow: hidden;
+	overflow: visible;
 	width: min(100%, calc(var(--photo-height-limit) * var(--photo-ratio, 1.5) + 2 * var(--photo-paper-edge)));
 	padding: var(--photo-paper-padding);
 	border: var(--photo-paper-border) solid color-mix(in oklab, var(--ink) 12%, transparent);
 	border-radius: var(--photo-paper-radius);
 	box-shadow: 0 2px 8px color-mix(in oklab, var(--menu-shadow) 65%, transparent);
 	background: color-mix(in oklab, var(--paper) 66%, white);
+	transform-origin: center center;
+	transition: rotate 220ms var(--photo-morph-easing), scale 220ms var(--photo-morph-easing);
 	rotate: var(--photo-tilt, 0deg);
+	scale: 1;
 	cursor: zoom-in;
+}
+.travel-editorial .photo-open:before {
+	content: "";
+	position: absolute;
+	opacity: 0;
+	inset: 0;
+	border-radius: inherit;
+	box-shadow: 0 10px 24px color-mix(in oklab, var(--menu-shadow) 70%, transparent);
+	transition: opacity 220ms var(--photo-morph-easing);
+	pointer-events: none;
+	z-index: -1;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+	.travel-editorial .photo-open.photo-hovered:where(:not(.photo-static)) {
+		rotate: calc(var(--photo-tilt, 0deg) * 0.35);
+		scale: 1.015;
+	}
+	.travel-editorial .photo-open.photo-hovered:where(:not(.photo-static)):before {
+		opacity: 1;
+	}
+}
+/* Opening captures the hover pose; the hidden reading photo then holds a stable return target. */
+.travel-editorial.viewer-active .photo-open {
+	transition: none;
+	rotate: var(--photo-tilt, 0deg);
+	scale: 1;
+}
+.travel-editorial.viewer-active .photo-open:before {
+	opacity: 0;
+	transition: none;
 }
 .travel-editorial[data-theme="dark"] .photo-open {
 	background: color-mix(in oklab, var(--paper) 82%, var(--ink));
@@ -156,7 +189,7 @@
 	}
 }
 @media (prefers-reduced-motion: reduce) {
-	.travel-editorial .photo-open:after, .travel-editorial .photo-live-control {
+	.travel-editorial .photo-open, .travel-editorial .photo-open:before, .travel-editorial .photo-open:after, .travel-editorial .photo-live-control {
 		transition: none;
 	}
 }

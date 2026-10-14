@@ -1,4 +1,4 @@
-# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前五章。
+# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前六章。
 # 电车说明：https://www.christchurchattractions.nz/
 # 沿途观光铁路：https://www.greatjourneysnz.com/routes/coastal-pacific/
 slug: nz-202609
@@ -419,3 +419,50 @@ days:
         caption: 晚饭在特卡波湖畔的一家印度餐厅解决。我点了一份印度香饭。说实话味道十分恐怖，像是在往嘴里塞各种香料，饭里的肉味米味，全部被香料那直冲天灵盖的味道盖住。难怪英国要殖民印度，香料和不要钱似的。
         lat: -44.0038222
         lng: 170.4768222
+
+  - day: 6
+    title: 赶路
+    shortTitle: 赶路
+    descriptions:
+      - 离开特卡波湖后，我们便前往皇后镇。
+    photos:
+      - src: https://blog-img.774352199.xyz/WDTSJi.webp
+        alt: 瓦纳卡湖畔其一
+        caption: |-
+          中午时分到达了瓦纳卡镇。
+          在提前做的攻略里，瓦纳卡是一个很宁静的小镇，游客很少。但在国内连休 + 澳新学校假期双重加持下，瓦纳卡也开始出现了公共厕所排队的情况。
+        lat: -44.6990083
+        lng: 169.1255806
+      - src: https://blog-img.774352199.xyz/c4Q5hH.webp
+        alt: 双宿双栖
+        lat: -44.6979311
+        lng: 169.1287964
+      - src: https://blog-img.774352199.xyz/IQjGir.webp
+        alt: 孤独的树
+        caption: 最著名的瓦纳卡景点，甚至是最著名的新西兰景点，一棵长在湖中的柳树。事实上，常年被长枪短炮怼着，相比于它岸上的兄弟姐妹们，却一点不显孤独了。
+        lat: -44.6988339
+        lng: 169.1179356
+      - src: https://blog-img.774352199.xyz/L71UEi.webp
+        alt: 瓦纳卡湖畔其二
+        lat: -44.6985272
+        lng: 169.1172894
+      - src: https://blog-img.774352199.xyz/HdSfpO.webp
+        alt: 淘金小镇箭镇
+        caption: 皇后镇旁的箭镇，起源于 19 世纪的淘金热。由于禁止了机械化采矿，据说现在在河畔还能淘到金砂。镇上的纪念品也多是以黄金为主题，十分讨喜。
+        lat: -44.93835
+        lng: 168.8309028
+      - src: https://blog-img.774352199.xyz/zrbuIY.webp
+        alt: 酒店阳台
+        caption: 我们到达了皇后镇的酒店并办理好入住。从皇后镇的酒店阳台向外看出去，能看到一角瓦卡蒂普湖。
+        lat: -45.0345806
+        lng: 168.6678472
+      - src: https://blog-img.774352199.xyz/yXkDCy.webp
+        alt: 阴云密布
+        caption: 傍晚的皇后镇开始阴云密布。不禁担心起了第二天的跳伞行程。
+        lat: -45.0301694
+        lng: 168.6612861
+      - src: https://blog-img.774352199.xyz/RDUhK2.webp
+        alt: 亚洲超市
+        caption: 说是亚洲超市，其实更像是中国超市：火锅食材、火锅底料、各种中国的零食小吃、国产方便面……应有尽有。恰逢国人黄金周（双周），亚洲超市挤满了中国人，连煮火锅的卡式炉都被租完甚至是买完了。我们买了一些火锅底料和调料，以及一大包方便面。
+        lat: -45.0305889
+        lng: 168.6609028

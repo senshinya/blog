@@ -9,7 +9,7 @@ function harness({ reduced = false, viewer = false, interactive = true } = {}) {
 	const props = { photo: { src: 'photo.jpg', live: 'photo.mp4' }, index: 0, active: true, viewer, interactive }
 	const watchers: Array<{ source: () => unknown, callback: (value: unknown) => void, previous: unknown }> = []
 	const script = stripTypeScriptTypes(readFileSync(new URL('./Photo.vue', import.meta.url), 'utf8').match(/<script setup lang="ts">([\s\S]*?)<\/script>/)![1]!).replace(/^import .*$/gm, '')
-	const runtime = vm.runInNewContext(`${script}\n;({ enter, leave, toggleLive: typeof toggleLive === 'function' ? toggleLive : undefined, livePlaying: typeof livePlaying === 'undefined' ? undefined : livePlaying })`, {
+	const runtime = vm.runInNewContext(`${script}\n;({ enter, leave, hovering, toggleLive: typeof toggleLive === 'function' ? toggleLive : undefined, livePlaying: typeof livePlaying === 'undefined' ? undefined : livePlaying })`, {
 		defineProps: () => props,
 		withDefaults: (value: unknown) => value,
 		defineEmits() {},
@@ -21,7 +21,7 @@ function harness({ reduced = false, viewer = false, interactive = true } = {}) {
 		watch(source: () => unknown, callback: (value: unknown) => void) {
 			watchers.push({ source, callback, previous: source() })
 		},
-	}) as { enter: (event: { pointerType: string }) => void, leave: () => void, toggleLive: () => void, livePlaying: { value: boolean } }
+	}) as { enter: (event: { pointerType: string }) => void, leave: () => void, toggleLive: () => void, livePlaying: { value: boolean }, hovering: { value: boolean } }
 	return { props, runtime, flush() {
 		for (const watcher of watchers) {
 			if (watcher.source() !== watcher.previous) {
@@ -31,6 +31,31 @@ function harness({ reduced = false, viewer = false, interactive = true } = {}) {
 		}
 	} }
 }
+
+test('ordinary photographs lift on mouse hover and settle after pointer leave or viewer entry', () => {
+	const h = harness()
+	delete (h.props.photo as { live?: string }).live
+	h.runtime.enter({ pointerType: 'mouse' })
+	assert.equal(h.runtime.hovering.value, true)
+	h.runtime.leave()
+	assert.equal(h.runtime.hovering.value, false)
+	h.runtime.enter({ pointerType: 'mouse' })
+	h.props.active = false
+	h.flush()
+	assert.equal(h.runtime.hovering.value, false)
+})
+
+test('inactive photos, touch input and reduced-motion readers do not lift', () => {
+	const inactive = harness()
+	inactive.props.active = false
+	for (const h of [inactive, harness({ interactive: false }), harness({ reduced: true })]) {
+		h.runtime.enter({ pointerType: 'mouse' })
+		assert.equal(h.runtime.hovering.value, false)
+	}
+	const touch = harness()
+	touch.runtime.enter({ pointerType: 'touch' })
+	assert.equal(touch.runtime.hovering.value, false)
+})
 
 test('manual stop overrides hover and explicit play persists after pointer leave', () => {
 	const h = harness()

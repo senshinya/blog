@@ -18,7 +18,7 @@ onMounted(() => {
 	}
 })
 function enter(event: PointerEvent) {
-	if (props.interactive && event.pointerType === 'mouse' && reduced.value !== 'reduce' && props.photo.live && !props.photo.video)
+	if (props.active && props.interactive && !props.viewer && event.pointerType === 'mouse' && reduced.value !== 'reduce')
 		hovering.value = true
 }
 function leave() {
@@ -74,7 +74,7 @@ watch(() => livePlaying.value, (playing) => {
 	:class="{ 'cover-image': eager }"
 >
 <div
-	v-else class="photo-open" :class="{ 'photo-static': !interactive }"
+	v-else class="photo-open" :class="{ 'photo-static': !interactive, 'photo-hovered': hovering }"
 	:style="{ '--photo-tilt': paperTilt, '--photo-ratio': (meta?.w ?? 1200) / (meta?.h ?? 800) }"
 	:data-open-label="interactive ? $t('page.travels.editorial.largePhoto') : undefined"
 	@pointerenter="enter" @pointerleave="leave"

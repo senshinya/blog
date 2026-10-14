@@ -63,13 +63,15 @@ export function viewerSwipe(dx: number, dy: number, scale: number): -1 | 0 | 1 {
 	return dx < 0 ? 1 : -1
 }
 
-/** Recover the unrotated image box around the center of its rotated screen bounds. */
-export function orientedViewerRect(bounds: ViewerRect, size: ViewerSize, rotation: number): ViewerRect {
+/** Recover the displayed image box around the center of its rotated screen bounds. */
+export function orientedViewerRect(bounds: ViewerRect, size: ViewerSize, rotation: number, scale = 1): ViewerRect {
+	const width = size.width * scale
+	const height = size.height * scale
 	return {
-		left: bounds.left + (bounds.width - size.width) / 2,
-		top: bounds.top + (bounds.height - size.height) / 2,
-		width: size.width,
-		height: size.height,
+		left: bounds.left + (bounds.width - width) / 2,
+		top: bounds.top + (bounds.height - height) / 2,
+		width,
+		height,
 		rotation,
 	}
 }
