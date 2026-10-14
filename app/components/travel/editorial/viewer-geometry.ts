@@ -1,6 +1,6 @@
 export interface ViewerSize { width: number, height: number }
 export interface ViewerPose { scale: number, x: number, y: number }
-export interface ViewerRect { left: number, top: number, width: number, height: number }
+export interface ViewerRect { left: number, top: number, width: number, height: number, rotation?: number }
 export type ViewerCaptionRects = Partial<Record<'title' | 'place' | 'description', ViewerRect>>
 
 function hasPositiveFiniteSize(size: ViewerSize): boolean {
@@ -63,10 +63,21 @@ export function viewerSwipe(dx: number, dy: number, scale: number): -1 | 0 | 1 {
 	return dx < 0 ? 1 : -1
 }
 
-/** Transform a centered target element onto the source rectangle for a closing morph. */
+/** Recover the unrotated image box around the center of its rotated screen bounds. */
+export function orientedViewerRect(bounds: ViewerRect, size: ViewerSize, rotation: number): ViewerRect {
+	return {
+		left: bounds.left + (bounds.width - size.width) / 2,
+		top: bounds.top + (bounds.height - size.height) / 2,
+		width: size.width,
+		height: size.height,
+		rotation,
+	}
+}
+
+/** Transform a centered target element onto the source image, including its tilt. */
 export function viewerMorph(source: ViewerRect, target: ViewerRect): string {
 	if (
-		![source.left, source.top, source.width, source.height, target.left, target.top, target.width, target.height].every(Number.isFinite)
+		![source.left, source.top, source.width, source.height, source.rotation ?? 0, target.left, target.top, target.width, target.height, target.rotation ?? 0].every(Number.isFinite)
 		|| source.width <= 0 || source.height <= 0 || target.width <= 0 || target.height <= 0
 	) {
 		return 'none'
@@ -74,5 +85,6 @@ export function viewerMorph(source: ViewerRect, target: ViewerRect): string {
 
 	const dx = source.left + source.width / 2 - (target.left + target.width / 2)
 	const dy = source.top + source.height / 2 - (target.top + target.height / 2)
-	return `translate3d(${dx}px, ${dy}px, 0) scale(${source.width / target.width}, ${source.height / target.height})`
+	const rotation = (source.rotation ?? 0) - (target.rotation ?? 0)
+	return `translate3d(${dx}px, ${dy}px, 0)${rotation ? ` rotate(${rotation}deg)` : ''} scale(${source.width / target.width}, ${source.height / target.height})`
 }

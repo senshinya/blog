@@ -10,7 +10,7 @@ interface TravelSpringScrollOptions {
 }
 
 const ignoredGestureTargets = 'input,textarea,select,[contenteditable],.map-detail-map'
-const ignoredKeyboardTargets = 'a,button,input,textarea,select,summary,[contenteditable],[role="button"],.map-detail-map'
+const ignoredKeyboardTargets = 'a,button,input,textarea,select,summary,video,dialog,[contenteditable],[role="button"],[role="menu"],[role="listbox"],.map-detail-map,.maplibregl-map'
 
 export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>, options: TravelSpringScrollOptions) {
 	let controller: ReturnType<typeof attach> | undefined
@@ -32,6 +32,7 @@ export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>,
 		let smoothTimestamp = 0
 		let snapTimer = 0
 		let springRunning = false
+		let springDestination = 0
 		let pointerHeld = false
 		let gestureActive = false
 		let controlledGesture = false
@@ -105,6 +106,7 @@ export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>,
 				target = refreshDestination(target)
 			nativeGestureIgnored = false
 			target = Math.max(0, Math.min(maxScroll(), target))
+			springDestination = target
 			if (immediate || reduced.matches || Math.abs(renderer.position - target) < 0.5) {
 				renderer.write(target)
 				lastScroll = renderer.position
@@ -414,8 +416,29 @@ export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>,
 		}
 
 		function onKeyDown(event: KeyboardEvent) {
-			if (options.blocked() || ignored(event.target, ignoredKeyboardTargets) || event.ctrlKey || event.metaKey || event.altKey)
+			const pageKey = event.key === 'ArrowDown' || event.key === 'ArrowUp'
+			const control = ignored(event.target, ignoredKeyboardTargets) && !(pageKey && ignored(event.target, '.photo-open'))
+			if (event.defaultPrevented || options.blocked() || control || event.ctrlKey || event.metaKey || event.altKey || (pageKey && event.shiftKey))
 				return
+			if (pageKey) {
+				event.preventDefault()
+				if (event.repeat)
+					return
+				const position = springRunning ? springDestination : renderer.position
+				const field = currentSnapField()
+				const stops = field.stops
+				let target = event.key === 'ArrowDown'
+					? stops.find(stop => stop > position + 1) ?? maxScroll()
+					: stops.findLast(stop => stop < position - 1) ?? 0
+				// Longer pages turn a viewport at a time so no paragraph is skipped.
+				if (field.free.some(range => position >= range.start - 1 && position <= range.end + 1 && target >= range.start && target <= range.end)) {
+					target = event.key === 'ArrowDown'
+						? Math.min(target, position + measuredHeight * 0.9)
+						: Math.max(target, position - measuredHeight * 0.9)
+				}
+				springTo(target)
+				return
+			}
 			if (reduced.matches) {
 				cancel()
 				return
@@ -426,8 +449,6 @@ export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>,
 				return
 			}
 			const deltas: Record<string, number> = {
-				'ArrowDown': 44,
-				'ArrowUp': -44,
 				'PageDown': element.clientHeight * 0.82,
 				'PageUp': -element.clientHeight * 0.82,
 				' ': element.clientHeight * 0.82 * (event.shiftKey ? -1 : 1),
@@ -493,7 +514,7 @@ export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>,
 		element.addEventListener('touchend', onTouchEnd, { passive: true })
 		element.addEventListener('touchcancel', onTouchEnd, { passive: true })
 		element.addEventListener('pointerdown', onPointerDown, { passive: true })
-		element.addEventListener('keydown', onKeyDown)
+		win.addEventListener('keydown', onKeyDown)
 		win.addEventListener('pointerup', onPointerUp, { passive: true })
 		win.addEventListener('pointercancel', onPointerCancel, { passive: true })
 		win.addEventListener('resize', measureReadingSteps, { passive: true })
@@ -537,7 +558,7 @@ export function useTravelSpringScroll(root: Ref<HTMLElement | null | undefined>,
 				element.removeEventListener('touchend', onTouchEnd)
 				element.removeEventListener('touchcancel', onTouchEnd)
 				element.removeEventListener('pointerdown', onPointerDown)
-				element.removeEventListener('keydown', onKeyDown)
+				win.removeEventListener('keydown', onKeyDown)
 				win.removeEventListener('pointerup', onPointerUp)
 				win.removeEventListener('pointercancel', onPointerCancel)
 				win.removeEventListener('resize', measureReadingSteps)

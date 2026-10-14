@@ -7,6 +7,7 @@ import { travelPalettes } from '~/utils/travelTheme'
 const props = defineProps<{
 	travel: Travel
 	chapter: number
+	progress?: { current: number, total: number }
 	palette: TravelPalette
 	appearance: TravelAppearance
 	theme: TravelTheme
@@ -107,8 +108,8 @@ onMounted(() => {
 		<strong>{{ travel.title }}</strong>
 	</div>
 	<div class="chapter-nav" @focusout="closeOnFocusOut($event, 'chapter')">
-		<button ref="chapterTrigger" class="chapter-trigger" aria-haspopup="listbox" aria-controls="travel-chapter-menu" :aria-expanded="chapterOpen" :aria-label="`${$t('page.travels.editorial.chapters')}：${currentLabel}`" @click="openMenu('chapter')" @keydown.down.prevent="openMenu('chapter')" @keydown.up.prevent="openMenu('chapter', true)">
-			<span>{{ currentLabel }}</span><TravelEditorialIcon name="down" />
+		<button ref="chapterTrigger" class="chapter-trigger" aria-haspopup="listbox" aria-controls="travel-chapter-menu" :aria-expanded="chapterOpen" :aria-label="`${$t('page.travels.editorial.chapters')}：${currentLabel}${progress ? ` · ${$t('page.travels.editorial.photoProgress', progress)}` : ''}`" @click="openMenu('chapter')" @keydown.down.prevent="openMenu('chapter')" @keydown.up.prevent="openMenu('chapter', true)">
+			<span>{{ currentLabel }}</span><small v-if="progress" class="chapter-photo-progress" :aria-label="$t('page.travels.editorial.photoProgress', progress)">{{ progress.current }} / {{ progress.total }}</small><TravelEditorialIcon name="down" />
 		</button>
 		<div id="travel-chapter-menu" ref="chapterMenu" class="chapter-menu" :hidden="!chapterOpen" @keydown="menuKeys($event, 'chapter')">
 			<div class="chapter-menu-heading" aria-hidden="true">

@@ -1,0 +1,162 @@
+/* Shared paper geometry and viewer morph settings. */
+.travel-editorial {
+	--photo-paper-padding: 4px;
+	--photo-paper-border: 1px;
+	--photo-paper-radius: 4px;
+	--photo-image-radius: 1px;
+	--photo-paper-edge: calc(var(--photo-paper-padding) + var(--photo-paper-border));
+	--photo-morph-duration: 280ms;
+	--photo-morph-easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.travel-editorial .photo-open {
+	--photo-height-limit: 720px;
+	display: block;
+	position: relative;
+	overflow: hidden;
+	width: min(100%, calc(var(--photo-height-limit) * var(--photo-ratio, 1.5) + 2 * var(--photo-paper-edge)));
+	padding: var(--photo-paper-padding);
+	border: var(--photo-paper-border) solid color-mix(in oklab, var(--ink) 12%, transparent);
+	border-radius: var(--photo-paper-radius);
+	box-shadow: 0 2px 8px color-mix(in oklab, var(--menu-shadow) 65%, transparent);
+	background: color-mix(in oklab, var(--paper) 66%, white);
+	rotate: var(--photo-tilt, 0deg);
+	cursor: zoom-in;
+}
+.travel-editorial[data-theme="dark"] .photo-open {
+	background: color-mix(in oklab, var(--paper) 82%, var(--ink));
+}
+.travel-editorial .photo-zoom, .travel-editorial .photo-source {
+	display: block;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	line-height: 0;
+	cursor: inherit;
+}
+.travel-editorial .photo-zoom:focus-visible {
+	outline: none;
+}
+.travel-editorial .photo-open:has(.photo-zoom:focus-visible) {
+	outline: 2px solid var(--red);
+	outline-offset: 3px;
+}
+.travel-editorial .photo-open img {
+	width: 100%;
+	height: auto;
+	max-height: var(--photo-height-limit);
+	border-radius: var(--photo-image-radius);
+	background: var(--paper);
+	object-fit: contain;
+	object-position: left;
+}
+.travel-editorial .photo-open:after {
+	content: attr(data-open-label);
+	display: grid;
+	place-content: center;
+	position: absolute;
+	opacity: 0;
+	right: 10px;
+	bottom: 10px;
+	padding: 3px 8px;
+	background: var(--paper);
+	font-family: var(--sans), sans-serif;
+	font-size: 12px;
+	line-height: 1.8;
+	color: var(--ink);
+	transition: opacity 140ms ease-out;
+	pointer-events: none;
+	z-index: 2;
+}
+.travel-editorial .photo-open:hover:after, .travel-editorial .photo-open:has(.photo-zoom:focus-visible):after {
+	opacity: 1;
+}
+.travel-editorial .photo-open:active:after {
+	opacity: 0.65;
+}
+.travel-editorial .photo-open video {
+	position: absolute;
+	opacity: 0;
+	inset: var(--photo-paper-padding);
+	width: calc(100% - 2 * var(--photo-paper-padding));
+	height: calc(100% - 2 * var(--photo-paper-padding));
+	border-radius: var(--photo-image-radius);
+	object-fit: contain;
+	pointer-events: none;
+}
+.travel-editorial .photo-open video.ready {
+	opacity: 1;
+}
+.travel-editorial .live-viewer {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+.travel-editorial .photo-live-control {
+	display: grid;
+	place-items: center;
+	position: absolute;
+	top: 6px;
+	left: 6px;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: #F4F4F4;
+	transition: transform 140ms ease-out;
+	cursor: pointer;
+	z-index: 3;
+}
+.travel-editorial .photo-live-control:before {
+	content: "";
+	position: absolute;
+	inset: 6px;
+	border-radius: inherit;
+	box-shadow: inset 0 0 0 0.75px #FFFFFF30, 0 1px 4px #00000020;
+	background: #15151570;
+}
+.travel-editorial .photo-live-control svg {
+	position: relative;
+	width: 21px;
+	height: 21px;
+	filter: drop-shadow(0 1px 1px #00000030);
+}
+.travel-editorial .photo-live-control:hover:before, .travel-editorial .photo-live-control:focus-visible:before {
+	background: #151515A0;
+}
+.travel-editorial .photo-live-control:focus-visible {
+	outline: 2px solid var(--red);
+	outline-offset: -3px;
+}
+.travel-editorial .photo-live-control:active {
+	transform: scale(0.94);
+}
+.travel-editorial .photo-motion {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	font-size: 18px;
+	text-shadow: 0 1px 3px #000;
+	color: white;
+}
+@media (max-width: 700px) {
+	.travel-editorial .photo-open {
+		--photo-height-limit: min(420px, calc(var(--reading-viewport, 100dvh) * 0.45));
+		margin-inline: auto;
+	}
+	.travel-editorial .photo-open img {
+		object-position: center;
+	}
+	.travel-editorial .photo-composition > .photo-open {
+		position: relative;
+		z-index: 2;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.travel-editorial .photo-open:after, .travel-editorial .photo-live-control {
+		transition: none;
+	}
+}

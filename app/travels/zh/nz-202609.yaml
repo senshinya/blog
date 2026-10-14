@@ -1,0 +1,320 @@
+# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前四章。
+# 电车说明：https://www.christchurchattractions.nz/
+# 沿途观光铁路：https://www.greatjourneysnz.com/routes/coastal-pacific/
+slug: nz-202609
+draft: true
+title: 新西兰南岛
+subtitle: '2026.9'
+posttitle: 游记：新西兰南岛（2026.9）
+description: |-
+  趁着中秋国庆假期，
+  请三休十三，
+  我们踏上了南半球的土地。
+published: 2026-10-13
+totaldays: 13
+coverImage: https://blog-img.774352199.xyz/S69z5t.png
+coverCaption: 凯库拉的雪山与海
+ending: 未完待续。
+days:
+  - day: 1
+    title: 在路上
+    shortTitle: 在路上
+    descriptions:
+      - 几个月前我还在为订到了低价方案而偷乐，等到真正坐飞机时就笑不出来了。转机方案十分折腾：先从上海飞广州中转，再从广州飞奥克兰，最后奥克兰飞基督城；返程则是基督城飞奥克兰，奥克兰飞北京，北京飞上海。飞完第一程后我就开始研究怎么升舱，还好比票价贵五倍的升舱费阻止了我。
+      - 我是有点神经衰弱的，再加上有些恐飞，噪音+颠簸使我在飞机上基本无法入睡。运气不够好的是，往返的飞机上都没有提供 WiFi。最终只能盯着椅背的娱乐屏，度过漫漫长夜。
+      - 不过好在，也是第一次坐上了空客的 A350。整体体验确实比返程的波音 B787-9 舒适一些。A350 的娱乐屏可以观看机身外几个位置的摄像头的实时画面，起飞和降落时能看到许多有趣的画面。
+      - 下飞机到酒店入住后，只想倒头大睡。
+    photos:
+      - src: https://blog-img.774352199.xyz/wdxqwl.webp
+        alt: A350
+        caption: 南航的 A350，第一次乘坐，安全感很足。不知何时能体验 A380，几乎每个机场都能看到沙特还是阿联酋航空的 A380，十分气派。
+        lat: 23.4009417
+        lng: 113.3044056
+      - src: https://blog-img.774352199.xyz/ioiXvL.webp
+        mapView: day
+        alt: 嘻嘻
+        caption: 刚登机，有点开心。npy 则在飞机还没起飞时就安然入睡。
+        lat: 23.211564
+        lng: 113.103152
+      - src: https://blog-img.774352199.xyz/ZCm8XG.webp
+        mapView: day
+        alt: 不嘻嘻
+        caption: 五个半小时后，依然无法入睡，嘻嘻不起来了。
+        lat: -4.138839
+        lng: 137.564833
+      - src: https://blog-img.774352199.xyz/t0xfem.webp
+        alt: landing
+        caption: 即将落地奥克兰时，前起落架视角。大片的农场。
+        lat: -36.997765
+        lng: 174.837975
+      - src: https://blog-img.774352199.xyz/BxjhU4.webp
+        alt: 机场一瞥
+        caption: 新西兰航空的飞机，黑白涂装有些帅。
+        lat: -37.0076
+        lng: 174.781814
+      - src: https://blog-img.774352199.xyz/iAlrpo.webp
+        alt: 奥克兰国内航站楼
+        caption: 拿行李过海关，乘坐穿梭巴士到了国内航站楼重新办理托运。第一次使用自助托运的机器，有些手忙脚乱。图片是捷星航空的托运处，不知何故人员寥寥。
+        lat: -37.0066528
+        lng: 174.7895972
+      - src: https://blog-img.774352199.xyz/feyXih.webp
+        alt: 抵达基督城
+        caption: 转乘新西兰航空飞到了基督城。机上似乎有一队青年运动员，人高马大的，很是活跃，还给乘客发小饼干。一直很想吐槽国内对基督城的直译：克赖斯特彻奇，中式片假名。
+        lat: -43.488758
+        lng: 172.540039
+  - day: 2
+    title: 基督城
+    shortTitle: 基督城
+    descriptions:
+      - 旅行社没有给第一天安排行程，供我们在基督城自由探索。
+      - 正合我意，早上睡饱。
+      - 上午计划去出门逛一逛，突逢疾风骤雨。狂风吹得头都抬不起来，勉强步行到附近的超市买了些食材，打滴滴（确实是 DiDi，滴滴海外版）回酒店做了顿午饭。
+      - 下午天气放晴，于是出门走走。
+    photos:
+      # NZ041 的拍摄时间为 9 月 28 日晚；此处沿用原稿第二章的配图与顺序。
+      - src: https://blog-img.774352199.xyz/KoIcyI.webp
+        alt: 第一次煎牛排！
+        caption: 新西兰的肉类相对于水果蔬菜十分便宜，我们在红超（New World）买了牛排、肉肠、盐和油，回到酒店完成了我的处女煎。说实话比我想的要简单很多，就是火候难以把握。照片中的牛排切开后里面基本还是生的……煎蛋倒是很香。
+        lat: -43.5270944
+        lng: 172.6327056
+      - src: https://blog-img.774352199.xyz/iZ3q1Y.webp
+        alt: 市区其一
+        caption: 南岛城市的建筑都很低矮，即使在市中心也都是这样的三四层小楼，再往外围一些则是私人的一户建。在市中心拥有带院子的别墅，在这里似乎是稀松平常的，放在国内就很少见了。
+        lat: -43.5266267
+        lng: 172.633295
+      - src: https://blog-img.774352199.xyz/GL9p94.webp
+        alt: 市区其二
+        caption: 基督城被称为花园城市。城市内有许多这样的公园、绿地以及各式各样的雕像、艺术品、历史建筑。酒店旁就竖着一座木质艺术品。
+        lat: -43.5267014
+        lng: 172.633505
+      - src: https://blog-img.774352199.xyz/KT9Jnk.webp
+        alt: 市区其三
+        caption: 在街头逛了许久，总觉得缺少些什么。终于找到了一幢写字楼，牛马的躁动才得以安抚。
+        lat: -43.5298531
+        lng: 172.6324508
+      - src: https://blog-img.774352199.xyz/5rBasa.webp
+        alt: 对牛弹琴？
+        lat: -43.5301619
+        lng: 172.6309281
+      - src: https://blog-img.774352199.xyz/tHqIOE.webp
+        alt: 城市内的有轨电车
+        caption: 市区内有许多涂装鲜艳的有轨电车，主要供游客游览市中心，也有可以边吃饭边看街景的电车餐厅。
+        lat: -43.5308061
+        lng: 172.6307369
+      - src: https://blog-img.774352199.xyz/XdTiUO.webp
+        alt: 英式电话亭
+        caption: 街边的老式电话亭，需要插卡或投币使用。国内基本已经绝迹，或被改造成公共 WiFi 发射站。
+        lat: -43.5310064
+        lng: 172.6290864
+      - src: https://blog-img.774352199.xyz/5HN17m.webp
+        alt: 悬空小房子
+        caption: 无意中走进街边的一个院落，拍到了这个很有特色的艺术品：悬浮在空中的房子。
+        lat: -43.5313556
+        lng: 172.6281072
+      - src: https://blog-img.774352199.xyz/7y08QM.webp
+        alt: 教堂玻璃花窗
+        caption: 彩绘花窗有三四层楼那么高，可惜光线太暗看不太清，对其宗教背景的故事也不甚了解。
+        lat: -43.5312317
+        lng: 172.6277622
+      - src: https://blog-img.774352199.xyz/u8EGEc.webp
+        alt: 植物园其一
+        caption: 市中心的西部有一个很大的植物园，充满了在国内没见过的植物。
+        lat: -43.5316522
+        lng: 172.6260469
+      - src: https://blog-img.774352199.xyz/H97iAb.webp
+        alt: 植物园其二
+        caption: So biiiiiiiiiig~
+        lat: -43.5313442
+        lng: 172.6253764
+      - src: https://blog-img.774352199.xyz/1FPEI1.webp
+        alt: 植物园其三
+        caption: 毫无防备心的🦆，单脚站立休息。看到我接近也只是抬头看了我一眼，便继续把头埋回了翅膀下。
+        lat: -43.5316675
+        lng: 172.6228933
+      - src: https://blog-img.774352199.xyz/gmOfcL.webp
+        alt: 植物园其四
+        lat: -43.5317167
+        lng: 172.6225056
+      - src: https://blog-img.774352199.xyz/2Go053.webp
+        alt: 植物园其五
+        lat: -43.5317861
+        lng: 172.6221444
+      - src: https://blog-img.774352199.xyz/XUgtkJ.webp
+        alt: 追忆桥
+        caption: 坐落在雅芳河上的追忆桥（Bridge of Remembrance），用来纪念一战中阵亡者。整个一战过程中新西兰近 10% 的人口参战，参战人员伤亡率高达 58% 左右，十分惨烈。一个远离欧洲主战场的国家，却承受了如此惨重的战争代价。
+        lat: -43.5331806
+        lng: 172.6327833
+      - src: https://blog-img.774352199.xyz/HJoTD4.webp
+        alt: 郊外一瞥
+        lat: -43.533645
+        lng: 172.6335925
+      - src: https://blog-img.774352199.xyz/Pcg6Mj.webp
+        alt: 晚餐
+        caption: 晚餐来到 Riverside Market。这是个拥有各国特色美食的美食街，就在雅芳河畔。我点了不知是印度菜还是泰国菜，总之有米饭就很对我的胃口。
+        lat: -43.5338889
+        lng: 172.6341861
+  - day: 3
+    title: 凯库拉追鲸
+    shortTitle: 凯库拉追鲸
+    descriptions:
+      - 旅行社安排的首个行程便是从凯库拉出海追鲸。
+      - 新西兰由于纬度原因，较低矮的山也会有雪顶。凯库拉位于南岛东海岸，在这里能同时看到大海、草甸和雪山。当日天公作美，又是个晴天。蓝天白云之下，风景绝美。
+      - 提前做过功课买了晕船药，登船前吃了一颗。海上风浪极大，船上会有工作人员四处瞭望负责寻找鲸鱼的痕迹。一旦发现便会加足马力前往痕迹附近后停船，随后便静待鲸鱼跃出水面。我们运气很好，鲸鱼的表现欲都很高，频频跃起引来游客阵阵欢呼。途中还遇到了海豚群在船身周围结伴而行。
+      - 只是鲸鱼喷气的味道属实很臭。
+    photos:
+      - src: https://blog-img.774352199.xyz/oSINYy.webp
+        alt: 沿途其一
+        caption: 沿途基本都是这样的景色：雪山下的大片牧场，成百上千只牛羊慢悠悠地踱步，或吃草或休息。
+        lat: -43.1250806
+        lng: 172.7331861
+      - src: https://blog-img.774352199.xyz/TNCPeU.webp
+        alt: 沿途其二
+        caption: 沿途还有一条铁路贯穿行程，可惜没能看到火车。这一段也是 Coastal Pacific 观光列车的路线。
+        lat: -43.1096611
+        lng: 172.7362972
+      - src: https://blog-img.774352199.xyz/xoVn0J.webp
+        alt: 绝景
+        caption: 凯库拉有一个伸向海中的半岛，形成了崎岖的海岸线。砂石滩上，可以同时欣赏到雪山、草地、大海、沙滩的组合，很是梦幻。砂石滩上的石头被海水冲刷得十分光滑，挑了几个带回去当纪念品。
+        lat: -42.3988236
+        lng: 173.6826167
+      - src: https://blog-img.774352199.xyz/8Spqw0.webp
+        alt: 你这背景太假了（
+        lat: -42.3985972
+        lng: 173.6826167
+      - src: https://blog-img.774352199.xyz/Q88z34.webp
+        alt: 水鸟其一
+        caption: 整个凯库拉小城都环绕着大量的水鸟，或红嘴红脚，或黑嘴黑脚，也不知是否是同一品种，咕咕嘎嘎地大声叫唤～
+        lat: -42.3982611
+        lng: 173.6814417
+      - src: https://blog-img.774352199.xyz/OHJFlJ.webp
+        alt: 水鸟其二
+        caption: 有人投喂了些面包，于是栈道前便落了一大群。
+        lat: -42.396
+        lng: 173.6811222
+      - src: https://blog-img.774352199.xyz/8prcet.webp
+        alt: 树丛掩映下的雪山
+        caption: 新西兰此刻是初春，但似乎很多常青树。春寒料峭时，也绿意盎然。
+        lat: -42.3959844
+        lng: 173.6811131
+      - src: https://blog-img.774352199.xyz/jG2bMT.webp
+        alt: 观鲸船
+        caption: 本次出海乘坐的观鲸船，远看很小，实际上有两层，搭乘个四五十个人还是很宽敞。
+        lat: -42.4261139
+        lng: 173.6814278
+      - src: https://blog-img.774352199.xyz/b0jOqk.webp
+        alt: 船上回望
+        caption: 出海时回望，原本晴朗的天空还是有云层笼罩。起风了。
+        lat: -42.4253778
+        lng: 173.6812444
+      - src: https://blog-img.774352199.xyz/5FrCDC.webp
+        alt: 独占鳌头
+        lat: -42.4255111
+        lng: 173.68065
+      - src: https://blog-img.774352199.xyz/brFsV1.webp
+        alt: 鲸跃其一
+        caption: 据说每条鲸鱼尾巴上的图案都是独一无二的，就像人类的指纹。不过指纹是年轮，而鲸尾是星空。
+        live: https://blog-img.774352199.xyz/9G12ar.mp4
+        lat: -42.4705472
+        lng: 173.5669694
+      - src: https://blog-img.774352199.xyz/x2zepF.webp
+        alt: 海豚群
+        caption: 成群结队的海豚。可惜天阴了，水面不是那么透明，看不到水下的情况。
+        live: https://blog-img.774352199.xyz/sYQuNx.mp4
+        lat: -42.4717333
+        lng: 173.5667889
+      - src: https://blog-img.774352199.xyz/TVa6UM.webp
+        alt: 鲸跃其二
+        live: https://blog-img.774352199.xyz/iUVBo1.mp4
+        lat: -42.4754361
+        lng: 173.5628056
+      - src: https://blog-img.774352199.xyz/n7VCL8.webp
+        alt: 鲸跃其三
+        live: https://blog-img.774352199.xyz/OZ4VcC.mp4
+        lat: -42.4696722
+        lng: 173.5654611
+      - src: https://blog-img.774352199.xyz/d5lNag.webp
+        alt: 鲸跃其四
+        live: https://blog-img.774352199.xyz/XfBI8E.mp4
+        lat: -42.4686361
+        lng: 173.5657806
+      - src: https://blog-img.774352199.xyz/AWABuM.webp
+        alt: 一碧万顷
+        caption: 有种果冻的质感。
+        lat: -42.4659194
+        lng: 173.5695028
+      - src: https://blog-img.774352199.xyz/MhrhDV.webp
+        alt: 没看到海豹，强颜欢笑
+        caption: 小红书做了攻略，在 Point Kean 能看到海豹。观鲸结束后去了一趟，是一片砂石滩，生长着一些矮树和草丛。不知道是不是时机不对，一只海豹也没看到。
+        lat: -42.4225306
+        lng: 173.7168722
+
+  # 本章按原稿编排；NZ_054、NZ_055 的 EXIF 拍摄日期为 2026-09-30。
+  - day: 4
+    title: 羊驼与星空
+    shortTitle: 羊驼与星空
+    descriptions:
+      - 阿卡罗阿的郊外山坡上，有一座羊驼牧场，牧场的员工大都是台湾人，交流起来没有障碍。
+      - 他们热情地向我们介绍每匹羊驼的名字、个性、脾气和爱好，如同介绍自己的好朋友。
+      - 随后，驱车前往特卡波。那里位于麦肯齐国际暗夜保护区，我平生第一次看到了银河。
+    photos:
+      - src: https://blog-img.774352199.xyz/3q4cfe.webp
+        alt: 被撸也要干饭
+        caption: 羊驼的毛十分厚实，手指能直接插进去狠狠地 rua。羊驼的脾气也很温顺，只是自顾自地吃饭。
+        lat: -43.7912528
+        lng: 172.9052889
+      - src: https://blog-img.774352199.xyz/F5hCNn.webp
+        alt: 你瞅啥
+        caption: 不过有些羊驼的脾气也没有那么好，幸而也没有十分恶劣。不喜欢被 rua 也只是快速跑开，并不会吐口水。事实上最终只看到过一次两只羊驼为了争夺草料相互吐口水。
+        lat: -43.7914417
+        lng: 172.9053806
+      - src: https://blog-img.774352199.xyz/RBNjCX.webp
+        alt: 放荡不羁
+        lat: -43.7914361
+        lng: 172.9053639
+      - src: https://blog-img.774352199.xyz/j584us.webp
+        alt: 羊驼与人，很是和谐
+        caption: 这一片是母羊驼。公羊驼和母羊驼是分开圈养的。公羊驼很大方，不需要喂草料就能随便 rua。而到了母羊驼这一边，工作人员会给每个人都发一个装满草料的盆，只有喂食草料，羊驼才短暂地愿意呆在原地任人 rua，一旦吃完则会十分势利地转身走开。
+        lat: -43.7907444
+        lng: 172.9069361
+      - src: https://blog-img.774352199.xyz/HO6BqJ.webp
+        alt: 海湾
+        lat: -43.7908003
+        lng: 172.906925
+      - src: https://blog-img.774352199.xyz/gBgYrh.webp
+        alt: 特立独行
+        lat: -43.7909806
+        lng: 172.9064333
+      - src: https://blog-img.774352199.xyz/nJTXzJ.webp
+        alt: 午餐日料
+        caption: 前往特卡波途中，经过了一个叫林肯的小镇，镇上餐馆很少。我们选了一家日料店，炸鸡可乐配米饭，吃了一顿新式日料。
+        lat: -43.6403583
+        lng: 172.4839028
+      - src: https://blog-img.774352199.xyz/klK4i3.webp
+        alt: 特卡波湖畔
+        lat: -44.0023642
+        lng: 170.4787881
+      - src: https://blog-img.774352199.xyz/yMEKCV.webp
+        alt: 好牧羊人教堂
+        caption: 也算是新西兰十大网红景点了，所以围着教堂的人很多。我只是远远地拍了一张，湖水映着教堂的倒影，只能说小红书审美这块儿还是在线的。
+        lat: -44.002329
+        lng: 170.479528
+      - src: https://blog-img.774352199.xyz/HvIFYx.webp
+        alt: 等待星空
+        caption: 饭后在湖边，找了个椅子等待观星。太阳落山后，暮光依然很亮，只有木星高悬夜空。
+        lat: -44.0030833
+        lng: 170.479675
+      - src: https://blog-img.774352199.xyz/6rNxb2.webp
+        alt: 银河其一
+        caption: 九点半左右，暮光完全消失。先是漫天繁星渐次出现，随后一条光带缓缓显现出来。
+        lat: -44.0030639
+        lng: 170.4735556
+      - src: https://blog-img.774352199.xyz/WyBNEM.webp
+        alt: 南半球特产
+        caption: 一直在各种纪录片中被提及的，我小时候就在科技馆反复听到的，大麦哲伦星云和小麦哲伦星云。
+        lat: -44.0047139
+        lng: 170.4738472
+      - src: https://blog-img.774352199.xyz/S16Xz3.webp
+        alt: 银河其二
+        caption: 甚至不需要专业的相机，只需手机夜景模式随手一拍。
+        lat: -44.0047083
+        lng: 170.4738306

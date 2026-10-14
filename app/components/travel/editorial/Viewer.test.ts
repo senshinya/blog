@@ -30,7 +30,7 @@ function harness(reducedMotion = 'no-preference') {
 			return value
 		},
 		nextTick: async () => {},
-		getComputedStyle: () => ({ transform: 'none' }),
+		getComputedStyle: () => ({ transform: 'none', getPropertyValue: (key: string) => key === '--photo-morph-duration' ? '280ms' : 'cubic-bezier(.22,1,.36,1)' }),
 		watch() {},
 		onMounted() {},
 		onScopeDispose: (fn: () => void) => { dispose = fn },
@@ -192,4 +192,28 @@ test('closing returns the caption to its reading anchor and retains the final fr
 	assert.equal(h.motions.some(motion => motion.cancelled), false)
 	h.dispose()
 	assert.equal(h.motions.every(motion => motion.cancelled), true)
+})
+
+test('opening smoothly straightens a tilted reading photo', async () => {
+	const h = animatedViewer()
+	const pending = h.runtime.enter({ left: 0, top: 0, width: 100, height: 100, rotation: -1.1 }, h.notes)
+	await new Promise<void>(resolve => setImmediate(resolve))
+	const photo = h.motions.find(motion => motion.name === 'photograph')!
+	assert.match(String(photo.frames[0]!.transform), /rotate\(-1\.1deg\)/)
+	assert.equal(photo.frames[1]!.transform, 'none')
+	for (const motion of h.motions)
+		motion.finish()
+	await pending
+})
+
+test('closing restores the reading tilt before the dialog is removed', async () => {
+	const h = animatedViewer()
+	const pending = h.runtime.leave({ left: 0, top: 0, width: 100, height: 100, rotation: 1.2 }, h.notes)
+	const photo = h.motions.find(motion => motion.name === 'photograph')!
+	assert.match(String(photo.frames[1]!.transform), /rotate\(1\.2deg\)/)
+	for (const motion of h.motions)
+		motion.finish()
+	await pending
+	assert.equal(photo.cancelled, false)
+	h.dispose()
 })

@@ -161,12 +161,6 @@ function wheel(event: WheelEvent) {
 	const unit = event.deltaMode === 1 ? 20 : event.deltaMode === 2 ? stageSize.value.height : 1
 	zoomTo(pose.value.scale * Math.exp(-event.deltaY * unit * 0.002), pointInStage(event.clientX, event.clientY))
 }
-function photoKey(event: KeyboardEvent) {
-	if (movingPhoto.value || !['Enter', ' '].includes(event.key))
-		return
-	event.preventDefault()
-	toggleZoom()
-}
 function loaded(event: Event) {
 	const image = event.target as HTMLImageElement
 	if (disposed || image !== previewImage.value || !image.isConnected || image.dataset.photoIndex !== String(props.index))
@@ -201,7 +195,10 @@ function cancelMotions() {
 async function animate(keyframes: Keyframe[], element = photograph.value, persist = false) {
 	if (disposed || reduced.value === 'reduce' || !element)
 		return
-	const current = element.animate(keyframes, { duration: 280, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' })
+	const style = getComputedStyle(element)
+	const duration = Number.parseFloat(style.getPropertyValue('--photo-morph-duration'))
+	const easing = style.getPropertyValue('--photo-morph-easing').trim() || 'cubic-bezier(.22,1,.36,1)'
+	const current = element.animate(keyframes, { duration: Number.isFinite(duration) ? duration : 280, easing, fill: 'both' })
 	motions.add(current)
 	try {
 		await current.finished
@@ -311,7 +308,7 @@ defineExpose({ enter, leave })
 	</header>
 	<div class="lightbox-content" :style="{ '--photo-ratio': `${imageSize.width} / ${imageSize.height}` }">
 		<div ref="stage" class="lightbox-stage" @pointerdown="pointerDown" @pointermove="pointerMove" @pointerup="pointerEnd" @pointercancel="pointerEnd" @lostpointercapture="pointerLost" @wheel="wheel">
-			<div ref="photograph" class="lightbox-photo" :style="photoStyle" :role="movingPhoto ? undefined : 'button'" :tabindex="movingPhoto ? undefined : 0" :aria-label="movingPhoto ? undefined : t(`page.travels.editorial.${pose.scale > 1.01 ? 'fitPhoto' : 'zoomPhoto'}`)" :aria-pressed="movingPhoto ? undefined : pose.scale > 1.01" @keydown="photoKey">
+			<div ref="photograph" class="lightbox-photo" :style="photoStyle">
 				<TravelEditorialPhoto v-if="movingPhoto" :photo viewer />
 				<template v-else>
 					<img :key="index" ref="previewImage" class="lightbox-preview" :data-photo-index="index" :src="getTravelImg(photo.src, TravelImgWidth.viewer)" :alt="photo.alt" :width="imageSize.width" :height="imageSize.height" draggable="false" decoding="async" :style="getLqipStyle(photo.src)" @load="loaded">

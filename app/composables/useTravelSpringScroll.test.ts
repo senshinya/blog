@@ -154,6 +154,103 @@ function harness(initialWidth = 1000, quantized = false, initialScroll = 0) {
 	}
 }
 
+function key(h: ReturnType<typeof harness>, value: string, extra: Record<string, unknown> = {}) {
+	const listener = h.windowListeners.get('keydown')
+	assert.equal(typeof listener, 'function', 'reading shortcuts work before the article is focused')
+	const event = {
+		key: value,
+		target: h.target('body'),
+		defaultPrevented: false,
+		preventDefault() { this.defaultPrevented = true },
+		...extra,
+	}
+	listener!(event)
+	return event.defaultPrevented
+}
+function finishSpring(h: ReturnType<typeof harness>) {
+	for (let i = 0; i < 120; i++)
+		h.frame()
+}
+
+test('up and down keys turn one reading page without first focusing the article', () => {
+	const h = harness()
+	assert.equal(key(h, 'ArrowDown'), true)
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 1000)
+	key(h, 'ArrowUp')
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 0)
+	key(h, 'ArrowUp')
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 0)
+	for (let i = 0; i < 4; i++) {
+		key(h, 'ArrowDown')
+		finishSpring(h)
+	}
+	assert.equal(h.root.scrollTop, 3000)
+	h.dispose()
+})
+test('separate presses advance from the pending page, while held-key repeats stay on it', () => {
+	const h = harness()
+	key(h, 'ArrowDown')
+	key(h, 'ArrowDown', { repeat: true })
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 1000)
+	key(h, 'ArrowDown')
+	key(h, 'ArrowDown')
+	key(h, 'ArrowUp')
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 2000)
+	h.dispose()
+})
+test('reading shortcuts preserve controls, menus, maps and modifier-key operations', () => {
+	const h = harness()
+	for (const selector of ['input', 'textarea', 'select', 'button', 'a', 'summary', '[contenteditable]', '[role="menu"]', '[role="listbox"]', 'video', '.map-detail-map', 'dialog'])
+		assert.equal(key(h, 'ArrowDown', { target: h.target(selector) }), false, selector)
+	for (const modifier of ['ctrlKey', 'metaKey', 'altKey', 'shiftKey'])
+		assert.equal(key(h, 'ArrowDown', { [modifier]: true }), false, modifier)
+	key(h, 'ArrowDown', { defaultPrevented: true })
+	h.setBlocked(true)
+	assert.equal(key(h, 'ArrowDown'), false)
+	assert.equal(h.root.scrollTop, 0)
+	assert.equal(h.frames.size, 0)
+	h.dispose()
+	assert.equal(h.windowListeners.size, 0)
+})
+test('focused photo buttons still allow reading-page shortcuts after the viewer closes', () => {
+	const h = harness()
+	assert.equal(key(h, 'ArrowDown', { target: h.target('.photo-open') }), true)
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 1000)
+	h.dispose()
+})
+test('reduced-motion readers turn pages immediately and retain native ordinary scrolling', () => {
+	const h = harness()
+	h.media.matches = true
+	assert.equal(key(h, 'ArrowDown'), true)
+	assert.equal(h.root.scrollTop, 1000)
+	assert.equal(h.frames.size, 0)
+	assert.equal(key(h, 'ArrowUp'), true)
+	assert.equal(h.root.scrollTop, 0)
+	assert.equal(key(h, 'PageDown'), false)
+	h.dispose()
+})
+test('long reading pages expose their final text before advancing to the following page', () => {
+	const h = harness()
+	h.setStepSize(2500)
+	h.resize()
+	key(h, 'ArrowDown')
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 900)
+	key(h, 'ArrowDown')
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 1500)
+	key(h, 'ArrowDown')
+	finishSpring(h)
+	assert.equal(h.root.scrollTop, 2500)
+	h.dispose()
+})
+
 test('wheel input accumulates without jumping and cancels on takeover', () => {
 	const h = harness()
 	assert.equal(h.wheel(200), true)

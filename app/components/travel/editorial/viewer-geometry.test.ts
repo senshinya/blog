@@ -4,11 +4,18 @@ import { test } from 'node:test'
 import {
 	clampViewerPose,
 	fitViewerImage,
+	orientedViewerRect,
 	pinchViewerAt,
 	viewerMorph,
 	viewerSwipe,
 	zoomViewerAt,
 } from './viewer-geometry.ts'
+
+test('tilted bounds retain their center without inflating the actual image dimensions', () => {
+	const rect = orientedViewerRect({ left: 10, top: 20, width: 204, height: 108 }, { width: 200, height: 100 }, 1.2)
+	assert.deepEqual(rect, { left: 12, top: 24, width: 200, height: 100, rotation: 1.2 })
+	assert.equal(viewerMorph(rect, { left: 112, top: 224, width: 400, height: 200 }), 'translate3d(-200px, -250px, 0) rotate(1.2deg) scale(0.5, 0.5)')
+})
 
 test('fits portrait images inside the viewport without changing their aspect ratio', () => {
 	assert.deepEqual(fitViewerImage({ width: 400, height: 800 }, { width: 1000, height: 500 }), { width: 250, height: 500 })

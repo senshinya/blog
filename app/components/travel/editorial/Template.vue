@@ -5,7 +5,10 @@ import type { Travel } from '~/types/travel'
 import blogConfig from '~~/blog.config'
 import { contentResourceLinks } from '~/utils/contentResources'
 import { countTravelLocations, flattenTravelPhotos, hasTravelCoordinates, travelCoordinateLabel } from '~/utils/travelStory'
+import { orientedViewerRect } from './viewer-geometry'
 import './editorial.css'
+import './photo.css'
+import './viewer.css'
 import './mobile-backdrop.css'
 
 const props = defineProps<{ travel: Travel }>()
@@ -28,12 +31,24 @@ const viewerIndex = ref(0)
 const expandedMap = ref<string | null>(null)
 const exploring = ref(false)
 const mapFailed = ref(false)
-const mobile = useMediaQuery('(max-width: 700px)')
+const mobile = useMediaQuery('(max-width: 700px)', { ssrWidth: 1024 })
 const reduced = usePreferredReducedMotion()
 const { palette, appearance, theme, setPalette, setAppearance } = useTravelTheme()
 const focusedIndex = computed(() => viewerOpen.value ? viewerIndex.value : activeNode.value.startsWith('photo-') ? Number(activeNode.value.slice(6)) : -1)
 const activeChapter = computed(() => focusedIndex.value >= 0 ? photos.value[focusedIndex.value]?.chapter ?? -1 : activeNode.value.startsWith('chapter-') ? Number(activeNode.value.slice(8)) : -1)
 const viewerPhoto = computed(() => photos.value[viewerIndex.value])
+const chapterProgress = computed(() => {
+	const photo = photos.value[focusedIndex.value]
+	return photo ? { current: photo.chapterIndex + 1, total: chapters.value[photo.chapter]!.photos.length } : undefined
+})
+const nextReadingImage = computed(() => {
+	const node = activeNode.value
+	const next = node.startsWith('photo-')
+		? photos.value[Number(node.slice(6)) + 1]
+		: node.startsWith('chapter-') ? chapters.value[Number(node.slice(8))]?.photos[0] : photos.value[0]
+	return next ? getTravelImg(next.src, mobile.value ? TravelImgWidth.cover : TravelImgWidth.viewer) : undefined
+})
+useTravelPhotoPreload(nextReadingImage, computed(() => viewerOpen.value || exploring.value))
 const connector = ref<{ path: string, x: number, y: number } | null>(null)
 const published = computed(() => new Intl.DateTimeFormat(locale.value, { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${props.travel.published}T00:00:00Z`)))
 let atlas: TravelAtlas | undefined
@@ -150,9 +165,22 @@ useEventListener(root, 'keydown', (event: KeyboardEvent) => {
 	if (exploring.value && event.key === 'Escape') {
 		event.preventDefault()
 		event.stopPropagation()
-		closeMap()
+		if (viewerOpen.value)
+			closeViewer()
+		else closeMap()
 	}
 })
+function photoRect(index: number): ViewerRect | undefined {
+	const image = root.value?.querySelector<HTMLImageElement>(`#photo-${index} .photo-open img`)
+	const frame = image?.closest('.photo-open')
+	if (!image || !frame)
+		return
+	const style = getComputedStyle(image)
+	return orientedViewerRect(image.getBoundingClientRect(), {
+		width: Number.parseFloat(style.width),
+		height: Number.parseFloat(style.height),
+	}, Number.parseFloat(getComputedStyle(frame).rotate) || 0)
+}
 function captionRects(index: number): ViewerCaptionRects {
 	const figure = root.value?.querySelector(`#photo-${index} .story-photo`)
 	return {
@@ -166,7 +194,7 @@ async function openViewer(index: number) {
 		return
 	if (exploring.value)
 		closeMap()
-	const origin = root.value?.querySelector(`#photo-${index} .photo-open img`)?.getBoundingClientRect()
+	const origin = photoRect(index)
 	const notes = captionRects(index)
 	cancel()
 	scrollToNode(`photo-${index}`, true)
@@ -196,7 +224,7 @@ async function closeViewer() {
 	await nextTick()
 	if (disposed)
 		return
-	const target = root.value?.querySelector(`#photo-${viewerIndex.value} .photo-open img`)?.getBoundingClientRect()
+	const target = photoRect(viewerIndex.value)
 	viewerDimmed.value = false
 	atlas?.update()
 	await lightbox.value?.leave(target, captionRects(viewerIndex.value))
@@ -208,7 +236,7 @@ async function closeViewer() {
 	await nextTick()
 	if (disposed)
 		return
-	root.value?.querySelector<HTMLButtonElement>(`#photo-${viewerIndex.value} .photo-open`)?.focus({ preventScroll: true })
+	root.value?.querySelector<HTMLButtonElement>(`#photo-${viewerIndex.value} .photo-zoom`)?.focus({ preventScroll: true })
 	atlas?.update()
 	queueConnector()
 }
@@ -218,12 +246,6 @@ function stepViewer(delta: number) {
 	if (exploring.value)
 		closeMap()
 	viewerIndex.value = Math.max(0, Math.min(photos.value.length - 1, viewerIndex.value + delta))
-}
-function viewerKey(event: KeyboardEvent) {
-	if (!viewerClosing.value && ['ArrowLeft', 'ArrowRight'].includes(event.key) && !(event.target as Element).closest('video,.map-detail-map')) {
-		event.preventDefault()
-		stepViewer(event.key === 'ArrowLeft' ? -1 : 1)
-	}
 }
 watch([activeNode, focusedIndex, palette, theme], async () => {
 	await nextTick()
@@ -287,7 +309,7 @@ onBeforeUnmount(() => {
 <template>
 <div ref="root" class="travel-editorial spring-ready" :class="{ 'exploring': exploring && !mobile, 'viewer-active': viewerOpen, 'viewer-restoring': viewerClosing }" :data-theme="theme" :data-palette="palette" :data-appearance="appearance" :data-reading-node="activeNode">
 	<a class="skip" href="#intro" @click.prevent="skipToContent">{{ $t('nav.skipToContent') }}</a>
-	<TravelEditorialMenus :travel :chapter="activeChapter" :palette :appearance :theme :exploring="exploring && !mobile" @navigate="navigate" @palette="setPalette" @appearance="setAppearance" @explore="toggleExplore" @interrupt="cancel" />
+	<TravelEditorialMenus :travel :chapter="activeChapter" :progress="chapterProgress" :palette :appearance :theme :exploring="exploring && !mobile" @navigate="navigate" @palette="setPalette" @appearance="setAppearance" @explore="toggleExplore" @interrupt="cancel" />
 	<aside class="map-stage" :aria-label="$t('page.travels.mapControls.title')" @wheel="wheel">
 		<div ref="canvas" class="map-canvas" />
 		<div class="map-cover" />
@@ -354,7 +376,7 @@ onBeforeUnmount(() => {
 						<figure class="story-photo" :class="{ portrait: photoPortrait(photo.src), active: focusedIndex === photo.index }">
 							<div>
 								<div class="photo-composition">
-									<TravelEditorialPhoto :photo :interactive="!mobile" @open="openViewer(photo.index)" />
+									<TravelEditorialPhoto :photo :index="photo.index" :active="!viewerOpen && focusedIndex === photo.index" :interactive="!mobile" @open="openViewer(photo.index)" />
 								</div>
 								<TravelEditorialMapDetail v-if="!viewerOpen && expandedMap === `photo-${photo.index}`" :map-key="`photo-${photo.index}`" :title="photo.alt" @collapse="closeMap" />
 							</div>
@@ -392,7 +414,7 @@ onBeforeUnmount(() => {
 	</main>
 	<TravelEditorialScrollPerf v-if="scrollPerfEnabled" :target="scroller" />
 	<svg class="connector" aria-hidden="true"><template v-if="connector"><path :d="connector.path" /><circle :cx="connector.x" :cy="connector.y" r="1.8" /></template></svg>
-	<dialog ref="viewer" class="viewer" :data-dimmed="viewerDimmed" :aria-labelledby="viewerOpen ? 'travel-viewer-title' : undefined" :aria-busy="viewerClosing" @cancel.prevent="closeViewer" @close="closeViewer" @keydown="viewerKey">
+	<dialog ref="viewer" class="viewer" :data-dimmed="viewerDimmed" :aria-labelledby="viewerOpen ? 'travel-viewer-title' : undefined" :aria-busy="viewerClosing" @cancel.prevent="closeViewer" @close="closeViewer">
 		<TravelEditorialViewer v-if="viewerOpen && viewerPhoto" ref="lightbox" :photo="viewerPhoto" :index="viewerIndex" :total="photos.length" :chapter="chapters[viewerPhoto.chapter]?.label ?? ''" :closing="viewerClosing" @close="closeViewer" @step="stepViewer" />
 	</dialog>
 </div>

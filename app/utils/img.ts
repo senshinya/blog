@@ -13,6 +13,8 @@ export interface ImgMeta {
 	h: number
 	/** 三个主色打包成的 8 位十六进制，见 assets/css/lqip.css */
 	lqip: string
+	/** 透明图片跳过占位底色，避免底色透过留白。 */
+	transparent?: boolean
 }
 
 /** 由 scripts/gen-image-meta.ts 预生成。SVG 和站外图不在其中，取不到就是 undefined */
@@ -29,7 +31,7 @@ export const getImgMeta = (src: string): ImgMeta | undefined => META[src]
  */
 export function getLqipStyle(src: string) {
 	const meta = META[src]
-	return meta ? { '--lqip': `#${meta.lqip}` } : undefined
+	return meta && !meta.transparent ? { '--lqip': `#${meta.lqip}` } : undefined
 }
 
 /**
