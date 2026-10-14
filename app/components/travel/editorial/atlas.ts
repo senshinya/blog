@@ -306,6 +306,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		const enabled = getState().exploring || explorationKey !== undefined
 		for (const handler of [map.dragPan, map.dragRotate, map.doubleClickZoom, map.scrollZoom, map.touchZoomRotate, map.touchPitch, map.keyboard, map.boxZoom])
 			enabled ? handler.enable() : handler.disable()
+		map.getCanvasContainer().classList.toggle('maplibregl-interactive', enabled)
 		map.getCanvas().tabIndex = enabled ? 0 : -1
 		if (enabled && !navigationAdded) {
 			navigation ??= new maplibre.NavigationControl({ showCompass: false })
@@ -600,6 +601,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			})
 			map.on('move', onMove)
 			map.on('webglcontextlost', failure)
+			map.getCanvasContainer().classList.remove('maplibregl-interactive')
 			map.getCanvas().tabIndex = -1
 			void waitFor(map, 'load', 15000).then((loaded) => {
 				if (disposed)

@@ -200,6 +200,8 @@ const zh = {
 				largePhoto: '大图 ↗',
 				playLive: '播放实况',
 				stopLive: '停止实况',
+				unmuteLive: '打开实况声音',
+				muteLive: '关闭实况声音',
 				photoProgress: '本章第 {current} 张照片，共 {total} 张',
 				photoMap: '{title}的拍摄位置地图',
 				expandPhotoMap: '展开拍摄地图：{title}',

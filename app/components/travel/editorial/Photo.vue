@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TravelPhoto } from '~/types/travel'
 import LiveControl from './LiveControl.vue'
+import SoundControl from './SoundControl.vue'
 
 const props = withDefaults(defineProps<{ photo: TravelPhoto, index?: number, active?: boolean, eager?: boolean, viewer?: boolean, interactive?: boolean }>(), { index: 0, active: true, interactive: true })
 defineEmits<{ open: [] }>()
@@ -8,6 +9,8 @@ const reduced = usePreferredReducedMotion()
 const hovering = ref(false)
 const liveReady = ref(false)
 const liveMode = ref<'auto' | 'play' | 'stop'>('auto')
+const liveMuted = ref(true)
+const liveVideo = ref<HTMLVideoElement>()
 const livePlaying = computed(() => Boolean(props.active && props.photo.live && !props.photo.video && (liveMode.value === 'play' || (liveMode.value === 'auto' && reduced.value !== 'reduce' && (props.viewer || hovering.value)))))
 const meta = computed(() => getImgMeta(props.photo.src))
 const paperTilt = ref('0deg')
@@ -26,8 +29,29 @@ function leave() {
 	if (!livePlaying.value)
 		liveReady.value = false
 }
-function toggleLive() {
+function playLiveVideo() {
+	const video = liveVideo.value
+	if (!video || !livePlaying.value)
+		return
+	video.muted = liveMuted.value
+	void video.play().catch(() => {
+		if (liveVideo.value === video)
+			stopLive()
+	})
+}
+async function toggleLive() {
 	liveMode.value = livePlaying.value ? 'stop' : 'play'
+	if (livePlaying.value) {
+		await nextTick()
+		playLiveVideo()
+	}
+}
+function toggleSound() {
+	liveMuted.value = !liveMuted.value
+	// Apply within the click gesture so Safari permits audible playback.
+	if (liveVideo.value)
+		liveVideo.value.muted = liveMuted.value
+	playLiveVideo()
 }
 function stopLive() {
 	liveMode.value = 'stop'
@@ -35,6 +59,7 @@ function stopLive() {
 }
 function resetLive() {
 	liveMode.value = 'auto'
+	liveMuted.value = true
 	hovering.value = false
 	liveReady.value = false
 }
@@ -51,9 +76,10 @@ watch(() => livePlaying.value, (playing) => {
 
 <template>
 <div v-if="viewer && photo.live && !photo.video" class="live-viewer">
-	<video v-if="livePlaying" :key="photo.live" :src="photo.live" :poster="getTravelImg(photo.src, TravelImgWidth.viewer)" :width="meta?.w ?? 1200" :height="meta?.h ?? 800" :aria-label="photo.alt" muted loop autoplay playsinline preload="metadata" @error="stopLive" />
+	<video v-if="livePlaying" :key="photo.live" ref="liveVideo" :src="photo.live" :poster="getTravelImg(photo.src, TravelImgWidth.viewer)" :width="meta?.w ?? 1200" :height="meta?.h ?? 800" :aria-label="photo.alt" :muted="liveMuted" loop autoplay playsinline preload="metadata" @error="stopLive" />
 	<img v-else :src="getTravelImg(photo.src, TravelImgWidth.viewer)" :alt="photo.alt" :width="meta?.w ?? 1200" :height="meta?.h ?? 800" decoding="async">
 	<LiveControl :playing="livePlaying" @toggle="toggleLive" />
+	<SoundControl :muted="liveMuted" @toggle="toggleSound" />
 </div>
 <video
 	v-else-if="viewer && photo.video"
@@ -86,10 +112,11 @@ watch(() => livePlaying.value, (playing) => {
 		</picture>
 	</component>
 	<video
-		v-if="livePlaying" :src="photo.live" :class="{ ready: liveReady }"
-		muted loop autoplay playsinline preload="none" aria-hidden="true" @playing="liveReady = true" @error="stopLive"
+		v-if="livePlaying" ref="liveVideo" :src="photo.live" :class="{ ready: liveReady }"
+		:muted="liveMuted" loop autoplay playsinline preload="none" aria-hidden="true" @playing="liveReady = true" @error="stopLive"
 	/>
 	<LiveControl v-if="photo.live && !photo.video" :playing="livePlaying" @toggle="toggleLive" />
+	<SoundControl v-if="photo.live && !photo.video" :muted="liveMuted" @toggle="toggleSound" />
 	<span v-else-if="photo.video" class="photo-motion" aria-hidden="true">▶</span>
 </div>
 </template>

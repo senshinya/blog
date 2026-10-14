@@ -198,6 +198,8 @@ const ja: MessageSchema = {
 				largePhoto: '拡大 ↗',
 				playLive: 'Live Photo を再生',
 				stopLive: 'Live Photo を停止',
+				unmuteLive: 'Live Photo の音をオン',
+				muteLive: 'Live Photo の音をオフ',
 				photoProgress: 'この章の写真 {current} / {total}',
 				photoMap: '{title}の撮影地点の地図',
 				expandPhotoMap: '撮影地点の地図を開く：{title}',

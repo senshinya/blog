@@ -151,6 +151,10 @@
 	box-shadow: inset 0 0 0 0.75px #FFFFFF30, 0 1px 4px #00000020;
 	background: #15151570;
 }
+.travel-editorial .photo-sound-control {
+	right: 6px;
+	left: auto;
+}
 .travel-editorial .photo-live-control svg {
 	position: relative;
 	width: 21px;

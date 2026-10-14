@@ -11,6 +11,14 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 	const allocations: any[] = []
 	const cameras: any[] = []
 	const mutations: any[] = []
+	const interactiveClasses = new Set(['maplibregl-interactive'])
+	const canvasContainer = { classList: {
+		remove: (name: string) => interactiveClasses.delete(name),
+		toggle(name: string, enabled: boolean) {
+			enabled ? interactiveClasses.add(name) : interactiveClasses.delete(name)
+		},
+	} }
+	let dragEnabled = false
 	let stopped = 0
 	let load: (() => void) | undefined
 	let removals = 0
@@ -67,9 +75,15 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 		setPaintProperty() {}
 		setLayoutProperty() {}
 		setPixelRatio() {}
+		addControl() {}
+		removeControl() {}
 		easeTo(options: any) { cameras.push({ type: 'ease', ...options }) }
 		fitBounds(bounds: any, options: any) { cameras.push({ type: 'fit', points: bounds.points, ...options }) }
-		dragPan = { disable() {} }
+		dragPan = {
+			enable() { dragEnabled = true },
+			disable() { dragEnabled = false },
+		}
+
 		dragRotate = this.dragPan
 		doubleClickZoom = this.dragPan
 		scrollZoom = this.dragPan
@@ -78,6 +92,7 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 		keyboard = this.dragPan
 		boxZoom = this.dragPan
 		getCanvas() { return { tabIndex: 0 } }
+		getCanvasContainer() { return canvasContainer }
 		remove() { removals++ }
 	}
 	const source = stripTypeScriptTypes(readFileSync(new URL('./atlas.ts', import.meta.url), 'utf8'))
@@ -91,7 +106,7 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 		structuredClone,
 		console,
 		workerUrl: 'test-worker',
-		maplibreMock: { Map: MapMock, setWorkerUrl() {}, LngLatBounds: class { points: any[] = []; extend(point: any) { this.points.push(point) } } },
+		maplibreMock: { Map: MapMock, NavigationControl: class {}, setWorkerUrl() {}, LngLatBounds: class { points: any[] = []; extend(point: any) { this.points.push(point) } } },
 		travelMapColors: () => ({ paper: '#1d1d1f', accent: '#ab7159', muted: '#aaa' }),
 		window: { devicePixelRatio: 3 },
 		lightStyle: { layers: [] },
@@ -107,7 +122,7 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 				]
 			: [], locale: 'zh', labels: {}, getState: () => state, onMove() {}, onFailure() {} },
 	})
-	return { state, allocations, runtime, intersections, cameras, canvas, home, backdrop, scroller, stopped: () => stopped, removals: () => removals, async loaded() {
+	return { state, allocations, runtime, intersections, cameras, canvas, home, backdrop, scroller, interactiveClasses, dragEnabled: () => dragEnabled, stopped: () => stopped, removals: () => removals, async loaded() {
 		load?.()
 		await Promise.resolve()
 		await Promise.resolve()
@@ -140,6 +155,35 @@ test('desktop reading retains one live map and releases it on disposal', async (
 	assert.equal(h.allocations.length, 1)
 	h.runtime.dispose()
 	assert.equal(h.removals(), 1)
+})
+
+test('map drag cursor follows interaction through reading, exploration and photo preview', async () => {
+	const h = await harness(false)
+	try {
+		assert.equal(h.interactiveClasses.has('maplibregl-interactive'), false, 'reading must not advertise dragging before map load')
+		await h.loaded()
+		assert.equal(h.dragEnabled(), false)
+		assert.equal(h.interactiveClasses.has('maplibregl-interactive'), false)
+		h.state.exploring = true
+		h.runtime.update()
+		assert.equal(h.dragEnabled(), true)
+		assert.equal(h.interactiveClasses.has('maplibregl-interactive'), true)
+		h.state.exploring = false
+		h.state.viewer = true
+		h.runtime.update()
+		assert.equal(h.dragEnabled(), false)
+		assert.equal(h.interactiveClasses.has('maplibregl-interactive'), false)
+		h.state.viewer = false
+		h.runtime.explore('photo-0')
+		assert.equal(h.dragEnabled(), true)
+		assert.equal(h.interactiveClasses.has('maplibregl-interactive'), true)
+		h.runtime.restore()
+		assert.equal(h.dragEnabled(), false)
+		assert.equal(h.interactiveClasses.has('maplibregl-interactive'), false)
+	}
+	finally {
+		h.runtime.dispose()
+	}
 })
 
 test('offscreen mobile map backdrops release their decoded image resources', async () => {

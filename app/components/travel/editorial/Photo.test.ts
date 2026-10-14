@@ -9,7 +9,7 @@ function harness({ reduced = false, viewer = false, interactive = true } = {}) {
 	const props = { photo: { src: 'photo.jpg', live: 'photo.mp4' }, index: 0, active: true, viewer, interactive }
 	const watchers: Array<{ source: () => unknown, callback: (value: unknown) => void, previous: unknown }> = []
 	const script = stripTypeScriptTypes(readFileSync(new URL('./Photo.vue', import.meta.url), 'utf8').match(/<script setup lang="ts">([\s\S]*?)<\/script>/)![1]!).replace(/^import .*$/gm, '')
-	const runtime = vm.runInNewContext(`${script}\n;({ enter, leave, hovering, toggleLive: typeof toggleLive === 'function' ? toggleLive : undefined, livePlaying: typeof livePlaying === 'undefined' ? undefined : livePlaying })`, {
+	const runtime = vm.runInNewContext(`${script}\n;({ enter, leave, hovering, toggleLive, livePlaying, liveMuted: typeof liveMuted === 'undefined' ? undefined : liveMuted, liveVideo: typeof liveVideo === 'undefined' ? undefined : liveVideo, toggleSound: typeof toggleSound === 'undefined' ? undefined : toggleSound })`, {
 		defineProps: () => props,
 		withDefaults: (value: unknown) => value,
 		defineEmits() {},
@@ -18,10 +18,11 @@ function harness({ reduced = false, viewer = false, interactive = true } = {}) {
 		computed: (get: () => unknown) => ({ get value() { return get() } }),
 		getImgMeta: () => undefined,
 		onMounted() {},
+		nextTick: () => Promise.resolve(),
 		watch(source: () => unknown, callback: (value: unknown) => void) {
 			watchers.push({ source, callback, previous: source() })
 		},
-	}) as { enter: (event: { pointerType: string }) => void, leave: () => void, toggleLive: () => void, livePlaying: { value: boolean }, hovering: { value: boolean } }
+	}) as { enter: (event: { pointerType: string }) => void, leave: () => void, toggleLive: () => Promise<void>, livePlaying: { value: boolean }, hovering: { value: boolean }, liveMuted: { value: boolean }, liveVideo: { value: { muted: boolean, play: () => Promise<void> } | undefined }, toggleSound: () => void }
 	return { props, runtime, flush() {
 		for (const watcher of watchers) {
 			if (watcher.source() !== watcher.previous) {
@@ -100,4 +101,69 @@ test('the viewer preserves autoplay preference and offers an explicit stop', () 
 	h.runtime.toggleLive()
 	assert.equal(h.runtime.livePlaying.value, false)
 	assert.equal(harness({ viewer: true, reduced: true }).runtime.livePlaying.value, false)
+})
+
+test('live photos autoplay muted and unmute the current video in the click gesture', () => {
+	for (const viewer of [false, true]) {
+		const h = harness({ viewer })
+		let plays = 0
+		const video = { muted: true, play: () => {
+			plays++
+			return Promise.resolve()
+		} }
+		assert.equal(h.runtime.liveMuted?.value, true)
+		h.runtime.liveVideo.value = video
+		h.runtime.enter({ pointerType: 'mouse' })
+		h.runtime.toggleSound()
+		assert.equal(video.muted, false, 'unmuting happens synchronously inside the user gesture')
+		assert.equal(h.runtime.liveMuted.value, false)
+		assert.equal(h.runtime.livePlaying.value, true)
+		assert.equal(plays, 1)
+		h.runtime.toggleSound()
+		assert.equal(video.muted, true)
+		assert.equal(h.runtime.liveMuted.value, true)
+	}
+})
+
+test('changing sound while stopped does not start playback and explicit play keeps the choice', async () => {
+	const h = harness({ interactive: false })
+	let plays = 0
+	assert.equal(h.runtime.liveMuted?.value, true)
+	h.runtime.toggleSound()
+	assert.equal(h.runtime.liveMuted.value, false)
+	assert.equal(h.runtime.livePlaying.value, false)
+	const pending = h.runtime.toggleLive()
+	const video = { muted: true, play: () => {
+		plays++
+		return Promise.resolve()
+	} }
+	h.runtime.liveVideo.value = video
+	await pending
+	assert.equal(video.muted, false)
+	assert.equal(plays, 1)
+	await h.runtime.toggleLive()
+	assert.equal(h.runtime.livePlaying.value, false)
+	assert.equal(h.runtime.liveMuted.value, false)
+})
+
+test('sound defaults to muted again after leaving or replacing the photo', () => {
+	const h = harness()
+	assert.equal(h.runtime.liveMuted?.value, true)
+	h.runtime.toggleSound()
+	h.props.active = false
+	h.flush()
+	assert.equal(h.runtime.liveMuted.value, true)
+	h.runtime.toggleSound()
+	h.props.photo.src = 'next.jpg'
+	h.flush()
+	assert.equal(h.runtime.liveMuted.value, true)
+})
+
+test('blocked sound playback settles the control back to stopped', async () => {
+	const h = harness({ viewer: true })
+	assert.equal(h.runtime.liveMuted?.value, true)
+	h.runtime.liveVideo.value = { muted: true, play: () => Promise.reject(new Error('NotAllowedError')) }
+	h.runtime.toggleSound()
+	await Promise.resolve()
+	assert.equal(h.runtime.livePlaying.value, false)
 })

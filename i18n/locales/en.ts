@@ -198,6 +198,8 @@ const en: MessageSchema = {
 				largePhoto: 'Enlarge ↗',
 				playLive: 'Play Live Photo',
 				stopLive: 'Stop Live Photo',
+				unmuteLive: 'Unmute Live Photo',
+				muteLive: 'Mute Live Photo',
 				photoProgress: 'Photo {current} of {total} in this chapter',
 				photoMap: 'Photo locations: {title}',
 				expandPhotoMap: 'Expand location map: {title}',
