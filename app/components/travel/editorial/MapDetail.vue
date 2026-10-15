@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import MapCredit from './MapCredit.vue'
+
 defineProps<{ mapKey: string, title: string }>()
 defineEmits<{ collapse: [] }>()
 </script>
@@ -12,7 +14,7 @@ defineEmits<{ collapse: [] }>()
 	</header>
 	<div class="map-detail-map" :data-map-detail="mapKey" />
 	<footer class="map-detail-foot">
-		<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© CARTO · © OpenStreetMap</a>
+		<MapCredit />
 	</footer>
 </section>
 </template>

@@ -1,12 +1,17 @@
 import type { FeatureCollection, Point } from 'geojson'
 import type { AllPaintProperties, ExpressionSpecification, GeoJSONSource, Map as MapLibreMap, NavigationControl, PaddingOptions, StyleSpecification } from 'maplibre-gl'
+import type { TravelTrack } from '../../../types/travel.ts'
+import type { TravelBasemap, TravelTrackColor } from '../../../utils/travelMapSettings.ts'
 import type { StoryPhoto } from '../../../utils/travelStory.ts'
 import type { TravelPalette } from '../../../utils/travelTheme.ts'
 import type { LocatedStoryPhoto } from './atlas-geometry.ts'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { getTravelMapLabelField } from '../../../utils/travelMapLocale.ts'
+import { createTravelBasemapLoader, isSatelliteBasemap, travelMapInteractive, travelStyleAttribution, travelTrackColors } from '../../../utils/travelMapSettings.ts'
+import { travelMotion, travelMotionEase } from '../../../utils/travelMotion.ts'
 import { neutralTravelPaint, travelMapColors } from '../../../utils/travelTheme.ts'
 import { atlasMobileBackdropPadding, atlasMobileCaptionWashTail, atlasMobileChapterRegion, atlasPeekVisible, atlasSelection, atlasSnapshotEligible, atlasSnapshotsPaused, atlasVeil, atlasViewerPadding } from './atlas-geometry.ts'
+import { installAtlasTracks, paintAtlasTracks } from './atlas-tracks.ts'
 import darkStyle from './map-styles/dark.json'
 import lightStyle from './map-styles/light.json'
 // This module is loaded by the editorial route only, including its CSS chunk.
@@ -20,7 +25,11 @@ export interface TravelAtlasState {
 	mobile: boolean
 	exploring: boolean
 	viewer: boolean
+	viewerClosing: boolean
 	reduced: boolean
+	tracksVisible: boolean
+	basemap: TravelBasemap
+	trackColor: TravelTrackColor
 }
 export interface TravelAtlas {
 	update: () => void
@@ -36,7 +45,11 @@ interface AtlasOptions {
 	canvas: HTMLElement
 	mobileBackdrop?: HTMLElement
 	photos: StoryPhoto[]
+	tracks?: TravelTrack[]
 	locale: string
+	apiKey?: string
+	onBasemap?: (basemap: TravelBasemap, attribution: string) => void
+	onBasemapError?: () => void
 	labels: { title: string, zoomIn: string, zoomOut: string, attribution: string, feedback: string }
 	getState: () => TravelAtlasState
 	onMove: () => void
@@ -55,7 +68,7 @@ function pointData(photos: LocatedStoryPhoto[]): FeatureCollection<Point> {
 }
 
 export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAtlas> {
-	const { root, scroller, canvas, mobileBackdrop, photos, locale, labels, getState, onMove, onFailure } = options
+	const { root, scroller, canvas, mobileBackdrop, photos, tracks, locale, labels, getState, onMove, onFailure } = options
 	let disposed = false
 	let ready = false
 	let failureReported = false
@@ -80,6 +93,8 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	let navigationAdded = false
 	let explorationKey: string | undefined
 	let cameraKey = ''
+	let cameraMode = 'reading'
+	let basemapKey = ''
 	let appearanceKey = ''
 	let previousMobile = getState().mobile
 	let snapshotWidth = root.clientWidth
@@ -88,6 +103,81 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	let maplibre: typeof import('maplibre-gl')
 	let mobileCameraInitialized = false
 	let deferredResize = false
+	const loadBasemap = createTravelBasemapLoader(options.apiKey ?? '', locale)
+	let activeBasemap: TravelBasemap = 'simple'
+	let requestedBasemap: TravelBasemap = 'simple'
+	let snapshotBasemap: TravelBasemap = 'simple'
+	let basemapRequest = 0
+	let styleMatchesActive = true
+
+	function mapColors() {
+		const state = getState()
+		return { ...travelMapColors(state.palette, state.basemap === 'simple' ? state.theme : 'light'), track: travelTrackColors[state.trackColor ?? 'blue'][isSatelliteBasemap(state.basemap) ? 'dark' : state.basemap !== 'simple' ? 'light' : state.theme] }
+	}
+	function withOverlays(target: MapLibreMap, style: StyleSpecification): StyleSpecification {
+		const current = target.getStyle()
+		const overlays = current.layers.filter(layer => 'source' in layer && ['travel-photos', 'travel-tracks', 'snapshot-position'].includes(String(layer.source)))
+		const sources = Object.fromEntries(Object.entries(current.sources).filter(([key]) => ['travel-photos', 'travel-tracks', 'snapshot-position'].includes(key)))
+		const base = structuredClone(style)
+		return { ...base, sources: { ...base.sources, ...sources }, layers: [...base.layers, ...overlays] }
+	}
+	async function applyBasemap(target: MapLibreMap, basemap: TravelBasemap) {
+		const style = basemap === 'simple' ? styles[getState().theme] : await loadBasemap(basemap)
+		if (disposed)
+			return false
+		const loaded = waitFor(target, 'style.load', 15000)
+		target.setStyle(withOverlays(target, style), { diff: true })
+		return loaded
+	}
+	function syncBasemap() {
+		if (!map)
+			return
+		const desired = getState().basemap ?? 'simple'
+		if (!ready && basemapRequest === 0)
+			return
+		if (desired === requestedBasemap)
+			return
+		requestedBasemap = desired
+		const request = ++basemapRequest
+		if (desired === activeBasemap && ready && styleMatchesActive)
+			return
+		void (async () => {
+			try {
+				const style = desired === 'simple' ? styles[getState().theme] : await loadBasemap(desired)
+				if (disposed || request !== basemapRequest || !map)
+					return
+				ready = false
+				styleMatchesActive = false
+				canvas.dataset.basemapLoading = 'true'
+				const loaded = waitFor(map, 'style.load', 15000)
+				map.setStyle(withOverlays(map, style), { diff: true })
+				if (!await loaded)
+					throw new Error('Basemap style timed out')
+				if (disposed || request !== basemapRequest)
+					return
+				activeBasemap = desired
+				styleMatchesActive = true
+				ready = true
+				if (desired === 'simple')
+					localize(map)
+				options.onBasemap?.(desired, travelStyleAttribution(style))
+				paintBasemap(map)
+				paintPoints()
+				// Keep the current camera, including an explored position.
+				update()
+				const settled = await waitFor(map, 'idle', 4500)
+				if (settled && !disposed && request === basemapRequest)
+					canvas.dataset.basemapLoading = 'false'
+			}
+			catch {
+				if (disposed || request !== basemapRequest)
+					return
+				ready = true
+				canvas.dataset.basemapLoading = 'false'
+				options.onBasemapError?.()
+			}
+		})()
+	}
 
 	function mobileReading() {
 		const state = getState()
@@ -114,14 +204,14 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	}
 	function themeKey() {
 		const state = getState()
-		return `${state.theme}:${state.palette}`
+		return `${state.theme}:${state.palette}:${state.tracksVisible}:${state.trackColor ?? 'blue'}:${state.basemap ?? 'simple'}`
 	}
 	function liveMapVisible() {
 		const state = getState()
 		return !state.mobile || state.exploring || state.viewer || explorationKey !== undefined || (mobileReading() && Boolean(mobileMapKey()))
 	}
 	/** Every wait is cancellable; removing a map cannot strand its snapshot queue. */
-	function waitFor(target: MapLibreMap, event: 'load' | 'idle', timeout: number): Promise<boolean> {
+	function waitFor(target: MapLibreMap, event: 'load' | 'idle' | 'style.load', timeout: number): Promise<boolean> {
 		return new Promise((resolve) => {
 			let timer: ReturnType<typeof setTimeout>
 			const finish = (success: boolean) => {
@@ -149,6 +239,8 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	}
 	/** Only known basemap layers own these paints; selection expressions stay untouched. */
 	function paintBasemap(target: MapLibreMap, snapshot = false) {
+		if ((target === map ? activeBasemap : snapshotBasemap) !== 'simple')
+			return
 		const state = getState()
 		const other = new Map(styles[state.theme === 'dark' ? 'light' : 'dark'].layers.map(layer => [layer.id, layer]))
 		const factor = snapshot || mobileReading() ? 1 : state.exploring || explorationKey !== undefined ? 1 : state.theme === 'dark' ? 0.45 : 0.55
@@ -192,7 +284,8 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			return
 		const { points, chapter, selected } = selection()
 		const index = selected?.index ?? -1
-		const colors = travelMapColors(getState().palette, getState().theme)
+		const colors = mapColors()
+		paintAtlasTracks(map, selection(), colors, getState().tracksVisible)
 		const active: ExpressionSpecification = ['==', ['get', 'index'], index]
 		for (const id of ['photo-halo', 'photo-points', 'photo-centers']) {
 			map.setFilter(id, chapter >= 0 ? ['in', ['get', 'index'], ['literal', points.map(photo => photo.index)]] : null)
@@ -206,16 +299,17 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		}
 		for (const id of ['photo-current-ring', 'photo-points', 'cover-points']) {
 			map.setPaintProperty(id, 'circle-color', colors.paper)
-			map.setPaintProperty(id, 'circle-stroke-color', colors.accent)
+			map.setPaintProperty(id, 'circle-stroke-color', id === 'photo-current-ring' ? colors.accent : colors.muted)
 		}
 		for (const id of ['photo-current-center', 'photo-halo', 'cover-centers'])
 			map.setPaintProperty(id, 'circle-color', colors.accent)
+		map.setPaintProperty('cover-centers', 'circle-radius', 0)
 		map.setPaintProperty('photo-halo', 'circle-opacity', ['case', active, 0.09, 0])
 		map.setPaintProperty('photo-points', 'circle-radius', index >= 0 ? ['case', active, 10, 5] : 5.5)
-		map.setPaintProperty('photo-points', 'circle-stroke-color', index >= 0 ? ['case', active, colors.accent, colors.muted] : colors.accent)
+		map.setPaintProperty('photo-points', 'circle-stroke-color', index >= 0 ? ['case', active, colors.accent, colors.muted] : colors.muted)
 		map.setPaintProperty('photo-points', 'circle-stroke-width', ['case', active, 1.5, 1])
-		map.setPaintProperty('photo-centers', 'circle-color', index >= 0 ? ['case', active, colors.accent, colors.muted] : colors.accent)
-		map.setPaintProperty('photo-centers', 'circle-radius', index >= 0 ? ['case', active, 4, 1.8] : 2.2)
+		map.setPaintProperty('photo-centers', 'circle-color', colors.accent)
+		map.setPaintProperty('photo-centers', 'circle-radius', index >= 0 ? ['case', active, 4, 0] : 0)
 	}
 	function padding(): Required<PaddingOptions> {
 		if (!map)
@@ -277,7 +371,18 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		const bounds = new maplibre.LngLatBounds()
 		for (const photo of points)
 			bounds.extend([photo.lng, photo.lat])
-		target.fitBounds(bounds, { padding: pad, maxZoom, duration })
+		target.fitBounds(bounds, { padding: pad, maxZoom, duration, easing: travelMotionEase })
+	}
+	function photoZoom(target: MapLibreMap, points: LocatedStoryPhoto[], pad: PaddingOptions, mobile: boolean, selected: LocatedStoryPhoto) {
+		const baseline = mobile ? 12.8 : 14.3
+		const bounds = new maplibre.LngLatBounds()
+		for (const photo of points)
+			bounds.extend([photo.lng, photo.lat])
+		const overviewZoom = points.length ? target.cameraForBounds(bounds, { padding: pad, maxZoom: 15 })?.zoom : undefined
+		// A compact city overview can already be closer than the old fixed photo zoom.
+		const zoom = overviewZoom === undefined ? baseline : Math.max(baseline, Math.min(16, overviewZoom + 1))
+		const offset = Number.isFinite(selected.mapZoomOffset) ? selected.mapZoomOffset! : 0
+		return Math.max(0, Math.min(16, zoom + offset))
 	}
 	function camera(force = false) {
 		if (!map || !ready || !liveMapVisible() || (mobileReading() && snapshotsPaused()) || !canvas.clientWidth || !canvas.clientHeight)
@@ -290,11 +395,14 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		if (!force && key === cameraKey)
 			return
 		cameraKey = key
-		const duration = state.reduced || (state.mobile && !mobileCameraInitialized) ? 0 : state.viewer ? 280 : 650
+		const mode = state.viewer ? 'viewer' : exploring ? 'exploring' : 'reading'
+		const switchingMode = mode !== cameraMode || state.viewerClosing
+		cameraMode = mode
+		const duration = state.reduced || (state.mobile && !mobileCameraInitialized) ? 0 : state.viewer || switchingMode ? travelMotion.duration.mode : travelMotion.duration.map
 		if (state.mobile)
 			mobileCameraInitialized = true
 		if (selected && !overview && (!exploring || state.mobile)) {
-			map.easeTo({ center: [selected.lng, selected.lat], zoom: state.mobile ? 12.8 : 14.3, padding: { top: 0, bottom: 0, left: 0, right: 0 }, offset: [(pad.left - pad.right) / 2, (pad.top - pad.bottom) / 2], duration })
+			map.easeTo({ center: [selected.lng, selected.lat], zoom: photoZoom(map, points, pad, state.mobile, selected), padding: { top: 0, bottom: 0, left: 0, right: 0 }, offset: [(pad.left - pad.right) / 2, (pad.top - pad.bottom) / 2], duration, easing: travelMotionEase })
 		}
 		else {
 			fitPoints(map, points, pad, duration, overview ? 8 : 15)
@@ -304,10 +412,13 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		if (!map)
 			return
 		const enabled = getState().exploring || explorationKey !== undefined
-		for (const handler of [map.dragPan, map.dragRotate, map.doubleClickZoom, map.scrollZoom, map.touchZoomRotate, map.touchPitch, map.keyboard, map.boxZoom])
+		const draggable = travelMapInteractive(getState().basemap ?? 'simple', enabled)
+		for (const handler of [map.dragPan, map.dragRotate])
+			draggable ? handler.enable() : handler.disable()
+		for (const handler of [map.doubleClickZoom, map.scrollZoom, map.touchZoomRotate, map.touchPitch, map.keyboard, map.boxZoom])
 			enabled ? handler.enable() : handler.disable()
-		map.getCanvasContainer().classList.toggle('maplibregl-interactive', enabled)
-		map.getCanvas().tabIndex = enabled ? 0 : -1
+		map.getCanvasContainer().classList.toggle('maplibregl-interactive', draggable)
+		map.getCanvas().tabIndex = -1
 		if (enabled && !navigationAdded) {
 			navigation ??= new maplibre.NavigationControl({ showCompass: false })
 			map.addControl(navigation, getState().mobile ? 'top-right' : 'bottom-right')
@@ -468,6 +579,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 				if (!await waitFor(snapshotMap, 'load', 15000) || disposed)
 					return false
 				localize(snapshotMap)
+				installAtlasTracks(snapshotMap, tracks)
 				snapshotMap.addSource('snapshot-position', { type: 'geojson', data: pointData([]) })
 				snapshotMap.addLayer({ id: 'snapshot-pin', type: 'circle', source: 'snapshot-position', paint: { 'circle-radius': 9, 'circle-color': '#fff', 'circle-stroke-color': '#a4513e', 'circle-stroke-width': 1.2 } })
 				snapshotMap.addLayer({ id: 'snapshot-center', type: 'circle', source: 'snapshot-position', paint: { 'circle-radius': 3, 'circle-color': '#a4513e' } })
@@ -518,27 +630,37 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 				renderer.style.width = `${width}px`
 				renderer.style.height = `${height}px`
 				snapshotMap.resize()
+				const positionSnapshot = () => {
+					// Reset photo padding so each page receives exactly one inset.
+					snapshotMap!.setPadding({ top: 0, bottom: 0, left: 0, right: 0 })
+					if (item.backdrop && selected && !overview)
+						snapshotMap!.jumpTo({ center: [selected.lng, selected.lat], zoom: photoZoom(snapshotMap!, list, item.padding, true, selected), padding: item.padding })
+					else
+						fitPoints(snapshotMap!, list, item.backdrop ? item.padding : chapter ? { top: 20, bottom: 45, left: 20, right: 20 } : item.padding, 0, overview ? 8 : selected ? 12.8 : 15)
+				}
+				const desiredBasemap = getState().basemap ?? 'simple'
+				// Activate OSM only at the visible preview's camera, avoiding offscreen tile requests.
+				if (desiredBasemap === 'osm' && snapshotBasemap !== desiredBasemap)
+					positionSnapshot()
+				if (snapshotBasemap !== desiredBasemap) {
+					if (!await applyBasemap(snapshotMap, desiredBasemap) || disposed)
+						continue
+					snapshotBasemap = desiredBasemap
+					if (item.generation !== snapshotGeneration || item.theme !== themeKey())
+						continue
+				}
 				paintBasemap(snapshotMap, true)
-				const colors = travelMapColors(getState().palette, getState().theme)
+				const colors = mapColors()
+				paintAtlasTracks(snapshotMap, atlasSelection(photos, item.key), colors, getState().tracksVisible)
 				snapshotMap.setPaintProperty('snapshot-pin', 'circle-color', colors.paper)
-				snapshotMap.setPaintProperty('snapshot-pin', 'circle-stroke-color', colors.accent)
-				snapshotMap.setPaintProperty('snapshot-center', 'circle-color', colors.accent)
 				const active: ExpressionSpecification = ['==', ['get', 'index'], selected?.index ?? -1]
 				snapshotMap.setPaintProperty('snapshot-pin', 'circle-radius', selected ? ['case', active, 8, 3.8] : intro ? 3 : 5.5)
-				snapshotMap.setPaintProperty('snapshot-pin', 'circle-stroke-color', selected ? ['case', active, colors.accent, colors.muted] : colors.accent)
-				snapshotMap.setPaintProperty('snapshot-center', 'circle-radius', selected ? ['case', active, 3, 1.2] : intro ? 1 : 2.2)
-				snapshotMap.setPaintProperty('snapshot-center', 'circle-color', selected ? ['case', active, colors.accent, colors.muted] : colors.accent)
+				snapshotMap.setPaintProperty('snapshot-pin', 'circle-stroke-color', selected ? ['case', active, colors.accent, colors.muted] : colors.muted)
+				snapshotMap.setPaintProperty('snapshot-center', 'circle-radius', selected ? ['case', active, 3, 0] : 0)
+				snapshotMap.setPaintProperty('snapshot-center', 'circle-color', colors.accent)
 				;(snapshotMap.getSource('snapshot-position') as GeoJSONSource).setData(pointData(list))
 				const settled = waitFor(snapshotMap, 'idle', 4500)
-				// A photo focus leaves persistent padding; overview fitting adds its own.
-				// Reset the snapshot camera so each page gets exactly one inset.
-				snapshotMap.setPadding({ top: 0, bottom: 0, left: 0, right: 0 })
-				if (item.backdrop && selected && !overview) {
-					snapshotMap.jumpTo({ center: [selected.lng, selected.lat], zoom: 12.8, padding: item.padding })
-				}
-				else {
-					fitPoints(snapshotMap, list, item.backdrop ? item.padding : chapter ? { top: 20, bottom: 45, left: 20, right: 20 } : item.padding, 0, overview ? 8 : selected ? 12.8 : 15)
-				}
+				positionSnapshot()
 				if (!await settled || disposed || item.generation !== snapshotGeneration || item.theme !== themeKey() || !snapshotsEnabled() || !snapshotRelevant(item))
 					continue
 				if (snapshotsPaused()) {
@@ -560,10 +682,11 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 				void pumpSnapshots()
 		}
 	}
-	function refreshSnapshots() {
+	function refreshSnapshots(clearCache = true) {
 		snapshotGeneration++
 		snapshotQueue = []
-		snapshotCache.clear()
+		if (clearCache)
+			snapshotCache.clear()
 		for (const peek of observed.keys()) {
 			const image = peek.querySelector('img')
 			image?.classList.remove('ready')
@@ -612,6 +735,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 				}
 				try {
 					localize(map)
+					installAtlasTracks(map, tracks)
 					installPoints(map)
 					ready = true
 					paintBasemap(map)
@@ -643,14 +767,20 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		observePeeks()
 		updateMobileBackdrop()
 		const state = getState()
-		const appearance = `${themeKey()}:${state.exploring || explorationKey !== undefined}:${state.mobile}`
+		interaction()
+		syncBasemap()
+		const basemapAppearance = `${state.theme}:${state.palette}:${state.exploring || explorationKey !== undefined}:${state.mobile}`
+		if (basemapAppearance !== basemapKey) {
+			basemapKey = basemapAppearance
+			if (ready && map)
+				paintBasemap(map)
+		}
+		const appearance = themeKey()
 		if (appearance !== appearanceKey) {
 			const changedTheme = appearance.split(':').slice(0, 2).join(':') !== appearanceKey.split(':').slice(0, 2).join(':')
 			appearanceKey = appearance
-			if (ready && map)
-				paintBasemap(map)
-			if (changedTheme)
-				refreshSnapshots()
+			// Visibility is part of the PNG key; keep both states for instant return toggles.
+			refreshSnapshots(changedTheme)
 		}
 		if (previousMobile !== state.mobile) {
 			previousMobile = state.mobile
@@ -685,12 +815,15 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		}
 		if (liveMapVisible())
 			map?.resize()
+		const previousCameraKey = cameraKey
 		update()
 		for (const peek of near) {
 			if (root.contains(peek))
 				queueSnapshot(peek)
 		}
-		camera(true)
+		// update() may already have started a mode transition; don't restart it.
+		if (cameraKey === previousCameraKey)
+			camera(true)
 		onMove()
 	}
 	function restore() {
@@ -729,6 +862,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			if (disposed)
 				return
 			disposed = true
+			basemapRequest++
 			observer?.disconnect()
 			viewportObserver?.disconnect()
 			domObserver?.disconnect()

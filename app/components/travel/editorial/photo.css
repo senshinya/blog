@@ -5,22 +5,24 @@
 	--photo-paper-radius: 4px;
 	--photo-image-radius: 1px;
 	--photo-paper-edge: calc(var(--photo-paper-padding) + var(--photo-paper-border));
-	--photo-morph-duration: 280ms;
-	--photo-morph-easing: cubic-bezier(0.22, 1, 0.36, 1);
 }
-.travel-editorial .photo-open {
-	--photo-height-limit: 720px;
-	display: block;
-	position: relative;
-	overflow: visible;
-	width: min(100%, calc(var(--photo-height-limit) * var(--photo-ratio, 1.5) + 2 * var(--photo-paper-edge)));
+.travel-editorial .photo-open, .travel-editorial .lightbox-photo {
 	padding: var(--photo-paper-padding);
 	border: var(--photo-paper-border) solid color-mix(in oklab, var(--ink) 12%, transparent);
 	border-radius: var(--photo-paper-radius);
 	box-shadow: 0 2px 8px color-mix(in oklab, var(--menu-shadow) 65%, transparent);
 	background: color-mix(in oklab, var(--paper) 66%, white);
+}
+.travel-editorial .photo-open {
+	--photo-max-height: 720px;
+	--photo-viewport-fraction: 1;
+	--photo-height-limit: min(var(--photo-max-height), calc(var(--reading-viewport, calc(100dvh - var(--bar))) - 86px));
+	display: block;
+	position: relative;
+	overflow: visible;
+	width: min(100%, calc(var(--photo-height-limit) * var(--photo-ratio, 1.5) + 2 * var(--photo-paper-edge)));
 	transform-origin: center center;
-	transition: rotate 220ms var(--photo-morph-easing), scale 220ms var(--photo-morph-easing);
+	transition: rotate var(--travel-motion-photo) var(--travel-motion-easing), scale var(--travel-motion-photo) var(--travel-motion-easing);
 	rotate: var(--photo-tilt, 0deg);
 	scale: 1;
 	cursor: zoom-in;
@@ -32,7 +34,7 @@
 	inset: 0;
 	border-radius: inherit;
 	box-shadow: 0 10px 24px color-mix(in oklab, var(--menu-shadow) 70%, transparent);
-	transition: opacity 220ms var(--photo-morph-easing);
+	transition: opacity var(--travel-motion-photo) var(--travel-motion-easing);
 	pointer-events: none;
 	z-index: -1;
 }
@@ -55,7 +57,7 @@
 	opacity: 0;
 	transition: none;
 }
-.travel-editorial[data-theme="dark"] .photo-open {
+.travel-editorial[data-theme="dark"] .photo-open, .travel-editorial[data-theme="dark"] .lightbox-photo {
 	background: color-mix(in oklab, var(--paper) 82%, var(--ink));
 }
 .travel-editorial .photo-zoom, .travel-editorial .photo-source {
@@ -98,7 +100,7 @@
 	font-size: 12px;
 	line-height: 1.8;
 	color: var(--ink);
-	transition: opacity 140ms ease-out;
+	transition: opacity var(--travel-motion-feedback) var(--travel-motion-easing);
 	pointer-events: none;
 	z-index: 2;
 }
@@ -139,7 +141,7 @@
 	border-radius: 50%;
 	background: transparent;
 	color: #F4F4F4;
-	transition: transform 140ms ease-out;
+	transition: transform var(--travel-motion-feedback) var(--travel-motion-easing);
 	cursor: pointer;
 	z-index: 3;
 }
@@ -171,17 +173,200 @@
 .travel-editorial .photo-live-control:active {
 	transform: scale(0.94);
 }
-.travel-editorial .photo-motion {
+.travel-editorial .photo-video:after {
+	content: none;
+}
+.travel-editorial .video-player {
+	container-type: inline-size;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	border-radius: var(--photo-image-radius);
+	color: #F4F4F4;
+}
+.travel-editorial .video-player.video-viewer {
+	height: 100%;
+}
+.travel-editorial .video-player > .video-poster {
+	display: block;
+}
+.travel-editorial .video-player > .video-media {
 	position: absolute;
-	top: 10px;
-	left: 10px;
-	font-size: 18px;
-	text-shadow: 0 1px 3px #000;
-	color: white;
+	opacity: 0;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	pointer-events: none;
+}
+.travel-editorial .video-player.has-started > .video-media {
+	opacity: 1;
+}
+.travel-editorial .video-surface {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	cursor: zoom-in;
+}
+.travel-editorial .video-viewer .video-surface {
+	cursor: pointer;
+}
+.travel-editorial .video-start {
+	display: grid;
+	justify-items: center;
+	gap: 12px;
+	position: absolute;
+	opacity: 1;
+	top: 50%;
+	left: 50%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	transform: translate(-50%, -50%) scale(1);
+	transition: opacity var(--travel-motion-feedback) var(--travel-motion-easing), transform var(--travel-motion-feedback) var(--travel-motion-easing);
+	cursor: pointer;
+}
+.travel-editorial .video-start.hidden {
+	opacity: 0;
+	transform: translate(-50%, -50%) scale(0.92);
+	pointer-events: none;
+}
+.travel-editorial .video-play-disc {
+	display: grid;
+	place-items: center;
+	width: 64px;
+	height: 64px;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px #FFFFFF50, 0 3px 14px #00000030;
+	background: #151515BD;
+	transition: transform var(--travel-motion-feedback) var(--travel-motion-easing);
+}
+.travel-editorial .video-play-disc svg {
+	width: 28px;
+	height: 28px;
+}
+.travel-editorial .video-start-label {
+	padding: 3px 9px;
+	border-radius: 4px;
+	background: #151515BD;
+	font: 500 13px/1.6 var(--sans), sans-serif;
+	letter-spacing: 0.04em;
+}
+.travel-editorial .video-controls {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 22px 8px 0;
+	background: linear-gradient(transparent, #000000AD);
+}
+.travel-editorial .video-control-row {
+	display: flex;
+	align-items: center;
+	gap: 1px;
+}
+.travel-editorial .video-control {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+}
+.travel-editorial .video-control svg {
+	width: 20px;
+	height: 20px;
+}
+.travel-editorial .video-time {
+	flex: 1;
+	font: 11px/1.5 var(--sans), sans-serif;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+.travel-editorial .video-time > span {
+	opacity: 0.75;
+}
+.travel-editorial .video-seek {
+	display: block;
+	width: calc(100% - 14px);
+	height: 24px;
+	margin: 0 7px -4px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	appearance: none;
+	cursor: pointer;
+	touch-action: none;
+}
+.travel-editorial .video-seek::-webkit-slider-runnable-track {
+	height: 2px;
+	border-radius: 1px;
+	background: linear-gradient(to right, #F4F4F4 var(--video-progress), #FFFFFF50 var(--video-progress));
+}
+.travel-editorial .video-seek::-moz-range-track {
+	height: 2px;
+	border-radius: 1px;
+	background: linear-gradient(to right, #F4F4F4 var(--video-progress), #FFFFFF50 var(--video-progress));
+}
+.travel-editorial .video-seek::-webkit-slider-thumb {
+	width: 8px;
+	height: 8px;
+	margin-top: -3px;
+	border: 0;
+	border-radius: 50%;
+	background: #F4F4F4;
+	appearance: none;
+}
+.travel-editorial .video-seek::-moz-range-thumb {
+	width: 8px;
+	height: 8px;
+	border: 0;
+	border-radius: 50%;
+	background: #F4F4F4;
+}
+.travel-editorial .video-control:active {
+	transform: scale(0.94);
+}
+.travel-editorial .video-start:active .video-play-disc {
+	transform: scale(0.94);
+}
+@media (hover: hover) and (pointer: fine) {
+	.travel-editorial .video-start:hover .video-play-disc {
+		transform: scale(1.06);
+	}
+	.travel-editorial .video-control:hover {
+		background: #FFFFFF20;
+	}
+}
+@container (max-width: 240px) {
+	.travel-editorial .video-control-row {
+		flex-wrap: wrap;
+	}
+	.travel-editorial .video-time {
+		flex: 0 0 100%;
+		order: -1;
+		padding-inline: 7px;
+		text-align: right;
+	}
+	.travel-editorial .video-control:first-child {
+		margin-right: auto;
+	}
 }
 @media (max-width: 700px) {
 	.travel-editorial .photo-open {
-		--photo-height-limit: min(420px, calc(var(--reading-viewport, 100dvh) * 0.45));
+		--photo-max-height: 420px;
+		--photo-viewport-fraction: 0.45;
+		--photo-height-limit: min(var(--photo-max-height), calc(var(--reading-viewport, 100dvh) * var(--photo-viewport-fraction)));
 		margin-inline: auto;
 	}
 	.travel-editorial .photo-open img {
@@ -193,7 +378,7 @@
 	}
 }
 @media (prefers-reduced-motion: reduce) {
-	.travel-editorial .photo-open, .travel-editorial .photo-open:before, .travel-editorial .photo-open:after, .travel-editorial .photo-live-control {
+	.travel-editorial .photo-open, .travel-editorial .photo-open:before, .travel-editorial .photo-open:after, .travel-editorial .photo-live-control, .travel-editorial .video-start, .travel-editorial .video-play-disc {
 		transition: none;
 	}
 }

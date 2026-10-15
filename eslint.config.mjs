@@ -3,7 +3,8 @@ import css from '@zinkawaii/eslint-config-css'
 import { defineConfig } from 'eslint/config'
 
 export default antfu({
-	ignores: ['*.yaml'],
+	// Coordinate sidecars are generated compactly; importer tests validate their data.
+	ignores: ['*.yaml', 'app/travels/**/*.tracks.json'],
 	stylistic: {
 		indent: 'tab',
 	},

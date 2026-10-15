@@ -2,13 +2,28 @@
 .travel-editorial.viewer-active .map-stage {
 	visibility: visible;
 }
-.travel-editorial.viewer-active .story-scroll,
+.travel-editorial.viewer-active .story-scroll {
+	visibility: hidden;
+}
+.travel-editorial .topbar {
+	visibility: visible;
+	opacity: 1;
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing), visibility 0s;
+}
+.travel-editorial.viewer-active:not(.viewer-restoring) .topbar {
+	visibility: hidden;
+	opacity: 0;
+	transition-delay: 0s, var(--travel-motion-mode);
+}
 .travel-editorial.viewer-active .topbar {
+	pointer-events: none;
+}
+.travel-editorial.viewer-active :is(.chapter-trigger > span, .chapter-photo-progress) {
 	visibility: hidden;
 }
 .travel-editorial .map-cover {
 	opacity: 1;
-	transition: opacity var(--photo-morph-duration) var(--photo-morph-easing);
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
 }
 .travel-editorial.viewer-active .map-cover {
 	opacity: 0;
@@ -33,7 +48,7 @@
 .travel-editorial .viewer::backdrop {
 	opacity: 0;
 	background: #000;
-	transition: opacity var(--photo-morph-duration) var(--photo-morph-easing);
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
 }
 .travel-editorial .viewer[data-dimmed="true"]::backdrop {
 	opacity: 0.4;
@@ -63,7 +78,22 @@
 	min-height: 56px;
 	padding: 6px 20px;
 }
+.travel-editorial .lightbox-actions {
+	opacity: 0;
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
+}
+.travel-editorial .viewer[data-dimmed="true"] .lightbox-actions {
+	opacity: 1;
+}
+.travel-editorial :is(.viewer-chapter, .viewer-progress) {
+	display: inline-block;
+	white-space: nowrap;
+	transform-origin: top left;
+}
 .travel-editorial .viewer-count {
+	display: flex;
+	align-items: baseline;
+	gap: 12px;
 	font-size: 13px;
 	color: var(--ink);
 	font-variant-numeric: tabular-nums;
@@ -91,7 +121,7 @@
 	flex: none;
 	position: relative;
 	transform-origin: center;
-	transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+	transition: transform var(--travel-motion-photo) var(--travel-motion-easing);
 	cursor: zoom-in;
 }
 .travel-editorial .lightbox-photo img, .travel-editorial .lightbox-photo video {
@@ -100,15 +130,18 @@
 	height: 100%;
 	max-width: none;
 	max-height: none;
+	border-radius: var(--photo-image-radius);
 	object-fit: contain;
 }
-.travel-editorial .lightbox-original {
+.travel-editorial .lightbox-photo .lightbox-original {
 	position: absolute;
 	opacity: 0;
-	inset: 0;
-	transition: opacity 160ms ease-out;
+	inset: var(--photo-paper-padding);
+	width: calc(100% - 2 * var(--photo-paper-padding));
+	height: calc(100% - 2 * var(--photo-paper-padding));
+	transition: opacity var(--travel-motion-feedback) var(--travel-motion-easing);
 }
-.travel-editorial .lightbox-original.ready {
+.travel-editorial .lightbox-photo .lightbox-original.ready {
 	opacity: 1;
 }
 .travel-editorial .lightbox.is-zoomed .lightbox-photo {
@@ -160,11 +193,10 @@
 	line-height: 1.85;
 	white-space: pre-line;
 }
-.travel-editorial .lightbox-header,
 .travel-editorial .lightbox-info {
-	transition: opacity 220ms ease-out;
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
 }
-.travel-editorial .lightbox.is-closing .lightbox-header {
+.travel-editorial .lightbox.is-closing .lightbox-actions {
 	opacity: 0;
 }
 @media (max-width: 1000px) {
@@ -218,12 +250,42 @@
 .travel-editorial .lightbox.is-morphing .lightbox-stage {
 	overflow: visible;
 }
+/* Fade map detail away under the notes without introducing a separate card. */
+.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) .lightbox::before {
+	content: "";
+	position: absolute;
+	opacity: 0;
+	inset: 0;
+	background:
+		linear-gradient(to left, var(--paper), color-mix(in oklab, var(--paper) 94%, transparent) 14%, color-mix(in oklab, var(--paper) 86%, transparent) 23%, color-mix(in oklab, var(--paper) 40%, transparent) 34%, transparent 46%),
+		linear-gradient(to bottom, color-mix(in oklab, var(--paper) 88%, transparent), color-mix(in oklab, var(--paper) 45%, transparent) 64px, transparent 150px);
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
+	pointer-events: none;
+}
+.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) .viewer[data-dimmed="true"] .lightbox::before {
+	opacity: 1;
+}
+.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) :is(.lightbox-header, .lightbox-content) {
+	position: relative;
+	z-index: 1;
+}
+@media (max-width: 1000px) {
+	.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) .lightbox::before {
+		background:
+			linear-gradient(to top, var(--paper), color-mix(in oklab, var(--paper) 96%, transparent) 22%, color-mix(in oklab, var(--paper) 84%, transparent) 38%, transparent 65%),
+			linear-gradient(to bottom, color-mix(in oklab, var(--paper) 88%, transparent), transparent 150px);
+	}
+}
 @media (prefers-reduced-motion: reduce) {
+	.travel-editorial .topbar,
 	.travel-editorial .lightbox-photo,
 	.travel-editorial .lightbox-original,
+	.travel-editorial .lightbox::before,
 	.travel-editorial .viewer::backdrop,
 	.travel-editorial .map-cover,
 	.travel-editorial .lightbox-header,
+	.travel-editorial .viewer-chapter,
+	.travel-editorial .lightbox-actions,
 	.travel-editorial .lightbox-info {
 		transition: none;
 	}

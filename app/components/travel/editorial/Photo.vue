@@ -2,6 +2,7 @@
 import type { TravelPhoto } from '~/types/travel'
 import LiveControl from './LiveControl.vue'
 import SoundControl from './SoundControl.vue'
+import Video from './Video.vue'
 
 const props = withDefaults(defineProps<{ photo: TravelPhoto, index?: number, active?: boolean, eager?: boolean, viewer?: boolean, interactive?: boolean }>(), { index: 0, active: true, interactive: true })
 defineEmits<{ open: [] }>()
@@ -81,15 +82,13 @@ watch(() => livePlaying.value, (playing) => {
 	<LiveControl :playing="livePlaying" @toggle="toggleLive" />
 	<SoundControl :muted="liveMuted" @toggle="toggleSound" />
 </div>
-<video
+<Video
 	v-else-if="viewer && photo.video"
-	:key="photo.video ?? photo.live"
-	:src="photo.video ?? photo.live"
+	:key="photo.video"
+	:src="photo.video"
 	:poster="getTravelImg(photo.src, TravelImgWidth.viewer)"
 	:width="meta?.w ?? 1200" :height="meta?.h ?? 800"
-	:aria-label="photo.alt"
-	:autoplay="reduced !== 'reduce'" :controls="Boolean(photo.video) || reduced === 'reduce'"
-	:muted="!photo.video" :loop="!photo.video" playsinline preload="metadata"
+	:alt="photo.alt" :active viewer
 />
 <img
 	v-else-if="viewer || eager"
@@ -100,12 +99,13 @@ watch(() => livePlaying.value, (playing) => {
 	:class="{ 'cover-image': eager }"
 >
 <div
-	v-else class="photo-open" :class="{ 'photo-static': !interactive, 'photo-hovered': hovering }"
+	v-else class="photo-open" :class="{ 'photo-static': !interactive, 'photo-hovered': hovering, 'photo-video': photo.video }"
 	:style="{ '--photo-tilt': paperTilt, '--photo-ratio': (meta?.w ?? 1200) / (meta?.h ?? 800) }"
-	:data-open-label="interactive ? $t('page.travels.editorial.largePhoto') : undefined"
+	:data-open-label="interactive && !photo.video ? $t('page.travels.editorial.largePhoto') : undefined"
 	@pointerenter="enter" @pointerleave="leave"
 >
-	<component :is="interactive ? 'button' : 'div'" class="photo-zoom" :aria-label="interactive ? $t('page.travels.editorial.openPhoto', { title: photo.alt }) : undefined" @click="interactive && $emit('open')">
+	<Video v-if="photo.video" :src="photo.video" :poster="getTravelImg(photo.src, TravelImgWidth.viewer)" :alt="photo.alt" :width="meta?.w ?? 1200" :height="meta?.h ?? 800" :active @enlarge="$emit('open')" />
+	<component :is="interactive ? 'button' : 'div'" v-else class="photo-zoom" :aria-label="interactive ? $t('page.travels.editorial.openPhoto', { title: photo.alt }) : undefined" @click="interactive && $emit('open')">
 		<picture class="photo-source">
 			<source media="(max-width: 700px)" :srcset="getTravelImg(photo.src, TravelImgWidth.cover)">
 			<img :src="getTravelImg(photo.src, TravelImgWidth.viewer)" :alt="photo.alt" :width="meta?.w ?? 1200" :height="meta?.h ?? 800" loading="lazy" decoding="async" :style="getLqipStyle(photo.src)">
@@ -117,6 +117,5 @@ watch(() => livePlaying.value, (playing) => {
 	/>
 	<LiveControl v-if="photo.live && !photo.video" :playing="livePlaying" @toggle="toggleLive" />
 	<SoundControl v-if="photo.live && !photo.video" :muted="liveMuted" @toggle="toggleSound" />
-	<span v-else-if="photo.video" class="photo-motion" aria-hidden="true">▶</span>
 </div>
 </template>

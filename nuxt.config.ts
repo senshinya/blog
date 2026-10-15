@@ -186,6 +186,7 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		// @keep-sorted
 		public: {
+			arcgisApiKey: '',
 			arch,
 			buildTime: Temporal.Now.zonedDateTimeISO().toString(),
 			// EdgeOne 检测暂时不可用

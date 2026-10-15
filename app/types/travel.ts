@@ -3,8 +3,8 @@ export interface TravelPhoto {
 	alt: string
 	caption?: string
 	/**
-	 * 实况照片的动态部分：H.264 编码、去掉音轨、faststart 的 MP4。
-	 * 缩略图悬停时、看图器里静音循环播放，像一张会动的照片。
+	 * 实况照片的动态部分：H.264、faststart 的 MP4；源文件有音轨时保留为 AAC。
+	 * 缩略图悬停时、看图器里默认静音循环播放，可通过声音按钮切换。
 	 */
 	live?: string
 	/**
@@ -16,6 +16,8 @@ export interface TravelPhoto {
 	video?: string
 	/** 海上、飞行等途中照片可展示当天全部点位的范围。省略时聚焦拍摄位置。 */
 	mapView?: 'day'
+	/** 照片背景地图相对自动取景的缩放偏移，正数放大；不影响整章或 day 总览。 */
+	mapZoomOffset?: number
 	lat?: number
 	lng?: number
 }
@@ -35,6 +37,14 @@ export interface TravelDay {
 	photos: TravelPhoto[]
 }
 
+export interface TravelTrack {
+	/** Chapter array index, independent of the displayed day number. */
+	chapter: number
+	day: number
+	/** Separate recordings remain separate; coordinates are longitude, latitude. */
+	segments: [number, number][][]
+}
+
 export interface Travel {
 	/** 与文件名、URL 一致：app/travels/<slug>.yaml → /travels/<slug> */
 	slug: string
@@ -52,4 +62,6 @@ export interface Travel {
 	coverCaption?: string
 	ending?: string
 	days: TravelDay[]
+	/** Loaded from the sibling .tracks.json after draft filtering. */
+	tracks?: TravelTrack[]
 }

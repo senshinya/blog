@@ -67,3 +67,19 @@ test('private frontmatter accepts the same delimiter whitespace as Nuxt Content'
 	}
 	assert.equal(isPrivateContentSource('posts/public.md', 'Text\n---\ndraft: true\n---'), false)
 })
+
+test('travel tracks load from a sibling file only after the draft has been excluded', async (t) => {
+	const { generateTravelData } = await import('./sources.ts')
+	const root = fixture()
+	t.after(() => rmSync(root, { recursive: true, force: true }))
+	const tracks = [{ chapter: 0, day: 1, segments: [[[170, -44], [171, -44]]] }]
+	writeFileSync(join(root, 'travels/zh/public.tracks.json'), JSON.stringify(tracks))
+	writeFileSync(join(root, 'travels/zh/private.tracks.json'), 'INVALID_PRIVATE_TRACK_SENTINEL')
+	const production = generateTravelData(join(root, 'travels'), ['zh', 'en', 'ja'], false)
+	const result = await import(`data:text/javascript,${encodeURIComponent(production)}`)
+	assert.deepEqual(result.travelsByLocale.zh[0].tracks, tracks)
+	assert.equal(production.includes('PRIVATE_TRACK'), false)
+	writeFileSync(join(root, 'travels/zh/private.tracks.json'), JSON.stringify(tracks))
+	const development = await import(`data:text/javascript,${encodeURIComponent(generateTravelData(join(root, 'travels'), ['zh'], true))}`)
+	assert.deepEqual(development.travelsByLocale.zh.find((travel: { slug: string }) => travel.slug === 'private').tracks, tracks)
+})

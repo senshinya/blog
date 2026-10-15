@@ -13,7 +13,7 @@
 		position: fixed;
 		opacity: 0;
 		inset: var(--bar) 0 0;
-		transition: opacity 240ms ease;
+		transition: opacity var(--travel-motion-photo) var(--travel-motion-easing);
 		pointer-events: none;
 		z-index: 1;
 	}
@@ -30,7 +30,7 @@
 		bottom: 6px;
 		font-size: 9px;
 		color: var(--muted);
-		pointer-events: none;
+		pointer-events: auto;
 		z-index: 3;
 	}
 	.travel-editorial .reading-stage {

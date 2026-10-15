@@ -19,8 +19,8 @@ export function normalizeTravelAppearance(value: unknown): TravelAppearance {
 export function travelMapColors(palette: TravelPalette, theme: TravelTheme) {
 	const colors = travelPalettes[palette]
 	return theme === 'dark'
-		? { paper: colors.darkPaper, accent: colors.darkAccent, muted: colors.darkMuted }
-		: { paper: colors.paper, accent: colors.accent, muted: colors.muted }
+		? { paper: colors.darkPaper, accent: colors.darkAccent, muted: '#9a9a9a', track: '#8ca2b2' }
+		: { paper: colors.paper, accent: colors.accent, muted: '#777777', track: '#637f91' }
 }
 /** Neutralize only basemap colors; photographs and selection layers keep their accents. */
 export function neutralTravelPaint(value: unknown): unknown {

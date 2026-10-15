@@ -1,10 +1,13 @@
 <script setup lang="ts">
 withDefaults(defineProps<{ name?: string }>(), { name: 'pin' })
 const paths: Record<string, string[]> = {
+	layers: ['m12 3 10 5-10 5L2 8Z', 'm2 12 10 5 10-5M2 16l10 5 10-5'],
+	lock: ['M6 10h12v11H6Z', 'M8 10V6a4 4 0 0 1 8 0v4'],
 	pin: ['M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z', 'M15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'],
 	zoomIn: ['M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z', 'm15 15 6 6M7 10h6M10 7v6'],
 	zoomOut: ['M16 10a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z', 'm15 15 6 6M7 10h6'],
 	map: ['m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Z', 'M9 3v16M15 5v16'],
+	route: ['M9 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z', 'M19 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z', 'M9 5h6a4 4 0 0 1 0 8H9a3 3 0 0 0 0 6h6'],
 	left: ['m15 5-7 7 7 7'],
 	right: ['m9 5 7 7-7 7'],
 	down: ['m5 9 7 7 7-7'],

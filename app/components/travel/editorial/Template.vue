@@ -2,10 +2,16 @@
 import type { TravelAtlas } from './atlas'
 import type { ViewerCaptionRects, ViewerRect } from './viewer-geometry'
 import type { Travel } from '~/types/travel'
+import type { TravelBasemap } from '~/utils/travelMapSettings'
 import blogConfig from '~~/blog.config'
 import { useTravelFocus } from '~/composables/useTravelFocus'
+import { useTravelPhotoFit } from '~/composables/useTravelPhotoFit'
 import { contentResourceLinks } from '~/utils/contentResources'
+import { travelMotionStyles } from '~/utils/travelMotion'
 import { countTravelLocations, flattenTravelPhotos, hasTravelCoordinates, travelCoordinateLabel } from '~/utils/travelStory'
+import { travelMapColors } from '~/utils/travelTheme'
+import Caption from './Caption.vue'
+import MapCredit from './MapCredit.vue'
 import { orientedViewerRect } from './viewer-geometry'
 import './editorial.css'
 import './photo.css'
@@ -20,6 +26,7 @@ const chapters = computed(() => props.travel.days.map((day, index) => ({ ...day,
 const coverPhoto = computed(() => ({ ...photos.value.find(photo => photo.src === props.travel.coverImage), src: props.travel.coverImage, alt: photos.value.find(photo => photo.src === props.travel.coverImage)?.alt ?? props.travel.title }))
 const root = useTemplateRef<HTMLElement>('root')
 useTravelFocus(root)
+useTravelPhotoFit(root, photos)
 const scroller = useTemplateRef<HTMLElement>('scroller')
 const canvas = useTemplateRef<HTMLElement>('canvas')
 const mobileBackdrop = useTemplateRef<HTMLElement>('mobileBackdrop')
@@ -32,6 +39,16 @@ const viewerDimmed = ref(false)
 const viewerIndex = ref(0)
 const expandedMap = ref<string | null>(null)
 const exploring = ref(false)
+const { basemap, trackColor, tracksVisible, setBasemap, setTrackColor } = useTravelMapSettings()
+const arcgisApiKey = useRuntimeConfig().public.arcgisApiKey
+const mapError = ref(false)
+const actualBasemap = ref<TravelBasemap>('simple')
+const mapAttribution = ref('')
+provide('travel-map-credit', { basemap: actualBasemap, attribution: mapAttribution })
+function changeBasemap(value: string) {
+	mapError.value = false
+	setBasemap(value)
+}
 const mapFailed = ref(false)
 const mobile = useMediaQuery('(max-width: 700px)', { ssrWidth: 1024 })
 const reduced = usePreferredReducedMotion()
@@ -169,23 +186,32 @@ function photoRect(index: number): ViewerRect | undefined {
 	const frame = image?.closest('.photo-open')
 	if (!image || !frame)
 		return
-	const style = getComputedStyle(image)
 	const frameStyle = getComputedStyle(frame)
-	return orientedViewerRect(image.getBoundingClientRect(), {
-		width: Number.parseFloat(style.width),
-		height: Number.parseFloat(style.height),
+	return orientedViewerRect(frame.getBoundingClientRect(), {
+		width: Number.parseFloat(frameStyle.width),
+		height: Number.parseFloat(frameStyle.height),
 	}, Number.parseFloat(frameStyle.rotate) || 0, Number.parseFloat(frameStyle.scale) || 1)
 }
 function captionRects(index: number): ViewerCaptionRects {
 	const figure = root.value?.querySelector(`#photo-${index} .story-photo`)
+	const headerRect = (selector: string) => {
+		const element = root.value?.querySelector(selector)
+		if (!element)
+			return undefined
+		const box = element.getBoundingClientRect()
+		const style = getComputedStyle(element)
+		return { left: box.left, top: box.top, width: box.width, height: box.height, fontSize: Number.parseFloat(style.fontSize), color: style.color }
+	}
 	return {
 		title: figure?.querySelector('.photo-title > span')?.getBoundingClientRect(),
 		place: figure?.querySelector('.photo-place > span')?.getBoundingClientRect(),
 		description: figure?.querySelector('.photo-caption > span')?.getBoundingClientRect(),
+		chapter: headerRect('.chapter-trigger > span'),
+		progress: headerRect('.chapter-photo-progress'),
 	}
 }
 async function openViewer(index: number) {
-	if (mobile.value || viewerClosing.value)
+	if ((mobile.value && !photos.value[index]?.video) || viewerClosing.value)
 		return
 	if (exploring.value)
 		closeMap()
@@ -199,9 +225,13 @@ async function openViewer(index: number) {
 	if (disposed || !viewerOpen.value)
 		return
 	viewer.value?.showModal()
-	// Commit the transparent backdrop before changing its dim state.
-	if (viewer.value)
+	// Commit both transparent layers before starting their entrance transitions.
+	if (viewer.value) {
 		getComputedStyle(viewer.value, '::backdrop').getPropertyValue('opacity')
+		const lightboxElement = viewer.value.querySelector('.lightbox')
+		if (lightboxElement)
+			getComputedStyle(lightboxElement, '::before').getPropertyValue('opacity')
+	}
 	viewerDimmed.value = true
 	connector.value = null
 	const motion = lightbox.value?.enter(origin, notes)
@@ -241,7 +271,7 @@ function stepViewer(delta: number) {
 		closeMap()
 	viewerIndex.value = Math.max(0, Math.min(photos.value.length - 1, viewerIndex.value + delta))
 }
-watch([activeNode, focusedIndex, palette, theme], async () => {
+watch([activeNode, focusedIndex, palette, theme, tracksVisible, basemap, trackColor], async () => {
 	await nextTick()
 	if (!disposed) {
 		atlas?.update()
@@ -267,9 +297,19 @@ onMounted(async () => {
 			canvas: canvas.value,
 			mobileBackdrop: mobileBackdrop.value ?? undefined,
 			photos: photos.value,
+			tracks: props.travel.tracks,
 			locale: locale.value,
+			apiKey: String(arcgisApiKey),
+			onBasemap: (value, attribution) => {
+				actualBasemap.value = value
+				mapAttribution.value = attribution
+			},
+			onBasemapError: () => {
+				mapError.value = true
+				setBasemap('simple')
+			},
 			labels: { title: t('page.travels.mapControls.title'), zoomIn: t('page.travels.mapControls.zoomIn'), zoomOut: t('page.travels.mapControls.zoomOut'), attribution: t('page.travels.mapControls.attribution'), feedback: t('page.travels.mapControls.feedback') },
-			getState: () => ({ node: activeNode.value, focusIndex: focusedIndex.value, theme: theme.value, palette: palette.value, mobile: mobile.value, exploring: exploring.value, viewer: viewerOpen.value && !viewerClosing.value, reduced: reduced.value === 'reduce' }),
+			getState: () => ({ node: activeNode.value, focusIndex: focusedIndex.value, theme: theme.value, palette: palette.value, mobile: mobile.value, exploring: exploring.value, viewer: viewerOpen.value && !viewerClosing.value, viewerClosing: viewerClosing.value, reduced: reduced.value === 'reduce', tracksVisible: tracksVisible.value, basemap: basemap.value, trackColor: trackColor.value }),
 			onMove: queueConnector,
 			onFailure: () => {
 				if (!disposed)
@@ -301,19 +341,19 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-<div ref="root" class="travel-editorial spring-ready" :class="{ 'exploring': exploring && !mobile, 'viewer-active': viewerOpen, 'viewer-restoring': viewerClosing }" :data-theme="theme" :data-palette="palette" :data-appearance="appearance" :data-reading-node="activeNode">
+<div ref="root" class="travel-editorial spring-ready" :class="{ 'exploring': exploring && !mobile, 'viewer-active': viewerOpen, 'viewer-restoring': viewerClosing }" :style="travelMotionStyles" :data-basemap="actualBasemap" :data-theme="theme" :data-palette="palette" :data-appearance="appearance" :data-reading-node="activeNode">
 	<a class="skip" href="#intro" @click.prevent="skipToContent">{{ $t('nav.skipToContent') }}</a>
-	<TravelEditorialMenus :travel :chapter="activeChapter" :progress="chapterProgress" :palette :appearance :theme :exploring="exploring && !mobile" @navigate="navigate" @palette="setPalette" @appearance="setAppearance" @explore="toggleExplore" @interrupt="cancel" />
+	<TravelEditorialMenus :travel :chapter="activeChapter" :progress="chapterProgress" :palette :appearance :theme :basemap :track-color="trackColor" :satellite-available="Boolean(arcgisApiKey)" :map-error="mapError" :tracks-visible="tracksVisible" :exploring="exploring && !mobile" @navigate="navigate" @palette="setPalette" @appearance="setAppearance" @basemap="changeBasemap" @track-color="setTrackColor" @tracks="tracksVisible = !tracksVisible" @explore="toggleExplore" @interrupt="cancel" />
 	<aside class="map-stage" :aria-label="$t('page.travels.mapControls.title')" @wheel="wheel">
 		<div ref="canvas" class="map-canvas" />
 		<div class="map-cover" />
 		<p v-if="mapFailed" class="map-failed visible">
 			{{ $t('page.travels.mapUnavailable') }}
 		</p>
-		<a class="map-credit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© CARTO · © OpenStreetMap</a>
+		<MapCredit class="map-credit" />
 	</aside>
 	<div ref="mobileBackdrop" class="mobile-atlas" aria-hidden="true" />
-	<span v-if="mobile && activeNode !== 'intro'" class="mobile-map-credit" aria-hidden="true">© CARTO · © OpenStreetMap</span>
+	<MapCredit v-if="mobile && activeNode !== 'intro'" class="mobile-map-credit" />
 	<main ref="scroller" class="story-scroll" tabindex="-1" :inert="exploring && !mobile" @scroll.passive="queueConnector">
 		<div class="story-content">
 			<div id="intro" class="reading-step" data-node="intro" :class="{ 'is-current': activeNode === 'intro' }">
@@ -370,7 +410,7 @@ onBeforeUnmount(() => {
 						<figure class="story-photo" :class="{ portrait: photoPortrait(photo.src), active: focusedIndex === photo.index }">
 							<div>
 								<div class="photo-composition">
-									<TravelEditorialPhoto :photo :index="photo.index" :active="!viewerOpen && focusedIndex === photo.index" :interactive="!mobile" @open="openViewer(photo.index)" />
+									<TravelEditorialPhoto :photo :index="photo.index" :active="!viewerOpen && focusedIndex === photo.index" :interactive="!mobile || Boolean(photo.video)" @open="openViewer(photo.index)" />
 								</div>
 								<TravelEditorialMapDetail v-if="!viewerOpen && expandedMap === `photo-${photo.index}`" :map-key="`photo-${photo.index}`" :title="photo.alt" @collapse="closeMap" />
 							</div>
@@ -391,7 +431,7 @@ onBeforeUnmount(() => {
 										</div>
 									</div>
 									<p v-if="photo.caption" class="photo-caption">
-										<span>{{ photo.caption }}</span>
+										<span><Caption :text="photo.caption" /></span>
 									</p>
 								</div>
 							</figcaption>
@@ -407,9 +447,9 @@ onBeforeUnmount(() => {
 		</div>
 	</main>
 	<TravelEditorialScrollPerf v-if="scrollPerfEnabled" :target="scroller" />
-	<svg class="connector" aria-hidden="true"><template v-if="connector"><path :d="connector.path" /><circle :cx="connector.x" :cy="connector.y" r="1.8" /></template></svg>
+	<svg class="connector" :style="actualBasemap !== 'simple' ? { '--red': travelMapColors(palette, 'light').accent } : undefined" aria-hidden="true"><template v-if="connector"><path :d="connector.path" /><circle :cx="connector.x" :cy="connector.y" r="1.8" /></template></svg>
 	<dialog ref="viewer" class="viewer" :data-dimmed="viewerDimmed" :aria-labelledby="viewerOpen ? 'travel-viewer-title' : undefined" :aria-busy="viewerClosing" @cancel.prevent="closeViewer" @close="closeViewer">
-		<TravelEditorialViewer v-if="viewerOpen && viewerPhoto" ref="lightbox" :photo="viewerPhoto" :index="viewerIndex" :total="photos.length" :chapter="chapters[viewerPhoto.chapter]?.label ?? ''" :closing="viewerClosing" @close="closeViewer" @step="stepViewer" />
+		<TravelEditorialViewer v-if="viewerOpen && viewerPhoto" ref="lightbox" :photo="viewerPhoto" :index="viewerIndex" :total="chapters[viewerPhoto.chapter]?.photos.length ?? 0" :chapter="`${String(viewerPhoto.chapter + 1).padStart(2, '0')} / ${chapters[viewerPhoto.chapter]?.label ?? ''}`" :closing="viewerClosing" @close="closeViewer" @step="stepViewer" />
 	</dialog>
 </div>
 </template>

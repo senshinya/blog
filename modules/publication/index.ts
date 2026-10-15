@@ -40,7 +40,7 @@ export default defineNuxtModule({
 		})
 		if (nuxt.options.dev) {
 			nuxt.hook('builder:watch', async (_event, path) => {
-				if (path.endsWith('.yaml'))
+				if (path.endsWith('.yaml') || path.endsWith('.tracks.json'))
 					await updateTemplates({ filter: item => item.filename === template.filename })
 			})
 		}

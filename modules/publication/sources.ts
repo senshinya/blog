@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 import { parse } from 'yaml'
 
@@ -46,8 +46,12 @@ export function generateTravelData(travelsDir: string, locales: readonly string[
 	const travelsByLocale = Object.fromEntries(locales.map((locale) => {
 		const travels = filesUnder(join(travelsDir, locale))
 			.filter(file => file.endsWith('.yaml'))
-			.map(file => parse(readFileSync(file, 'utf8')) as Record<string, unknown>)
-			.filter(travel => isDev || travel.draft !== true)
+			.map(file => ({ file, travel: parse(readFileSync(file, 'utf8')) as Record<string, unknown> }))
+			.filter(({ travel }) => isDev || travel.draft !== true)
+			.map(({ file, travel }) => {
+				const tracks = file.replace(/\.yaml$/, '.tracks.json')
+				return existsSync(tracks) ? { ...travel, tracks: JSON.parse(readFileSync(tracks, 'utf8')) } : travel
+			})
 		return [locale, travels]
 	}))
 	return `export const travelsByLocale = ${JSON.stringify(travelsByLocale)}\n`

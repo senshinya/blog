@@ -1,7 +1,7 @@
 export interface ViewerSize { width: number, height: number }
 export interface ViewerPose { scale: number, x: number, y: number }
 export interface ViewerRect { left: number, top: number, width: number, height: number, rotation?: number }
-export type ViewerCaptionRects = Partial<Record<'title' | 'place' | 'description', ViewerRect>>
+export type ViewerCaptionRects = Partial<Record<'title' | 'place' | 'description' | 'chapter' | 'progress', ViewerRect & { fontSize?: number, color?: string }>>
 
 function hasPositiveFiniteSize(size: ViewerSize): boolean {
 	return Number.isFinite(size.width) && size.width > 0 && Number.isFinite(size.height) && size.height > 0

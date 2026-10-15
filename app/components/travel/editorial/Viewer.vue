@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { StoryPhoto } from '../../../utils/travelStory'
 import type { ViewerCaptionRects, ViewerPose, ViewerRect, ViewerSize } from './viewer-geometry'
+import { travelMotion } from '../../../utils/travelMotion'
 import { hasTravelCoordinates, travelCoordinateLabel } from '../../../utils/travelStory'
+import Caption from './Caption.vue'
 import { clampViewerPose, fitViewerImage, pinchViewerAt, viewerMorph, viewerSwipe, zoomViewerAt } from './viewer-geometry'
 
 const props = withDefaults(defineProps<{ photo: StoryPhoto, index: number, total: number, chapter: string, closing?: boolean }>(), { closing: false })
@@ -14,9 +16,13 @@ const originalImage = useTemplateRef<HTMLImageElement>('originalImage')
 const captionTitle = useTemplateRef<HTMLElement>('captionTitle')
 const captionPlace = useTemplateRef<HTMLElement>('captionPlace')
 const captionDescription = useTemplateRef<HTMLElement>('captionDescription')
+const chapterText = useTemplateRef<HTMLElement>('chapterText')
+const progressText = useTemplateRef<HTMLElement>('progressText')
+const progress = computed(() => ({ current: props.photo.chapterIndex + 1, total: props.total }))
 const reduced = usePreferredReducedMotion()
 const mobile = useMediaQuery('(max-width: 700px)')
 const stageSize = ref<ViewerSize>({ width: 1200, height: 800 })
+const paperEdge = ref(5)
 const naturalSize = ref<ViewerSize | null>(null)
 const pose = ref<ViewerPose>({ scale: 1, x: 0, y: 0 })
 const dragging = ref(false)
@@ -30,7 +36,11 @@ const imageSize = computed(() => {
 	const meta = getImgMeta(props.photo.src)
 	return meta ? { width: meta.w, height: meta.h } : naturalSize.value ?? { width: 1200, height: 800 }
 })
-const fitted = computed(() => fitViewerImage(imageSize.value, { width: Math.max(1, stageSize.value.width - (mobile.value ? 24 : 112)), height: Math.max(1, stageSize.value.height - 24) }))
+const fitted = computed(() => {
+	const edge = paperEdge.value * 2
+	const image = fitViewerImage(imageSize.value, { width: Math.max(1, stageSize.value.width - (mobile.value ? 24 : 112) - edge), height: Math.max(1, stageSize.value.height - 24 - edge) })
+	return { width: image.width + edge, height: image.height + edge }
+})
 const photoStyle = computed(() => ({ width: `${fitted.value.width}px`, height: `${fitted.value.height}px`, transform: `translate3d(${pose.value.x + swipeOffset.value}px, ${pose.value.y}px, 0) scale(${pose.value.scale})` }))
 const pointers = new Map<number, { x: number, y: number }>()
 let gesture: { x: number, y: number, lastX: number, lastY: number, onPhoto: boolean, pinched: boolean } | undefined
@@ -43,6 +53,12 @@ let disposed = false
 function measure() {
 	if (!stage.value?.clientWidth || !stage.value.clientHeight)
 		return
+	if (photograph.value) {
+		const style = getComputedStyle(photograph.value)
+		const edge = Number.parseFloat(style.paddingLeft) + Number.parseFloat(style.borderLeftWidth)
+		if (Number.isFinite(edge) && edge >= 0)
+			paperEdge.value = edge
+	}
 	stageSize.value = { width: stage.value.clientWidth, height: stage.value.clientHeight }
 	pose.value = clampViewerPose(pose.value, fitted.value, stageSize.value)
 }
@@ -195,10 +211,7 @@ function cancelMotions() {
 async function animate(keyframes: Keyframe[], element = photograph.value, persist = false) {
 	if (disposed || reduced.value === 'reduce' || !element)
 		return
-	const style = getComputedStyle(element)
-	const duration = Number.parseFloat(style.getPropertyValue('--photo-morph-duration'))
-	const easing = style.getPropertyValue('--photo-morph-easing').trim() || 'cubic-bezier(.22,1,.36,1)'
-	const current = element.animate(keyframes, { duration: Number.isFinite(duration) ? duration : 280, easing, fill: 'both' })
+	const current = element.animate(keyframes, { duration: travelMotion.duration.mode, easing: travelMotion.easing, fill: 'both' })
 	motions.add(current)
 	try {
 		await current.finished
@@ -217,7 +230,7 @@ function motionStyle(element: HTMLElement | null) {
 }
 function captionMotions(rects: ViewerCaptionRects | undefined, opening: boolean, from?: Partial<Record<keyof ViewerCaptionRects, { transform: string, opacity: number }>>) {
 	const captions = { title: captionTitle.value, place: captionPlace.value, description: captionDescription.value }
-	return Promise.all((Object.keys(captions) as (keyof ViewerCaptionRects)[]).map((key) => {
+	return Promise.all((Object.keys(captions) as (keyof typeof captions)[]).map((key) => {
 		const element = captions[key]
 		if (!element)
 			return Promise.resolve()
@@ -230,6 +243,23 @@ function captionMotions(rects: ViewerCaptionRects | undefined, opening: boolean,
 		return animate(frames, element, true)
 	}))
 }
+function headerMotion(key: 'chapter' | 'progress', rect: ViewerCaptionRects['progress'], opening: boolean, from?: Keyframe) {
+	const element = key === 'chapter' ? chapterText.value : progressText.value
+	if (!rect || !element)
+		return Promise.resolve()
+	const box = element.getBoundingClientRect()
+	const style = getComputedStyle(element)
+	// Scale the glyphs without reflowing the neighbouring label during the move.
+	const scale = rect.fontSize ? rect.fontSize / Number.parseFloat(style.fontSize) : 1
+	const reading = { transform: `translate3d(${rect.left - box.left}px, ${rect.top - box.top}px, 0) scale(${scale})`, color: rect.color ?? style.color, opacity: 1 }
+	const enlarged = { transform: 'none', color: style.color, opacity: 1 }
+	return animate(opening ? [reading, enlarged] : [from ?? enlarged, reading], element, true)
+}
+function paperFrame(rect: ViewerRect, base: ViewerRect): Keyframe {
+	// Grid keeps the resized paper centered; translate/rotate it without scaling its edge.
+	const centered = { left: base.left + (base.width - rect.width) / 2, top: base.top + (base.height - rect.height) / 2, width: rect.width, height: rect.height }
+	return { width: `${rect.width}px`, height: `${rect.height}px`, transform: viewerMorph(rect, centered), opacity: 1 }
+}
 async function enter(origin?: ViewerRect, notes?: ViewerCaptionRects) {
 	cancelMotions()
 	entering.value = true
@@ -237,27 +267,32 @@ async function enter(origin?: ViewerRect, notes?: ViewerCaptionRects) {
 	await nextTick()
 	if (disposed)
 		return
-	const image = origin && photograph.value
-		? animate([{ transform: viewerMorph(origin, photograph.value.getBoundingClientRect()), opacity: 1 }, { transform: 'none', opacity: 1 }])
+	const base = photograph.value?.getBoundingClientRect()
+	const image = origin && base
+		? animate([paperFrame(origin, base), { width: `${base.width}px`, height: `${base.height}px`, transform: 'none', opacity: 1 }])
 		: Promise.resolve()
 	const captions = captionMotions(notes, true)
 	notesReady.value = true
-	await Promise.all([image, captions])
+	await Promise.all([image, captions, headerMotion('chapter', notes?.chapter, true), headerMotion('progress', notes?.progress, true)])
 	entering.value = false
 }
 async function leave(target?: ViewerRect, notes?: ViewerCaptionRects) {
 	if (disposed || !photograph.value || !stage.value)
 		return
-	const currentPhoto = motionStyle(photograph.value)!
+	const style = getComputedStyle(photograph.value)
+	const currentPhoto = { ...motionStyle(photograph.value)!, width: style.width, height: style.height }
 	const currentNotes = { title: motionStyle(captionTitle.value), place: motionStyle(captionPlace.value), description: motionStyle(captionDescription.value) }
+	const currentHeader = (element: HTMLElement | null) => element ? { ...motionStyle(element)!, color: getComputedStyle(element).color } : undefined
+	const currentChapter = currentHeader(chapterText.value)
+	const currentProgress = currentHeader(progressText.value)
 	cancelMotions()
 	const box = stage.value.getBoundingClientRect()
 	const fit = fitted.value
 	const base = { left: box.left + (box.width - fit.width) / 2, top: box.top + (box.height - fit.height) / 2, width: fit.width, height: fit.height }
 	const image = target
-		? animate([currentPhoto, { transform: viewerMorph(target, base), opacity: 1 }], photograph.value, true)
+		? animate([currentPhoto, paperFrame(target, base)], photograph.value, true)
 		: Promise.resolve()
-	await Promise.all([image, captionMotions(notes, false, currentNotes)])
+	await Promise.all([image, captionMotions(notes, false, currentNotes), headerMotion('chapter', notes?.chapter, false, currentChapter), headerMotion('progress', notes?.progress, false, currentProgress)])
 }
 
 watch(() => props.index, async (_index, previous) => {
@@ -298,7 +333,7 @@ defineExpose({ enter, leave })
 <div class="lightbox" :class="{ 'is-zoomed': pose.scale > 1.01, 'is-dragging': dragging, 'is-closing': closing, 'is-morphing': entering || closing }" :data-zoom="pose.scale.toFixed(2)" @click="blankClick">
 	<header class="lightbox-header">
 		<p class="viewer-count">
-			{{ chapter }} · {{ index + 1 }} / {{ total }}
+			<span ref="chapterText" class="viewer-chapter">{{ chapter }}</span><span ref="progressText" class="viewer-progress">{{ progress.current }} / {{ progress.total }}</span>
 		</p>
 		<div class="lightbox-actions">
 			<button class="icon-button" :disabled="closing" :aria-label="t('page.travels.closeViewer')" @click="emit('close')">
@@ -325,7 +360,7 @@ defineExpose({ enter, leave })
 					<span>{{ travelCoordinateLabel(photo) }}</span>
 				</p>
 				<p v-if="photo.caption" ref="captionDescription" class="lightbox-description">
-					<span>{{ photo.caption }}</span>
+					<span><Caption :text="photo.caption" /></span>
 				</p>
 			</div>
 		</aside>

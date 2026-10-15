@@ -4,17 +4,19 @@ import { stripTypeScriptTypes } from 'node:module'
 // eslint-disable-next-line test/no-import-node-test -- Use the repository's Node test runner.
 import test from 'node:test'
 import vm from 'node:vm'
+import { travelMotion } from '../../../utils/travelMotion.ts'
 import * as geometry from './viewer-geometry.ts'
 
 function harness(reducedMotion = 'no-preference') {
-	const props = { photo: { src: 'first.jpg', index: 0, video: false }, index: 0, closing: false }
+	const props = { photo: { src: 'first.jpg', index: 0, chapterIndex: 0, video: false }, index: 0, total: 7, closing: false }
 	const events: string[] = []
 	const templateRefs = new Map<string, { value: unknown }>()
 	let dispose = () => {}
 	const script = readFileSync(new URL('./Viewer.vue', import.meta.url), 'utf8').match(/<script setup lang="ts">([\s\S]*?)<\/script>/)![1]!
 	const source = stripTypeScriptTypes(script).replace(/^import .*$/gm, '')
-	const runtime = vm.runInNewContext(`${source}\n;({ originalLoaded, loaded, originalRequested, originalReady, naturalSize, blankClick: typeof blankClick === 'function' ? blankClick : undefined, entering, enter, leave, notesReady: typeof notesReady === 'undefined' ? undefined : notesReady })`, {
+	const runtime = vm.runInNewContext(`${source}\n;({ originalLoaded, loaded, originalRequested, originalReady, naturalSize, fitted, measure, blankClick: typeof blankClick === 'function' ? blankClick : undefined, entering, enter, leave, progress: typeof progress === 'undefined' ? undefined : progress, notesReady: typeof notesReady === 'undefined' ? undefined : notesReady })`, {
 		...geometry,
+		travelMotion,
 		defineProps: () => props,
 		withDefaults: (value: unknown) => value,
 		defineEmits: () => (event: string) => { events.push(event) },
@@ -30,17 +32,29 @@ function harness(reducedMotion = 'no-preference') {
 			return value
 		},
 		nextTick: async () => {},
-		getComputedStyle: () => ({ transform: 'none', getPropertyValue: (key: string) => key === '--photo-morph-duration' ? '280ms' : 'cubic-bezier(.22,1,.36,1)' }),
+		getComputedStyle: () => ({ transform: 'none', fontSize: '13px', color: 'rgb(240, 240, 240)', getPropertyValue: (key: string) => key === '--photo-morph-duration' ? '333ms' : 'cubic-bezier(.22,1,.36,1)' }),
 		watch() {},
 		onMounted() {},
 		onScopeDispose: (fn: () => void) => { dispose = fn },
 		getImgMeta: () => null,
-	}) as { enter: (origin?: geometry.ViewerRect, notes?: Record<string, geometry.ViewerRect>) => Promise<void>, leave: (target?: geometry.ViewerRect, notes?: Record<string, geometry.ViewerRect>) => Promise<void>, notesReady: { value: boolean }, blankClick: (event: { target: unknown, defaultPrevented?: boolean }) => void, entering: { value: boolean }, originalLoaded: (event: { target: unknown }) => void, loaded: (event: { target: unknown }) => void, originalRequested: { value: boolean }, originalReady: { value: boolean }, naturalSize: { value: { width: number, height: number } | null } }
+	}) as { progress: { value: { current: number, total: number } }, fitted: { value: geometry.ViewerSize }, measure: () => void, enter: (origin?: geometry.ViewerRect, notes?: Record<string, geometry.ViewerRect>) => Promise<void>, leave: (target?: geometry.ViewerRect, notes?: Record<string, geometry.ViewerRect>) => Promise<void>, notesReady: { value: boolean }, blankClick: (event: { target: unknown, defaultPrevented?: boolean }) => void, entering: { value: boolean }, originalLoaded: (event: { target: unknown }) => void, loaded: (event: { target: unknown }) => void, originalRequested: { value: boolean }, originalReady: { value: boolean }, naturalSize: { value: { width: number, height: number } | null } }
 	function image(index: number, src: string) {
 		return { isConnected: true, dataset: { photoIndex: String(index) }, getAttribute: () => src, naturalWidth: 1600, naturalHeight: 1200 }
 	}
 	return { props, runtime, templateRefs, image, events, dispose: () => dispose() }
 }
+
+test('viewer fitting reserves the paper edge while preserving image proportions and native resolution', () => {
+	const h = harness()
+	h.templateRefs.get('stage')!.value = { clientWidth: 922, clientHeight: 800 }
+	h.runtime.naturalSize.value = { width: 1600, height: 800 }
+	h.runtime.measure()
+	assert.equal(h.runtime.fitted.value.width, 810)
+	assert.equal(h.runtime.fitted.value.height, 410)
+	h.runtime.naturalSize.value = { width: 200, height: 100 }
+	assert.equal(h.runtime.fitted.value.width, 210)
+	assert.equal(h.runtime.fitted.value.height, 110)
+})
 
 test('only the current requested original may become ready', () => {
 	const h = harness()
@@ -50,7 +64,7 @@ test('only the current requested original may become ready', () => {
 	h.runtime.originalLoaded({ target: first })
 	assert.equal(h.runtime.originalReady.value, true)
 	h.props.index = 1
-	h.props.photo = { src: 'second.jpg', index: 1, video: false }
+	h.props.photo = { src: 'second.jpg', index: 1, chapterIndex: 1, video: false }
 	h.runtime.originalReady.value = false
 	const second = h.image(1, 'second.jpg')
 	h.templateRefs.get('originalImage')!.value = second
@@ -76,7 +90,7 @@ test('an old preview never replaces the new photograph dimensions', () => {
 	const h = harness()
 	const previous = h.image(0, 'first.jpg')
 	h.props.index = 1
-	h.props.photo = { src: 'second.jpg', index: 1, video: false }
+	h.props.photo = { src: 'second.jpg', index: 1, chapterIndex: 1, video: false }
 	const current = h.image(1, 'second.jpg')
 	h.templateRefs.get('previewImage')!.value = current
 	h.runtime.loaded({ target: previous })
@@ -116,18 +130,22 @@ test('viewer background clicks are ignored during morphing or prevented input', 
 	assert.deepEqual(h.events, [])
 })
 
-function animatedViewer(reduced = 'no-preference') {
+function animatedViewer(reduced = 'no-preference', withProgress = false, withChapter = false) {
 	const h = harness(reduced)
-	const motions: { name: string, frames: Keyframe[], cancelled: boolean, finish: () => void }[] = []
-	for (const [name, left, top] of [['photograph', 100, 100], ['captionTitle', 900, 200], ['captionPlace', 900, 260], ['captionDescription', 900, 320]] as const) {
+	const motions: { name: string, frames: Keyframe[], options: KeyframeAnimationOptions, cancelled: boolean, finish: () => void }[] = []
+	for (const [name, left, top] of [['photograph', 100, 100], ['captionTitle', 900, 200], ['captionPlace', 900, 260], ['captionDescription', 900, 320], ['progressText', 100, 20], ['chapterText', 20, 20]] as const) {
+		if (name === 'progressText' && !withProgress)
+			continue
+		if (name === 'chapterText' && !withChapter)
+			continue
 		const element = {
 			getBoundingClientRect: () => ({ left, top, width: 200, height: 100 }),
-			animate(frames: Keyframe[]) {
+			animate(frames: Keyframe[], options: KeyframeAnimationOptions) {
 				let finish = () => {}
 				const finished = new Promise<void>((resolve) => {
 					finish = resolve
 				})
-				const motion = { name, frames, cancelled: false, finish }
+				const motion = { name, frames, options, cancelled: false, finish }
 				motions.push(motion)
 				return { finished, cancel() {
 					motion.cancelled = true
@@ -143,6 +161,83 @@ function animatedViewer(reduced = 'no-preference') {
 	const notes = { title: { left: 100, top: 600, width: 300, height: 30 }, place: { left: 100, top: 730, width: 250, height: 20 }, description: { left: 100, top: 650, width: 300, height: 60 } }
 	return { ...h, motions, notes }
 }
+
+test('viewer progress uses the chapter position even when the global image index is larger', () => {
+	const h = harness()
+	h.props.index = 24
+	h.props.photo.chapterIndex = 3
+	h.props.total = 17
+	assert.equal(h.runtime.progress?.value.current, 4)
+	assert.equal(h.runtime.progress?.value.total, 17)
+})
+
+test('photo, header and captions share one mode timing through entry and exit', async () => {
+	const h = animatedViewer('no-preference', true, true)
+	const notes = { ...h.notes, chapter: { left: 650, top: 30, width: 120, height: 18 }, progress: { left: 800, top: 30, width: 40, height: 16 } }
+	const opened = h.runtime.enter({ left: 0, top: 0, width: 100, height: 100 }, notes)
+	await new Promise<void>(resolve => setImmediate(resolve))
+	for (const motion of h.motions) {
+		assert.equal(motion.options.duration, 280)
+		assert.equal(motion.options.easing, 'cubic-bezier(0.22, 1, 0.36, 1)')
+		motion.finish()
+	}
+	await opened
+	const closed = h.runtime.leave({ left: 0, top: 0, width: 100, height: 100 }, notes)
+	for (const motion of h.motions) {
+		assert.equal(motion.options.duration, 280)
+		assert.equal(motion.options.easing, 'cubic-bezier(0.22, 1, 0.36, 1)')
+		motion.finish()
+	}
+	await closed
+	h.dispose()
+})
+
+test('chapter label moves together with progress and returns to the reading title position', async () => {
+	const h = animatedViewer('no-preference', true, true)
+	const notes = { ...h.notes, chapter: { left: 650, top: 30, width: 120, height: 18, fontSize: 11, color: 'rgb(170, 170, 170)' }, progress: { left: 800, top: 30, width: 40, height: 16, fontSize: 11, color: 'rgb(170, 170, 170)' } }
+	const opened = h.runtime.enter(undefined, notes)
+	await new Promise<void>(resolve => setImmediate(resolve))
+	const chapter = h.motions.find(motion => motion.name === 'chapterText')
+	assert.ok(chapter, 'the shared chapter label must have its own motion')
+	assert.equal(chapter.frames[0]!.transform, 'translate3d(630px, 10px, 0) scale(0.8461538461538461)')
+	assert.equal(chapter.frames[0]!.opacity, 1)
+	assert.equal(chapter.frames[1]!.transform, 'none')
+	for (const motion of h.motions) motion.finish()
+	await opened
+	const closed = h.runtime.leave({ left: 0, top: 0, width: 100, height: 100 }, notes)
+	const exit = h.motions.findLast(motion => motion.name === 'chapterText')!
+	assert.equal(exit.frames[1]!.transform, 'translate3d(630px, 10px, 0) scale(0.8461538461538461)')
+	assert.equal(exit.frames[1]!.color, 'rgb(170, 170, 170)')
+	assert.equal(exit.frames[1]!.opacity, 1)
+	for (const motion of h.motions) motion.finish()
+	await closed
+	h.dispose()
+})
+
+test('chapter progress moves between the reading topbar and viewer without fading out', async () => {
+	const h = animatedViewer('no-preference', true)
+	const notes = { ...h.notes, progress: { left: 800, top: 30, width: 40, height: 16, fontSize: 11, color: 'rgb(170, 170, 170)' } }
+	const opened = h.runtime.enter(undefined, notes)
+	await new Promise<void>(resolve => setImmediate(resolve))
+	const entrance = h.motions.find(motion => motion.name === 'progressText')
+	assert.ok(entrance, 'the shared chapter counter must have its own motion')
+	assert.equal(entrance.frames[0]!.transform, 'translate3d(700px, 10px, 0) scale(0.8461538461538461)')
+	assert.equal(entrance.frames[0]!.color, 'rgb(170, 170, 170)')
+	assert.equal(entrance.frames[1]!.color, 'rgb(240, 240, 240)')
+	assert.equal(entrance.frames[0]!.fontSize, undefined, 'size changes must not reflow the adjacent header label')
+	assert.equal(entrance.frames[1]!.transform, 'none')
+	assert.equal(entrance.frames[0]!.opacity, 1)
+	for (const motion of h.motions) motion.finish()
+	await opened
+	const closed = h.runtime.leave({ left: 0, top: 0, width: 100, height: 100 }, notes)
+	const exit = h.motions.findLast(motion => motion.name === 'progressText')!
+	assert.equal(exit.frames[1]!.transform, 'translate3d(700px, 10px, 0) scale(0.8461538461538461)')
+	assert.equal(exit.frames[1]!.color, 'rgb(170, 170, 170)')
+	assert.equal(exit.frames[1]!.opacity, 1)
+	for (const motion of h.motions) motion.finish()
+	await closed
+	h.dispose()
+})
 
 test('opening moves title, coordinates and description with the photograph and waits for every motion', async () => {
 	const h = animatedViewer()
@@ -216,4 +311,29 @@ test('closing restores the reading tilt before the dialog is removed', async () 
 	await pending
 	assert.equal(photo.cancelled, false)
 	h.dispose()
+})
+
+test('paper morph resizes the frame without scaling its border at either reading endpoint', async () => {
+	const opening = animatedViewer()
+	const origin = { left: 10, top: 20, width: 110, height: 85, rotation: -1.2 }
+	const entered = opening.runtime.enter(origin)
+	await new Promise<void>(resolve => setImmediate(resolve))
+	const first = opening.motions.find(motion => motion.name === 'photograph')!.frames[0]!
+	assert.equal(first.width, '110px')
+	assert.equal(first.height, '85px')
+	assert.match(String(first.transform), /rotate\(-1\.2deg\) scale\(1, 1\)$/)
+	for (const motion of opening.motions)
+		motion.finish()
+	await entered
+
+	const closing = animatedViewer()
+	const left = closing.runtime.leave(origin)
+	const last = closing.motions.find(motion => motion.name === 'photograph')!.frames[1]!
+	assert.equal(last.width, '110px')
+	assert.equal(last.height, '85px')
+	assert.match(String(last.transform), /rotate\(-1\.2deg\) scale\(1, 1\)$/)
+	for (const motion of closing.motions)
+		motion.finish()
+	await left
+	closing.dispose()
 })

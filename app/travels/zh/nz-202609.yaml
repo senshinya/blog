@@ -1,4 +1,4 @@
-# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前六章。
+# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前九章。
 # 电车说明：https://www.christchurchattractions.nz/
 # 沿途观光铁路：https://www.greatjourneysnz.com/routes/coastal-pacific/
 slug: nz-202609
@@ -305,7 +305,7 @@ days:
         lng: 170.479675
       - src: https://blog-img.774352199.xyz/6rNxb2.webp
         alt: 银河其一
-        caption: 九点半左右，暮光完全消失。先是漫天繁星渐次出现，随后一条光带缓缓显现出来。
+        caption: 九点半左右，暮光散尽，满天繁星清晰可见，随后一条光带也渐渐显现出来。
         lat: -44.0030639
         lng: 170.4735556
       - src: https://blog-img.774352199.xyz/WyBNEM.webp
@@ -463,6 +463,202 @@ days:
         lng: 168.6612861
       - src: https://blog-img.774352199.xyz/RDUhK2.webp
         alt: 亚洲超市
-        caption: 说是亚洲超市，其实更像是中国超市：火锅食材、火锅底料、各种中国的零食小吃、国产方便面……应有尽有。恰逢国人黄金周（双周），亚洲超市挤满了中国人，连煮火锅的卡式炉都被租完甚至是买完了。我们买了一些火锅底料和调料，以及一大包方便面。
+        caption: 说是亚洲超市，其实更像是中国超市：火锅食材、火锅底料、各种中国的零食小吃、国产方便面……应有尽有。恰逢国人黄金周（双周），亚洲超市挤满了中国人，连煮火锅的卡式炉都被租完甚至是买完了。我们买了一些火锅底料和调料，以及一大包方便面和一包螺蛳粉。
         lat: -45.0305889
         lng: 168.6609028
+
+  - day: 7
+    title: shoot!
+    shortTitle: shoot!
+    descriptions:
+      - 预约了早上六点的第一班跳伞，凌晨四点就起床收拾。五点半正准备出门时，收到了因天气原因取消跳伞的邮件。不死心，还是去了跳伞门店，最后却只能败兴而归。
+      - 回到酒店又休息到了中午。连一刻都没有为跳伞取消而失落，立刻到来的是射击！
+    photos:
+      - src: https://blog-img.774352199.xyz/FVyYbZ.webp
+        mapZoomOffset: 0.6
+        alt: 初春
+        lat: -45.0335361
+        lng: 168.6660306
+      - src: https://blog-img.774352199.xyz/JxgnfC.webp
+        mapZoomOffset: 0.6
+        alt: 烟屁股
+        caption: 等车时看到的装置，上面写着“Butts belong in this bin”。butts 我知道是屁股，但整句话看不明白。问了 AI 才知道，这里的 butts 指烟屁股，也就是烟头 😂
+        lat: -45.0307306
+        lng: 168.6602639
+      - src: https://blog-img.774352199.xyz/PrOvaU.webp
+        mapZoomOffset: 0.6
+        alt: Town Center
+        lat: -45.0306972
+        lng: 168.6603556
+      - src: https://blog-img.774352199.xyz/Ijc2hK.webp
+        mapZoomOffset: 0.6
+        alt: 镇郊远眺
+        caption: 靶场设在皇后镇郊外一座山上的私人牧场，射击教练就是牧场主。据教练说，牧场里养了五千只羊，占据了城郊的好几个山头。不知道是不是英国殖民时期留下的习惯，当地人闲聊时真的很喜欢聊天气，还喜欢调侃天气预报员。
+        lat: -45.0037639
+        lng: 168.7099611
+      - src: https://blog-img.774352199.xyz/BVINEB.webp
+        mapZoomOffset: 0.6
+        alt: 霰弹枪
+        caption: 射击用的是一把半自动霰弹枪。射击位周围有好几台陶土靶发射器，教练一按遥控器，就会有陶土靶飞出来。
+        lat: -45.0058139
+        lng: 168.7100528
+      - src: https://blog-img.774352199.xyz/ro9M1H.webp
+        mapZoomOffset: 0.6
+        alt: 姿势要正
+        caption: 射击前，教练先讲解姿势和要点，浅显易懂，几句话就说完了。没有反复的三令五申，松弛得有种不真实感，仿佛我们玩的是 Laser Tag。教练反复强调的只有一句：“Eyes on target”。
+        lat: -45.0058528
+        lng: 168.7100528
+      - src: https://blog-img.774352199.xyz/Ng9QO6.webp
+        mapZoomOffset: 0.6
+        alt: 开枪！
+        caption: 真拿起来才感受到枪的重量，大幅度移动有些费劲。不过后坐力意外地小，不知道是不是减装药量的缘故。最后每人打了约四五十发。教练的情绪价值给得十分充足，没打中还会帮我们找补。
+        live: https://blog-img.774352199.xyz/zlLxt9.mp4
+        lat: -45.0058472
+        lng: 168.7100361
+      - src: https://blog-img.774352199.xyz/vEIRTD.webp
+        mapZoomOffset: 0.6
+        alt: 强烈推荐
+        caption: |-
+          原本计划去瓦纳卡的 Real Guns，但交通不方便，也没订到合适的时间，只好改订了这个项目。没想到是个意外之喜，体验极佳。我们预约时官网没有在线预订入口，可以通过邮件或电话联系。
+          官网：https://breakone.co.nz
+        lat: -45.0058444
+        lng: 168.7100222
+      - src: https://blog-img.774352199.xyz/RDgmbB.webp
+        mapZoomOffset: 0.6
+        alt: 网红大脸汉堡
+        caption: 返程还是在镇中心下车，顺便在附近逛了逛。偶遇大脸汉堡，小红书上的皇后镇必吃推荐，不过我毫无兴趣，只想回去涮火锅吃。
+        lat: -45.0317111
+        lng: 168.6593639
+      - src: https://blog-img.774352199.xyz/astXwO.webp
+        mapZoomOffset: 0.6
+        alt: 肯记麦记
+        caption: 十分和谐。
+        lat: -45.0315694
+        lng: 168.6614083
+
+  - day: 7
+    title: Skyline
+    shortTitle: Skyline
+    descriptions:
+      - Skyline 坐落在皇后镇边缘的山上，初次进入皇后镇时就注意到了。从山下望去，平平无奇。为了修建缆车，山坡还被砍出了一条光秃秃的岩石带，甚至有些丑陋。
+      - 但当实际登上观景台，俯瞰皇后镇和瓦卡蒂普湖，却又是另一番景象了。
+      - 我们买了 Skyline 套票，包含缆车体验、三次滑车（luge），还有一顿山顶自助餐。
+    photos:
+      - src: https://blog-img.774352199.xyz/mOqmRj.webp
+        alt: 瓦卡蒂普湖
+        caption: 可能是夏令时的原因，新西兰天黑得特别晚，下午五点仍不见暮色。
+        lat: -45.0331417
+        lng: 168.6606611
+      - src: https://blog-img.774352199.xyz/OkJTRk.webp
+        alt: 缆车风景其一
+        lat: -45.02905
+        lng: 168.6565389
+      - src: https://blog-img.774352199.xyz/ZhHGPh.webp
+        alt: 缆车风景其二
+        lat: -45.0275889
+        lng: 168.652725
+      - src: https://blog-img.774352199.xyz/W8duHW.webp
+        alt: 滑车
+        caption: |-
+          套票里包含三次滑车体验。因为时间预留得不多，原本计划先玩一次就去吃饭，结果体验超乎想象，十分刺激，连续玩了两次仍意犹未尽。
+          一共有两条滑道，Arrow 和 Dart。理论上 Arrow 更平缓悠闲，Dart 更刺激，但实际体验下来，Arrow 的刺激程度并不比 Dart 低，而且滑道更长，体验更佳。
+        lat: -45.0257194
+        lng: 168.6475361
+      - src: https://blog-img.774352199.xyz/T1rVo8.webp
+        alt: 自助餐
+        caption: 自助餐中规中矩，冷饮和酒都要另付费，免费的只有咖啡、茶之类的热饮。第一次品尝了鹿肉，吃过的动物种类 +1。没有什么特殊的味道，口感和牛肉差不多。坐在餐厅窗边，就能俯瞰整个皇后镇和瓦卡蒂普湖。
+        lat: -45.0264806
+        lng: 168.6499028
+      - src: https://blog-img.774352199.xyz/KN2GmZ.webp
+        alt: 晚霞
+        caption: 一直吃到晚霞爬上山头，又渐渐褪去。餐后离开餐厅时，天已经黑透了，不过 luge 还在营业，于是又坐缆车上去玩了一次。
+        lat: -45.0263639
+        lng: 168.6498417
+
+  - day: 8
+    title: 天堂镇天堂路
+    shortTitle: 天堂镇天堂路
+    descriptions:
+      - 格林诺奇是南岛一个很有名的小镇，据说是《指环王》和《霍比特人》中土世界的取景地。它离皇后镇很近，车程只有半小时左右。
+      - 我们预订了当地一家马场的骑马徒步。马场位于天堂镇的天堂路（Paradise），十分应景。
+      - 由于前一天的跳伞被取消，我们又预约了室内跳伞。说是跳伞，更像是体验自由落体。
+    photos:
+      - src: https://blog-img.774352199.xyz/2DC2bu.webp
+        alt: 世界十大最美公路之一
+        caption: 从皇后镇前往格林诺奇，全程沿着瓦卡蒂普湖畔，湖面倒映着雪山，轻云掩映。这条路也被誉为世界十大最美公路之一。
+        lat: -45.0580778
+        lng: 168.59105
+      - src: https://blog-img.774352199.xyz/ETWnt7.webp
+        alt: 起飞
+        lat: -45.0580222
+        lng: 168.5909111
+      - src: https://blog-img.774352199.xyz/LHvGn8.webp
+        alt: 一抹亮眼的红色
+        lat: -44.8515389
+        lng: 168.3825833
+      - src: https://blog-img.774352199.xyz/9dWLdA.webp
+        alt: 噩梦红房子
+        caption: 此前同事 C 也去过格林诺奇，在一个旱厕里留下了心理阴影。回国后讲给我听，害得我也做了个不太下饭的噩梦。今天终于得以窥见其真容。
+        lat: -44.8527028
+        lng: 168.3834528
+      - src: https://blog-img.774352199.xyz/UcaXyR.webp
+        alt: 饮马槽
+        caption: 到达马场后，工作人员简单讲解了骑马的基本操作，已有骑马经验的我理解起来自然没有问题。我骑的这匹马叫 Smarty，似乎在马队中的地位较低（原话 low dominance），偶尔被其他马霸凌，有些可怜。徒步时也只能吊车尾，走在马队最后。
+        lat: -44.8006167
+        lng: 168.3762194
+      - src: https://blog-img.774352199.xyz/ldsntb.webp
+        alt: 飒爽
+        lat: -44.8011361
+        lng: 168.3758389
+      - src: https://blog-img.774352199.xyz/KsqoOC.webp
+        alt: 沿途其一
+        lat: -44.8038778
+        lng: 168.3833167
+      - src: https://blog-img.774352199.xyz/ukVks1.webp
+        alt: 沿途其二
+        caption: 穿越里斯河（Rees River），水很浅，才能没马蹄。
+        lat: -44.8026694
+        lng: 168.3851611
+      - src: https://blog-img.774352199.xyz/M9hPio.webp
+        alt: 沿途其三
+        lat: -44.8023417
+        lng: 168.38585
+      - src: https://blog-img.774352199.xyz/JN3G0K.webp
+        alt: 嘻嘻和略略
+        lat: -44.7973278
+        lng: 168.3905028
+      - src: https://blog-img.774352199.xyz/AHMa6R.webp
+        alt: 沿途其四
+        caption: |-
+          里斯河畔有一片柳树林，和瓦纳卡那棵孤独的树是同种。马儿走到这里就有些走不动道了，逮着空就想低头吃草。
+          据工作人员说，春天四处冒出的草对马儿来说，就像大麻（没错，就是你想的大麻）对人类。马儿很爱吃，但吃多了会不舒服，所以一低头吃草，就得及时拉住缰绳，把它拽回来。
+        lat: -44.7989889
+        lng: 168.3830556
+      - src: https://blog-img.774352199.xyz/o5HP9H.webp
+        alt: 沿途其五
+        lat: -44.8019917
+        lng: 168.3791194
+      - src: https://blog-img.774352199.xyz/vdFLEW.webp
+        alt: 简易午餐
+        caption: 煮了一大锅泡面，又煮了一锅螺蛳粉。希望对门不要投诉。
+        lat: -45.0345222
+        lng: 168.6678306
+      - src: https://blog-img.774352199.xyz/Y2YXGy.webp
+        alt: 室内跳伞
+        caption: 身后是一个巨大的风洞，地板下的风扇吹出狂风，让人悬浮在空中。相对运动，十分合理。
+        lat: -45.0298806
+        lng: 168.6575917
+      - src: https://blog-img.774352199.xyz/YP7Zwn.webp
+        alt: 这是真起飞了
+        caption: 风很大，胳膊保持姿势都有点费力。飞完一圈，第二天腰酸背痛。
+        lat: -45.029881
+        lng: 168.657592
+      - src: https://blog-img.774352199.xyz/Tvf3oP.webp
+        alt: 皆若空游无所依
+        video: https://blog-img.774352199.xyz/7OIwwM.mp4
+        lat: -45.029881
+        lng: 168.657592
+      - src: https://blog-img.774352199.xyz/PyTtua.webp
+        alt: 奇奇怪怪的纪念品
+        lat: -45.0329444
+        lng: 168.6576083
