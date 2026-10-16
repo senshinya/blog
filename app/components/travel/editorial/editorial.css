@@ -1394,7 +1394,7 @@
 .travel-editorial .photo-caption {
 	font-size: 15px;
 	line-height: 1.95;
-	text-wrap: pretty;
+	text-wrap: wrap;
 	color: var(--ink);
 }
 .travel-editorial .photo-number {
