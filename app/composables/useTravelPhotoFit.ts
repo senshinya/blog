@@ -31,7 +31,7 @@ export function useTravelPhotoFit(root: Ref<HTMLElement | null>, content: Readon
 				const captionHeight = sideBySide ? 0 : caption.offsetHeight + pixels(notes.marginTop) + pixels(notes.marginBottom) + pixels(layout.rowGap)
 				const padding = pixels(layout.paddingTop) + pixels(layout.paddingBottom)
 				const edge = pixels(style.paddingTop) + pixels(style.paddingBottom) + pixels(style.borderTopWidth) + pixels(style.borderBottomWidth)
-				const maximum = pixels(style.getPropertyValue('--photo-max-height')) || 720
+				const maximum = pixels(style.getPropertyValue('--photo-max-height')) || viewport!.clientHeight
 				const fraction = pixels(style.getPropertyValue('--photo-viewport-fraction')) || 1
 				// Keep a small allowance for the paper's resting tilt and hover scale.
 				const available = viewport!.clientHeight - padding - captionHeight - edge - 24

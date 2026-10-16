@@ -143,7 +143,7 @@ async function closeMap() {
 	atlas?.update()
 	queueConnector()
 }
-async function openMap(key: string) {
+async function openMap(key: string, keepView = false) {
 	if (mapClosing.value || viewerClosing.value)
 		return
 	if (!atlas || (mapFailed.value && !mobile.value))
@@ -163,13 +163,13 @@ async function openMap(key: string) {
 	if (disposed || request !== openingMap)
 		return
 	const container = mobile.value || viewerOpen.value ? root.value?.querySelector<HTMLElement>(`[data-map-detail="${key}"]`) : undefined
-	atlas.explore(key, container ?? undefined)
+	atlas.explore(key, container ?? undefined, keepView)
 	connector.value = null
 }
 function toggleExplore() {
 	if (exploring.value)
 		closeMap()
-	else openMap(activeChapter.value >= 0 ? `chapter-${activeChapter.value}` : 'intro')
+	else openMap(activeNode.value, true)
 }
 function navigate(key: string) {
 	if (exploring.value)

@@ -5,7 +5,7 @@ import { stripTypeScriptTypes } from 'node:module'
 import test from 'node:test'
 import vm from 'node:vm'
 
-function harness() {
+function harness(maximum = '720px') {
 	const frames = new Map<number, () => void>()
 	let id = 0
 	let resize = () => {}
@@ -31,7 +31,7 @@ function harness() {
 				return layout
 			if (target === caption)
 				return { marginTop: '22px', marginBottom: '0px' }
-			return { paddingTop: '4px', paddingBottom: '4px', borderTopWidth: '1px', borderBottomWidth: '1px', getPropertyValue: (key: string) => key === '--photo-max-height' ? '720px' : '1' }
+			return { paddingTop: '4px', paddingBottom: '4px', borderTopWidth: '1px', borderBottomWidth: '1px', getPropertyValue: (key: string) => key === '--photo-max-height' ? maximum : '1' }
 		},
 		ResizeObserver: class {
 			constructor(callback: () => void) { resize = callback }
@@ -88,4 +88,24 @@ test('resize notifications batch into one frame and disposal cancels pending lay
 	h.flush()
 	h.resize()
 	assert.equal(h.frames.size, 0)
+})
+
+test('uncapped mobile photos use the remaining page height and still reserve long captions', () => {
+	const h = harness('none')
+	h.layout.display = 'grid'
+	h.layout.gridTemplateColumns = '335px'
+	h.layout.rowGap = '20px'
+	h.layout.paddingTop = '24px'
+	h.layout.paddingBottom = '24px'
+	h.viewport.clientWidth = 375
+	h.viewport.clientHeight = 1100
+	h.resize()
+	h.flush()
+	assert.equal(h.height(), 816)
+	h.viewport.clientHeight = 682
+	h.caption.offsetHeight = 325
+	h.resize()
+	h.flush()
+	assert.equal(h.height(), 233)
+	assert.ok(h.height() + 10 + 48 + 24 + 325 + 22 + 20 <= h.viewport.clientHeight)
 })

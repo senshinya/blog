@@ -10,7 +10,7 @@ import { neutralTravelPaint, travelMapColors } from '../../../utils/travelTheme.
 import * as geometry from './atlas-geometry.ts'
 import * as trackLayers from './atlas-tracks.ts'
 
-async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false, snapshots = false, requestStyle?: typeof fetch) {
+async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false, snapshots = false, requestStyle?: typeof fetch, tracks: any[] = []) {
 	const intersections: ((entries: unknown[]) => void)[] = []
 	const allocations: any[] = []
 	const cameras: any[] = []
@@ -154,7 +154,7 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 					{ index: 1, day: 0, chapter: 0, lat: 31.16, lng: 121.81 },
 					{ index: 2, day: 0, chapter: 1, lat: 34.2, lng: 135.5, mapView: 'day' },
 				]
-			: [], apiKey: requestStyle ? 'test-key' : '', onBasemap: (value: string) => basemapEvents.push(value), locale: 'zh', labels: {}, getState: () => state, onMove() {}, onFailure() {} },
+			: [], tracks, apiKey: requestStyle ? 'test-key' : '', onBasemap: (value: string) => basemapEvents.push(value), locale: 'zh', labels: {}, getState: () => state, onMove() {}, onFailure() {} },
 	})
 	return { state, allocations, runtime, swaps, basemapEvents, intersections, cameras, paints, encodings: () => encodings, overviewZoom, photoZoomOffset, canvas, home, backdrop, scroller, interactiveClasses, dragEnabled: () => dragEnabled, stopped: () => stopped, removals: () => removals, async loaded() {
 		load?.()
@@ -267,6 +267,79 @@ test('entering and leaving map exploration use the same mode duration as the for
 	finally { h.runtime.dispose() }
 })
 
+test('the topbar explores the current reading node with its existing camera', () => {
+	const source = readFileSync(new URL('./Template.vue', import.meta.url), 'utf8')
+	const toggle = source.match(/function toggleExplore\(\) \{[\s\S]*?\n\}/)![0]
+	for (const node of ['photo-1', 'chapter-0', 'intro']) {
+		const calls: any[] = []
+		const context = {
+			exploring: { value: false },
+			activeNode: { value: node },
+			activeChapter: { value: 0 },
+			openMap: (...args: any[]) => calls.push(args),
+			closeMap: () => calls.push('close'),
+		}
+		vm.runInNewContext(`${toggle}\ntoggleExplore()`, context)
+		assert.deepEqual(calls, [[node, true]])
+		context.exploring.value = true
+		vm.runInNewContext(`${toggle}\ntoggleExplore()`, context)
+		assert.equal(calls.at(-1), 'close')
+	}
+})
+
+test('exploring the current map preserves its view through updates and restores reading framing on exit', async () => {
+	const h = await harness(false, [], true)
+	try {
+		await h.loaded()
+		h.state.node = 'photo-0'
+		h.state.focusIndex = 0
+		h.runtime.update()
+		const count = h.cameras.length
+		const stopped = h.stopped()
+		h.state.exploring = true
+		h.runtime.explore('photo-0', undefined, true)
+		assert.equal(h.cameras.length, count, 'entry must not move or zoom the current map')
+		assert.ok(h.stopped() > stopped, 'stop any unfinished reading camera at its current position')
+		assert.equal(h.dragEnabled(), true)
+		h.runtime.resize()
+		h.state.palette = 'mist'
+		h.state.tracksVisible = true
+		h.runtime.update()
+		assert.equal(h.cameras.length, count, 'layout and overlay changes must preserve the explored view')
+		h.state.exploring = false
+		h.runtime.restore()
+		assert.equal(h.cameras.length, count + 1)
+		assert.deepEqual([...h.cameras.at(-1).center], [121.8, 31.15])
+		assert.equal(h.cameras.at(-1).duration, 280)
+		assert.equal(h.dragEnabled(), false)
+	}
+	finally { h.runtime.dispose() }
+})
+
+test('retained chapter exploration still reframes when the user changes track visibility', async () => {
+	const tracks = [{ chapter: 0, day: 0, segments: [[[120, 30], [124, 34]]] }]
+	const h = await harness(false, [], true, false, undefined, tracks)
+	try {
+		await h.loaded()
+		h.state.node = 'chapter-0'
+		h.runtime.update()
+		const count = h.cameras.length
+		h.state.exploring = true
+		h.runtime.explore('chapter-0', undefined, true)
+		assert.equal(h.cameras.length, count)
+		h.state.tracksVisible = true
+		h.runtime.update()
+		assert.equal(h.cameras.length, count + 1)
+		assert.equal(h.cameras.at(-1).points.length, 4)
+		h.runtime.resize()
+		assert.equal(h.cameras.length, count + 1, 'later layout passes must not reset a manually explored camera')
+		h.state.tracksVisible = false
+		h.runtime.update()
+		assert.equal(h.cameras.at(-1).points.length, 2)
+	}
+	finally { h.runtime.dispose() }
+})
+
 test('desktop reading retains one live map and releases it on disposal', async () => {
 	const h = await harness(false)
 	assert.equal(h.allocations.length, 1)
@@ -290,6 +363,39 @@ test('toggling tracks leaves the basemap and camera untouched while palette chan
 		assert.ok(backgrounds() > before, 'palette changes must still repaint the basemap')
 	}
 	finally { h.runtime.dispose() }
+})
+
+test('chapter framing toggles between all photo points and the complete chapter route', async () => {
+	const tracks = [
+		{ chapter: 0, day: 0, segments: [[[120, 30], [122, 32]], [[123, 33], [124, 34]]] },
+		{ chapter: 1, day: 0, segments: [[[130, 35], [135, 36]]] },
+	]
+	for (const mobile of [false, true]) {
+		const h = await harness(mobile, [], true, false, undefined, tracks)
+		const coordinates = () => JSON.parse(JSON.stringify(h.cameras.at(-1).points))
+		try {
+			h.state.node = 'chapter-0'
+			h.runtime.update()
+			await h.loaded()
+			const photos = coordinates()
+			assert.deepEqual(photos, [[121.8, 31.15], [121.81, 31.16]])
+			const count = h.cameras.length
+			h.state.tracksVisible = true
+			h.runtime.update()
+			assert.equal(h.cameras.length, count + 1, 'visibility changes must refit the chapter immediately')
+			assert.deepEqual(coordinates(), [...photos, ...tracks[0]!.segments.flat()])
+			h.state.tracksVisible = false
+			h.runtime.update()
+			assert.deepEqual(coordinates(), photos, 'hidden tracks must no longer expand the framing')
+			h.state.node = 'photo-0'
+			h.runtime.update()
+			const photoCameras = h.cameras.length
+			h.state.tracksVisible = true
+			h.runtime.update()
+			assert.equal(h.cameras.length, photoCameras, 'a local photograph keeps its current camera')
+		}
+		finally { h.runtime.dispose() }
+	}
 })
 
 test('track visibility snapshots stay distinct and reuse the matching image when toggled back', async () => {
@@ -345,6 +451,44 @@ test('track visibility snapshots stay distinct and reuse the matching image when
 		assert.equal(image.src, light)
 		await settle()
 		assert.equal(image.src, light, 'an obsolete render must not overwrite the latest toggle state')
+	}
+	finally { h.runtime.dispose() }
+})
+
+test('chapter snapshot framing follows track visibility and excludes neighboring routes', async () => {
+	let peek: any
+	const image = {
+		dataset: {} as Record<string, string>,
+		src: '',
+		classList: { add() {}, remove() {} },
+		removeAttribute() { this.src = '' },
+		closest: () => peek,
+	}
+	peek = {
+		dataset: { mapImage: 'chapter-0' },
+		classList: { contains: () => false },
+		closest: () => null,
+		querySelector: () => image,
+		style: { removeProperty() {} },
+	}
+	const tracks = [
+		{ chapter: 0, day: 0, segments: [[[120, 30], [122, 32]]] },
+		{ chapter: 1, day: 0, segments: [[[130, 35], [135, 36]]] },
+	]
+	const h = await harness(true, [peek], false, true, undefined, tracks)
+	const settle = async () => {
+		for (let i = 0; i < 20; i++)
+			await Promise.resolve()
+	}
+	try {
+		h.intersections[0]!([{ target: peek, isIntersecting: true }])
+		await settle()
+		const photos = JSON.parse(JSON.stringify(h.cameras.at(-1).points))
+		assert.equal(photos.length, 2)
+		h.state.tracksVisible = true
+		h.runtime.update()
+		await settle()
+		assert.deepEqual(JSON.parse(JSON.stringify(h.cameras.at(-1).points)), [...photos, ...tracks[0]!.segments.flat()])
 	}
 	finally { h.runtime.dispose() }
 })

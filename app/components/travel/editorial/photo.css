@@ -364,9 +364,8 @@
 }
 @media (max-width: 700px) {
 	.travel-editorial .photo-open {
-		--photo-max-height: 420px;
-		--photo-viewport-fraction: 0.45;
-		--photo-height-limit: min(var(--photo-max-height), calc(var(--reading-viewport, 100dvh) * var(--photo-viewport-fraction)));
+		--photo-max-height: none;
+		--photo-height-limit: calc(var(--reading-viewport, calc(100dvh - var(--bar))) - 180px);
 		margin-inline: auto;
 	}
 	.travel-editorial .photo-open img {

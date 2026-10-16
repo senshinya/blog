@@ -14,6 +14,22 @@ test('chapter scope excludes neighboring chapters and invalid coordinates', () =
 	assert.deepEqual(atlasSelection(photos, 'chapter-1').points.map(p => p.index), [1, 2])
 	assert.deepEqual(atlasSelection(photos, 'chapter-2').points, [])
 })
+test('overview bounds include every visible route segment in the current chapter or day', async () => {
+	const { atlasOverviewPoints } = await import('./atlas-geometry.ts')
+	const tracks = [
+		{ chapter: 1, day: 1, segments: [[[136, 36], [137, 37]], [[138, 38], [139, 39]]] },
+		{ chapter: 2, day: 1, segments: [[[140, 40], [141, 41]]] },
+		{ chapter: 3, day: 2, segments: [[[142, 42], [143, 43]]] },
+	] satisfies import('../../../types/travel.ts').TravelTrack[]
+	const chapter = atlasSelection(photos, 'chapter-1')
+	const route = tracks[0]!.segments.flat().map(([lng, lat]) => ({ lng, lat }))
+	assert.deepEqual(atlasOverviewPoints(chapter, tracks, false), chapter.points)
+	assert.deepEqual(atlasOverviewPoints(chapter, tracks, true), [...chapter.points, ...route])
+	assert.deepEqual(atlasOverviewPoints(chapter, undefined, true), chapter.points)
+	const day = { ...chapter, overview: true, selected: { ...chapter.points[0]!, day: 1 } }
+	assert.equal(atlasOverviewPoints(day, tracks, true).length, chapter.points.length + 6)
+	assert.equal(atlasOverviewPoints(atlasSelection(photos, 'intro'), tracks, true).length, 11)
+})
 test('photo focus keeps its chapter context and recorded coordinate', () => {
 	const selection = atlasSelection(photos, 'photo-2')
 	assert.equal(selection.selected?.index, 2)

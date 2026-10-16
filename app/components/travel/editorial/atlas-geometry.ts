@@ -1,3 +1,4 @@
+import type { TravelTrack } from '../../../types/travel.ts'
 import type { StoryPhoto } from '../../../utils/travelStory.ts'
 import { hasTravelCoordinates } from '../../../utils/travelStory.ts'
 
@@ -11,6 +12,16 @@ export function atlasSelection(photos: StoryPhoto[], node: string, focusIndex = 
 	const overview = focus?.mapView === 'day'
 	const points = photos.filter((photo): photo is LocatedStoryPhoto => hasTravelCoordinates(photo) && (overview ? photo.day === focus.day : chapter < 0 || photo.chapter === chapter))
 	return { points, chapter, overview, selected: focus && hasTravelCoordinates(focus) ? focus as LocatedStoryPhoto : undefined }
+}
+
+/** Overview bounds follow the same chapter/day scope as the visible track layers. */
+export function atlasOverviewPoints(selection: ReturnType<typeof atlasSelection>, tracks: TravelTrack[] = [], tracksVisible = false): { lng: number, lat: number }[] {
+	if (!tracksVisible)
+		return selection.points
+	const route = tracks.filter(track => selection.overview && selection.selected
+		? track.day === selection.selected.day
+		: selection.chapter < 0 || track.chapter === selection.chapter)
+	return [...selection.points, ...route.flatMap(track => track.segments.flat().map(([lng, lat]) => ({ lng, lat })))]
 }
 
 /** Dialog peeks use viewport geometry because the dialog is outside the story scroller. */

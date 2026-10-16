@@ -25,11 +25,7 @@ const { t, locale } = useI18n()
 const chapterOpen = ref(false)
 const themeOpen = ref(false)
 const mapOpen = ref(false)
-const selectedKey = computed(() => props.chapter < 0 ? 'intro' : `chapter-${props.chapter}`)
-const chapters = computed(() => [
-	{ key: 'intro', number: t('page.travels.editorial.opening'), title: props.travel.title, detail: t('page.travels.editorial.opening') },
-	...props.travel.days.map((day, index) => ({ key: `chapter-${index}`, number: String(index + 1).padStart(2, '0'), title: day.shortTitle ?? day.title, detail: `${day.day === 0 ? t('page.travels.editorial.departure') : t('page.travels.editorial.day', { n: day.day })} · ${t('page.travels.tripPhotos', { n: day.photos.length })}` })),
-])
+const chapterTrigger = useTemplateRef<HTMLElement>('chapterTrigger')
 const currentLabel = computed(() => props.chapter < 0
 	? `${t('page.travels.editorial.opening')} / ${props.travel.title}`
 	: `${String(props.chapter + 1).padStart(2, '0')} / ${props.travel.days[props.chapter]?.shortTitle ?? props.travel.days[props.chapter]?.title}`)
@@ -65,7 +61,7 @@ onMounted(() => {
 	})
 	useEventListener(document, 'pointerdown', (event) => {
 		const target = event.target as Element
-		if (!target.closest('.chapter-nav'))
+		if (!target.closest('.chapter-nav, .chapter-directory'))
 			chapterOpen.value = false
 		if (!target.closest('.theme-control'))
 			themeOpen.value = false
@@ -84,19 +80,9 @@ onMounted(() => {
 		<strong>{{ travel.title }}</strong>
 	</div>
 	<div class="chapter-nav">
-		<button class="chapter-trigger" aria-haspopup="listbox" aria-controls="travel-chapter-menu" :aria-expanded="chapterOpen" :aria-label="`${$t('page.travels.editorial.chapters')}：${currentLabel}${progress ? ` · ${$t('page.travels.editorial.photoProgress', progress)}` : ''}`" @click="openMenu('chapter')">
+		<button ref="chapterTrigger" class="chapter-trigger" aria-haspopup="listbox" aria-controls="travel-chapter-menu" :aria-expanded="chapterOpen" :aria-label="`${$t('page.travels.editorial.chapters')}：${currentLabel}${progress ? ` · ${$t('page.travels.editorial.photoProgress', progress)}` : ''}`" @click="openMenu('chapter')">
 			<span>{{ currentLabel }}</span><small v-if="progress" class="chapter-photo-progress" :aria-label="$t('page.travels.editorial.photoProgress', progress)">{{ progress.current }} / {{ progress.total }}</small><TravelEditorialIcon name="down" />
 		</button>
-		<div id="travel-chapter-menu" class="chapter-menu" :hidden="!chapterOpen">
-			<div class="chapter-menu-heading" aria-hidden="true">
-				{{ $t('page.travels.editorial.chapters') }}
-			</div>
-			<div role="listbox" :aria-label="$t('page.travels.editorial.chapters')">
-				<button v-for="item in chapters" :key="item.key" class="chapter-option" role="option" :aria-selected="item.key === selectedKey" :tabindex="item.key === selectedKey ? 0 : -1" @click="navigate(item.key)">
-					<span class="chapter-option-number">{{ item.number }}</span><span><strong>{{ item.title }}</strong><small>{{ item.detail }}</small></span>
-				</button>
-			</div>
-		</div>
 	</div>
 	<div class="nav-right">
 		<div class="theme-control">
@@ -162,4 +148,5 @@ onMounted(() => {
 		</button>
 	</div>
 </header>
+<TravelEditorialChapterDirectory :open="chapterOpen" :travel :chapter :progress :anchor="chapterTrigger" @close="chapterOpen = false" @navigate="navigate" />
 </template>

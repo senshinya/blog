@@ -1,7 +1,14 @@
 import type { TravelTrack } from '../app/types/travel.ts'
 
 interface TrackPoint { time: number, lng: number, lat: number, speed?: number, altitude?: number }
-export interface TrackWindow { chapter: number, day: number, start: string, end: string }
+export interface TrackWindow {
+	chapter: number
+	day: number
+	start: string
+	end: string
+	/** Maximum validated airborne repair span; recording gaps remain separate. */
+	maxFlightRepairSeconds?: number
+}
 interface FlightRepair { estimated: true, start: number, end: number, removedPoints: number, originalJumpMeters: number, bridgeMeters: number, bridgeSeconds: number }
 
 function csvFields(line: string): string[] {
@@ -53,10 +60,12 @@ function airborne(point: TrackPoint) {
 	return (point.speed ?? 0) >= 70 && (point.altitude ?? 0) >= 1000
 }
 
-/** Reconcile short cruise-source jumps using recorded anchors, never through a layover. */
-function repairFlightJumps(points: TrackPoint[], maxSpeed: number, maxGapSeconds: number) {
+/** Reconcile cruise-source jumps using recorded anchors, never through a layover. */
+function repairFlightJumps(points: TrackPoint[], maxSpeed: number, maxGapSeconds: number, maxRepairSeconds = 600) {
 	const removed = new Set<number>()
 	const repairs: FlightRepair[] = []
+	const extended = maxRepairSeconds > 600
+	const anchorSeconds = extended ? maxRepairSeconds : maxRepairSeconds / 2
 	const jumps = points.map((p, i) => i > 0 && distance(points[i - 1]!, p) / (p.time - points[i - 1]!.time) > maxSpeed ? 1 : 0)
 	for (let i = 1; i < points.length; i++) {
 		const previous = points[i - 1]!
@@ -66,18 +75,22 @@ function repairFlightJumps(points: TrackPoint[], maxSpeed: number, maxGapSeconds
 		let best: { left: number, right: number, seconds: number, metres: number } | undefined
 		for (let left = i - 1; left > 0; left--) {
 			const a = points[left]!
-			if (previous.time - a.time > 300 || !airborne(a))
+			if (previous.time - a.time > anchorSeconds || !airborne(a))
 				break
-			if (!airborne(points[left - 1]!))
+			if (!airborne(points[left - 1]!) || removed.has(left) || removed.has(left - 1))
 				continue
 			for (let right = i; right < points.length - 1; right++) {
 				const b = points[right]!
-				if (b.time - point.time > 300 || !airborne(b))
+				if (b.time - point.time > anchorSeconds || !airborne(b))
 					break
 				const seconds = b.time - a.time
-				if (seconds > Math.min(600, maxGapSeconds) || (best && seconds >= best.seconds) || !airborne(points[right + 1]!))
+				if (seconds > maxRepairSeconds || (best && seconds >= best.seconds) || !airborne(points[right + 1]!) || removed.has(right) || removed.has(right + 1))
 					continue
-				if (points.slice(left, right + 1).some((_, offset) => removed.has(left + offset)) || jumps.slice(left + 1, right + 1).reduce<number>((sum, jump) => sum + jump, 0) !== 1)
+				// Keep the existing conservative treatment unless this chapter opts in.
+				if (!extended && (points.slice(left, right + 1).some((_, offset) => removed.has(left + offset)) || jumps.slice(left + 1, right + 1).reduce<number>((sum, jump) => sum + jump, 0) !== 1))
+					continue
+				// A cluster may subsume an earlier repair, but never bridge a real recording gap.
+				if (points.slice(left + 1, right + 1).some((p, offset) => p.time - points[left + offset]!.time > Math.min(600, maxGapSeconds)))
 					continue
 				const metres = distance(a, b)
 				const expected = (a.speed! + b.speed!) / 2
@@ -94,6 +107,10 @@ function repairFlightJumps(points: TrackPoint[], maxSpeed: number, maxGapSeconds
 			continue
 		for (let index = best.left + 1; index < best.right; index++)
 			removed.add(index)
+		for (let index = repairs.length - 1; index >= 0; index--) {
+			if (repairs[index]!.start >= points[best.left]!.time && repairs[index]!.end <= points[best.right]!.time)
+				repairs.splice(index, 1)
+		}
 		repairs.push({ estimated: true, start: points[best.left]!.time, end: points[best.right]!.time, removedPoints: best.right - best.left - 1, originalJumpMeters: Math.round(distance(previous, point)), bridgeMeters: Math.round(best.metres), bridgeSeconds: best.seconds })
 	}
 	return { points: points.filter((_, index) => !removed.has(index)), repairs }
@@ -148,7 +165,8 @@ export function buildTravelTracks(points: TrackPoint[], windows: TrackWindow[], 
 		if (!Number.isFinite(start) || !Number.isFinite(end) || start >= end)
 			throw new Error(`Invalid chapter window: ${window.chapter}`)
 		const windowPoints = sorted.filter(p => p.time >= start && p.time < end)
-		const { points: selected, repairs: flightRepairs } = repairFlightJumps(windowPoints, maxSpeed, maxGapSeconds)
+		const { points: selected, repairs: flightRepairs } = repairFlightJumps(windowPoints, maxSpeed, maxGapSeconds, window.maxFlightRepairSeconds)
+		const flightConnections = new Set(flightRepairs.map(repair => `${repair.start}:${repair.end}`))
 		const segments: [number, number][][] = []
 		let current: TrackPoint[] = []
 		let removedSpikes = 0
@@ -175,7 +193,7 @@ export function buildTravelTracks(points: TrackPoint[], windows: TrackWindow[], 
 				// Only join within this chapter, using the two recorded endpoints unchanged.
 				if (elapsed > maxGapSeconds && maxPauseDistanceMeters > 0 && displacement <= maxPauseDistanceMeters)
 					rejoinedPauses++
-				else if (elapsed > maxGapSeconds || speed > maxSpeed)
+				else if ((elapsed > maxGapSeconds && !flightConnections.has(`${previous.time}:${point.time}`)) || speed > maxSpeed)
 					finish()
 			}
 			current.push(point)

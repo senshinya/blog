@@ -39,10 +39,32 @@ test('flight repair keeps layovers, surface jumps and unsupported large jumps di
 	const layover = base.map((p, i) => ({ ...p, time: p.time + (i >= 3 ? 10800 : 0) }))
 	const unsupported = base.map((p, i) => ({ ...p, lng: p.lng + (i >= 3 ? 20 : 0) }))
 	for (const points of [surface, layover, unsupported]) {
-		const result = buildTravelTracks(points, [window])
-		assert.equal(result.tracks[0]!.segments.length, 2)
-		assert.equal(result.report[0]!.flightRepairs.length, 0)
+		for (const maxFlightRepairSeconds of [600, 1800]) {
+			const result = buildTravelTracks(points, [{ ...window, maxFlightRepairSeconds }])
+			assert.equal(result.tracks[0]!.segments.length, 2)
+			assert.equal(result.report[0]!.flightRepairs.length, 0)
+		}
 	}
+})
+
+test('a sustained return-flight source offset can use a longer validated bridge within its chapter', async () => {
+	const { buildTravelTracks } = await import('./travelTrackImport.ts')
+	const flight = Array.from({ length: 51 }, (_, step) => ({ ...point(step * 60, 150 + step * 0.18 + (step >= 25 ? 1 : 0)), speed: 240, altitude: 10000 }))
+	assert.equal(buildTravelTracks(flight, [window]).tracks[0]!.segments.length, 2)
+	const result = buildTravelTracks(flight, [{ ...window, maxFlightRepairSeconds: 1800 }])
+	assert.equal(result.tracks[0]!.segments.length, 1)
+	assert.ok(result.report[0]!.flightRepairs.some(repair => repair.bridgeSeconds > 900 && repair.bridgeSeconds <= 1800))
+	assert.deepEqual(result.tracks[0]!.segments[0]![0], [flight[0]!.lng, -44])
+	assert.deepEqual(result.tracks[0]!.segments[0]!.at(-1), [flight.at(-1)!.lng, -44])
+})
+
+test('consecutive source jumps are repaired as one airborne cluster without retaining the displaced plateau', async () => {
+	const { buildTravelTracks } = await import('./travelTrackImport.ts')
+	const flight = Array.from({ length: 51 }, (_, step) => ({ ...point(step * 60, 150 + step * 0.18 + (step === 25 || step === 26 ? 1 : 0)), speed: 240, altitude: 10000 }))
+	const result = buildTravelTracks(flight, [{ ...window, maxFlightRepairSeconds: 1800 }])
+	assert.equal(result.tracks[0]!.segments.length, 1)
+	assert.ok(result.report[0]!.flightRepairs.some(repair => repair.removedPoints >= 2))
+	assert.ok(!result.tracks[0]!.segments.flat().some(([lng]) => lng === flight[25]!.lng || lng === flight[26]!.lng))
 })
 
 test('chapter windows respect DST offsets, exclude unrelated dates and never join separate chapters', async () => {

@@ -1,8 +1,7 @@
-# 原稿：~/Documents/nz 游记/游记.txt；目前已转换完成的前九章。
+# 原稿：~/Documents/nz 游记/游记.txt；全十三章已完成。
 # 电车说明：https://www.christchurchattractions.nz/
 # 沿途观光铁路：https://www.greatjourneysnz.com/routes/coastal-pacific/
 slug: nz-202609
-draft: true
 title: 新西兰南岛
 subtitle: '2026.9'
 posttitle: 游记：新西兰南岛（2026.9）
@@ -14,7 +13,7 @@ published: 2026-10-13
 totaldays: 13
 coverImage: https://blog-img.774352199.xyz/S69z5t.png
 coverCaption: 凯库拉的雪山与海
-ending: 未完待续。
+ending: 那么，就此告别吧。
 days:
   - day: 1
     title: 在路上
@@ -662,3 +661,284 @@ days:
         alt: 奇奇怪怪的纪念品
         lat: -45.0329444
         lng: 168.6576083
+
+  - day: 9
+    title: 峡湾
+    shortTitle: 峡湾
+    descriptions:
+      - 米尔福德峡湾在新西兰西岸，是世界上最潮湿的地区之一，一年有 200 多天都在下雨。去峡湾，看的是末世感：水雾弥漫、乌云压顶，岩壁上涌现出成百上千条瀑布。
+      - 然而，我的运气真的很好（或者很不好），一年里难得的超级大晴天被我碰上了。于是，我也观赏到了这稀有的美景。
+    photos:
+      - src: https://blog-img.774352199.xyz/UGw319.webp
+        alt: 风吹草低现牛羊
+        caption: 我在新西兰见过的牛马，没有一万也有上千，每一只活得都比中国的牛马舒服。
+        lat: -45.4672083
+        lng: 167.7928306
+      - src: https://blog-img.774352199.xyz/Gxpgrf.webp
+        alt: 盘山路
+        caption: 从皇后镇到峡湾需要穿越南阿尔卑斯山，后半段道路基本都是这样的盘山道，穿梭在峡谷间。重岩叠嶂，隐天蔽日。
+        lat: -44.76015
+        lng: 167.9690694
+      - src: https://blog-img.774352199.xyz/MoeLJz.webp
+        alt: 米尔福德君主号
+        caption: 大游轮被我拍成小游艇了，或许我该去军宣报到。
+        lat: -44.6685222
+        lng: 167.9264667
+      - src: https://blog-img.774352199.xyz/YlqWVM.webp
+        alt: 沿岸其一
+        lat: -44.6669222
+        lng: 167.9216472
+      - src: https://blog-img.774352199.xyz/ELMRmv.webp
+        alt: 沿岸其二
+        lat: -44.6647528
+        lng: 167.9170222
+      - src: https://blog-img.774352199.xyz/fmsqjy.webp
+        alt: 沿岸其三
+        lat: -44.6636472
+        lng: 167.9156333
+      - src: https://blog-img.774352199.xyz/Pn4IeG.webp
+        alt: 入海口
+        caption: 从前看讲解，说峡湾是我国唯一没有的地貌。但小红书上很多人说和三峡差不太多。峡湾是被海水淹没的冰川谷，三峡则由河流切割形成。单看“峡”的部分，与米尔福德或许真的没差多少。
+        lat: -44.604125
+        lng: 167.8225111
+      - src: https://blog-img.774352199.xyz/e8HNEN.webp
+        alt: 沿岸其四
+        caption: 有了参照物，山的大小便显现了出来。
+        lat: -44.5997861
+        lng: 167.8166194
+      - src: https://blog-img.774352199.xyz/BMo7jf.webp
+        alt: 沿岸其五
+        lat: -44.6101417
+        lng: 167.8710944
+      - src: https://blog-img.774352199.xyz/g4dKp6.webp
+        alt: 搭个便船回岸边
+        lat: -44.6629528
+        lng: 167.9186861
+      - src: https://blog-img.774352199.xyz/1QwP4v.webp
+        alt: 小镇蒂阿瑙
+        caption: 晚上来到了湖边小镇蒂阿瑙，这里的商业化程度很低，人烟稀少。除了少数本地居民，基本就只有来往峡湾的游客暂住，十分宁静。
+        lat: -45.4220167
+        lng: 167.7184139
+      - src: https://blog-img.774352199.xyz/vXSfm0.webp
+        alt: 一架穿越时光的飞机
+        caption: 蒂阿瑙湖上停着一架水上飞机。好奇查了下注册号 ZK-DRH，没想到它早在 1974 年就已在新西兰执飞。当年 12 月，它停在皮克顿的莎士比亚湾时，还被旋风掀翻，浸水约四个小时。后来打捞修复，如今仍在服役。
+        lat: -45.4195861
+        lng: 167.7139444
+      - src: https://blog-img.774352199.xyz/9jRacX.webp
+        alt: 蒂阿瑙湖
+        lat: -45.4196083
+        lng: 167.7136528
+      - src: https://blog-img.774352199.xyz/KB2mC9.webp
+        alt: 当地特产
+        caption: 新西兰必买当地特产老字号。
+        lat: -45.4224139
+        lng: 167.7197111
+
+  - day: 10
+    title: 从西海岸到东海岸
+    shortTitle: 西岸到东岸
+    descriptions:
+      - 但尼丁被称为南方的爱丁堡，名字就源自苏格兰盖尔语中对爱丁堡的称呼。整座城市充满了欧陆风情。
+      - 晚上我们到了小镇奥马鲁，去观看小企鹅归巢。由于禁止拍照，没有留下什么照片，很是可惜。
+    photos:
+      - src: https://blog-img.774352199.xyz/jX9nnG.webp
+        alt: 沿途
+        lat: -45.9573889
+        lng: 170.189225
+      - src: https://blog-img.774352199.xyz/hcVFwY.webp
+        alt: 午餐其一
+        caption: 午餐在但尼丁市中心的 Chopsticks 101 解决。这家店的中文名叫台北 101，是家中餐馆，味道还挺地道。尤其是在吃了这么多天白人饭之后，仿佛回到了文明社会。我点了一份牛肉滑蛋饭。
+        lat: -45.8683611
+        lng: 170.5068667
+      - src: https://blog-img.774352199.xyz/pPsPEZ.webp
+        alt: 午餐其二
+        caption: 而 npy 则点了一碗螺蛳粉（可以地道，但可以不用这么地道）。
+        lat: -45.8683306
+        lng: 170.50685
+      - src: https://blog-img.774352199.xyz/flESS3.webp
+        alt: 街景其一
+        caption: 欧陆风情，城市最不缺的就是教堂。图中的 Knox Church 始建于 1872 年，1876 年落成。
+        lat: -45.868
+        lng: 170.5070194
+      - src: https://blog-img.774352199.xyz/aDpt9M.webp
+        alt: 街景其二
+        lat: -45.8680028
+        lng: 170.50705
+      - src: https://blog-img.774352199.xyz/15XT1j.webp
+        alt: 街景其三
+        lat: -45.8736083
+        lng: 170.5038917
+      - src: https://blog-img.774352199.xyz/Ngbsxc.webp
+        alt: 街景其四
+        caption: 依然是最喜欢站在雕像头上的海鸥。这里的雕像头顶都十分斑驳，星星点点，都是海鸥的痕迹。
+        lat: -45.8739361
+        lng: 170.5035389
+      - src: https://blog-img.774352199.xyz/rF0iiI.webp
+        alt: 喂海鸥的人
+        caption: 被海鸥围了一圈，还有两只鸭子也混在其中。可能是发现了我在拍他，向我挥了挥手。
+        lat: -45.8742472
+        lng: 170.5039056
+      - src: https://blog-img.774352199.xyz/f9aeW5.webp
+        alt: 奥塔哥第一教堂
+        lat: -45.8755639
+        lng: 170.504775
+      - src: https://blog-img.774352199.xyz/Hw9ftK.webp
+        alt: 奥塔哥每日时报馆
+        lat: -45.8748583
+        lng: 170.5065778
+      - src: https://blog-img.774352199.xyz/8kfIEk.webp
+        alt: 但尼丁火车站
+        caption: 文艺复兴风格，花哨而美丽。
+        lat: -45.8753167
+        lng: 170.5078139
+      - src: https://blog-img.774352199.xyz/NwuKhV.webp
+        alt: 天桥上
+        caption: 从铁轨上的天桥向下望去，只有几列货车停靠。
+        lat: -45.8758417
+        lng: 170.5085
+      - src: https://blog-img.774352199.xyz/ohsoaE.webp
+        alt: 小企鹅
+        caption: 傍晚驱车前往奥马鲁，来到海边的小企鹅保护中心，观看小企鹅归巢。很可惜，归巢开始后就不允许用手机拍摄了，屏幕的亮光会对小企鹅造成干扰。所以我只在开始之前拍了几张照片。彼时小企鹅还没回到岸上，岸边的石滩上只有一群海豹在摇头晃脑、打闹嬉戏。
+        lat: -45.1104139
+        lng: 170.9804389
+
+  - day: 11
+    title: 回到基督城
+    shortTitle: 回到基督城
+    descriptions:
+      - 我们又回到了基督城。
+    photos:
+      - src: https://blog-img.774352199.xyz/8z5TCg.webp
+        alt: 维多利亚历史街区其一
+        caption: 奥马鲁拥有新西兰保存最完好的维多利亚时代建筑。街边这些商铺，都是维多利亚时代所建，原汁原味。
+        lat: -45.1029917
+        lng: 170.9704889
+      - src: https://blog-img.774352199.xyz/tLSt67.webp
+        alt: 维多利亚历史街区其二
+        caption: 确实古色古香。
+        lat: -45.1037833
+        lng: 170.9703222
+      - src: https://blog-img.774352199.xyz/6q6Sc3.webp
+        alt: 啤酒厂主题的酒吧
+        caption: 不只是啤酒厂主题，实际上整个酒吧就是由一个老酒厂改造而成。
+        lat: -45.1044389
+        lng: 170.9701528
+      - src: https://blog-img.774352199.xyz/i45tfX.webp
+        alt: 小镇街景
+        caption: 雷霆大坡。
+        lat: -45.1044583
+        lng: 170.9701389
+      - src: https://blog-img.774352199.xyz/v3pqza.webp
+        alt: 维多利亚历史街区其三
+        caption: 有些建筑被改成了展览馆，展出些当年的老物件。
+        lat: -45.1041528
+        lng: 170.97
+      - src: https://blog-img.774352199.xyz/FJdj5W.webp
+        alt: 赌场
+        caption: 下午晚些时候，我们又回到了基督城。第二次来才注意到，我们住的酒店旁边有一座赌场。
+        lat: -43.5262361
+        lng: 172.6329806
+      - src: https://blog-img.774352199.xyz/6ZpQGA.webp
+        alt: 地道达美乐
+        caption: 去了附近的达美乐整点披萨。虽然提供堂食选项，但店里似乎没有为堂食做任何准备。披萨也是用外卖盒包好出餐的，不提供一次性手套和餐具。遂直接上手，体验印度人吃法。
+        lat: -43.520325
+        lng: 172.6270306
+      - src: https://blog-img.774352199.xyz/SwX5R5.webp
+        alt: 钟楼
+        caption: npy 路过钟楼的时候，和我提了一嘴。我一时半会儿还没反应过来：钟楼，哪有钟（bell）？原来不是国内的鼓楼钟楼。
+        lat: -43.5247778
+        lng: 172.6309972
+      - src: https://blog-img.774352199.xyz/BVh9nE.webp
+        alt: 钟楼脚下一块石头
+        caption: 镌刻着当时的市长、建筑师和市政文员的名字。
+        lat: -43.5246778
+        lng: 172.6308444
+      - src: https://blog-img.774352199.xyz/tGwjkj.webp
+        alt: 詹姆斯库克像
+        caption: 他是皇家海军船长，曾在新西兰升起英国国旗，并对周边海岸进行测绘。于是就明白了为什么雕像上被人用红漆喷了个大大的 X。
+        lat: -43.5280139
+        lng: 172.6356056
+      - src: https://blog-img.774352199.xyz/KJb1NP.webp
+        alt: 布尔战争
+        caption: 新西兰曾在布尔战争期间响应英国号召，派遣过六千多名士兵参战。当时新西兰国内似乎掀起过极大的、近乎狂热的爱国主义浪潮，任何反战言论或行为都遭到压制。
+        lat: -43.5284389
+        lng: 172.6361389
+      - src: https://blog-img.774352199.xyz/oqEewr.webp
+        alt: 维多利亚女王像
+        lat: -43.5284361
+        lng: 172.6362
+      - src: https://blog-img.774352199.xyz/DIdPIJ.webp
+        alt: 大教堂广场上纪念世界大战的雕像
+        caption: 中间的文字纪念的是坎特伯雷地区的一战参战人员。后来二战爆发，大概是为了共同纪念，又在两边刻上了二战的起止年份。
+        lat: -43.5306444
+        lng: 172.6362306
+      - src: https://blog-img.774352199.xyz/X9wdRF.webp
+        alt: 艺术品
+        caption: Love is rife，译为“爱无处不在”。铁笼内部是各式各样的石头，上面都写满了对爱的渴望。
+        lat: -43.5308833
+        lng: 172.6361833
+      - src: https://blog-img.774352199.xyz/YCYjhA.webp
+        alt: 街景其一
+        lat: -43.5330556
+        lng: 172.6395556
+      - src: https://blog-img.774352199.xyz/GtkQ7z.webp
+        alt: 街景其二
+        caption: 很有特色的涂鸦。
+        lat: -43.5352222
+        lng: 172.6394806
+      - src: https://blog-img.774352199.xyz/qbMxv0.webp
+        alt: 街景其三
+        lat: -43.5353389
+        lng: 172.6397556
+      - src: https://blog-img.774352199.xyz/ZUS5Mv.webp
+        alt: 街景其四
+        lat: -43.5329444
+        lng: 172.6379861
+
+  - day: 12
+    title: 返程
+    shortTitle: 返程
+    descriptions:
+      - 那么，就此告别吧。
+    photos:
+      - src: https://blog-img.774352199.xyz/MRenfB.webp
+        alt: 凯库拉半岛
+        caption: 乘坐飞机返回奥克兰时，看到了陆地向海中突出的一角，正是凯库拉半岛。
+        lat: -42.342821
+        lng: 173.066036
+      - src: https://blog-img.774352199.xyz/ZAn49C.webp
+        alt: 云上其一
+        lat: -37.591716
+        lng: 174.810363
+      - src: https://blog-img.774352199.xyz/ZLLr33.webp
+        alt: 云上其二
+        lat: -36.957839
+        lng: 175.062238
+      - src: https://blog-img.774352199.xyz/3dkScN.webp
+        alt: 云上其三
+        caption: 新西兰总人口只有 500 多万，其中奥克兰就有近 200 万人。从空中看，城市十分庞大。
+        lat: -36.950434
+        lng: 175.009597
+      - src: https://blog-img.774352199.xyz/nqyrvc.webp
+        alt: 冲锋 8-300
+        caption: 新西兰航空的双发螺旋桨飞机。这年头民航用螺旋桨飞机并不多见。
+        lat: -37.0062
+        lng: 174.8074
+      - src: https://blog-img.774352199.xyz/qDMHeI.webp
+        alt: 等待转运巴士中
+        lat: -37.0061639
+        lng: 174.7914417
+      - src: https://blog-img.774352199.xyz/A0a2g9.webp
+        alt: 航站楼的中餐
+        caption: 牛肉炒饭很不错，炒粉上的豆芽是生的，有些吃不习惯。
+        lat: -37.0050556
+        lng: 174.7832333
+      - src: https://blog-img.774352199.xyz/V0i5GJ.webp
+        alt: 入睡困难
+        caption: 返程飞机上，我们坐在了机舱最后一排，三个位置的空间只有两个座位，十分宽敞。可惜返程飞机颠簸了好几个小时，我仍是无法入睡。
+        lat: -37.0053722
+        lng: 174.7791444
+      - src: https://blog-img.774352199.xyz/egVOmU.webp
+        alt: 浦东机场行李转盘的小马
+        lat: 31.1548472
+        lng: 121.8051389

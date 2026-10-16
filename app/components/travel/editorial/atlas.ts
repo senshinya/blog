@@ -10,7 +10,7 @@ import { getTravelMapLabelField } from '../../../utils/travelMapLocale.ts'
 import { createTravelBasemapLoader, isSatelliteBasemap, travelMapInteractive, travelStyleAttribution, travelTrackColors } from '../../../utils/travelMapSettings.ts'
 import { travelMotion, travelMotionEase } from '../../../utils/travelMotion.ts'
 import { neutralTravelPaint, travelMapColors } from '../../../utils/travelTheme.ts'
-import { atlasMobileBackdropPadding, atlasMobileCaptionWashTail, atlasMobileChapterRegion, atlasPeekVisible, atlasSelection, atlasSnapshotEligible, atlasSnapshotsPaused, atlasVeil, atlasViewerPadding } from './atlas-geometry.ts'
+import { atlasMobileBackdropPadding, atlasMobileCaptionWashTail, atlasMobileChapterRegion, atlasOverviewPoints, atlasPeekVisible, atlasSelection, atlasSnapshotEligible, atlasSnapshotsPaused, atlasVeil, atlasViewerPadding } from './atlas-geometry.ts'
 import { installAtlasTracks, paintAtlasTracks } from './atlas-tracks.ts'
 import darkStyle from './map-styles/dark.json'
 import lightStyle from './map-styles/light.json'
@@ -35,7 +35,7 @@ export interface TravelAtlas {
 	update: () => void
 	resize: () => void
 	project: (index: number) => { x: number, y: number } | undefined
-	explore: (key: string, container?: HTMLElement) => void
+	explore: (key: string, container?: HTMLElement, keepView?: boolean) => void
 	restore: () => void
 	dispose: () => void
 }
@@ -92,6 +92,8 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	let navigation: NavigationControl | undefined
 	let navigationAdded = false
 	let explorationKey: string | undefined
+	let keepExplorationView = false
+	let explorationTracksVisible = false
 	let cameraKey = ''
 	let cameraMode = 'reading'
 	let basemapKey = ''
@@ -365,7 +367,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		// fitBounds must retain a positive exposed viewport even during layout changes.
 		return { top: Math.min(100, canvas.clientHeight / 4), bottom: Math.min(70, canvas.clientHeight / 4), left: Math.round(Math.max(0, Math.min(left, width - 100))), right: Math.min(40, width / 4) }
 	}
-	function fitPoints(target: MapLibreMap, points: LocatedStoryPhoto[], pad: PaddingOptions, duration: number, maxZoom = 15) {
+	function fitPoints(target: MapLibreMap, points: { lng: number, lat: number }[], pad: PaddingOptions, duration: number, maxZoom = 15) {
 		if (!points.length)
 			return
 		const bounds = new maplibre.LngLatBounds()
@@ -388,16 +390,25 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		if (!map || !ready || !liveMapVisible() || (mobileReading() && snapshotsPaused()) || !canvas.clientWidth || !canvas.clientHeight)
 			return
 		const state = getState()
-		const { points, selected, overview } = selection()
+		const scope = selection()
+		const { points, selected, overview } = scope
 		const exploring = state.exploring || explorationKey !== undefined
 		const pad = padding()
-		const key = `${explorationKey ?? state.node}:${state.focusIndex}:${state.mobile}:${exploring}:${state.viewer}:${JSON.stringify(pad)}`
+		const overviewTracks = (!selected || overview) && state.tracksVisible
+		const key = `${explorationKey ?? state.node}:${state.focusIndex}:${state.mobile}:${exploring}:${state.viewer}:${overviewTracks}:${JSON.stringify(pad)}`
 		if (!force && key === cameraKey)
 			return
 		cameraKey = key
 		const mode = state.viewer ? 'viewer' : exploring ? 'exploring' : 'reading'
 		const switchingMode = mode !== cameraMode || state.viewerClosing
 		cameraMode = mode
+		if (keepExplorationView) {
+			const tracksChanged = overviewTracks !== explorationTracksVisible
+			explorationTracksVisible = overviewTracks
+			// Retain manual panning too; only an explicit overview route toggle reframes it.
+			if (!tracksChanged)
+				return
+		}
 		const duration = state.reduced || (state.mobile && !mobileCameraInitialized) ? 0 : state.viewer || switchingMode ? travelMotion.duration.mode : travelMotion.duration.map
 		if (state.mobile)
 			mobileCameraInitialized = true
@@ -405,7 +416,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			map.easeTo({ center: [selected.lng, selected.lat], zoom: photoZoom(map, points, pad, state.mobile, selected), padding: { top: 0, bottom: 0, left: 0, right: 0 }, offset: [(pad.left - pad.right) / 2, (pad.top - pad.bottom) / 2], duration, easing: travelMotionEase })
 		}
 		else {
-			fitPoints(map, points, pad, duration, overview ? 8 : 15)
+			fitPoints(map, atlasOverviewPoints(scope, tracks, overviewTracks), pad, duration, overview ? 8 : 15)
 		}
 	}
 	function interaction() {
@@ -620,10 +631,12 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 					paintSnapshot(item.image, cached)
 					continue
 				}
-				const { points, selected, overview } = atlasSelection(photos, item.key)
+				const scope = atlasSelection(photos, item.key)
+				const { points, selected, overview } = scope
 				const chapter = item.key.startsWith('chapter-')
 				const intro = item.key === 'intro'
 				const list = points
+				const boundsPoints = atlasOverviewPoints(scope, tracks, (!selected || overview) && getState().tracksVisible)
 				if (!list.length)
 					continue
 				const { width, height } = item
@@ -636,7 +649,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 					if (item.backdrop && selected && !overview)
 						snapshotMap!.jumpTo({ center: [selected.lng, selected.lat], zoom: photoZoom(snapshotMap!, list, item.padding, true, selected), padding: item.padding })
 					else
-						fitPoints(snapshotMap!, list, item.backdrop ? item.padding : chapter ? { top: 20, bottom: 45, left: 20, right: 20 } : item.padding, 0, overview ? 8 : selected ? 12.8 : 15)
+						fitPoints(snapshotMap!, boundsPoints, item.backdrop ? item.padding : chapter ? { top: 20, bottom: 45, left: 20, right: 20 } : item.padding, 0, overview ? 8 : selected ? 12.8 : 15)
 				}
 				const desiredBasemap = getState().basemap ?? 'simple'
 				// Activate OSM only at the visible preview's camera, avoiding offscreen tile requests.
@@ -830,6 +843,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		if (disposed)
 			return
 		explorationKey = undefined
+		keepExplorationView = false
 		if (canvas.parentElement !== home)
 			home.insertBefore(canvas, nextSibling?.parentNode === home ? nextSibling : null)
 		cameraKey = ''
@@ -848,10 +862,16 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			const box = canvas.getBoundingClientRect()
 			return { x: point.x + box.left, y: point.y + box.top }
 		},
-		explore(key, container) {
+		explore(key, container, keepView = false) {
 			if (disposed)
 				return
+			keepExplorationView = Boolean(keepView && map && cameraKey && !container && !getState().mobile)
 			explorationKey = key
+			if (keepExplorationView) {
+				map!.stop()
+				const { selected, overview } = selection()
+				explorationTracksVisible = (!selected || overview) && getState().tracksVisible
+			}
 			if (container)
 				container.append(canvas)
 			cameraKey = ''
