@@ -2,91 +2,16 @@
 	display: contents;
 }
 
-.travel-editorial .mobile-atlas {
-	display: none;
-}
-
-/* Mobile keeps one map behind the scrolling foreground; desktop retains its atlas. */
+/* Mobile reading has a plain canvas; maps open in a separate drawer. */
 @media (max-width: 700px) {
-	.travel-editorial .mobile-atlas {
-		display: block;
-		position: fixed;
-		opacity: 0;
-		inset: var(--bar) 0 0;
-		transition: opacity var(--travel-motion-photo) var(--travel-motion-easing);
-		pointer-events: none;
-		z-index: 1;
+	.travel-editorial .map-stage,
+	.travel-editorial.viewer-active .map-stage {
+		display: none;
 	}
-	.travel-editorial .mobile-atlas[data-visible="true"][data-ready="true"] {
-		opacity: 1;
-	}
-	.travel-editorial .mobile-atlas > .map-canvas {
-		visibility: visible;
-		pointer-events: none;
-	}
-	.travel-editorial .mobile-map-credit {
-		position: fixed;
-		right: 10px;
-		bottom: 6px;
-		font-size: 9px;
-		color: var(--muted);
-		pointer-events: auto;
-		z-index: 3;
-	}
-	.travel-editorial .reading-stage {
-		isolation: isolate;
-	}
-	.travel-editorial .reading-stage > .reading-map {
-		--map-clear-top: 45%;
-		--map-clear-bottom: 68%;
-		display: block;
-		position: absolute;
-		visibility: hidden;
-		inset: 0 -20px;
-		width: auto;
-		height: auto;
-		margin: 0;
+	.travel-editorial .viewer {
 		background: var(--paper);
-		background-repeat: no-repeat;
-		background-size: 100% 100%;
-		pointer-events: none;
-		z-index: 0;
 	}
-	.travel-editorial .reading-map:after {
-		content: none;
-	}
-	.travel-editorial .reading-stage:has(.photo-caption):after {
-		content: "";
-		position: absolute;
-		inset: calc(var(--map-description-start, 65%) - 48px) -20px 0;
-		background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--paper) 60%, transparent) 48px, color-mix(in oklab, var(--paper) 60%, transparent) calc(100% - var(--map-wash-tail, 24px)), transparent);
-		pointer-events: none;
-		z-index: 0;
-	}
-	.travel-editorial .reading-stage:has(> .reading-map) .chapter-prose:has(p) {
-		position: relative;
-		isolation: isolate;
-	}
-	.travel-editorial .reading-stage:has(> .reading-map) .chapter-prose:has(p):before {
-		content: "";
-		position: absolute;
-		inset: -48px -20px;
-		background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--paper) 60%, transparent) 48px, color-mix(in oklab, var(--paper) 60%, transparent) calc(100% - 48px), transparent);
-		pointer-events: none;
-		z-index: -1;
-	}
-	.travel-editorial .reading-map img {
-		position: absolute;
-		opacity: 0;
-		width: 1px;
-		height: 1px;
-		max-height: none;
-		pointer-events: none;
-	}
-	.travel-editorial .reading-map img.ready {
-		opacity: 0;
-	}
-	.travel-editorial .reading-map img:before {
+	.travel-editorial .lightbox::before {
 		content: none;
 	}
 	.travel-editorial .photo-static {
@@ -102,15 +27,6 @@
 	.travel-editorial .photo-static:after {
 		content: none;
 		display: none;
-	}
-	.travel-editorial .reading-map .map-peek-credit {
-		top: auto;
-		right: 20px;
-		bottom: calc(100% - var(--map-clear-bottom) + 31px);
-		padding: 0;
-		background: transparent;
-		font-size: 8px;
-		z-index: 2;
 	}
 	.travel-editorial .reading-stage > .cover, .travel-editorial .reading-stage > .chapter-head, .travel-editorial .reading-stage > .story-photo {
 		position: relative;
@@ -156,16 +72,6 @@
 		height: 100%;
 		max-height: 460px;
 	}
-	.travel-editorial .reading-stage:has(.map-detail.open) > .cover {
-		height: auto;
-		min-height: var(--reading-viewport, calc(100dvh - var(--bar)));
-	}
-	.travel-editorial .cover:has(.map-detail.open) .cover-photo > div:first-child {
-		flex: none;
-	}
-	.travel-editorial .cover:has(.map-detail.open) .photo-composition, .travel-editorial .cover:has(.map-detail.open) .cover-image {
-		height: auto;
-	}
 	.travel-editorial .story-scroll {
 		container: travel-reader / size;
 	}
@@ -184,18 +90,23 @@
 	.travel-editorial .photo-heading .photo-place {
 		min-height: 0;
 	}
-	.travel-editorial .reading-stage:has(.map-detail.open) > .reading-map {
-		visibility: hidden;
-	}
-	.travel-editorial .reading-stage:has(.map-detail.open) .photo-heading {
-		min-height: 0;
-		padding-right: 0;
-	}
-}
 
-@media (prefers-reduced-motion: reduce) {
-	.travel-editorial .mobile-atlas {
-		transition: none;
+	.travel-editorial .photo-heading .photo-place,
+	.travel-editorial button.lightbox-place {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		min-height: 44px;
+		text-align: left;
+	}
+	.travel-editorial .photo-heading .photo-place {
+		margin-block: 0;
+	}
+	.travel-editorial .photo-place .photo-place-arrow,
+	.travel-editorial .lightbox-place .icon {
+		width: 12px;
+		height: 12px;
+		margin-left: 2px;
 	}
 }
 

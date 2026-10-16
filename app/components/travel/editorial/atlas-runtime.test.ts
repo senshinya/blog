@@ -184,6 +184,42 @@ test('mobile reading allocates no hidden desktop map and creates it on desktop t
 	assert.equal(h.removals(), 1)
 })
 
+test('mobile drawer loads one map on demand and returns it without camera work during reading', async () => {
+	const h = await harness(true, [], false, true)
+	const drawer = { append(element: any) {
+		element.parentElement = drawer
+	} }
+	try {
+		h.state.node = 'photo-0'
+		h.state.focusIndex = 0
+		h.runtime.update()
+		h.state.viewer = true
+		h.runtime.update()
+		assert.equal(h.allocations.length, 0, 'reading and large photos have no background map')
+		h.state.viewer = false
+		h.state.exploring = true
+		h.runtime.explore('photo-0', drawer as unknown as HTMLElement)
+		await h.loaded()
+		assert.equal(h.allocations.length, 1)
+		assert.equal(h.canvas.parentElement, drawer)
+		assert.deepEqual([...h.cameras.at(-1).center], [121.8, 31.15])
+		assert.equal(h.dragEnabled(), true)
+		h.state.exploring = false
+		h.runtime.restore()
+		assert.equal(h.canvas.parentElement, h.home)
+		assert.equal(h.dragEnabled(), false)
+		const cameras = h.cameras.length
+		h.state.node = 'photo-1'
+		h.runtime.update()
+		assert.equal(h.cameras.length, cameras, 'turning pages does not move the hidden map')
+		h.state.exploring = true
+		h.runtime.explore('photo-1', drawer as unknown as HTMLElement)
+		assert.equal(h.allocations.length, 1, 'opening another coordinate reuses the renderer')
+		assert.deepEqual([...h.cameras.at(-1).center], [121.81, 31.16])
+	}
+	finally { h.runtime.dispose() }
+})
+
 test('viewer camera uses mode timing in both directions and resumes slower reading travel afterwards', async () => {
 	const h = await harness(false, [], true)
 	try {

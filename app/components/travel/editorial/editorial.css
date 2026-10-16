@@ -102,7 +102,7 @@
 	height: var(--bar);
 	padding: 0 28px;
 	border-bottom: 0;
-	background: color-mix(in oklab, var(--surface) 35%, transparent);
+	background: color-mix(in oklab, var(--surface) 85%, transparent);
 	-webkit-backdrop-filter: blur(8px);
 	backdrop-filter: blur(8px);
 	z-index: 20;
@@ -448,7 +448,8 @@
 	.travel-editorial .nav-right {
 		gap: 0;
 	}
-	.travel-editorial .topbar > .nav-right > .mode-button {
+	.travel-editorial .topbar > .nav-right > .mode-button,
+	.travel-editorial .topbar > .nav-right > .map-control {
 		display: none;
 	}
 	.travel-editorial .story-scroll {

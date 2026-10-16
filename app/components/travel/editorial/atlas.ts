@@ -208,7 +208,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	}
 	function liveMapVisible() {
 		const state = getState()
-		return !state.mobile || state.exploring || state.viewer || explorationKey !== undefined || (mobileReading() && Boolean(mobileMapKey()))
+		return !state.mobile || state.exploring || explorationKey !== undefined || (mobileReading() && Boolean(mobileMapKey()))
 	}
 	/** Every wait is cancellable; removing a map cannot strand its snapshot queue. */
 	function waitFor(target: MapLibreMap, event: 'load' | 'idle' | 'style.load', timeout: number): Promise<boolean> {

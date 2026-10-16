@@ -29,7 +29,8 @@ useTravelFocus(root)
 useTravelPhotoFit(root, photos)
 const scroller = useTemplateRef<HTMLElement>('scroller')
 const canvas = useTemplateRef<HTMLElement>('canvas')
-const mobileBackdrop = useTemplateRef<HTMLElement>('mobileBackdrop')
+const mapDrawer = useTemplateRef<{ leave: () => Promise<void> }>('mapDrawer')
+const mapClosing = ref(false)
 const viewer = useTemplateRef<HTMLDialogElement>('viewer')
 const lightbox = useTemplateRef<{ enter: (rect?: ViewerRect, notes?: ViewerCaptionRects) => Promise<void>, leave: (rect?: ViewerRect, notes?: ViewerCaptionRects) => Promise<void> }>('lightbox')
 const activeNode = ref('intro')
@@ -56,6 +57,7 @@ const { palette, appearance, theme, setPalette, setAppearance } = useTravelTheme
 const focusedIndex = computed(() => viewerOpen.value ? viewerIndex.value : activeNode.value.startsWith('photo-') ? Number(activeNode.value.slice(6)) : -1)
 const activeChapter = computed(() => focusedIndex.value >= 0 ? photos.value[focusedIndex.value]?.chapter ?? -1 : activeNode.value.startsWith('chapter-') ? Number(activeNode.value.slice(8)) : -1)
 const viewerPhoto = computed(() => photos.value[viewerIndex.value])
+const drawerPhoto = computed(() => expandedMap.value?.startsWith('photo-') ? photos.value[Number(expandedMap.value.slice(6))] : undefined)
 const chapterProgress = computed(() => {
 	const photo = photos.value[focusedIndex.value]
 	return photo ? { current: photo.chapterIndex + 1, total: chapters.value[photo.chapter]!.photos.length } : undefined
@@ -73,7 +75,6 @@ const published = computed(() => new Intl.DateTimeFormat(locale.value, { year: '
 let atlas: TravelAtlas | undefined
 let disposed = false
 let openingMap = 0
-let inlineReadingTop = 0
 let connectorFrame = 0
 
 useHead(() => ({
@@ -125,29 +126,35 @@ function queueConnector() {
 	if (!disposed && !connectorFrame)
 		connectorFrame = requestAnimationFrame(drawConnector)
 }
-function closeMap() {
+async function closeMap() {
+	if (mapClosing.value)
+		return
 	openingMap++
-	atlas?.restore()
+	if (mobile.value && mapDrawer.value) {
+		mapClosing.value = true
+		await mapDrawer.value.leave()
+		mapClosing.value = false
+		if (disposed)
+			return
+	}
 	exploring.value = false
 	expandedMap.value = null
-	if (scroller.value && mobile.value)
-		scroller.value.scrollTop = inlineReadingTop
+	atlas?.restore()
 	atlas?.update()
 	queueConnector()
 }
 async function openMap(key: string) {
-	if (mobile.value || viewerClosing.value)
+	if (mapClosing.value || viewerClosing.value)
 		return
-	if (mapFailed.value || !atlas)
+	if (!atlas || (mapFailed.value && !mobile.value))
 		return
 	if (expandedMap.value === key) {
 		closeMap()
 		return
 	}
 	if (exploring.value)
-		closeMap()
+		await closeMap()
 	cancel()
-	inlineReadingTop = scroller.value?.scrollTop ?? 0
 	const request = ++openingMap
 	exploring.value = true
 	if (mobile.value || viewerOpen.value)
@@ -176,7 +183,9 @@ useEventListener('keydown', (event: KeyboardEvent) => {
 	if (!event.defaultPrevented && event.key === 'Escape' && (viewerOpen.value || exploring.value)) {
 		event.preventDefault()
 		event.stopPropagation()
-		if (viewerOpen.value)
+		if (mobile.value && exploring.value)
+			closeMap()
+		else if (viewerOpen.value)
 			closeViewer()
 		else closeMap()
 	}
@@ -280,7 +289,7 @@ watch([activeNode, focusedIndex, palette, theme, tracksVisible, basemap, trackCo
 })
 watch(mobile, async () => {
 	if (exploring.value)
-		closeMap()
+		await closeMap()
 	await nextTick()
 	atlas?.resize()
 	atlas?.update()
@@ -295,7 +304,6 @@ onMounted(async () => {
 			root: root.value,
 			scroller: scroller.value,
 			canvas: canvas.value,
-			mobileBackdrop: mobileBackdrop.value ?? undefined,
 			photos: photos.value,
 			tracks: props.travel.tracks,
 			locale: locale.value,
@@ -352,9 +360,7 @@ onBeforeUnmount(() => {
 		</p>
 		<MapCredit class="map-credit" />
 	</aside>
-	<div ref="mobileBackdrop" class="mobile-atlas" aria-hidden="true" />
-	<MapCredit v-if="mobile && activeNode !== 'intro'" class="mobile-map-credit" />
-	<main ref="scroller" class="story-scroll" tabindex="-1" :inert="exploring && !mobile" @scroll.passive="queueConnector">
+	<main ref="scroller" class="story-scroll" tabindex="-1" :inert="exploring" @scroll.passive="queueConnector">
 		<div class="story-content">
 			<div id="intro" class="reading-step" data-node="intro" :class="{ 'is-current': activeNode === 'intro' }">
 				<div class="reading-stage">
@@ -365,7 +371,7 @@ onBeforeUnmount(() => {
 								<div class="photo-composition">
 									<TravelEditorialPhoto :photo="coverPhoto" eager />
 								</div>
-								<TravelEditorialMapDetail v-if="!viewerOpen && expandedMap === 'intro'" map-key="intro" :title="travel.title" @collapse="closeMap" />
+								<TravelEditorialMapDetail v-if="!mobile && !viewerOpen && expandedMap === 'intro'" map-key="intro" :title="travel.title" @collapse="closeMap" />
 							</div>
 							<div>
 								<blockquote>{{ travel.description }}</blockquote>
@@ -383,36 +389,38 @@ onBeforeUnmount(() => {
 			<section v-for="chapter, chapterIndex in chapters" :key="chapterIndex" class="chapter">
 				<div :id="`chapter-${chapterIndex}`" class="reading-step" :data-node="`chapter-${chapterIndex}`" :class="{ 'is-current': activeNode === `chapter-${chapterIndex}` }">
 					<div class="reading-stage">
-						<TravelEditorialMapPeek v-if="countTravelLocations(chapter.photos)" class="reading-map" :map-key="`chapter-${chapterIndex}`" :title="chapter.label" :interactive="false" />
+						<TravelEditorialMapPeek v-if="!mobile && countTravelLocations(chapter.photos)" class="reading-map" :map-key="`chapter-${chapterIndex}`" :title="chapter.label" :interactive="false" />
 						<header class="chapter-head">
-							<p class="kicker">
-								{{ String(chapterIndex + 1).padStart(2, '0') }} / {{ chapter.day === 0 ? $t('page.travels.editorial.departure') : $t('page.travels.editorial.day', { n: chapter.day }) }}
-							</p>
-							<h2><span>{{ titleParts(chapter.title)[0] }}</span><span v-if="titleParts(chapter.title)[1]" class="chapter-title-sub">{{ titleParts(chapter.title)[1] }}</span></h2>
-							<div class="chapter-prose">
-								<p v-for="text, index in chapter.descriptions" :key="index">
-									{{ text }}
+							<div class="chapter-copy">
+								<p class="kicker">
+									{{ String(chapterIndex + 1).padStart(2, '0') }} / {{ chapter.day === 0 ? $t('page.travels.editorial.departure') : $t('page.travels.editorial.day', { n: chapter.day }) }}
 								</p>
+								<h2><span>{{ titleParts(chapter.title)[0] }}</span><span v-if="titleParts(chapter.title)[1]" class="chapter-title-sub">{{ titleParts(chapter.title)[1] }}</span></h2>
+								<div class="chapter-prose">
+									<p v-for="text, index in chapter.descriptions" :key="index">
+										{{ text }}
+									</p>
+								</div>
+								<div class="chapter-summary">
+									<span>{{ $t('page.travels.tripPhotos', { n: chapter.photos.length }) }}</span>
+									<button v-if="chapter.photos.length" class="chapter-read" @click="navigate(`photo-${chapter.photos[0]!.index}`)">
+										{{ $t('page.travels.editorial.readPhotos') }} <span aria-hidden="true">↓</span>
+									</button>
+								</div>
 							</div>
-							<div class="chapter-summary">
-								<span>{{ $t('page.travels.tripPhotos', { n: chapter.photos.length }) }}</span>
-								<button v-if="chapter.photos.length" class="chapter-read" @click="navigate(`photo-${chapter.photos[0]!.index}`)">
-									{{ $t('page.travels.editorial.readPhotos') }} <span aria-hidden="true">↓</span>
-								</button>
-							</div>
-							<TravelEditorialMapDetail v-if="!viewerOpen && expandedMap === `chapter-${chapterIndex}`" :map-key="`chapter-${chapterIndex}`" :title="chapter.label" @collapse="closeMap" />
+							<TravelEditorialMapDetail v-if="!mobile && !viewerOpen && expandedMap === `chapter-${chapterIndex}`" :map-key="`chapter-${chapterIndex}`" :title="chapter.label" @collapse="closeMap" />
 						</header>
 					</div>
 				</div>
 				<div v-for="photo in chapter.photos" :id="`photo-${photo.index}`" :key="photo.index" class="reading-step" :data-node="`photo-${photo.index}`" :class="{ 'is-current': activeNode === `photo-${photo.index}` }">
 					<div class="reading-stage">
-						<TravelEditorialMapPeek v-if="hasTravelCoordinates(photo)" class="reading-map" :map-key="`photo-${photo.index}`" :title="photo.alt" :interactive="false" />
+						<TravelEditorialMapPeek v-if="!mobile && hasTravelCoordinates(photo)" class="reading-map" :map-key="`photo-${photo.index}`" :title="photo.alt" :interactive="false" />
 						<figure class="story-photo" :class="{ portrait: photoPortrait(photo.src), active: focusedIndex === photo.index }">
 							<div>
 								<div class="photo-composition">
 									<TravelEditorialPhoto :photo :index="photo.index" :active="!viewerOpen && focusedIndex === photo.index" :interactive="!mobile || Boolean(photo.video)" @open="openViewer(photo.index)" />
 								</div>
-								<TravelEditorialMapDetail v-if="!viewerOpen && expandedMap === `photo-${photo.index}`" :map-key="`photo-${photo.index}`" :title="photo.alt" @collapse="closeMap" />
+								<TravelEditorialMapDetail v-if="!mobile && !viewerOpen && expandedMap === `photo-${photo.index}`" :map-key="`photo-${photo.index}`" :title="photo.alt" @collapse="closeMap" />
 							</div>
 							<figcaption>
 								<span class="photo-number"><span>{{ String(photo.index + 1).padStart(2, '0') }}<span v-if="photoPortrait(photo.src)" class="number-context"> / {{ chapter.label }}</span></span></span>
@@ -422,12 +430,10 @@ onBeforeUnmount(() => {
 											<h3 class="photo-title">
 												<span>{{ photo.alt }}</span>
 											</h3>
-											<button v-if="hasTravelCoordinates(photo) && !mobile" class="photo-place" @click="openMap(`photo-${photo.index}`)">
+											<button v-if="hasTravelCoordinates(photo)" class="photo-place" :aria-label="mobile ? $t('page.travels.editorial.expandPhotoMap', { title: photo.alt }) : undefined" :aria-expanded="mobile ? expandedMap === `photo-${photo.index}` : undefined" @click="openMap(`photo-${photo.index}`)">
 												<TravelEditorialIcon /><span>{{ travelCoordinateLabel(photo) }}</span>
+												<TravelEditorialIcon v-if="mobile" class="photo-place-arrow" name="right" />
 											</button>
-											<p v-else-if="hasTravelCoordinates(photo)" class="photo-place">
-												<TravelEditorialIcon /><span>{{ travelCoordinateLabel(photo) }}</span>
-											</p>
 										</div>
 									</div>
 									<p v-if="photo.caption" class="photo-caption">
@@ -449,7 +455,8 @@ onBeforeUnmount(() => {
 	<TravelEditorialScrollPerf v-if="scrollPerfEnabled" :target="scroller" />
 	<svg class="connector" :style="actualBasemap !== 'simple' ? { '--red': travelMapColors(palette, 'light').accent } : undefined" aria-hidden="true"><template v-if="connector"><path :d="connector.path" /><circle :cx="connector.x" :cy="connector.y" r="1.8" /></template></svg>
 	<dialog ref="viewer" class="viewer" :data-dimmed="viewerDimmed" :aria-labelledby="viewerOpen ? 'travel-viewer-title' : undefined" :aria-busy="viewerClosing" @cancel.prevent="closeViewer" @close="closeViewer">
-		<TravelEditorialViewer v-if="viewerOpen && viewerPhoto" ref="lightbox" :photo="viewerPhoto" :index="viewerIndex" :total="chapters[viewerPhoto.chapter]?.photos.length ?? 0" :chapter="`${String(viewerPhoto.chapter + 1).padStart(2, '0')} / ${chapters[viewerPhoto.chapter]?.label ?? ''}`" :closing="viewerClosing" @close="closeViewer" @step="stepViewer" />
+		<TravelEditorialViewer v-if="viewerOpen && viewerPhoto" ref="lightbox" :photo="viewerPhoto" :index="viewerIndex" :total="chapters[viewerPhoto.chapter]?.photos.length ?? 0" :chapter="`${String(viewerPhoto.chapter + 1).padStart(2, '0')} / ${chapters[viewerPhoto.chapter]?.label ?? ''}`" :closing="viewerClosing" @close="closeViewer" @step="stepViewer" @explore="openMap(`photo-${viewerIndex}`)" />
 	</dialog>
+	<TravelEditorialMapDrawer v-if="mobile && expandedMap" ref="mapDrawer" :map-key="expandedMap" :title="drawerPhoto?.alt ?? travel.title" :coordinates="drawerPhoto ? travelCoordinateLabel(drawerPhoto) : undefined" :failed="mapFailed" @close="closeMap" />
 </div>
 </template>

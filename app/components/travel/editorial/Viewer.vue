@@ -7,7 +7,7 @@ import Caption from './Caption.vue'
 import { clampViewerPose, fitViewerImage, pinchViewerAt, viewerMorph, viewerSwipe, zoomViewerAt } from './viewer-geometry'
 
 const props = withDefaults(defineProps<{ photo: StoryPhoto, index: number, total: number, chapter: string, closing?: boolean }>(), { closing: false })
-const emit = defineEmits<{ close: [], step: [delta: number] }>()
+const emit = defineEmits<{ close: [], step: [delta: number], explore: [] }>()
 const { t } = useI18n()
 const stage = useTemplateRef<HTMLElement>('stage')
 const photograph = useTemplateRef<HTMLElement>('photograph')
@@ -356,7 +356,10 @@ defineExpose({ enter, leave })
 				<h2 id="travel-viewer-title" ref="captionTitle">
 					<span>{{ photo.alt }}</span>
 				</h2>
-				<p v-if="hasTravelCoordinates(photo)" ref="captionPlace" class="lightbox-place">
+				<button v-if="hasTravelCoordinates(photo) && mobile" ref="captionPlace" class="lightbox-place" :aria-label="$t('page.travels.editorial.expandPhotoMap', { title: photo.alt })" @click="emit('explore')">
+					<span>{{ travelCoordinateLabel(photo) }}</span><TravelEditorialIcon name="right" />
+				</button>
+				<p v-else-if="hasTravelCoordinates(photo)" ref="captionPlace" class="lightbox-place">
 					<span>{{ travelCoordinateLabel(photo) }}</span>
 				</p>
 				<p v-if="photo.caption" ref="captionDescription" class="lightbox-description">

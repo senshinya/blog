@@ -251,7 +251,13 @@
 	overflow: visible;
 }
 /* Fade map detail away under the notes without introducing a separate card. */
-.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) .lightbox::before {
+.travel-editorial {
+	--viewer-wash-opacity: 0.65;
+}
+.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) {
+	--viewer-wash-opacity: 1;
+}
+.travel-editorial .lightbox::before {
 	content: "";
 	position: absolute;
 	opacity: 0;
@@ -262,15 +268,15 @@
 	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
 	pointer-events: none;
 }
-.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) .viewer[data-dimmed="true"] .lightbox::before {
-	opacity: 1;
+.travel-editorial .viewer[data-dimmed="true"] .lightbox::before {
+	opacity: var(--viewer-wash-opacity);
 }
-.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) :is(.lightbox-header, .lightbox-content) {
+.travel-editorial :is(.lightbox-header, .lightbox-content) {
 	position: relative;
 	z-index: 1;
 }
 @media (max-width: 1000px) {
-	.travel-editorial:is([data-basemap="osm"], [data-basemap="satellite"], [data-basemap="hybrid"]) .lightbox::before {
+	.travel-editorial .lightbox::before {
 		background:
 			linear-gradient(to top, var(--paper), color-mix(in oklab, var(--paper) 96%, transparent) 22%, color-mix(in oklab, var(--paper) 84%, transparent) 38%, transparent 65%),
 			linear-gradient(to bottom, color-mix(in oklab, var(--paper) 88%, transparent), transparent 150px);
