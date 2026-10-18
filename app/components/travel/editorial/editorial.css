@@ -206,6 +206,12 @@
 	padding: 58px 5.5vw 80px;
 	pointer-events: auto;
 }
+@media (any-pointer: coarse) {
+	/* Touch readers need a hit-testable scroll container across the whole viewport. */
+	.travel-editorial .story-scroll {
+		pointer-events: auto;
+	}
+}
 .travel-editorial .cover .kicker {
 	margin-bottom: 20px;
 	font-size: 10px;
