@@ -1,0 +1,929 @@
+slug: nz-202609
+title: New Zealand’s South Island
+subtitle: '2026.9'
+posttitle: 'Travel Journal: New Zealand’s South Island (September 2026)'
+description: |-
+  With the Mid-Autumn and National Day holidays,
+  three days of annual leave bought us thirteen days off.
+  So off we went to the Southern Hemisphere.
+published: 2026-10-13
+totaldays: 13
+coverImage: https://blog-img.774352199.xyz/S69z5t.png
+coverCaption: Snowy mountains and sea in Kaikōura
+ending: Well then, time to say goodbye.
+days:
+  - day: 1
+    title: Getting There
+    shortTitle: Getting There
+    descriptions:
+      - "A few months earlier, I was feeling rather pleased with the bargain flights I'd found. By the time we were on them, I wasn't laughing. The connections were a slog: Shanghai to Guangzhou, Guangzhou to Auckland, then Auckland to Christchurch. Coming home would be Christchurch to Auckland, Auckland to Beijing, and Beijing to Shanghai. After the very first leg I started looking into upgrades. Fortunately, an upgrade costing five times the original fare put a stop to that."
+      - I'm a light sleeper with somewhat frayed nerves, and I'm a bit scared of flying. Add the noise and turbulence, and sleep on a plane is pretty much impossible. To top it off, none of our flights in either direction had Wi-Fi. I spent the long nights staring at the seatback entertainment screen.
+      - On the plus side, I got to fly on an Airbus A350 for the first time. Overall, it was more comfortable than the Boeing 787-9 on the way home. The A350's entertainment system lets you watch live feeds from several cameras outside the aircraft, which made take-off and landing fun to watch.
+      - Once we'd landed and checked into the hotel, all I wanted to do was crash.
+    photos:
+      - src: https://blog-img.774352199.xyz/wdxqwl.webp
+        alt: A350
+        caption: My first flight on a China Southern A350. It felt reassuringly solid. I wonder when I'll get to try an A380. Almost every airport had one from either Saudia or Emirates; I couldn't tell which. They looked magnificent.
+        lat: 23.4009417
+        lng: 113.3044056
+      - src: https://blog-img.774352199.xyz/ioiXvL.webp
+        mapView: day
+        alt: All smiles
+        caption: Just boarded and feeling pretty happy. My girlfriend, meanwhile, was sound asleep before we'd even taken off.
+        lat: 23.211564
+        lng: 113.103152
+      - src: https://blog-img.774352199.xyz/ZCm8XG.webp
+        mapView: day
+        alt: No more smiles
+        caption: Five and a half hours later, still wide awake. Not smiling now.
+        lat: -4.138839
+        lng: 137.564833
+      - src: https://blog-img.774352199.xyz/t0xfem.webp
+        alt: Coming in to land
+        caption: The nose-gear camera view as we approached Auckland. Farmland as far as the eye could see.
+        lat: -36.997765
+        lng: 174.837975
+      - src: https://blog-img.774352199.xyz/BxjhU4.webp
+        alt: A glimpse of the airport
+        caption: An Air New Zealand plane. That black-and-white livery looks pretty slick.
+        lat: -37.0076
+        lng: 174.781814
+      - src: https://blog-img.774352199.xyz/iAlrpo.webp
+        alt: Auckland domestic terminal
+        caption: We collected our bags, cleared customs and took a shuttle to the domestic terminal to check them in again. My first encounter with self-service bag drop was a bit of a scramble. This is the Jetstar bag-drop area, deserted for some reason.
+        lat: -37.0066528
+        lng: 174.7895972
+      - src: https://blog-img.774352199.xyz/60FQv9.webp
+        alt: Arriving in Christchurch
+        caption: "We connected onto Air New Zealand for the flight to Christchurch. There seemed to be a youth sports team on board: tall, lively kids who even handed out biscuits to the passengers. I've always wanted to grumble about the mainland Chinese name for Christchurch, “Kelaisitecheqi”. It's a mouthful of phonetic Chinese, like katakana with Chinese characters."
+        lat: -43.488758
+        lng: 172.540039
+  - day: 2
+    title: Christchurch
+    shortTitle: Christchurch
+    descriptions:
+      - The travel agency had left our first day free for us to explore Christchurch.
+      - Fine by me. A lie-in it was.
+      - We'd planned a wander in the morning, but got caught in a sudden downpour with howling wind. I could barely lift my head into it. We made it as far as a nearby supermarket, picked up some ingredients, then took a DiDi back to the hotel to cook lunch. Yes, actual DiDi, the overseas version of the Chinese app.
+      - The weather cleared in the afternoon, so we went out for a walk.
+    photos:
+      - src: https://blog-img.774352199.xyz/KoIcyI.webp
+        alt: My first attempt at steak!
+        caption: Meat in New Zealand is cheap compared with fruit and veg. We bought steaks, sausages, salt and oil at New World, the supermarket Chinese visitors call the “red supermarket”, and I had my first go at pan-frying steak back at the hotel. It was easier than I'd expected, apart from getting the doneness right. The steak in the photo was basically raw inside when I cut it open… The fried egg was lovely, though.
+        lat: -43.5270944
+        lng: 172.6327056
+      - src: https://blog-img.774352199.xyz/iZ3q1Y.webp
+        alt: Around town, 1
+        caption: Buildings in South Island cities are low-rise. Even the city centre has little three- or four-storey blocks like these, with detached houses a little further out. Owning a house with a garden in the middle of town seems perfectly ordinary here. Back in China, that's a rarity.
+        lat: -43.5266267
+        lng: 172.633295
+      - src: https://blog-img.774352199.xyz/GL9p94.webp
+        alt: Around town, 2
+        caption: Christchurch is known as the Garden City. It's full of parks and green spaces like these, plus statues, artwork and historic buildings of every sort. There was even a wooden artwork right next to our hotel.
+        lat: -43.5267014
+        lng: 172.633505
+      - src: https://blog-img.774352199.xyz/KT9Jnk.webp
+        alt: Around town, 3
+        caption: After wandering for ages, I kept feeling that something was missing. At last, an office building. My inner corporate workhorse could finally relax.
+        lat: -43.5298531
+        lng: 172.6324508
+      - src: https://blog-img.774352199.xyz/5rBasa.webp
+        alt: Playing music to a cow?
+        lat: -43.5301619
+        lng: 172.6309281
+      - src: https://blog-img.774352199.xyz/tHqIOE.webp
+        alt: Trams in the city
+        caption: Brightly painted trams run through the city centre, mostly taking visitors sightseeing. There's also a restaurant tram where you can eat while watching the streets go by.
+        lat: -43.5308061
+        lng: 172.6307369
+      - src: https://blog-img.774352199.xyz/XdTiUO.webp
+        alt: A British-style phone box
+        caption: An old street phone box, operated with a card or coins. These have all but disappeared in China, or been turned into public Wi-Fi hotspots.
+        lat: -43.5310064
+        lng: 172.6290864
+      - src: https://blog-img.774352199.xyz/5HN17m.webp
+        alt: A house in mid-air
+        caption: 'We wandered into a courtyard off the street and found this distinctive artwork: a house floating in the air.'
+        lat: -43.5313556
+        lng: 172.6281072
+      - src: https://blog-img.774352199.xyz/7y08QM.webp
+        alt: Church stained glass
+        caption: The stained-glass window was three or four storeys high. Sadly, it was too dark to make out much, and I didn't know the religious stories behind it either.
+        lat: -43.5312317
+        lng: 172.6277622
+      - src: https://blog-img.774352199.xyz/u8EGEc.webp
+        alt: Botanic Gardens, 1
+        caption: There's a huge botanic garden on the western side of the city centre, full of plants I'd never seen back home.
+        lat: -43.5316522
+        lng: 172.6260469
+      - src: https://blog-img.774352199.xyz/H97iAb.webp
+        alt: Botanic Gardens, 2
+        caption: So biiiiiiiiiig~
+        lat: -43.5313442
+        lng: 172.6253764
+      - src: https://blog-img.774352199.xyz/1FPEI1.webp
+        alt: Botanic Gardens, 3
+        caption: One utterly unbothered duck, resting on one leg. It glanced up as I approached, then tucked its head straight back under its wing.
+        lat: -43.5316675
+        lng: 172.6228933
+      - src: https://blog-img.774352199.xyz/gmOfcL.webp
+        alt: Botanic Gardens, 4
+        lat: -43.5317167
+        lng: 172.6225056
+      - src: https://blog-img.774352199.xyz/2Go053.webp
+        alt: Botanic Gardens, 5
+        lat: -43.5317861
+        lng: 172.6221444
+      - src: https://blog-img.774352199.xyz/XUgtkJ.webp
+        alt: Bridge of Remembrance
+        caption: The Bridge of Remembrance crosses the Avon River and commemorates those who died in the First World War. Nearly 10% of New Zealand's population served in the war, and around 58% of those who served were killed or wounded. A terrible toll for a country so far from the main European battlefields.
+        lat: -43.5331806
+        lng: 172.6327833
+      - src: https://blog-img.774352199.xyz/HJoTD4.webp
+        alt: A glimpse beyond the centre
+        lat: -43.533645
+        lng: 172.6335925
+      - src: https://blog-img.774352199.xyz/Pcg6Mj.webp
+        alt: Dinner
+        caption: For dinner we went to Riverside Market, a food market beside the Avon with cuisines from all over the world. I ordered something that might have been Indian or Thai. Either way, it came with rice, which was good enough for me.
+        lat: -43.5338889
+        lng: 172.6341861
+  - day: 3
+    title: Whale Watching in Kaikōura
+    shortTitle: Kaikōura Whales
+    descriptions:
+      - The first outing the travel agency had arranged was a whale-watching trip from Kaikōura.
+      - At New Zealand's latitude, even relatively low mountains can have snowy peaks. Kaikōura sits on the South Island's east coast, with sea, meadows and snow-capped mountains all in view at once. The weather played along with another sunny day. Under blue skies and white clouds, the scenery was gorgeous.
+      - "I'd done my homework and bought seasickness tablets, so I took one before boarding. It was very rough out at sea. Crew members kept watch for signs of whales; whenever they spotted something, the boat sped over, stopped nearby, and we waited for a whale to break the surface. We got lucky: the whales seemed keen to put on a show, surfacing again and again to cheers from everyone on board. A pod of dolphins also swam alongside us along the way."
+      - Whale breath absolutely reeks, though.
+    photos:
+      - src: https://blog-img.774352199.xyz/oSINYy.webp
+        alt: On the way, 1
+        caption: 'Most of the journey looked like this: wide pastures beneath snowy mountains, with hundreds or thousands of cattle and sheep ambling about, grazing or resting.'
+        lat: -43.1250806
+        lng: 172.7331861
+      - src: https://blog-img.774352199.xyz/TNCPeU.webp
+        alt: On the way, 2
+        caption: A railway followed our route too, though we didn't get to see a train. This stretch is part of the Coastal Pacific scenic train route.
+        lat: -43.1096611
+        lng: 172.7362972
+      - src: https://blog-img.774352199.xyz/xoVn0J.webp
+        alt: What a view
+        caption: A peninsula juts into the sea at Kaikōura, making for a rugged coastline. From the shingle beach, you can take in snowy mountains, grassland, sea and shore all at once. It felt dreamlike. The sea had polished the pebbles smooth, so I picked out a few to take home as souvenirs.
+        lat: -42.3988236
+        lng: 173.6826167
+      - src: https://blog-img.774352199.xyz/8Spqw0.webp
+        alt: That background looks photoshopped
+        lat: -42.3985972
+        lng: 173.6826167
+      - src: https://blog-img.774352199.xyz/Q88z34.webp
+        alt: Seabirds, 1
+        caption: Seabirds were everywhere around Kaikōura. Some had red beaks and feet, others black ones; no idea whether they were the same species. All of them were making a glorious racket.
+        lat: -42.3982611
+        lng: 173.6814417
+      - src: https://blog-img.774352199.xyz/OHJFlJ.webp
+        alt: Seabirds, 2
+        caption: Someone put out some bread, and a whole flock landed by the boardwalk.
+        lat: -42.396
+        lng: 173.6811222
+      - src: https://blog-img.774352199.xyz/8prcet.webp
+        alt: Snowy mountains through the trees
+        caption: It was early spring in New Zealand, but there seemed to be plenty of evergreens. Even with a chill in the air, everything was green.
+        lat: -42.3959844
+        lng: 173.6811131
+      - src: https://blog-img.774352199.xyz/jG2bMT.webp
+        alt: Our whale-watching boat
+        caption: Our boat looked tiny from a distance, but had two decks and plenty of room for forty or fifty people.
+        lat: -42.4261139
+        lng: 173.6814278
+      - src: https://blog-img.774352199.xyz/b0jOqk.webp
+        alt: Looking back from the boat
+        caption: Looking back as we headed out, clouds were gathering over what had been a clear sky. The wind was picking up.
+        lat: -42.4253778
+        lng: 173.6812444
+      - src: https://blog-img.774352199.xyz/5FrCDC.webp
+        alt: Top spot
+        lat: -42.4255111
+        lng: 173.68065
+      - src: https://blog-img.774352199.xyz/brFsV1.webp
+        alt: Whales, 1
+        caption: Apparently the markings on each whale's tail are unique, like human fingerprints. Except fingerprints look like tree rings, and whale tails look like starry skies.
+        live: https://blog-img.774352199.xyz/gpSU7f.mp4
+        lat: -42.4705472
+        lng: 173.5669694
+      - src: https://blog-img.774352199.xyz/x2zepF.webp
+        alt: A pod of dolphins
+        caption: Dolphins in a big group. Unfortunately, the sky had clouded over and the water wasn't as clear, so we couldn't see beneath the surface.
+        live: https://blog-img.774352199.xyz/lZ7mEZ.mp4
+        lat: -42.4717333
+        lng: 173.5667889
+      - src: https://blog-img.774352199.xyz/TVa6UM.webp
+        alt: Whales, 2
+        live: https://blog-img.774352199.xyz/iUuHj5.mp4
+        lat: -42.4754361
+        lng: 173.5628056
+      - src: https://blog-img.774352199.xyz/n7VCL8.webp
+        alt: Whales, 3
+        live: https://blog-img.774352199.xyz/XeEB4O.mp4
+        lat: -42.4696722
+        lng: 173.5654611
+      - src: https://blog-img.774352199.xyz/d5lNag.webp
+        alt: Whales, 4
+        live: https://blog-img.774352199.xyz/HoTCZN.mp4
+        lat: -42.4686361
+        lng: 173.5657806
+      - src: https://blog-img.774352199.xyz/AWABuM.webp
+        alt: Blue as far as the eye can see
+        caption: The water looked almost like jelly.
+        lat: -42.4659194
+        lng: 173.5695028
+      - src: https://blog-img.774352199.xyz/MhrhDV.webp
+        alt: No seals, just a brave smile
+        caption: My Xiaohongshu research said you could see seals at Point Kean, so we went after the whale-watching trip. It was a shingle beach with low trees and scrub. Maybe our timing was off, but we didn't see a single seal.
+        lat: -42.4225306
+        lng: 173.7168722
+  - day: 4
+    title: Alpacas and Stars
+    shortTitle: Alpacas & Stars
+    descriptions:
+      - There's an alpaca farm on a hillside outside Akaroa. Most of the staff were Taiwanese, so we had no trouble communicating.
+      - They introduced each alpaca's name, personality, temperament and favourite things with such enthusiasm, as though introducing their best mates.
+      - Afterwards we drove to Tekapo, in the Aoraki Mackenzie International Dark Sky Reserve. There I saw the Milky Way for the first time in my life.
+    photos:
+      - src: https://blog-img.774352199.xyz/3q4cfe.webp
+        alt: You pet, I eat
+        caption: The alpacas had such thick fleece that you could sink your fingers right in and give them a good scritch. They were placid too, carrying on eating as though nothing was happening.
+        lat: -43.7912528
+        lng: 172.9052889
+      - src: https://blog-img.774352199.xyz/F5hCNn.webp
+        alt: What are you looking at?
+        caption: Some alpacas were a little less accommodating, though none were nasty about it. If they didn't want a pat, they just hurried away rather than spitting. In fact, the only spitting we saw was between two alpacas squabbling over feed.
+        lat: -43.7914417
+        lng: 172.9053806
+      - src: https://blog-img.774352199.xyz/RBNjCX.webp
+        alt: Wild and free
+        lat: -43.7914361
+        lng: 172.9053639
+      - src: https://blog-img.774352199.xyz/j584us.webp
+        alt: Humans and alpacas getting along
+        caption: These were the female alpacas; the males and females live in separate paddocks. The males were generous with their affection, letting you pet them without so much as a snack. Over on the females' side, staff handed each of us a bowl of feed. The alpacas would stand still for pats only while you fed them. As soon as the bowl was empty, they'd turn and walk away. Strictly transactional.
+        lat: -43.7907444
+        lng: 172.9069361
+      - src: https://blog-img.774352199.xyz/HO6BqJ.webp
+        alt: The bay
+        lat: -43.7908003
+        lng: 172.906925
+      - src: https://blog-img.774352199.xyz/gBgYrh.webp
+        alt: Doing things their own way
+        lat: -43.7909806
+        lng: 172.9064333
+      - src: https://blog-img.774352199.xyz/nJTXzJ.webp
+        alt: Japanese lunch
+        caption: On the way to Tekapo we passed through a little town called Lincoln, which had very few restaurants. We picked a Japanese place and had fried chicken, Coke and rice. A rather modern take on Japanese food.
+        lat: -43.6403583
+        lng: 172.4839028
+      - src: https://blog-img.774352199.xyz/klK4i3.webp
+        alt: By Lake Tekapo
+        lat: -44.0023642
+        lng: 170.4787881
+      - src: https://blog-img.774352199.xyz/yMEKCV.webp
+        alt: Church of the Good Shepherd
+        caption: "This must be one of New Zealand's top ten social-media spots, judging by the crowd around the church. I took a photo from a distance, with its reflection in the lake. Fair play to Xiaohongshu: it does know a good-looking spot."
+        lat: -44.002329
+        lng: 170.479528
+      - src: https://blog-img.774352199.xyz/HvIFYx.webp
+        alt: Waiting for the stars
+        caption: After dinner we found a seat by the lake and waited for the stars. Even after sunset, the twilight was bright. Only Jupiter was visible high in the sky.
+        lat: -44.0030833
+        lng: 170.479675
+      - src: https://blog-img.774352199.xyz/6rNxb2.webp
+        alt: Milky Way, 1
+        caption: At about half past nine, the last of the twilight faded and the stars came into focus. Then a band of light gradually appeared too.
+        lat: -44.0030639
+        lng: 170.4735556
+      - src: https://blog-img.774352199.xyz/WyBNEM.webp
+        alt: A Southern Hemisphere special
+        caption: The Large and Small Magellanic Clouds. I'd heard about them in countless documentaries and at the science museum as a child, and now here they were.
+        lat: -44.0047139
+        lng: 170.4738472
+      - src: https://blog-img.774352199.xyz/S16Xz3.webp
+        alt: Milky Way, 2
+        caption: No fancy camera needed. Just switch on your phone's night mode and take a snap.
+        lat: -44.0047083
+        lng: 170.4738306
+  - day: 5
+    title: Snowy Mountains
+    shortTitle: Snowy Mountains
+    descriptions:
+      - 'The night before, I was chatting with my colleague C. When he heard I was going hiking at Aoraki / Mount Cook, he insisted I book a glacier helicopter flight: take off from the airfield at the foot of the mountains, fly around the peaks, then land on the snow up on a ridge. It was a last-minute idea and all the helicopters were booked, so we ended up booking a 55-minute ski-plane flight instead.'
+    photos:
+      - src: https://blog-img.774352199.xyz/FaRPbt.webp
+        alt: On the way, 1
+        caption: The morning mist hadn't lifted yet.
+        lat: -44.1846583
+        lng: 170.1189583
+      - src: https://blog-img.774352199.xyz/ItLLGS.webp
+        alt: On the way, 2
+        caption: A band of cloud wrapped around Mount Cook. Our driver-guide said we were lucky, as this wasn't a common sight.
+        lat: -44.0518806
+        lng: 170.1341083
+      - src: https://blog-img.774352199.xyz/nztrGr.webp
+        alt: An airfield beneath the mountains
+        caption: Mount Cook Airport sits in the middle of the valley, with just one short runway for little ski planes.
+        lat: -43.7661061
+        lng: 170.1325589
+      - src: https://blog-img.774352199.xyz/xZhoLo.webp
+        alt: Our little ski plane
+        caption: The ski plane was tiny, seating only seven or eight people including the pilot. To get in, you had to fold a seat forward, bend down and duck your head.
+        lat: -43.7660642
+        lng: 170.1325042
+      - src: https://blog-img.774352199.xyz/mHHv4c.webp
+        alt: Snowy peaks through the window
+        caption: After take-off, my girlfriend kept filming the view with her Pocket camera, blissfully unaware of what fate had in store for it.
+        lat: -43.7668333
+        lng: 170.1350861
+      - src: https://blog-img.774352199.xyz/ZGoUPG.webp
+        alt: River valley
+        caption: It was early spring and the snow had only just started melting. The rivers in the valley were still running low, thin threads in their broad riverbeds.
+        lat: -43.657775
+        lng: 170.2068333
+      - src: https://blog-img.774352199.xyz/RhqV9j.webp
+        alt: Layers of snowy peaks
+        lat: -43.6391194
+        lng: 170.1855472
+      - src: https://blog-img.774352199.xyz/LDAIdq.webp
+        alt: Flying over the snow
+        caption: Snowy mountains growing out of a sea of cloud.
+        lat: -43.5263139
+        lng: 170.1342917
+      - src: https://blog-img.774352199.xyz/gkPGVP.webp
+        alt: Blue ice beneath the snow
+        lat: -43.5103639
+        lng: 170.2130889
+      - src: https://blog-img.774352199.xyz/BoFh2i.webp
+        alt: Touchdown!
+        caption: We landed on a fairly level stretch of mountainside. The snow was ankle-deep and there wasn't a sound around us. It felt otherworldly. Pure white and pure blue.
+        lat: -43.4900156
+        lng: 170.2653103
+      - src: https://blog-img.774352199.xyz/qQ4VyE.webp
+        alt: With our pilot
+        caption: |-
+          We had a quick chat with the pilot. This wasn't his day job; flying was his hobby, and he'd been doing it for seven years. He wasn't paid for flying sightseeing trips like this around Mount Cook.
+          Full respect. Also, very jealous.
+        lat: -43.490075
+        lng: 170.2653361
+      - src: https://blog-img.774352199.xyz/ZKOo6W.webp
+        alt: Taking off again
+        lat: -43.4864056
+        lng: 170.2369083
+      - src: https://blog-img.774352199.xyz/NK4b3Z.webp
+        alt: A mountain supply hut
+        lat: -43.6354306
+        lng: 170.1740889
+      - src: https://blog-img.774352199.xyz/sqm69k.webp
+        alt: Valley views
+        caption: After landing we headed to the Tasman Glacier track. It's a short, easy walk up a little hill, looking down over the glacial lake, with a round trip of only about an hour.
+        lat: -43.6977806
+        lng: 170.1657556
+      - src: https://blog-img.774352199.xyz/XGhlDa.webp
+        alt: The “Blue” Lake
+        caption: On the way up, we saw a small lake. The sign called it Blue Lake. The name dates back over a hundred years, when glacial meltwater filled it and made it a vivid blue. Over recent decades, changes in the glacier have cut off that supply. Rainwater now fills the lake, leaving it pale green. That old blue survives only in the name.
+        lat: -43.6964278
+        lng: 170.1666417
+      - src: https://blog-img.774352199.xyz/2ZutqI.webp
+        alt: Tasman Glacier Lake
+        caption: At the end of the track is Tasman Glacier Lake, formed by the retreat of the Tasman Glacier. It only became a lake in the 1990s. The glacier sits at the far end, and countless chunks of ice broken from it float on the water.
+        lat: -43.6959306
+        lng: 170.1683667
+      - src: https://blog-img.774352199.xyz/thdo3p.webp
+        alt: Alpine salmon
+        caption: On the way back we stopped at the famous salmon shop beside Lake Pukaki. The shop and lakeside were packed with visitors buying salmon. The fish are raised in glacial meltwater and are supposed to taste fantastic. We followed the crowd and bought a box.
+        lat: -44.1899222
+        lng: 170.1398306
+      - src: https://blog-img.774352199.xyz/bOh9j3.webp
+        alt: The priciest bird food
+        caption: Neither of us could get used to eating it raw, so the seagulls got the lot. Seagulls, let's call them that. At NZ$20 a box, this was easily the most expensive bird food I've ever bought.
+        live: https://blog-img.774352199.xyz/hx0FOJ.mp4
+        lat: -44.001594
+        lng: 170.472519
+      - src: https://blog-img.774352199.xyz/wOOQ30.webp
+        alt: Spiced rice
+        caption: Dinner was at an Indian restaurant beside Lake Tekapo. I ordered biryani. The flavour was terrifying, like shovelling spices straight into my mouth. I couldn't taste the meat or the rice through the spice assault blasting up into my skull. No wonder the British colonised India. They were throwing spices around like they were free.
+        lat: -44.0038222
+        lng: 170.4768222
+  - day: 6
+    title: On the Road
+    shortTitle: On the Road
+    descriptions:
+      - We left Lake Tekapo and headed for Queenstown.
+    photos:
+      - src: https://blog-img.774352199.xyz/WDTSJi.webp
+        alt: By Lake Wānaka, 1
+        caption: |-
+          We reached Wānaka around midday.
+          My research had painted it as a peaceful little town with few visitors. But China's extended holiday, combined with school holidays in Australia and New Zealand, meant even the public toilets had queues.
+        lat: -44.6990083
+        lng: 169.1255806
+      - src: https://blog-img.774352199.xyz/c4Q5hH.webp
+        alt: Two of a kind
+        lat: -44.6979311
+        lng: 169.1287964
+      - src: https://blog-img.774352199.xyz/IQjGir.webp
+        alt: That Wānaka Tree
+        caption: "Wānaka's most famous sight, perhaps even New Zealand's: a willow growing in the lake. With camera lenses of every size pointed at it all year round, it hardly seems lonelier than its siblings on the shore."
+        lat: -44.6988339
+        lng: 169.1179356
+      - src: https://blog-img.774352199.xyz/L71UEi.webp
+        alt: By Lake Wānaka, 2
+        lat: -44.6985272
+        lng: 169.1172894
+      - src: https://blog-img.774352199.xyz/HdSfpO.webp
+        alt: Arrowtown, a gold-rush town
+        caption: Arrowtown, near Queenstown, grew out of the 19th-century gold rush. Apparently you can still pan for gold by the river, since mechanised mining is banned. Most of the souvenirs have a gold theme too. Very appealing.
+        lat: -44.93835
+        lng: 168.8309028
+      - src: https://blog-img.774352199.xyz/zrbuIY.webp
+        alt: The hotel balcony
+        caption: We arrived at our Queenstown hotel and checked in. From the balcony, we could see a little slice of Lake Wakatipu.
+        lat: -45.0345806
+        lng: 168.6678472
+      - src: https://blog-img.774352199.xyz/yXkDCy.webp
+        alt: Clouds rolling in
+        caption: By evening, dark clouds had gathered over Queenstown. I started worrying about the next day's skydive.
+        lat: -45.0301694
+        lng: 168.6612861
+      - src: https://blog-img.774352199.xyz/RDUhK2.webp
+        alt: An Asian supermarket
+        caption: "It said Asian supermarket, but felt more like a Chinese one: hotpot ingredients and soup bases, Chinese snacks, instant noodles from home… the lot. With China's Golden Week stretching to almost two weeks, the shop was packed with Chinese shoppers. Even the portable gas stoves for hotpot had all been hired out or sold. We bought hotpot base and seasonings, a big bag of instant noodles and a packet of luosifen, the famously pungent river-snail rice noodles."
+        lat: -45.0305889
+        lng: 168.6609028
+  - day: 7
+    title: Shoot!
+    shortTitle: Shoot!
+    descriptions:
+      - "We'd booked the first skydive of the day at 6 am, so we were up at 4 getting ready. At 5.30, just as we were about to leave, an email arrived: cancelled due to the weather. We refused to give up and went to the shop anyway, only to come back disappointed."
+      - 'Back at the hotel, we rested until noon. No time to mourn the cancelled skydive: clay shooting was up next!'
+    photos:
+      - src: https://blog-img.774352199.xyz/FVyYbZ.webp
+        mapZoomOffset: 0.6
+        alt: Early spring
+        lat: -45.0335361
+        lng: 168.6660306
+      - src: https://blog-img.774352199.xyz/JxgnfC.webp
+        mapZoomOffset: 0.6
+        alt: Butts
+        caption: 'While waiting for our ride, I spotted a contraption labelled “Butts belong in this bin”. I knew “butts” as in backsides, but the sentence made no sense to me. I asked AI and discovered another meaning: cigarette butts 😂'
+        lat: -45.0307306
+        lng: 168.6602639
+      - src: https://blog-img.774352199.xyz/PrOvaU.webp
+        mapZoomOffset: 0.6
+        alt: Town centre
+        lat: -45.0306972
+        lng: 168.6603556
+      - src: https://blog-img.774352199.xyz/Ijc2hK.webp
+        mapZoomOffset: 0.6
+        alt: Looking out beyond town
+        caption: The shooting range was on a private sheep farm in the hills outside Queenstown, and our instructor was the farmer himself. He said he had five thousand sheep spread across several hills. Maybe it's a habit left over from British colonial days, but the locals do love chatting about the weather, especially making fun of the forecasters.
+        lat: -45.0037639
+        lng: 168.7099611
+      - src: https://blog-img.774352199.xyz/BVINEB.webp
+        mapZoomOffset: 0.6
+        alt: Shotgun
+        caption: We used a semi-automatic shotgun. Several clay launchers surrounded the shooting position. One press of the instructor's remote, and out flew a clay.
+        lat: -45.0058139
+        lng: 168.7100528
+      - src: https://blog-img.774352199.xyz/ro9M1H.webp
+        mapZoomOffset: 0.6
+        alt: Getting the stance right
+        caption: Before we started, the instructor explained the stance and basics in a few clear sentences. No repeated stern warnings. It felt so laid-back it was almost surreal, as though we were playing laser tag. The one thing he kept saying was “Eyes on target”.
+        lat: -45.0058528
+        lng: 168.7100528
+      - src: https://blog-img.774352199.xyz/Ng9QO6.webp
+        mapZoomOffset: 0.6
+        alt: Fire!
+        caption: Only when I picked up the gun did I feel its weight. Big swings took some effort. The recoil was surprisingly mild, though; I wondered if they were using lighter loads. We each fired around forty or fifty shots. Our instructor was a brilliant morale booster, even finding excuses for us when we missed.
+        live: https://blog-img.774352199.xyz/zlLxt9.mp4
+        lat: -45.0058472
+        lng: 168.7100361
+      - src: https://blog-img.774352199.xyz/vEIRTD.webp
+        mapZoomOffset: 0.6
+        alt: Highly recommended
+        caption: |-
+          We'd originally planned to go to Real Guns in Wānaka, but transport was awkward and we couldn't get a suitable time, so we booked this instead. What a pleasant surprise. We had a fantastic time. When we booked, the website had no online booking option; you could get in touch by email or phone.
+          Website: https://breakone.co.nz
+        lat: -45.0058444
+        lng: 168.7100222
+      - src: https://blog-img.774352199.xyz/RDgmbB.webp
+        mapZoomOffset: 0.6
+        alt: The famous Fergburger
+        caption: They dropped us back in the town centre, so we had a wander. We happened upon Fergburger, a Queenstown must-eat according to Xiaohongshu. I had zero interest. All I wanted was to go back and have hotpot.
+        lat: -45.0317111
+        lng: 168.6593639
+      - src: https://blog-img.774352199.xyz/astXwO.webp
+        mapZoomOffset: 0.6
+        alt: KFC and Macca’s
+        caption: A picture of peaceful coexistence.
+        lat: -45.0315694
+        lng: 168.6614083
+  - day: 7
+    title: Skyline
+    shortTitle: Skyline
+    descriptions:
+      - Skyline sits on a hill at the edge of Queenstown. I'd noticed it when we first arrived, and from below it looked unremarkable. They'd even cleared a bare strip of rock up the hillside for the gondola. A bit of an eyesore, really.
+      - But up on the viewing platform, looking down over Queenstown and Lake Wakatipu, it was a different story.
+      - We bought a Skyline package with the gondola, three luge rides and a buffet dinner at the top.
+    photos:
+      - src: https://blog-img.774352199.xyz/mOqmRj.webp
+        alt: Lake Wakatipu
+        caption: Perhaps because of daylight saving, it got dark very late in New Zealand. At five in the afternoon, there wasn't a hint of dusk.
+        lat: -45.0331417
+        lng: 168.6606611
+      - src: https://blog-img.774352199.xyz/OkJTRk.webp
+        alt: Gondola views, 1
+        lat: -45.02905
+        lng: 168.6565389
+      - src: https://blog-img.774352199.xyz/ZhHGPh.webp
+        alt: Gondola views, 2
+        lat: -45.0275889
+        lng: 168.652725
+      - src: https://blog-img.774352199.xyz/W8duHW.webp
+        alt: Luge
+        caption: |-
+          Our package included three luge rides. We hadn't allowed much time, so the plan was to do one ride and then eat. It was far more exciting than we'd expected. Two rides back to back and we still wanted more.
+          There are two tracks, Arrow and Dart. In theory, Arrow is gentler and more relaxed, and Dart is the thrilling one. In practice, Arrow felt every bit as exciting, and its longer track made it even better.
+        lat: -45.0257194
+        lng: 168.6475361
+      - src: https://blog-img.774352199.xyz/T1rVo8.webp
+        alt: Buffet
+        caption: The buffet was decent enough. Cold drinks and alcohol cost extra; only hot drinks like coffee and tea were included. I tried venison for the first time. One more animal on the list of things I've eaten. Nothing particularly distinctive about the flavour; the texture was much like beef. From a window seat, you could look out over all of Queenstown and Lake Wakatipu.
+        lat: -45.0264806
+        lng: 168.6499028
+      - src: https://blog-img.774352199.xyz/KN2GmZ.webp
+        alt: Sunset glow
+        caption: We stayed over dinner as the sunset colours crept onto the mountains and faded away. It was pitch-black by the time we left the restaurant, but the luge was still open, so we took the lift up for one more go.
+        lat: -45.0263639
+        lng: 168.6498417
+  - day: 8
+    title: Paradise Road, Paradise
+    shortTitle: Paradise
+    descriptions:
+      - Glenorchy is a well-known little town on the South Island, said to be a filming location for Middle-earth in The Lord of the Rings and The Hobbit. It's close to Queenstown, only about half an hour by car.
+      - We booked a horse trek with a local stable, on Paradise Road in a place called Paradise. Very fitting.
+      - With the previous day's skydive cancelled, we also booked indoor skydiving. Despite the name, it's more of a free-fall experience.
+    photos:
+      - src: https://blog-img.774352199.xyz/2DC2bu.webp
+        alt: One of the world’s top ten scenic drives
+        caption: The road from Queenstown to Glenorchy follows Lake Wakatipu all the way, with snowy peaks reflected in the water and wisps of cloud drifting past. It's also billed as one of the world's ten most beautiful drives.
+        lat: -45.0580778
+        lng: 168.59105
+      - src: https://blog-img.774352199.xyz/ETWnt7.webp
+        alt: Taking flight
+        lat: -45.0580222
+        lng: 168.5909111
+      - src: https://blog-img.774352199.xyz/LHvGn8.webp
+        alt: A splash of bright red
+        lat: -44.8515389
+        lng: 168.3825833
+      - src: https://blog-img.774352199.xyz/9dWLdA.webp
+        alt: The red hut of nightmares
+        caption: My colleague C had visited Glenorchy before and been traumatised by a long-drop toilet. His account after coming home was vivid enough to give me a distinctly unappetising nightmare too. Today I finally got to see the place for myself.
+        lat: -44.8527028
+        lng: 168.3834528
+      - src: https://blog-img.774352199.xyz/UcaXyR.webp
+        alt: The horses’ water trough
+        caption: At the stable, the staff gave us a quick rundown of the basics. Having ridden before, I had no trouble following. My horse was called Smarty. He was apparently near the bottom of the pecking order, “low dominance” in their words, and occasionally got picked on by the others. Poor lad. He also had to bring up the rear throughout the trek.
+        lat: -44.8006167
+        lng: 168.3762194
+      - src: https://blog-img.774352199.xyz/ldsntb.webp
+        alt: Looking the part
+        lat: -44.8011361
+        lng: 168.3758389
+      - src: https://blog-img.774352199.xyz/KsqoOC.webp
+        alt: On the trail, 1
+        lat: -44.8038778
+        lng: 168.3833167
+      - src: https://blog-img.774352199.xyz/ukVks1.webp
+        alt: On the trail, 2
+        caption: Crossing the Rees River. The water was shallow, barely covering the horses' hooves.
+        lat: -44.8026694
+        lng: 168.3851611
+      - src: https://blog-img.774352199.xyz/M9hPio.webp
+        alt: On the trail, 3
+        lat: -44.8023417
+        lng: 168.38585
+      - src: https://blog-img.774352199.xyz/JN3G0K.webp
+        alt: Smiles and a cheeky tongue
+        lat: -44.7973278
+        lng: 168.3905028
+      - src: https://blog-img.774352199.xyz/AHMa6R.webp
+        alt: On the trail, 4
+        caption: |-
+          There's a grove of willows by the Rees River, the same kind as that lone tree in Wānaka. The horses got rather reluctant to move here, dipping their heads to graze at every opportunity.
+          The staff said fresh spring grass was to horses what weed is to humans. Yes, that kind of weed. They love it, but too much makes them feel ill. Whenever they lowered their heads, we had to pull them back up with the reins.
+        lat: -44.7989889
+        lng: 168.3830556
+      - src: https://blog-img.774352199.xyz/o5HP9H.webp
+        alt: On the trail, 5
+        lat: -44.8019917
+        lng: 168.3791194
+      - src: https://blog-img.774352199.xyz/vdFLEW.webp
+        alt: A simple lunch
+        caption: We cooked a huge pot of instant noodles and another of luosifen. Hopefully the neighbours across the hall wouldn't complain about the smell.
+        lat: -45.0345222
+        lng: 168.6678306
+      - src: https://blog-img.774352199.xyz/Y2YXGy.webp
+        alt: Indoor skydiving
+        caption: Behind me is a huge wind tunnel. Fans beneath the floor blast air upwards, keeping you suspended. Relative motion. The physics checks out.
+        lat: -45.0298806
+        lng: 168.6575917
+      - src: https://blog-img.774352199.xyz/YP7Zwn.webp
+        alt: Now we’re really flying
+        caption: The wind was so strong it took effort just to hold my arms in position. After one session, my back and waist ached the next day.
+        lat: -45.029881
+        lng: 168.657592
+      - src: https://blog-img.774352199.xyz/Tvf3oP.webp
+        alt: Floating in air, with nothing to hold us up
+        video: https://blog-img.774352199.xyz/7OIwwM.mp4
+        lat: -45.029881
+        lng: 168.657592
+      - src: https://blog-img.774352199.xyz/PyTtua.webp
+        alt: Some rather odd souvenirs
+        lat: -45.0329444
+        lng: 168.6576083
+  - day: 9
+    title: Milford Sound
+    shortTitle: Milford Sound
+    descriptions:
+      - "Milford Sound, on New Zealand's west coast, is one of the wettest places in the world, with rain on more than two hundred days a year. The appeal is that end-of-the-world atmosphere: mist everywhere, dark clouds hanging low, and hundreds upon hundreds of waterfalls pouring down the rock faces."
+      - "But my luck was very good, or very bad: I caught one of the year's rare, gloriously sunny days. So I got to see this unusual version of the scenery instead."
+    photos:
+      - src: https://blog-img.774352199.xyz/UGw319.webp
+        alt: Cattle and sheep beneath the windswept grass
+        caption: I must have seen thousands of cattle and horses in New Zealand, if not ten thousand. Every one of them had it easier than the overworked humans we call “workhorses” back in China.
+        lat: -45.4672083
+        lng: 167.7928306
+      - src: https://blog-img.774352199.xyz/Gxpgrf.webp
+        alt: Winding mountain road
+        caption: Getting from Queenstown to Milford Sound means crossing the Southern Alps. Most of the second half is winding mountain road like this, threading between gorges. Layer upon layer of rock rises up, blocking out the sky.
+        lat: -44.76015
+        lng: 167.9690694
+      - src: https://blog-img.774352199.xyz/MoeLJz.webp
+        alt: Milford Monarch
+        caption: I've managed to make a big cruise boat look like a little yacht. Perhaps Chinese military PR could use my talent for making big ships look small.
+        lat: -44.6685222
+        lng: 167.9264667
+      - src: https://blog-img.774352199.xyz/YlqWVM.webp
+        alt: Along the shore, 1
+        lat: -44.6669222
+        lng: 167.9216472
+      - src: https://blog-img.774352199.xyz/ELMRmv.webp
+        alt: Along the shore, 2
+        lat: -44.6647528
+        lng: 167.9170222
+      - src: https://blog-img.774352199.xyz/fmsqjy.webp
+        alt: Along the shore, 3
+        lat: -44.6636472
+        lng: 167.9156333
+      - src: https://blog-img.774352199.xyz/Pn4IeG.webp
+        alt: Out to sea
+        caption: I once saw an explanation claiming fjords were the one type of landform China didn't have. But plenty of Xiaohongshu posts said this looked much like the Three Gorges. A fjord is a glacial valley flooded by the sea; the Three Gorges were carved by a river. Looking only at the steep-sided gorge itself, perhaps they aren't so different from Milford after all.
+        lat: -44.604125
+        lng: 167.8225111
+      - src: https://blog-img.774352199.xyz/e8HNEN.webp
+        alt: Along the shore, 4
+        caption: With something to compare them to, you can finally see how enormous the mountains are.
+        lat: -44.5997861
+        lng: 167.8166194
+      - src: https://blog-img.774352199.xyz/BMo7jf.webp
+        alt: Along the shore, 5
+        lat: -44.6101417
+        lng: 167.8710944
+      - src: https://blog-img.774352199.xyz/g4dKp6.webp
+        alt: Hitching a ride back to shore
+        lat: -44.6629528
+        lng: 167.9186861
+      - src: https://blog-img.774352199.xyz/1QwP4v.webp
+        alt: The little town of Te Anau
+        caption: In the evening we reached Te Anau, a lakeside town with little commercial bustle and few people around. Apart from a handful of residents, most people seemed to be visitors stopping over on their way to or from the fiords. It was very peaceful.
+        lat: -45.4220167
+        lng: 167.7184139
+      - src: https://blog-img.774352199.xyz/vXSfm0.webp
+        alt: A plane from another time
+        caption: A floatplane sat on Lake Te Anau. Curious, I looked up its registration, ZK-DRH. It had already been flying in New Zealand back in 1974. That December, while moored in Shakespeare Bay, Picton, a whirlwind flipped it over and left it submerged for about four hours. It was salvaged and repaired, and is still flying today.
+        lat: -45.4195861
+        lng: 167.7139444
+      - src: https://blog-img.774352199.xyz/9jRacX.webp
+        alt: Lake Te Anau
+        lat: -45.4196083
+        lng: 167.7136528
+      - src: https://blog-img.774352199.xyz/KB2mC9.webp
+        alt: A local speciality
+        caption: A must-buy New Zealand speciality from a time-honoured local brand.
+        lat: -45.4224139
+        lng: 167.7197111
+  - day: 10
+    title: From the West Coast to the East Coast
+    shortTitle: West to East
+    descriptions:
+      - Dunedin is known as the Edinburgh of the South. Its name comes from the Scottish Gaelic name for Edinburgh, and the whole city has a European feel.
+      - In the evening we reached the little town of Oamaru to watch the little blue penguins come ashore. Photography wasn't allowed, so sadly I have very few photos of it.
+    photos:
+      - src: https://blog-img.774352199.xyz/jX9nnG.webp
+        alt: On the way
+        lat: -45.9573889
+        lng: 170.189225
+      - src: https://blog-img.774352199.xyz/hcVFwY.webp
+        alt: Lunch, 1
+        caption: We had lunch at Chopsticks 101 in central Dunedin. Its Chinese name is Taipei 101, and the Chinese food was pretty authentic. After so many days of Western food, it felt like being back in civilisation. I ordered rice with beef and silky scrambled eggs.
+        lat: -45.8683611
+        lng: 170.5068667
+      - src: https://blog-img.774352199.xyz/pPsPEZ.webp
+        alt: Lunch, 2
+        caption: My girlfriend ordered luosifen. Authentic is good, but we don't have to go quite that authentic.
+        lat: -45.8683306
+        lng: 170.50685
+      - src: https://blog-img.774352199.xyz/flESS3.webp
+        alt: Street scenes, 1
+        caption: Very European, and certainly no shortage of churches. Knox Church, pictured here, was begun in 1872 and completed in 1876.
+        lat: -45.868
+        lng: 170.5070194
+      - src: https://blog-img.774352199.xyz/aDpt9M.webp
+        alt: Street scenes, 2
+        lat: -45.8680028
+        lng: 170.50705
+      - src: https://blog-img.774352199.xyz/15XT1j.webp
+        alt: Street scenes, 3
+        lat: -45.8736083
+        lng: 170.5038917
+      - src: https://blog-img.774352199.xyz/Ngbsxc.webp
+        alt: Street scenes, 4
+        caption: "More seagulls claiming their favourite perch: the tops of statues' heads. The heads here were all mottled and speckled with evidence of their visits."
+        lat: -45.8739361
+        lng: 170.5035389
+      - src: https://blog-img.774352199.xyz/rF0iiI.webp
+        alt: A man feeding the gulls
+        caption: He was surrounded by seagulls, with two ducks sneaking into the crowd. He must have noticed me taking his picture, because he gave me a wave.
+        lat: -45.8742472
+        lng: 170.5039056
+      - src: https://blog-img.774352199.xyz/f9aeW5.webp
+        alt: First Church of Otago
+        lat: -45.8755639
+        lng: 170.504775
+      - src: https://blog-img.774352199.xyz/Hw9ftK.webp
+        alt: Otago Daily Times building
+        lat: -45.8748583
+        lng: 170.5065778
+      - src: https://blog-img.774352199.xyz/8kfIEk.webp
+        alt: Dunedin Railway Station
+        caption: Renaissance-style, ornate and beautiful.
+        lat: -45.8753167
+        lng: 170.5078139
+      - src: https://blog-img.774352199.xyz/NwuKhV.webp
+        alt: On the footbridge
+        caption: Looking down from the footbridge over the railway, we could see only a few parked freight wagons.
+        lat: -45.8758417
+        lng: 170.5085
+      - src: https://blog-img.774352199.xyz/ohsoaE.webp
+        alt: Little blue penguins
+        caption: Towards evening we drove to Oamaru and went to the little blue penguin colony by the sea to watch them come ashore. Sadly, phones had to be put away once the penguins started returning, because the glow from the screens would disturb them. I only took a few photos before it began. The penguins hadn't come ashore yet; there were just seals on the rocky beach, bobbing their heads and playing around.
+        lat: -45.1104139
+        lng: 170.9804389
+  - day: 11
+    title: Back to Christchurch
+    shortTitle: Christchurch Again
+    descriptions:
+      - Back in Christchurch again.
+    photos:
+      - src: https://blog-img.774352199.xyz/8z5TCg.webp
+        alt: Victorian Precinct, 1
+        caption: Oamaru has New Zealand's best-preserved Victorian buildings. These shops along the street were all built in the Victorian era. The real thing.
+        lat: -45.1029917
+        lng: 170.9704889
+      - src: https://blog-img.774352199.xyz/tLSt67.webp
+        alt: Victorian Precinct, 2
+        caption: Proper old-world charm.
+        lat: -45.1037833
+        lng: 170.9703222
+      - src: https://blog-img.774352199.xyz/6q6Sc3.webp
+        alt: A brewery-themed pub
+        caption: It wasn't just brewery-themed. The whole pub had been converted from an old brewery.
+        lat: -45.1044389
+        lng: 170.9701528
+      - src: https://blog-img.774352199.xyz/i45tfX.webp
+        alt: A street in town
+        caption: That's one hell of a hill.
+        lat: -45.1044583
+        lng: 170.9701389
+      - src: https://blog-img.774352199.xyz/v3pqza.webp
+        alt: Victorian Precinct, 3
+        caption: Some of the buildings have become exhibition spaces, displaying objects from those days.
+        lat: -45.1041528
+        lng: 170.97
+      - src: https://blog-img.774352199.xyz/FJdj5W.webp
+        alt: Casino
+        caption: We got back to Christchurch late in the afternoon. Only on this second visit did I notice the casino beside our hotel.
+        lat: -43.5262361
+        lng: 172.6329806
+      - src: https://blog-img.774352199.xyz/6ZpQGA.webp
+        alt: Domino’s, the local way
+        caption: We went to a nearby Domino's for some pizza. They offered dine-in, but seemed completely unprepared for anyone to do it. The pizza came in a takeaway box, with no disposable gloves or cutlery. So we went Indian-style and ate with our hands.
+        lat: -43.520325
+        lng: 172.6270306
+      - src: https://blog-img.774352199.xyz/SwX5R5.webp
+        alt: Clock tower
+        caption: "My girlfriend pointed out a clock tower as we walked past. It took me a moment: where was the bell? In Chinese, the same word can mean either a clock or a bell. I'd been picturing one of the traditional bell towers back home."
+        lat: -43.5247778
+        lng: 172.6309972
+      - src: https://blog-img.774352199.xyz/BVh9nE.webp
+        alt: A stone at the foot of the clock tower
+        caption: Inscribed with the names of the mayor, architect and town clerk of the time.
+        lat: -43.5246778
+        lng: 172.6308444
+      - src: https://blog-img.774352199.xyz/tGwjkj.webp
+        alt: Statue of James Cook
+        caption: A Royal Navy captain who raised the British flag in New Zealand and surveyed the surrounding coast. That explains the big red X someone had spray-painted across his statue.
+        lat: -43.5280139
+        lng: 172.6356056
+      - src: https://blog-img.774352199.xyz/KJb1NP.webp
+        alt: Boer War memorial
+        caption: New Zealand answered Britain's call during the Boer War and sent more than six thousand soldiers. Apparently the country was swept up in an intense, almost feverish wave of patriotism, with any anti-war speech or activity suppressed.
+        lat: -43.5284389
+        lng: 172.6361389
+      - src: https://blog-img.774352199.xyz/oqEewr.webp
+        alt: Statue of Queen Victoria
+        lat: -43.5284361
+        lng: 172.6362
+      - src: https://blog-img.774352199.xyz/DIdPIJ.webp
+        alt: World war memorial in Cathedral Square
+        caption: The central inscription commemorates the people of Canterbury who served in the First World War. After the Second World War, its start and end dates were added on either side, presumably to commemorate both wars together.
+        lat: -43.5306444
+        lng: 172.6362306
+      - src: https://blog-img.774352199.xyz/X9wdRF.webp
+        alt: Public artwork
+        caption: “Love is rife”, meaning love is everywhere. Inside the metal cage were stones of all shapes and sizes, covered in messages longing for love.
+        lat: -43.5308833
+        lng: 172.6361833
+      - src: https://blog-img.774352199.xyz/YCYjhA.webp
+        alt: Street scenes, 1
+        lat: -43.5330556
+        lng: 172.6395556
+      - src: https://blog-img.774352199.xyz/GtkQ7z.webp
+        alt: Street scenes, 2
+        caption: Some distinctive street art.
+        lat: -43.5352222
+        lng: 172.6394806
+      - src: https://blog-img.774352199.xyz/qbMxv0.webp
+        alt: Street scenes, 3
+        lat: -43.5353389
+        lng: 172.6397556
+      - src: https://blog-img.774352199.xyz/ZUS5Mv.webp
+        alt: Street scenes, 4
+        lat: -43.5329444
+        lng: 172.6379861
+  - day: 12
+    title: Heading Home
+    shortTitle: Heading Home
+    descriptions:
+      - Well then, time to say goodbye.
+    photos:
+      - src: https://blog-img.774352199.xyz/MRenfB.webp
+        alt: Kaikōura Peninsula
+        caption: On the flight back to Auckland, I spotted a piece of land jutting into the sea. It was the Kaikōura Peninsula.
+        lat: -42.342821
+        lng: 173.066036
+      - src: https://blog-img.774352199.xyz/ZAn49C.webp
+        alt: Above the clouds, 1
+        lat: -37.591716
+        lng: 174.810363
+      - src: https://blog-img.774352199.xyz/ZLLr33.webp
+        alt: Above the clouds, 2
+        lat: -36.957839
+        lng: 175.062238
+      - src: https://blog-img.774352199.xyz/3dkScN.webp
+        alt: Above the clouds, 3
+        caption: New Zealand has a population of just over five million, with nearly two million in Auckland alone. From the air, the city looked enormous.
+        lat: -36.950434
+        lng: 175.009597
+      - src: https://blog-img.774352199.xyz/nqyrvc.webp
+        alt: Dash 8-300
+        caption: An Air New Zealand twin-engine turboprop. You don't see many propeller planes in commercial passenger service these days.
+        lat: -37.0062
+        lng: 174.8074
+      - src: https://blog-img.774352199.xyz/qDMHeI.webp
+        alt: Waiting for the transfer bus
+        lat: -37.0061639
+        lng: 174.7914417
+      - src: https://blog-img.774352199.xyz/A0a2g9.webp
+        alt: Chinese food at the terminal
+        caption: The beef fried rice was good. The bean sprouts on the fried rice noodles were raw, which I wasn't quite used to.
+        lat: -37.0050556
+        lng: 174.7832333
+      - src: https://blog-img.774352199.xyz/V0i5GJ.webp
+        alt: Still can’t sleep
+        caption: "On the flight home, we had the very last row: just two seats in a space meant for three. Lovely and roomy. Unfortunately, the flight was bumpy for hours, and I still couldn't sleep."
+        lat: -37.0053722
+        lng: 174.7791444
+      - src: https://blog-img.774352199.xyz/egVOmU.webp
+        alt: A little horse on the baggage carousel at Pudong Airport
+        lat: 31.1548472
+        lng: 121.8051389

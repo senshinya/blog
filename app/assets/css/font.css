@@ -35,6 +35,13 @@
 	}
 }
 
+/* CJK fonts give curly apostrophes a full-em advance; English needs Latin metrics. */
+:lang(en) {
+	--font-serif: Georgia, "Times New Roman", serif;
+	--font-creative: "InterVariable", system-ui, sans-serif;
+	--font-stroke-free: "InterVariable", system-ui, sans-serif;
+}
+
 /* 中日共用汉字字形不同（直、骨、今、令 等），日语页面须落到 JP 字库。
 
    --font-creative / --font-stroke-free 在 :root 里第一顺位是抖音美好体
