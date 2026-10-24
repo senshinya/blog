@@ -64,6 +64,14 @@ export default [
 				avatar: 'https://www.weitao-jiang.cn/images/avatar.jpg',
 				icon: getFavicon('https://www.weitao-jiang.cn'),
 			},
+			{
+				author: 'Ashes Born',
+				sitenick: 'Ashes Space',
+				desc: '独立工程师，写 GraphRAG / TypeScript / 检索基础设施',
+				link: 'https://blog.ashesborn.cloud',
+				avatar: 'https://blog.ashesborn.cloud/avatar.jpg',
+				icon: getFavicon('https://blog.ashesborn.cloud'),
+			},
 		],
 	},
 ] satisfies FeedGroup[]
