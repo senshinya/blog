@@ -2,15 +2,34 @@ import assert from 'node:assert/strict'
 // eslint-disable-next-line test/no-import-node-test -- Repository Node test runner.
 import test from 'node:test'
 import { createTravelBasemapLoader, normalizeTravelBasemap, normalizeTravelTrackColor, travelMapInteractive, travelTrackColors } from './travelMapSettings.ts'
+import { travelMapColors } from './travelTheme.ts'
 
-test('invalid saved settings fall back to the existing map and muted blue', () => {
+test('track colors have strong contrast against light and dark map paper', () => {
+	function luminance(hex: string) {
+		const channels = hex.slice(1).match(/../g)!.map((channel) => {
+			const value = Number.parseInt(channel, 16) / 255
+			return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4
+		})
+		return channels[0]! * 0.2126 + channels[1]! * 0.7152 + channels[2]! * 0.0722
+	}
+	for (const theme of ['light', 'dark'] as const) {
+		const paper = luminance(travelMapColors('mono', theme).paper)
+		for (const [name, colors] of Object.entries(travelTrackColors)) {
+			const track = luminance(colors[theme])
+			assert.ok((Math.max(paper, track) + 0.05) / (Math.min(paper, track) + 0.05) >= 4.5, `${theme} ${name} must remain clearly visible`)
+		}
+	}
+})
+
+test('invalid saved settings fall back to the existing map and orange tracks', () => {
 	for (const value of [null, '', 'invalid', '__proto__', 3]) {
 		assert.equal(normalizeTravelBasemap(value), 'simple')
-		assert.equal(normalizeTravelTrackColor(value), 'blue')
+		assert.equal(normalizeTravelTrackColor(value), 'orange')
 	}
 	assert.equal(normalizeTravelBasemap('hybrid'), 'hybrid')
 	assert.equal(normalizeTravelTrackColor('sage'), 'sage')
-	assert.equal(Object.keys(travelTrackColors).length, 5)
+	assert.equal(normalizeTravelTrackColor('orange'), 'orange')
+	assert.equal(Object.keys(travelTrackColors).length, 6)
 })
 
 test('satellite exploration locks all input while the simple map remains interactive', () => {

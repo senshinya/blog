@@ -237,6 +237,7 @@ const zh = {
 				satelliteUnavailable: '卫星图暂未配置',
 				basemapFailed: '底图加载失败，已返回简洁地图',
 				trackColor: '轨迹颜色',
+				track_orange: '橙色',
 				track_blue: '雾蓝',
 				track_sage: '鼠尾草绿',
 				track_clay: '陶土棕',

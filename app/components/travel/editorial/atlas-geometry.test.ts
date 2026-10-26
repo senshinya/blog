@@ -10,6 +10,35 @@ const photos = [photo(0, 0, 31.23, 121.47), photo(1, 1, 35.01, 135.77), photo(2,
 test('intro keeps Shanghai and Japan in the real trip extent', () => {
 	assert.deepEqual(atlasSelection(photos, 'intro').points.map(p => p.index), [0, 1, 2])
 })
+test('explicit cover bounds frame the destination despite distant photos and selected tracks', async () => {
+	const { atlasOverviewPoints } = await import('./atlas-geometry.ts')
+	const coverMap = { bounds: [[166, -47], [175, -40]], tracks: { days: [2] } } as const
+	const selection = atlasSelection(photos, 'intro', -1, coverMap as any)
+	const tracks = [{ chapter: 1, day: 2, segments: [[[121, 31], [171, -44]]] }] as any
+	for (const visible of [false, true])
+		assert.deepEqual(atlasOverviewPoints(selection, tracks, visible), [{ lng: 166, lat: -47 }, { lng: 175, lat: -40 }])
+})
+test('cover route bounds include only selected chapters and all chapters on selected days even with tracks off', async () => {
+	const { atlasOverviewPoints } = await import('./atlas-geometry.ts')
+	const tracks = [
+		{ chapter: 0, day: 0, segments: [[[120, 30], [121, 31]]] },
+		{ chapter: 1, day: 7, segments: [[[170, -44], [171, -43]]] },
+		{ chapter: 2, day: 7, segments: [[[172, -44], [173, -43]]] },
+	] as any
+	const selection = atlasSelection(photos, 'intro', -1, { tracks: { days: [7] } })
+	assert.deepEqual(atlasOverviewPoints(selection, tracks, false), [...selection.points, ...tracks.slice(1).flatMap((track: any) => track.segments.flat().map(([lng, lat]: number[]) => ({ lng, lat })))])
+	const empty = atlasSelection(photos, 'intro', -1, { tracks: { chapters: [] } })
+	assert.deepEqual(atlasOverviewPoints(empty, tracks, true), empty.points)
+})
+test('cover settings never change chapter, photo or viewer focus scope', async () => {
+	const { atlasOverviewPoints } = await import('./atlas-geometry.ts')
+	const coverMap = { bounds: [[166, -47], [175, -40]], tracks: { days: [7] } } as any
+	for (const [node, focus] of [['chapter-1', -1], ['photo-2', -1], ['intro', 2]] as const) {
+		const selection = atlasSelection(photos, node, focus, coverMap)
+		assert.equal(selection.coverMap, undefined)
+		assert.deepEqual(atlasOverviewPoints(selection), selection.points)
+	}
+})
 test('chapter scope excludes neighboring chapters and invalid coordinates', () => {
 	assert.deepEqual(atlasSelection(photos, 'chapter-1').points.map(p => p.index), [1, 2])
 	assert.deepEqual(atlasSelection(photos, 'chapter-2').points, [])

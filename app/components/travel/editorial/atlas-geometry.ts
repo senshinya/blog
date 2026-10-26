@@ -1,26 +1,29 @@
-import type { TravelTrack } from '../../../types/travel.ts'
+import type { TravelCoverMap, TravelTrack } from '../../../types/travel.ts'
 import type { StoryPhoto } from '../../../utils/travelStory.ts'
+import { normalizeTravelCoverMap } from '../../../utils/travelCoverMap.ts'
 import { hasTravelCoordinates } from '../../../utils/travelStory.ts'
+import { atlasTrackMatches } from './atlas-tracks.ts'
 
 export type LocatedStoryPhoto = StoryPhoto & { lat: number, lng: number }
 
-/** The cover includes every real coordinate, including far-away departure points. */
-export function atlasSelection(photos: StoryPhoto[], node: string, focusIndex = -1): { points: LocatedStoryPhoto[], chapter: number, overview: boolean, selected?: LocatedStoryPhoto } {
+/** Cover overrides apply only to intro; focused photos always keep their reading scope. */
+export function atlasSelection(photos: StoryPhoto[], node: string, focusIndex = -1, coverMap?: TravelCoverMap): { points: LocatedStoryPhoto[], chapter: number, overview: boolean, selected?: LocatedStoryPhoto, coverMap?: TravelCoverMap } {
 	const index = focusIndex >= 0 ? focusIndex : /^photo-\d+$/.test(node) ? Number(node.slice(6)) : -1
 	const focus = photos.find(photo => photo.index === index)
 	const chapter = focus?.chapter ?? (/^chapter-\d+$/.test(node) ? Number(node.slice(8)) : -1)
 	const overview = focus?.mapView === 'day'
 	const points = photos.filter((photo): photo is LocatedStoryPhoto => hasTravelCoordinates(photo) && (overview ? photo.day === focus.day : chapter < 0 || photo.chapter === chapter))
-	return { points, chapter, overview, selected: focus && hasTravelCoordinates(focus) ? focus as LocatedStoryPhoto : undefined }
+	return { points, chapter, overview, selected: focus && hasTravelCoordinates(focus) ? focus as LocatedStoryPhoto : undefined, coverMap: node === 'intro' && index < 0 ? normalizeTravelCoverMap(coverMap) : undefined }
 }
 
 /** Overview bounds follow the same chapter/day scope as the visible track layers. */
 export function atlasOverviewPoints(selection: ReturnType<typeof atlasSelection>, tracks: TravelTrack[] = [], tracksVisible = false): { lng: number, lat: number }[] {
-	if (!tracksVisible)
+	if (selection.coverMap?.bounds)
+		return selection.coverMap.bounds.map(([lng, lat]) => ({ lng, lat }))
+	const coverTracks = selection.coverMap?.tracks
+	if (!tracksVisible && !coverTracks)
 		return selection.points
-	const route = tracks.filter(track => selection.overview && selection.selected
-		? track.day === selection.selected.day
-		: selection.chapter < 0 || track.chapter === selection.chapter)
+	const route = tracks.filter(track => atlasTrackMatches(track, selection))
 	return [...selection.points, ...route.flatMap(track => track.segments.flat().map(([lng, lat]) => ({ lng, lat })))]
 }
 

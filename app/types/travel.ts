@@ -45,6 +45,18 @@ export interface TravelTrack {
 	segments: [number, number][][]
 }
 
+export interface TravelCoverMap {
+	/** 封面取景边界：西南、东北两角，坐标顺序为 [经度, 纬度]。 */
+	bounds?: [[number, number], [number, number]]
+	/** 配置后封面固定显示这些轨迹，不受正文轨迹开关影响。空对象表示全部轨迹。 */
+	tracks?: {
+		/** 从 1 开始的章节序号；与 days 同时配置时取并集。 */
+		chapters?: number[]
+		/** 对应 TravelDay.day；同一天的多章全部包含，支持出发前夜 day 0。 */
+		days?: number[]
+	}
+}
+
 export interface Travel {
 	/** 与文件名、URL 一致：app/travels/<slug>.yaml → /travels/<slug> */
 	slug: string
@@ -60,6 +72,7 @@ export interface Travel {
 	totaldays: number
 	coverImage: string
 	coverCaption?: string
+	coverMap?: TravelCoverMap
 	ending?: string
 	days: TravelDay[]
 	/** Loaded from the sibling .tracks.json after draft filtering. */

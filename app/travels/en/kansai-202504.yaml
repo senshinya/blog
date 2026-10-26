@@ -10,6 +10,10 @@ published: 2025-05-19
 totaldays: 3
 coverImage: https://blog-img.774352199.xyz/46z6bG.png
 coverCaption: Kasuga Taisha
+coverMap:
+  bounds:
+    - [134, 33.3]
+    - [137.1, 36]
 ending: Happy days always pass too quickly.
 days:
   - day: 0

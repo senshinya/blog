@@ -306,6 +306,7 @@ onMounted(async () => {
 			canvas: canvas.value,
 			photos: photos.value,
 			tracks: props.travel.tracks,
+			coverMap: props.travel.coverMap,
 			locale: locale.value,
 			apiKey: String(arcgisApiKey),
 			onBasemap: (value, attribution) => {

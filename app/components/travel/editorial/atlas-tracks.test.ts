@@ -70,3 +70,32 @@ test('tracks start hidden and toggling changes both layers without replacing the
 		assert.equal(layer.layout.visibility, 'none')
 	assert.equal(target.sources.get('travel-tracks'), source)
 })
+
+test('configured cover tracks stay visible and filter by one-based chapters or actual days', async () => {
+	const { installAtlasTracks, paintAtlasTracks } = await import('./atlas-tracks.ts')
+	const target = map()
+	installAtlasTracks(target as any, tracks)
+	const colors = { track: '#637f91', paper: '#f5f5f7' }
+	const scope = { chapter: -1, overview: false, coverMap: { tracks: { chapters: [1, 3], days: [7] } } }
+	for (const visible of [false, true]) {
+		paintAtlasTracks(target as any, scope, colors, visible)
+		assert.deepEqual(target.layers.get('travel-track-line').filter, ['any', ['in', ['get', 'chapter'], ['literal', [0, 2]]], ['in', ['get', 'day'], ['literal', [7]]]])
+		for (const layer of target.layers.values())
+			assert.equal(layer.layout.visibility, 'visible')
+	}
+	paintAtlasTracks(target as any, { chapter: 0, overview: false }, colors, false)
+	assert.equal(target.layers.get('travel-track-line').layout.visibility, 'none')
+	assert.deepEqual(target.layers.get('travel-track-line').filter, ['==', ['get', 'chapter'], 0])
+})
+
+test('empty cover selections match no routes while an empty track object selects all routes', async () => {
+	const { installAtlasTracks, paintAtlasTracks } = await import('./atlas-tracks.ts')
+	const target = map()
+	installAtlasTracks(target as any, tracks)
+	const colors = { track: '#637f91', paper: '#f5f5f7' }
+	paintAtlasTracks(target as any, { chapter: -1, overview: false, coverMap: { tracks: { days: [] } } } as any, colors)
+	assert.deepEqual(target.layers.get('travel-track-line').filter, ['in', ['get', 'day'], ['literal', []]])
+	paintAtlasTracks(target as any, { chapter: -1, overview: false, coverMap: { tracks: {} } } as any, colors)
+	assert.equal(target.layers.get('travel-track-line').filter, null)
+	assert.equal(target.layers.get('travel-track-line').layout.visibility, 'visible')
+})

@@ -235,6 +235,7 @@ const en: MessageSchema = {
 				satelliteUnavailable: 'Satellite is not configured',
 				basemapFailed: 'Basemap unavailable. Simple map restored.',
 				trackColor: 'Track color',
+				track_orange: 'Orange',
 				track_blue: 'Mist blue',
 				track_sage: 'Sage',
 				track_clay: 'Clay',

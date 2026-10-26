@@ -1,17 +1,17 @@
 import type { FeatureCollection, Point } from 'geojson'
 import type { AllPaintProperties, ExpressionSpecification, GeoJSONSource, Map as MapLibreMap, NavigationControl, PaddingOptions, StyleSpecification } from 'maplibre-gl'
-import type { TravelTrack } from '../../../types/travel.ts'
+import type { TravelCoverMap, TravelTrack } from '../../../types/travel.ts'
 import type { TravelBasemap, TravelTrackColor } from '../../../utils/travelMapSettings.ts'
 import type { StoryPhoto } from '../../../utils/travelStory.ts'
 import type { TravelPalette } from '../../../utils/travelTheme.ts'
 import type { LocatedStoryPhoto } from './atlas-geometry.ts'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { getTravelMapLabelField } from '../../../utils/travelMapLocale.ts'
-import { createTravelBasemapLoader, isSatelliteBasemap, travelMapInteractive, travelStyleAttribution, travelTrackColors } from '../../../utils/travelMapSettings.ts'
+import { createTravelBasemapLoader, defaultTravelTrackColor, isSatelliteBasemap, travelMapInteractive, travelStyleAttribution, travelTrackColors } from '../../../utils/travelMapSettings.ts'
 import { travelMotion, travelMotionEase } from '../../../utils/travelMotion.ts'
 import { neutralTravelPaint, travelMapColors } from '../../../utils/travelTheme.ts'
 import { atlasMobileBackdropPadding, atlasMobileCaptionWashTail, atlasMobileChapterRegion, atlasOverviewPoints, atlasPeekVisible, atlasSelection, atlasSnapshotEligible, atlasSnapshotsPaused, atlasVeil, atlasViewerPadding } from './atlas-geometry.ts'
-import { installAtlasTracks, paintAtlasTracks } from './atlas-tracks.ts'
+import { atlasHasVisibleTracks, installAtlasTracks, paintAtlasTracks } from './atlas-tracks.ts'
 import darkStyle from './map-styles/dark.json'
 import lightStyle from './map-styles/light.json'
 // This module is loaded by the editorial route only, including its CSS chunk.
@@ -46,6 +46,7 @@ interface AtlasOptions {
 	mobileBackdrop?: HTMLElement
 	photos: StoryPhoto[]
 	tracks?: TravelTrack[]
+	coverMap?: TravelCoverMap
 	locale: string
 	apiKey?: string
 	onBasemap?: (basemap: TravelBasemap, attribution: string) => void
@@ -68,7 +69,7 @@ function pointData(photos: LocatedStoryPhoto[]): FeatureCollection<Point> {
 }
 
 export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAtlas> {
-	const { root, scroller, canvas, mobileBackdrop, photos, tracks, locale, labels, getState, onMove, onFailure } = options
+	const { root, scroller, canvas, mobileBackdrop, photos, tracks, coverMap, locale, labels, getState, onMove, onFailure } = options
 	let disposed = false
 	let ready = false
 	let failureReported = false
@@ -114,7 +115,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 
 	function mapColors() {
 		const state = getState()
-		return { ...travelMapColors(state.palette, state.basemap === 'simple' ? state.theme : 'light'), track: travelTrackColors[state.trackColor ?? 'blue'][isSatelliteBasemap(state.basemap) ? 'dark' : state.basemap !== 'simple' ? 'light' : state.theme] }
+		return { ...travelMapColors(state.palette, state.basemap === 'simple' ? state.theme : 'light'), track: travelTrackColors[state.trackColor ?? defaultTravelTrackColor][isSatelliteBasemap(state.basemap) ? 'dark' : state.basemap !== 'simple' ? 'light' : state.theme] }
 	}
 	function withOverlays(target: MapLibreMap, style: StyleSpecification): StyleSpecification {
 		const current = target.getStyle()
@@ -206,7 +207,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	}
 	function themeKey() {
 		const state = getState()
-		return `${state.theme}:${state.palette}:${state.tracksVisible}:${state.trackColor ?? 'blue'}:${state.basemap ?? 'simple'}`
+		return `${state.theme}:${state.palette}:${state.tracksVisible}:${state.trackColor ?? defaultTravelTrackColor}:${state.basemap ?? 'simple'}`
 	}
 	function liveMapVisible() {
 		const state = getState()
@@ -263,9 +264,12 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		if (state.palette === 'mono' && target.getLayer('background'))
 			target.setPaintProperty('background', 'background-color', travelMapColors(state.palette, state.theme).paper)
 	}
+	function select(node: string, focusIndex = -1) {
+		return atlasSelection(photos, node, focusIndex, coverMap)
+	}
 	function selection() {
 		const state = getState()
-		return atlasSelection(photos, explorationKey ?? state.node, explorationKey === undefined ? state.focusIndex : -1)
+		return select(explorationKey ?? state.node, explorationKey === undefined ? state.focusIndex : -1)
 	}
 	function installPoints(target: MapLibreMap) {
 		target.addSource(sourceId, { type: 'geojson', data: pointData(atlasSelection(photos, 'intro').points) })
@@ -284,34 +288,36 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 	function paintPoints() {
 		if (!map || !ready)
 			return
-		const { points, chapter, selected } = selection()
+		const scope = selection()
+		const { points, chapter, selected } = scope
 		const index = selected?.index ?? -1
 		const colors = mapColors()
-		paintAtlasTracks(map, selection(), colors, getState().tracksVisible)
+		const showPoints = Boolean(selected) || !atlasHasVisibleTracks(scope, tracks, getState().tracksVisible)
+		paintAtlasTracks(map, scope, colors, getState().tracksVisible)
 		const active: ExpressionSpecification = ['==', ['get', 'index'], index]
 		for (const id of ['photo-halo', 'photo-points', 'photo-centers']) {
 			map.setFilter(id, chapter >= 0 ? ['in', ['get', 'index'], ['literal', points.map(photo => photo.index)]] : null)
-			map.setLayoutProperty(id, 'visibility', chapter >= 0 ? 'visible' : 'none')
+			map.setLayoutProperty(id, 'visibility', chapter >= 0 && showPoints ? 'visible' : 'none')
 		}
 		for (const id of ['cover-points', 'cover-centers'])
-			map.setLayoutProperty(id, 'visibility', chapter < 0 ? 'visible' : 'none')
+			map.setLayoutProperty(id, 'visibility', chapter < 0 && showPoints ? 'visible' : 'none')
 		for (const id of ['photo-current-ring', 'photo-current-center']) {
 			map.setFilter(id, ['==', ['get', 'index'], index])
 			map.setLayoutProperty(id, 'visibility', index >= 0 ? 'visible' : 'none')
 		}
 		for (const id of ['photo-current-ring', 'photo-points', 'cover-points']) {
 			map.setPaintProperty(id, 'circle-color', colors.paper)
-			map.setPaintProperty(id, 'circle-stroke-color', id === 'photo-current-ring' ? colors.accent : colors.muted)
+			map.setPaintProperty(id, 'circle-stroke-color', colors.accent)
 		}
 		for (const id of ['photo-current-center', 'photo-halo', 'cover-centers'])
 			map.setPaintProperty(id, 'circle-color', colors.accent)
-		map.setPaintProperty('cover-centers', 'circle-radius', 0)
+		map.setPaintProperty('cover-centers', 'circle-radius', 1.4)
 		map.setPaintProperty('photo-halo', 'circle-opacity', ['case', active, 0.09, 0])
 		map.setPaintProperty('photo-points', 'circle-radius', index >= 0 ? ['case', active, 10, 5] : 5.5)
-		map.setPaintProperty('photo-points', 'circle-stroke-color', index >= 0 ? ['case', active, colors.accent, colors.muted] : colors.muted)
+		map.setPaintProperty('photo-points', 'circle-stroke-color', index >= 0 ? ['case', active, colors.accent, colors.muted] : colors.accent)
 		map.setPaintProperty('photo-points', 'circle-stroke-width', ['case', active, 1.5, 1])
 		map.setPaintProperty('photo-centers', 'circle-color', colors.accent)
-		map.setPaintProperty('photo-centers', 'circle-radius', index >= 0 ? ['case', active, 4, 0] : 0)
+		map.setPaintProperty('photo-centers', 'circle-radius', index >= 0 ? ['case', active, 4, 0] : 2)
 	}
 	function padding(): Required<PaddingOptions> {
 		if (!map)
@@ -394,7 +400,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 		const { points, selected, overview } = scope
 		const exploring = state.exploring || explorationKey !== undefined
 		const pad = padding()
-		const overviewTracks = (!selected || overview) && state.tracksVisible
+		const overviewTracks = (!selected || overview) && (Boolean(scope.coverMap?.tracks) || state.tracksVisible)
 		const key = `${explorationKey ?? state.node}:${state.focusIndex}:${state.mobile}:${exploring}:${state.viewer}:${overviewTracks}:${JSON.stringify(pad)}`
 		if (!force && key === cameraKey)
 			return
@@ -545,7 +551,10 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 				snapshotFrame(peek)
 			return
 		}
-		if (disposed || !snapshotEligible(peek) || snapshotBroken || !key || !image || !atlasSelection(photos, key).points.length)
+		if (disposed || !snapshotEligible(peek) || snapshotBroken || !key || !image)
+			return
+		const scope = select(key)
+		if (!scope.points.length && !atlasOverviewPoints(scope, tracks, getState().tracksVisible).length)
 			return
 		const theme = themeKey()
 		const frame = snapshotFrame(peek)
@@ -631,13 +640,13 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 					paintSnapshot(item.image, cached)
 					continue
 				}
-				const scope = atlasSelection(photos, item.key)
+				const scope = select(item.key)
 				const { points, selected, overview } = scope
 				const chapter = item.key.startsWith('chapter-')
 				const intro = item.key === 'intro'
 				const list = points
 				const boundsPoints = atlasOverviewPoints(scope, tracks, (!selected || overview) && getState().tracksVisible)
-				if (!list.length)
+				if (!boundsPoints.length)
 					continue
 				const { width, height } = item
 				renderer.style.width = `${width}px`
@@ -664,12 +673,15 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 				}
 				paintBasemap(snapshotMap, true)
 				const colors = mapColors()
-				paintAtlasTracks(snapshotMap, atlasSelection(photos, item.key), colors, getState().tracksVisible)
+				paintAtlasTracks(snapshotMap, scope, colors, getState().tracksVisible)
+				const showPoints = Boolean(selected) || !atlasHasVisibleTracks(scope, tracks, getState().tracksVisible)
+				for (const id of ['snapshot-pin', 'snapshot-center'])
+					snapshotMap.setLayoutProperty(id, 'visibility', showPoints ? 'visible' : 'none')
 				snapshotMap.setPaintProperty('snapshot-pin', 'circle-color', colors.paper)
 				const active: ExpressionSpecification = ['==', ['get', 'index'], selected?.index ?? -1]
 				snapshotMap.setPaintProperty('snapshot-pin', 'circle-radius', selected ? ['case', active, 8, 3.8] : intro ? 3 : 5.5)
-				snapshotMap.setPaintProperty('snapshot-pin', 'circle-stroke-color', selected ? ['case', active, colors.accent, colors.muted] : colors.muted)
-				snapshotMap.setPaintProperty('snapshot-center', 'circle-radius', selected ? ['case', active, 3, 0] : 0)
+				snapshotMap.setPaintProperty('snapshot-pin', 'circle-stroke-color', selected ? ['case', active, colors.accent, colors.muted] : colors.accent)
+				snapshotMap.setPaintProperty('snapshot-center', 'circle-radius', selected ? ['case', active, 3, 0] : intro ? 1.4 : 2)
 				snapshotMap.setPaintProperty('snapshot-center', 'circle-color', colors.accent)
 				;(snapshotMap.getSource('snapshot-position') as GeoJSONSource).setData(pointData(list))
 				const settled = waitFor(snapshotMap, 'idle', 4500)
@@ -869,8 +881,8 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			explorationKey = key
 			if (keepExplorationView) {
 				map!.stop()
-				const { selected, overview } = selection()
-				explorationTracksVisible = (!selected || overview) && getState().tracksVisible
+				const scope = selection()
+				explorationTracksVisible = (!scope.selected || scope.overview) && (Boolean(scope.coverMap?.tracks) || getState().tracksVisible)
 			}
 			if (container)
 				container.append(canvas)

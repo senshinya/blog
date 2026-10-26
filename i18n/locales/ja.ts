@@ -235,6 +235,7 @@ const ja: MessageSchema = {
 				satelliteUnavailable: '衛星画像は未設定です',
 				basemapFailed: '背景地図を読み込めないため標準地図に戻しました',
 				trackColor: '軌跡の色',
+				track_orange: 'オレンジ',
 				track_blue: 'ミストブルー',
 				track_sage: 'セージ',
 				track_clay: 'テラコッタ',

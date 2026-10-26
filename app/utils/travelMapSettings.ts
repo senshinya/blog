@@ -3,17 +3,19 @@ import type { StyleSpecification } from 'maplibre-gl'
 export type TravelBasemap = 'simple' | 'osm' | 'satellite' | 'hybrid'
 export type TravelTrackColor = keyof typeof travelTrackColors
 export const travelTrackColors = {
-	blue: { light: '#637f91', dark: '#9fb6c5' },
-	sage: { light: '#70846b', dark: '#abbda2' },
-	clay: { light: '#a07866', dark: '#d1aa92' },
-	violet: { light: '#86768e', dark: '#bcb0c7' },
-	pink: { light: '#a77c86', dark: '#d4aeb7' },
+	orange: { light: '#ae5700', dark: '#ffb15c' },
+	blue: { light: '#296a98', dark: '#80bce5' },
+	sage: { light: '#3f744d', dark: '#9dcc9b' },
+	clay: { light: '#a4513e', dark: '#dc9a78' },
+	violet: { light: '#79539e', dark: '#bf9ce2' },
+	pink: { light: '#a84666', dark: '#e6a1b7' },
 } as const
+export const defaultTravelTrackColor: TravelTrackColor = 'orange'
 export function normalizeTravelBasemap(value: unknown): TravelBasemap {
 	return value === 'osm' || value === 'satellite' || value === 'hybrid' ? value : 'simple'
 }
 export function normalizeTravelTrackColor(value: unknown): TravelTrackColor {
-	return typeof value === 'string' && Object.hasOwn(travelTrackColors, value) ? value as TravelTrackColor : 'blue'
+	return typeof value === 'string' && Object.hasOwn(travelTrackColors, value) ? value as TravelTrackColor : defaultTravelTrackColor
 }
 export function isSatelliteBasemap(basemap: TravelBasemap) {
 	return basemap === 'satellite' || basemap === 'hybrid'

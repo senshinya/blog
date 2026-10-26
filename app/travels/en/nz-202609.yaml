@@ -10,6 +10,12 @@ published: 2026-10-13
 totaldays: 13
 coverImage: https://blog-img.774352199.xyz/S69z5t.png
 coverCaption: Snowy mountains and sea in Kaikōura
+coverMap:
+  bounds:
+    - [165.5, -48]
+    - [179.5, -33.5]
+  tracks:
+    chapters: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 ending: Well then, time to say goodbye.
 days:
   - day: 1

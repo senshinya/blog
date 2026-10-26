@@ -10,11 +10,13 @@ import { neutralTravelPaint, travelMapColors } from '../../../utils/travelTheme.
 import * as geometry from './atlas-geometry.ts'
 import * as trackLayers from './atlas-tracks.ts'
 
-async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false, snapshots = false, requestStyle?: typeof fetch, tracks: any[] = []) {
+async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false, snapshots = false, requestStyle?: typeof fetch, tracks: any[] = [], coverMap?: unknown, storyPhotos?: any[]) {
 	const intersections: ((entries: unknown[]) => void)[] = []
 	const allocations: any[] = []
 	const cameras: any[] = []
 	const paints: any[] = []
+	const filters: any[] = []
+	const layouts: any[] = []
 	const swaps: any[] = []
 	const basemapEvents: string[] = []
 	let styleLoaded: (() => void) | undefined
@@ -94,9 +96,9 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 		addLayer(layer: any) { this.layers.set(layer.id, layer) }
 		addSource(id: string) { this.sources.set(id, { setData() {} }) }
 		getSource(id: string) { return this.sources.get(id) }
-		setFilter() {}
+		setFilter(id: string, filter: unknown) { filters.push({ id, filter }) }
 		setPaintProperty(id: string, key: string, value: unknown) { paints.push({ id, key, value }) }
-		setLayoutProperty() {}
+		setLayoutProperty(id: string, key: string, value: unknown) { layouts.push({ id, key, value }) }
 		setPixelRatio() {}
 		addControl() {}
 		removeControl() {}
@@ -148,15 +150,15 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 		IntersectionObserver: Intersection,
 		MutationObserver: Mutation,
 		ResizeObserver: Observer,
-		options: { root, canvas, mobileBackdrop: continuous ? backdrop : undefined, scroller, photos: continuous || snapshots
+		options: { root, canvas, mobileBackdrop: continuous ? backdrop : undefined, scroller, photos: storyPhotos ?? (continuous || snapshots
 			? [
 					{ index: 0, day: 0, chapter: 0, lat: 31.15, lng: 121.8, get mapZoomOffset() { return photoZoomOffset.value } },
 					{ index: 1, day: 0, chapter: 0, lat: 31.16, lng: 121.81 },
 					{ index: 2, day: 0, chapter: 1, lat: 34.2, lng: 135.5, mapView: 'day' },
 				]
-			: [], tracks, apiKey: requestStyle ? 'test-key' : '', onBasemap: (value: string) => basemapEvents.push(value), locale: 'zh', labels: {}, getState: () => state, onMove() {}, onFailure() {} },
+			: []), tracks, coverMap, apiKey: requestStyle ? 'test-key' : '', onBasemap: (value: string) => basemapEvents.push(value), locale: 'zh', labels: {}, getState: () => state, onMove() {}, onFailure() {} },
 	})
-	return { state, allocations, runtime, swaps, basemapEvents, intersections, cameras, paints, encodings: () => encodings, overviewZoom, photoZoomOffset, canvas, home, backdrop, scroller, interactiveClasses, dragEnabled: () => dragEnabled, stopped: () => stopped, removals: () => removals, async loaded() {
+	return { state, allocations, runtime, swaps, basemapEvents, intersections, cameras, paints, filters, layouts, encodings: () => encodings, overviewZoom, photoZoomOffset, canvas, home, backdrop, scroller, interactiveClasses, dragEnabled: () => dragEnabled, stopped: () => stopped, removals: () => removals, async loaded() {
 		load?.()
 		await Promise.resolve()
 		await Promise.resolve()
@@ -165,6 +167,183 @@ async function harness(mobile: boolean, mapPeeks: any[] = [], continuous = false
 		mutations[0]([{ target: scroller, attributeName: 'data-snap-state', addedNodes: [] }])
 	} }
 }
+
+test('cover camera and fixed routes survive the reading track toggle and restore after a chapter', async () => {
+	const tracks = [{ chapter: 0, day: 0, segments: [[[120, 30], [124, 34]]] }]
+	const bounds = [[166, -47], [175, -40]]
+	const h = await harness(false, [], true, false, undefined, tracks, { bounds, tracks: { chapters: [1] } })
+	const lineVisible = () => h.layouts.filter(change => change.id === 'travel-track-line' && change.key === 'visibility').at(-1)?.value
+	try {
+		await h.loaded()
+		assert.deepEqual(JSON.parse(JSON.stringify(h.cameras.at(-1).points)), bounds)
+		assert.equal(lineVisible(), 'visible')
+		const count = h.cameras.length
+		h.state.tracksVisible = true
+		h.runtime.update()
+		h.state.tracksVisible = false
+		h.runtime.update()
+		assert.equal(h.cameras.length, count, 'fixed cover framing ignores the reading route toggle')
+		assert.equal(lineVisible(), 'visible')
+		h.state.node = 'chapter-0'
+		h.runtime.update()
+		assert.deepEqual(JSON.parse(JSON.stringify(h.cameras.at(-1).points)), [[121.8, 31.15], [121.81, 31.16]])
+		assert.equal(lineVisible(), 'none')
+		h.state.node = 'intro'
+		h.runtime.update()
+		assert.deepEqual(JSON.parse(JSON.stringify(h.cameras.at(-1).points)), bounds)
+		assert.equal(lineVisible(), 'visible')
+	}
+	finally { h.runtime.dispose() }
+})
+
+test('cover snapshots use configured destination bounds and fixed track selection', async () => {
+	let peek: any
+	const image = {
+		dataset: {} as Record<string, string>,
+		src: '',
+		classList: { add() {}, remove() {} },
+		removeAttribute() { this.src = '' },
+		closest: () => peek,
+	}
+	peek = { dataset: { mapImage: 'intro' }, classList: { contains: () => false }, closest: () => null, querySelector: () => image, style: { removeProperty() {} } }
+	const bounds = [[166, -47], [175, -40]]
+	const tracks = [{ chapter: 0, day: 0, segments: [[[120, 30], [124, 34]]] }]
+	const h = await harness(true, [peek], false, true, undefined, tracks, { bounds, tracks: { days: [0] } })
+	try {
+		h.intersections[0]!([{ target: peek, isIntersecting: true }])
+		for (let i = 0; i < 25; i++)
+			await Promise.resolve()
+		assert.ok(image.src.startsWith('data:image/png'))
+		assert.deepEqual(JSON.parse(JSON.stringify(h.cameras.at(-1).points)), bounds)
+		assert.equal(h.layouts.filter(change => change.id === 'travel-track-line' && change.key === 'visibility').at(-1)?.value, 'visible')
+		assert.deepEqual(h.filters.filter(change => change.id === 'travel-track-line').at(-1)?.filter, ['in', ['get', 'day'], ['literal', [0]]])
+	}
+	finally { h.runtime.dispose() }
+})
+
+test('exploring a configured cover retains the camera when reading tracks are off', async () => {
+	const h = await harness(false, [], true, false, undefined, [], { bounds: [[166, -47], [175, -40]], tracks: { days: [7] } })
+	try {
+		await h.loaded()
+		const count = h.cameras.length
+		h.state.exploring = true
+		h.runtime.explore('intro', undefined, true)
+		assert.equal(h.cameras.length, count, 'entering exploration preserves the already framed cover')
+		h.runtime.resize()
+		h.state.tracksVisible = true
+		h.runtime.update()
+		h.state.tracksVisible = false
+		h.runtime.update()
+		assert.equal(h.cameras.length, count, 'reading track changes must not reset a manually explored cover')
+	}
+	finally { h.runtime.dispose() }
+})
+
+test('cover and chapter maps replace photo dots with available routes and restore accent dots otherwise', async () => {
+	for (const mobile of [false, true]) {
+		const tracks = [{ chapter: 0, day: 0, segments: [[[120, 30], [124, 34]]] }, { chapter: 1, day: 0, segments: [] }]
+		const h = await harness(mobile, [], true, false, undefined, tracks)
+		const visible = (id: string) => h.layouts.filter(change => change.id === id && change.key === 'visibility').at(-1)?.value
+		const paint = (id: string, key: string) => h.paints.filter(change => change.id === id && change.key === key).at(-1)?.value
+		try {
+			h.state.tracksVisible = true
+			h.state.node = 'chapter-0'
+			h.runtime.update()
+			await h.loaded()
+			assert.equal(visible('travel-track-line'), 'visible')
+			assert.equal(visible('photo-points'), 'none')
+			assert.equal(visible('photo-centers'), 'none')
+			assert.ok(paint('travel-track-line', 'line-opacity') >= 0.9)
+			h.state.node = 'chapter-1'
+			h.runtime.update()
+			assert.equal(visible('photo-points'), 'visible', 'a chapter without its own route falls back to dots')
+			assert.equal(paint('photo-points', 'circle-stroke-color'), travelMapColors('mono', 'dark').accent)
+			assert.ok(paint('photo-centers', 'circle-radius') > 0)
+			h.state.node = 'photo-0'
+			h.runtime.update()
+			assert.equal(visible('photo-current-ring'), 'visible', 'individual photographs keep their selected point over routes')
+			h.state.node = 'chapter-0'
+			h.state.tracksVisible = false
+			h.runtime.update()
+			assert.equal(visible('photo-points'), 'visible', 'turning routes off restores dots')
+			if (!mobile) {
+				h.state.node = 'intro'
+				h.state.tracksVisible = true
+				h.runtime.update()
+				assert.equal(visible('cover-points'), 'none')
+				h.state.tracksVisible = false
+				h.runtime.update()
+				assert.equal(visible('cover-points'), 'visible')
+				assert.equal(paint('cover-points', 'circle-stroke-color'), travelMapColors('mono', 'dark').accent)
+				assert.ok(paint('cover-centers', 'circle-radius') > 0)
+			}
+		}
+		finally { h.runtime.dispose() }
+	}
+})
+
+test('a configured cover with no matching recorded route keeps photo dots visible', async () => {
+	const h = await harness(false, [], true, false, undefined, [{ chapter: 0, day: 0, segments: [[[120, 30], [124, 34]]] }], { tracks: { chapters: [2] } })
+	try {
+		await h.loaded()
+		assert.equal(h.layouts.filter(change => change.id === 'cover-points').at(-1)?.value, 'visible')
+		assert.equal(h.paints.filter(change => change.id === 'cover-points' && change.key === 'circle-stroke-color').at(-1)?.value, travelMapColors('mono', 'dark').accent)
+	}
+	finally { h.runtime.dispose() }
+})
+
+test('snapshot chapter maps show routes or accent dots while photo snapshots retain their selected pin', async () => {
+	for (const [key, chapter, pins] of [['chapter-0', 0, 'none'], ['chapter-0', 1, 'visible'], ['photo-0', 0, 'visible']] as const) {
+		let peek: any
+		const image = {
+			dataset: {} as Record<string, string>,
+			src: '',
+			classList: { add() {}, remove() {} },
+			removeAttribute() { this.src = '' },
+			closest: () => peek,
+		}
+		peek = { dataset: { mapImage: key }, classList: { contains: () => false }, closest: () => null, querySelector: () => image, style: { removeProperty() {} } }
+		const h = await harness(true, [peek], false, true, undefined, [{ chapter, day: 0, segments: [[[120, 30], [124, 34]]] }])
+		try {
+			h.state.tracksVisible = true
+			h.runtime.update()
+			h.intersections[0]!([{ target: peek, isIntersecting: true }])
+			for (let i = 0; i < 25; i++)
+				await Promise.resolve()
+			assert.ok(image.src.startsWith('data:image/png'))
+			assert.equal(h.layouts.filter(change => change.id === 'snapshot-pin').at(-1)?.value, pins)
+			if (key === 'chapter-0' && pins === 'visible')
+				assert.equal(h.paints.filter(change => change.id === 'snapshot-pin' && change.key === 'circle-stroke-color').at(-1)?.value, travelMapColors('mono', 'dark').accent)
+		}
+		finally { h.runtime.dispose() }
+	}
+})
+
+test('cover and chapter snapshots render recorded routes even when no photograph has coordinates', async () => {
+	for (const key of ['intro', 'chapter-0']) {
+		let peek: any
+		const image = {
+			dataset: {} as Record<string, string>,
+			src: '',
+			classList: { add() {}, remove() {} },
+			removeAttribute() { this.src = '' },
+			closest: () => peek,
+		}
+		peek = { dataset: { mapImage: key }, classList: { contains: () => false }, closest: () => null, querySelector: () => image, style: { removeProperty() {} } }
+		const h = await harness(true, [peek], false, true, undefined, [{ chapter: 0, day: 0, segments: [[[120, 30], [124, 34]]] }], undefined, [])
+		try {
+			h.state.tracksVisible = true
+			h.runtime.update()
+			h.intersections[0]!([{ target: peek, isIntersecting: true }])
+			for (let i = 0; i < 25; i++)
+				await Promise.resolve()
+			assert.ok(image.src.startsWith('data:image/png'), `${key} should render its route`)
+			assert.deepEqual(JSON.parse(JSON.stringify(h.cameras.at(-1).points)), [[120, 30], [124, 34]])
+			assert.equal(h.layouts.filter(change => change.id === 'snapshot-pin').at(-1)?.value, 'none')
+		}
+		finally { h.runtime.dispose() }
+	}
+})
 
 test('mobile reading allocates no hidden desktop map and creates it on desktop transition', async () => {
 	const h = await harness(true)
@@ -788,7 +967,7 @@ for (const basemap of ['osm', 'satellite', 'hybrid']) {
 			const light = travelMapColors('mono', 'light')
 			assert.equal(paint('photo-points', 'circle-color'), light.paper)
 			assert.equal(paint('photo-current-ring', 'circle-stroke-color'), light.accent)
-			assert.equal(paint('cover-points', 'circle-stroke-color'), light.muted)
+			assert.equal(paint('cover-points', 'circle-stroke-color'), light.accent)
 			h.state.basemap = 'simple'
 			h.runtime.update()
 			for (let i = 0; i < 12; i++) await Promise.resolve()
