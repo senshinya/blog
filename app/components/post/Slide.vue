@@ -5,6 +5,7 @@ import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { resolveContentPath } from '~/utils/locale'
 
 defineProps<{ list: ArticleProps[] }>()
+const { begin } = useArticleArrival()
 
 const { locale } = useI18n()
 const appConfig = useAppConfig()
@@ -46,8 +47,10 @@ useEventListener(carouselEl, 'wheel', (e) => {
 				v-for="(article, index) in list"
 				:key="index"
 				class="slide-item"
+				:data-transition-key="article.path"
 				:title="article.description"
 				:to="resolveContentPath(article.path, locale)"
+				@click.capture="begin($event, article)"
 			>
 				<UtilImg responsive sizes="(max-width: 768px) 50vw, 320px" loading="eager" decoding="async" class="cover" :src="article.image" :alt="compConf.showTitle ? '' : article.title" />
 

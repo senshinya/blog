@@ -5,11 +5,27 @@
 	border-radius: 0.5em;
 	box-shadow: var(--box-shadow-1);
 	background-color: var(--ld-bg-card);
-	transition: all 0.2s;
+	transition:
+		transform var(--motion-feedback-duration) var(--motion-easing),
+		scale var(--motion-press-duration) var(--motion-easing),
+		box-shadow var(--motion-feedback-duration) var(--motion-easing),
+		background-color var(--motion-feedback-duration),
+		color var(--motion-feedback-duration);
 
-	&.upraise:hover {
-		box-shadow: var(--box-shadow-3);
-		transform: translateY(-2px);
+	@media (hover: hover) {
+		&.upraise:hover {
+			box-shadow: var(--box-shadow-3);
+			transform: translateY(-2px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+
+		&.upraise:hover, &.upraise:active {
+			transform: none;
+			scale: none;
+		}
 	}
 }
 

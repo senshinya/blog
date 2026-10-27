@@ -74,12 +74,14 @@ const { locale } = useI18n()
 		backdrop-filter: blur(0.5rem);
 		color: currentcolor;
 		transform: var(--transform-start-far);
-		transition: transform 0.2s;
+		transition: transform var(--motion-dismiss-duration) var(--motion-exit-easing);
 		z-index: var(--z-index-popover);
 
 		&.show {
 			box-shadow: var(--box-shadow-1), var(--box-shadow-3);
 			transform: none;
+			transition-duration: var(--motion-drawer-duration);
+			transition-timing-function: var(--motion-easing);
 		}
 	}
 }
@@ -106,7 +108,7 @@ const { locale } = useI18n()
 	gap: 0.5em;
 	padding: 0.5em 1em;
 	border-radius: 0.5em;
-	transition: all 0.2s;
+	transition: background-color var(--motion-feedback-duration), color var(--motion-feedback-duration), opacity var(--motion-feedback-duration), outline-color var(--motion-feedback-duration);
 
 	&:hover,
 	&.router-link-active {

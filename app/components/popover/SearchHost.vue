@@ -38,5 +38,17 @@ function finishLeave() {
 	@media (max-width: 768px) {
 		backdrop-filter: none;
 	}
+
+	&.v-enter-active {
+		transition: opacity var(--motion-fade-duration) var(--motion-easing);
+	}
+
+	&.v-leave-active {
+		transition: opacity var(--motion-dismiss-duration) var(--motion-exit-easing);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&.v-enter-active, &.v-leave-active { transition: none; }
+	}
 }
 </style>

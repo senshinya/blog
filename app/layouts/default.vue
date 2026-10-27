@@ -1,15 +1,17 @@
 <script setup lang="ts">
 const { slots } = provideLayoutSlots()
+const { arrival } = useArticleArrival()
+const arriving = computed(() => arrival.value?.visible && (arrival.value.loading || arrival.value.moving))
 // 同步 memos/travels 页面也与客户端首帧保持一致，挂载后才显示侧栏按钮。
 const mounted = useMounted()
 </script>
 
 <template>
-<NuxtLoadingIndicator />
 <NuxtRouteAnnouncer :style="{ position: 'absolute' }" />
 <BlogSkipToContent />
 <BlogSidebar />
-<main id="main-content">
+<main id="main-content" :data-article-arriving="arriving || undefined" :aria-busy="arriving || undefined">
+	<PostArrival />
 	<slot />
 	<!-- 评论只在客户端取数；等待页面注册插槽后挂载，避免异步正文的 hydration 错位。 -->
 	<ClientOnly>
@@ -23,7 +25,7 @@ const mounted = useMounted()
 	</BlogAside>
 </div>
 <BlogFooter />
-<BlogPanel :has-aside="mounted && !!slots?.aside" />
+<BlogPanel :has-aside="mounted && (!!arrival?.visible || !!slots?.aside)" />
 <BikariyaModals />
 <ClientOnly>
 	<PopoverSearchHost />
@@ -81,6 +83,8 @@ const mounted = useMounted()
 	grid-area: 1 / 2;
 	/* 保留语义 main 和可见溢出，不影响正文内的 sticky 元素。 */
 	min-width: 0;
+	/* The live route can finish in the background without repainting the moving header. */
+	&[data-article-arriving] > :not(.article-arrival) { display: none !important; }
 
 	:root[data-article-transition] & { view-transition-name: article-body; }
 
@@ -99,6 +103,20 @@ const mounted = useMounted()
 			align-self: stretch;
 			min-width: 0;
 		}
+	}
+}
+
+/* 阅读目录沿用参考站 1024px 断点；其余侧栏继续使用现有布局。 */
+@media (min-width: 1025px) and (max-width: 1080px) {
+	#blog-root:has(> .blog-aside-track .reading-navigation) {
+		grid-template-columns: var(--sidebar-width) minmax(0, 1fr) 200px;
+	}
+
+	.blog-aside-track:has(.reading-navigation) {
+		display: block;
+		grid-area: 1 / 3;
+		align-self: stretch;
+		min-width: 0;
 	}
 }
 

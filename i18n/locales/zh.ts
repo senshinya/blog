@@ -41,6 +41,7 @@ const zh = {
 		theme: '主题: {name} {version}',
 	},
 	post: {
+		loading: '正在加载正文…',
 		author: '作者：{name}',
 		authorship: {
 			'replay': '点击重新盖章',
@@ -384,7 +385,11 @@ const zh = {
 		},
 		toc: {
 			title: '文章目录',
-			backToTop: '返回开头',
+			menuTitle: '目录',
+			show: '显示目录',
+			close: '关闭目录',
+			progress: '阅读进度',
+			backToTop: '回到顶部',
 			comments: '评论区',
 			empty: '暂无目录信息',
 		},

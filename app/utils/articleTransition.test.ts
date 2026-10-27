@@ -25,6 +25,7 @@ function navigation(from: string, to: string, key: string, localeMotion = false)
 	const noop = () => {}
 	const nuxt = { isHydrating: false, hook: () => noop, vueApp: { onUnmount: noop } }
 	const router = {
+		options: {},
 		beforeEach: () => noop,
 		beforeResolve: (guard: typeof resolveGuard) => {
 			resolveGuard = guard
@@ -36,6 +37,8 @@ function navigation(from: string, to: string, key: string, localeMotion = false)
 	}
 	const element = {
 		dataset: { transitionKey: key },
+		querySelector: () => null,
+		matches: () => false,
 		getBoundingClientRect: () => ({ width: 300, height: 100, top: 10, bottom: 110, left: 10, right: 310 }),
 	}
 	const root = { dataset: {}, classList: { contains: () => localeMotion }, style: { setProperty: noop, removeProperty: noop } }
@@ -44,12 +47,15 @@ function navigation(from: string, to: string, key: string, localeMotion = false)
 		.replace('export default ', ''))
 	runInNewContext(code, {
 		defineNuxtPlugin: (plugin: (app: typeof nuxt) => void) => plugin(nuxt),
+		injectHead: () => ({}),
+		renderDOMHead: noop,
 		blogConfig: { locales: [{ code: 'zh' }, { code: 'en' }, { code: 'ja' }] },
 		stripLocale,
 		isLocaleSwitch,
 		once: (callback: () => void) => callback,
 		normalizeContentPath: (path: string) => path.replace(/\/+$/, '') || '/',
 		useRouter: () => router,
+		useArticleArrival: () => ({ arrival: { value: null } }),
 		usePreferredReducedMotion: () => ({ value: 'no-preference' }),
 		useEventBus: () => ({ emit: noop }),
 		useEventListener: noop,
@@ -59,6 +65,7 @@ function navigation(from: string, to: string, key: string, localeMotion = false)
 		window: { history: { state: { position: 1 } }, scrollX: 0, scrollY: 0, innerHeight: 900, innerWidth: 1400 },
 		document: {
 			documentElement: root,
+			getElementById: () => null,
 			querySelectorAll: (selector: string) => selector === '[data-transition-key]' ? [element] : [],
 			startViewTransition: () => {
 				captures++

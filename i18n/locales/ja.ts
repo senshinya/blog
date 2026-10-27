@@ -39,6 +39,7 @@ const ja: MessageSchema = {
 		theme: 'テーマ: {name} {version}',
 	},
 	post: {
+		loading: '本文を読み込み中…',
 		author: '著者：{name}',
 		authorship: {
 			'replay': 'クリックして押し直す',
@@ -382,6 +383,10 @@ const ja: MessageSchema = {
 		},
 		toc: {
 			title: '目次',
+			menuTitle: '目次',
+			show: '目次を表示',
+			close: '目次を閉じる',
+			progress: '読書の進捗',
 			backToTop: '先頭に戻る',
 			comments: 'コメント',
 			empty: '目次はありません',

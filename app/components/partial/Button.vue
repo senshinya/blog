@@ -35,7 +35,7 @@ withDefaults(defineProps<ButtonProps>(), {
 <style scoped>
 .z-button {
 	display: inline-block;
-	transition: color 0.1s, background-color 0.2s;
+	transition: color var(--motion-feedback-duration), background-color var(--motion-feedback-duration);
 
 	&.text {
 		&:hover {
@@ -87,6 +87,17 @@ withDefaults(defineProps<ButtonProps>(), {
 	align-items: center;
 	justify-content: center;
 	gap: 0.2em;
+	transition: scale var(--motion-press-duration) var(--motion-easing);
+
+	.z-button:active:not(:disabled) > & {
+		scale: 0.96;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+
+		.z-button:active:not(:disabled) > & { scale: none; }
+	}
 }
 
 .button-desc {

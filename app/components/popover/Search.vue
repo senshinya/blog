@@ -28,8 +28,12 @@ const { data, status } = await useLazyAsyncData(
 	{ watch: [collection] },
 )
 
-const miniSearch = computed(() => {
-	const wordSegmenter = segmenter.value
+const miniSearch = shallowRef<MiniSearch>()
+// 分词和索引分批让出主线程，首开弹窗时仍能绘制输入框和淡入动画。
+watch([data, segmenter], async ([sections, wordSegmenter], _previous, onCleanup) => {
+	let cancelled = false
+	onCleanup(() => cancelled = true)
+	miniSearch.value = undefined
 	const index = new MiniSearch({
 		fields: ['title', 'content'],
 		storeFields: ['title', 'titles', 'content', 'level'],
@@ -43,16 +47,25 @@ const miniSearch = computed(() => {
 			? term => Array.from(wordSegmenter.segment(term), seg => seg.segment.toLowerCase())
 			: undefined,
 	})
-	index.addAll(data.value ?? [])
-	return index
-})
+	for (let offset = 0; offset < (sections?.length ?? 0); offset += 4) {
+		await new Promise(resolve => setTimeout(resolve, 0))
+		if (cancelled)
+			return
+		index.addAll(sections!.slice(offset, offset + 4))
+	}
+	if (!cancelled)
+		miniSearch.value = index
+}, { immediate: true })
 
 const searchStore = useSearchStore()
 const searchInput = ref<HTMLInputElement>()
 
 const { word } = storeToRefs(searchStore)
 const debouncedWord = refDebounced(word, 100)
-const result = computed(() => miniSearch.value.search(debouncedWord.value))
+const result = computed(() => miniSearch.value?.search(debouncedWord.value) ?? [])
+const batchSize = 24
+const renderedCount = ref(batchSize)
+const renderedResults = computed(() => result.value.slice(0, renderedCount.value))
 
 const isKeyboardMode = ref(false)
 const listResult = useTemplateRef('list-result')
@@ -63,6 +76,10 @@ const resultHeight = ref(0)
 useResizeObserver(resultContent, ([entry]) => {
 	if (entry)
 		resultHeight.value = entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height
+	// 很高的视口或较小字号可能装下首批；没有滚动条时仍需继续填充。
+	const list = listResult.value
+	if (list?.clientHeight && list.scrollHeight <= list.clientHeight)
+		loadMoreResults()
 })
 
 const activeIndex = ref(0)
@@ -79,11 +96,12 @@ function onResultsUpdated(items: SearchResult[]) {
 	const retained = items.findIndex(item => item.id === selectedId)
 	activeIndex.value = Math.max(0, retained)
 	selectedId = items[activeIndex.value]?.id
+	renderedCount.value = Math.max(batchSize, activeIndex.value + 1)
 	if (retained < 0 && listResult.value)
 		listResult.value.scrollTop = 0
 }
 
-watch(result, onResultsUpdated, { flush: 'post' })
+watch(result, onResultsUpdated)
 
 useEventListener('mousemove', () => isKeyboardMode.value = false)
 useEventListener('keydown', () => isKeyboardMode.value = true)
@@ -95,12 +113,22 @@ async function focusInput(allSelect = false) {
 		searchInput.value?.select()
 }
 
-function updateActiveIndex(index: number, isKeyboard = false) {
+function loadMoreResults() {
+	const list = listResult.value
+	if (list && list.scrollHeight - list.scrollTop - list.clientHeight < list.clientHeight)
+		renderedCount.value = Math.min(result.value.length, renderedCount.value + batchSize)
+}
+
+async function updateActiveIndex(index: number, isKeyboard = false) {
 	focusInput()
-	if (index < 0 || index >= (listResult.value?.children.length ?? 0))
+	if (index < 0 || index >= result.value.length)
 		return
 	activeIndex.value = index
-	selectedId = activeItem()?.dataset.resultId
+	selectedId = result.value[index]?.id
+	if (index >= renderedCount.value) {
+		renderedCount.value = index + batchSize
+		await nextTick()
+	}
 	if (isKeyboard)
 		isKeyboardMode.value = true
 	if (isKeyboardMode.value)
@@ -118,7 +146,7 @@ function openActiveItem() {
 	<div v-if="open" class="blog-search">
 		<form class="input" @submit.prevent>
 			<Icon v-show="false" name="line-md:loading-alt-loop" />
-			<Icon :name="status === 'pending' ? 'line-md:loading-alt-loop' : 'tabler:search'" />
+			<Icon :name="status === 'pending' || !miniSearch ? 'line-md:loading-alt-loop' : 'tabler:search'" />
 
 			<!-- 方向键切换搜索结果不应只在搜索框内触发 -->
 			<input
@@ -135,7 +163,7 @@ function openActiveItem() {
 
 		<div class="search-results" :style="{ height: `${resultHeight}px` }">
 			<div ref="result-content" class="result-content">
-				<div v-if="debouncedWord && status === 'success' && !result.length" class="no-result">
+				<div v-if="debouncedWord && status === 'success' && miniSearch && !result.length" class="no-result">
 					{{ $t('search.noResults') }}
 				</div>
 
@@ -143,9 +171,10 @@ function openActiveItem() {
 					v-show="result.length"
 					ref="list-result"
 					class="scrollcheck-y search-result"
+					@scroll.passive="loadMoreResults"
 				>
 					<PopoverSearchItem
-						v-for="(item, itemIndex) in result"
+						v-for="(item, itemIndex) in renderedResults"
 						:key="item.id"
 						:data-result-id="item.id"
 						v-bind="item"
@@ -171,7 +200,7 @@ function openActiveItem() {
 
 <style scoped>
 .blog-search {
-	--float-distance: 10px;
+	--float-distance: 6px;
 
 	contain: paint;
 	position: fixed;
@@ -191,10 +220,10 @@ function openActiveItem() {
 }
 
 /* 结果逐条浮入。列表按 item.id 复用 DOM，故连续输入时只有真正新增的条目会播， */
-/* 留下的条目原地不动。延迟封顶 8 档，避免长列表末尾等得发木。 */
+/* 留下的条目原地不动。错峰最多 120ms，避免长列表末尾等得发木。 */
 .search-result > :deep(.search-item) {
 	animation: search-item-in 0.22s var(--motion-easing) backwards;
-	animation-delay: calc(min(sibling-index() - 1, 8) * 0.02s);
+	animation-delay: min(calc((sibling-index() - 1) * 0.02s), var(--motion-stagger-limit));
 }
 
 /* 不支持 sibling-index() 时整条 animation-delay 失效，退化成无错峰的同步浮入。 */
@@ -205,9 +234,12 @@ function openActiveItem() {
 	}
 }
 
-.search-popover-enter-active,
+.search-popover-enter-active {
+	transition: opacity var(--motion-fade-duration) var(--motion-easing), transform var(--motion-surface-duration) var(--motion-easing);
+}
+
 .search-popover-leave-active {
-	transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+	transition: opacity var(--motion-dismiss-duration) var(--motion-exit-easing), transform var(--motion-dismiss-duration) var(--motion-exit-easing);
 }
 
 .search-popover-enter-from,

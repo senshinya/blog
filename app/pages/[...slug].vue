@@ -10,6 +10,14 @@ const { locale } = useI18n()
 const collection = useContentCollection()
 const contentPath = useContentPath()
 const discussionKey = computed(() => stripLocale(contentPath.value, LOCALES, 'zh').basePath)
+const { arrival, resolve: resolveArrival } = useArticleArrival()
+const arrivingPage = arrival.value
+const arrivalHeader = computed(() => arrival.value?.visible && arrival.value.path === contentPath.value)
+
+// Route modules can load during the cover motion; SQLite and Markdown work
+// starts afterwards so a cold content runtime cannot take frames from it.
+if (arrivingPage?.moving)
+	await until(() => !arrivingPage.moving || arrival.value !== arrivingPage).toBeTruthy()
 
 const dataKey = computed(() => `content:${contentPath.value}`)
 const { data: post } = await useAsyncData(
@@ -22,6 +30,12 @@ const { data: post } = await useAsyncData(
 )
 
 useContentResources(() => post.value)
+if (arrival.value === arrivingPage)
+	resolveArrival(contentPath.value, post.value)
+onMounted(() => {
+	if (arrivingPage && arrival.value === arrivingPage && arrivingPage.path === contentPath.value)
+		arrivingPage.loading = false
+})
 
 const hasSeries = computed(() => !!post.value?.stem.startsWith('posts/') && articleSeries.some(series => series.paths.includes(post.value!.path)))
 const excerpt = computed(() => post.value?.description || '')
@@ -67,8 +81,8 @@ else {
 </template>
 
 <template v-if="post">
-	<PostHeader v-bind="post" />
-	<PostExcerpt v-if="excerpt" :excerpt />
+	<PostHeader v-if="!arrivalHeader" v-bind="post" />
+	<PostExcerpt v-if="excerpt && !arrivalHeader" :excerpt />
 	<!-- 正文只淡入，保持 URL 锚点和目录测量的坐标稳定。 -->
 	<ContentRenderer
 		class="article"
@@ -78,7 +92,7 @@ else {
 		tag="article"
 	/>
 
-	<!-- 紧跟 .article：命名时间轴只对后继兄弟可见。 -->
+	<!-- 阅读状态与侧栏共享；移动端入口和右缘进度渲染到 body。 -->
 	<PostProgress />
 
 	<PostSeries v-if="hasSeries" :path="post.path" />

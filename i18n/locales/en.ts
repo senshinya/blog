@@ -39,6 +39,7 @@ const en: MessageSchema = {
 		theme: 'Theme: {name} {version}',
 	},
 	post: {
+		loading: 'Loading article…',
 		author: 'Author: {name}',
 		authorship: {
 			'replay': 'Replay stamp',
@@ -382,6 +383,10 @@ const en: MessageSchema = {
 		},
 		toc: {
 			title: 'Table of Contents',
+			menuTitle: 'Contents',
+			show: 'Show contents',
+			close: 'Close contents',
+			progress: 'Reading progress',
 			backToTop: 'Back to top',
 			comments: 'Comments',
 			empty: 'No table of contents',

@@ -34,7 +34,7 @@ defineProps<{
 	column-gap: 0.5em;
 	min-width: 0;
 	margin: var(--archive-item-gap, 0.2em) 0;
-	animation: var(--entrance, float-in var(--motion-duration) var(--motion-easing) var(--delay, 0s) backwards);
+	animation: var(--entrance, float-in var(--motion-duration) var(--motion-easing) min(var(--delay, 0s), var(--motion-stagger-limit)) backwards);
 
 	@media (max-width: 768px) {
 		font-size: 0.9em;

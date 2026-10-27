@@ -1,9 +1,16 @@
 :root {
-	--motion-duration: 0.3s;
-	--motion-fade-duration: 0.2s;
+	--motion-duration: 0.32s;
+	--motion-press-duration: 0.12s;
+	--motion-feedback-duration: 0.16s;
+	--motion-surface-duration: 0.24s;
+	--motion-drawer-duration: 0.32s;
+	--motion-dismiss-duration: 0.16s;
+	--motion-fade-duration: 0.18s;
 	--motion-exit-duration: 0.1s;
-	--motion-delay: 0.05s;
-	--motion-easing: ease-out;
+	--motion-delay: 0.025s;
+	--motion-stagger-limit: 0.12s;
+	--motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
+	--motion-exit-easing: cubic-bezier(0.4, 0, 1, 1);
 	--max-bezier-to-full: cubic-bezier(0.5, 0, 1, 0.5);
 	--max-bezier-to-collapse: cubic-bezier(0, 0.5, 0.5, 1);
 
@@ -77,7 +84,7 @@
 	animation: var(--entrance, widget-in var(--motion-duration) var(--motion-easing) backwards);
 
 	/* 不支持 sibling-index() 时沿用无延迟的基础动画。 */
-	animation-delay: calc((sibling-index() - 1) * var(--motion-delay));
+	animation-delay: min(calc((sibling-index() - 1) * var(--motion-delay)), var(--motion-stagger-limit));
 }
 
 #blog-aside.aside-enter-active > .blog-widget {
@@ -92,6 +99,17 @@
 :root[data-article-transition] {
 	scroll-behavior: auto;
 
+	/* new 快照仍是实时画面：子动画会持续重绘、上传整层，与头图合成争用。 */
+	body, body * {
+		transition: none !important;
+		animation-play-state: paused !important;
+	}
+
+	#main-content {
+		clip-path: var(--article-body-clip, none);
+	}
+
+	/* 入场交给快照淡入，避免暂停在 opacity: 0 后再重复入场。 */
 	[data-transition-enter] {
 		animation: none !important;
 	}
@@ -99,6 +117,31 @@
 
 [data-article-source] {
 	view-transition-name: article-hero;
+}
+
+:root[data-article-transition="old"] [data-article-title] { view-transition-name: article-title-out; }
+:root[data-article-transition="new"] [data-article-title] { view-transition-name: article-title-in; }
+
+/* Text keeps its actual glyph size while the cover expands underneath it. */
+:root[data-article-transition]::view-transition-group(article-title-out),
+:root[data-article-transition]::view-transition-group(article-title-in) { animation: none; }
+:root[data-article-transition]::view-transition-old(article-title-out) {
+	animation: content-in 0.07s ease reverse both;
+	mix-blend-mode: normal;
+}
+@keyframes article-title-enter {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+:root[data-article-transition]::view-transition-new(article-title-in) {
+	animation: article-title-enter var(--motion-surface-duration) var(--motion-easing) 0.04s both;
+	mix-blend-mode: normal;
 }
 
 :root[data-article-transition]::view-transition {
@@ -111,10 +154,40 @@
 }
 
 :root[data-article-transition]::view-transition-group(article-body),
+:root[data-article-transition]::view-transition-group(root),
+:root[data-article-transition]::view-transition-group(article-aside),
 :root[data-article-transition]::view-transition-group(article-navigation),
 :root[data-article-transition]::view-transition-new(root),
 :root[data-article-transition]::view-transition-new(article-navigation) {
 	animation: none;
+}
+
+@keyframes article-hero-move {
+	from { transform: var(--article-hero-from); }
+	to { transform: var(--article-hero-to); }
+}
+
+:root[data-article-transition]::view-transition-group(article-hero) {
+	transform-origin: top left;
+	animation-name: article-hero-move;
+}
+
+@keyframes article-panel-move {
+	from { transform: var(--article-panel-from, none); }
+	to { transform: var(--article-panel-to, none); }
+}
+
+/* 覆盖 UA 对尺寸、backdrop-filter 的插值，保留浮动按钮的避让位移。 */
+:root[data-article-transition]::view-transition-group(article-panel) {
+	transform-origin: top left;
+	animation: var(--article-panel-motion, none) 0.1s ease both;
+}
+
+/* 两个快照填满固定画布，缩放由 group 完成，端点与真实卡片/页头相合。 */
+:root[data-article-transition]::view-transition-old(article-hero),
+:root[data-article-transition]::view-transition-new(article-hero) {
+	height: 100%;
+	object-fit: fill;
 }
 
 :root[data-article-transition]::view-transition-old(root),
@@ -136,17 +209,9 @@
 	mix-blend-mode: normal;
 }
 
-@keyframes article-radius {
-	from { border-radius: var(--article-radius-from, 0); }
-	to { border-radius: var(--article-radius-to, 0); }
-}
-
-/* 独立于 group 的浏览器几何动画，正向、返回均使用真实元素的圆角。 */
-/* 快照保留默认的 width: 100% / height: auto，避免宽高比不同时缩成贴左的小块。 */
+/* 快照已包含各自真实的圆角。随快照缩放、交叠，避免主线程逐帧重绘裁剪。 */
 :root[data-article-transition]::view-transition-image-pair(article-hero) {
-	overflow: clip;
-	border-radius: var(--article-radius-to, 0);
-	animation: article-radius var(--motion-duration) var(--motion-easing) both;
+	overflow: visible;
 }
 
 /* WebKit 快照绕过：私有属性仅用于引擎识别，不能检测快照 bug 本身。 */
@@ -203,7 +268,12 @@
 /* 侧栏组件短淡入，文字保持原始比例。 */
 .aside-widget-enter-active,
 .aside-widget-leave-active {
-	transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+	transition: transform var(--motion-surface-duration) var(--motion-easing), opacity var(--motion-fade-duration) var(--motion-easing);
+}
+
+.aside-widget-leave-active {
+	transition-duration: var(--motion-dismiss-duration);
+	transition-timing-function: var(--motion-exit-easing);
 }
 
 .aside-widget-enter-from,
@@ -214,7 +284,7 @@
 
 /* 留在原地的 widget 平滑让位（FLIP），否则会在进出场的瞬间硬跳 */
 .aside-widget-move {
-	transition: transform 0.25s;
+	transition: transform var(--motion-surface-duration) var(--motion-easing);
 }
 
 

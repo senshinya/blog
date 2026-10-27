@@ -2,7 +2,8 @@
 import type { ArticleProps } from '~/types/article'
 import blogConfig from '~~/blog.config'
 
-defineProps<ArticleProps>()
+const props = defineProps<ArticleProps>()
+const { begin } = useArticleArrival()
 
 const { locale } = useI18n()
 const currentLanguage = computed(() =>
@@ -10,7 +11,7 @@ const currentLanguage = computed(() =>
 </script>
 
 <template>
-<UtilLink class="article-card card upraise" :data-transition-key="path" data-transition-enter>
+<UtilLink class="article-card card upraise" :data-transition-key="path" data-transition-enter @click.capture="begin($event, props)">
 	<UtilImg v-if="image" class="article-cover" :src="image" :alt="title" responsive sizes="(max-width: 768px) 100vw, 400px" loading="lazy" decoding="async" />
 	<article>
 		<h2 class="article-title text-creative">
@@ -49,7 +50,10 @@ const currentLanguage = computed(() =>
 	margin: 1em 0;
 	border-radius: 0.8em;
 	color: var(--c-text);
-	animation: var(--entrance, float-in var(--motion-duration) var(--motion-easing) var(--delay, 0s) backwards);
+	animation: var(--entrance, float-in var(--motion-duration) var(--motion-easing) min(var(--delay, 0s), var(--motion-stagger-limit)) backwards);
+	@media (prefers-reduced-motion: no-preference) {
+		&:active { scale: 0.985; }
+	}
 
 	> article {
 		display: grid;

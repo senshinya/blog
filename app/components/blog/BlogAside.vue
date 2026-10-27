@@ -1,12 +1,14 @@
 <script setup lang="ts">
 const layoutStore = useLayoutStore()
+const { arrival } = useArticleArrival()
+const arriving = computed(() => arrival.value?.visible && (arrival.value.loading || arrival.value.moving))
 
 // 页面异步数据完成后才会注册具名插槽；水合时必须保留原有 SSR 侧栏。
 const layoutSlots = useLayoutSlotProvider()
 if (layoutSlots)
 	await layoutSlots.ready
 
-const hasAside = computed(() => !!layoutSlots?.slots.value?.aside)
+const hasAside = computed(() => arriving.value || !!layoutSlots?.slots.value?.aside)
 const desktop = useMediaQuery('not (max-width: 1080px)')
 const reducedMotion = usePreferredReducedMotion()
 const retainedSlots = shallowRef(layoutSlots?.slots.value ?? null)
@@ -69,12 +71,28 @@ function afterEnter(element: Element) {
 		:inert="!hasAside"
 		@click.self="layoutStore.close()"
 	>
-		<slot />
+		<div v-if="arriving" class="blog-widget arrival-aside-skeleton" aria-hidden="true">
+			<i /><i /><i />
+		</div>
+		<slot v-else />
 	</aside>
 </Transition>
 </template>
 
 <style scoped>
+.arrival-aside-skeleton {
+	display: grid;
+	gap: 1rem;
+	padding: 1rem;
+	color: var(--c-text-3);
+	i {
+		opacity: 0.1;
+		height: 0.6rem;
+		border-radius: 0.3rem;
+		background: currentColor;
+		&:last-child { width: 65%; }
+	}
+}
 #blog-aside {
 	display: flex;
 	flex-direction: column;
@@ -109,7 +127,7 @@ function afterEnter(element: Element) {
 		/* 为底部悬浮面板的双按钮及底边距留出滚动空间。 */
 		padding-bottom: 9rem;
 		transform: var(--transform-end-far);
-		transition: transform 0.2s;
+		transition: transform var(--motion-dismiss-duration) var(--motion-exit-easing);
 
 		/* 平板只有一个按钮；矮屏时双按钮横排，只需留一行高度。 */
 		@media (min-width: 769px), (max-height: 528px) {
@@ -126,6 +144,8 @@ function afterEnter(element: Element) {
 
 		&.show {
 			transform: none;
+			transition-duration: var(--motion-drawer-duration);
+			transition-timing-function: var(--motion-easing);
 		}
 	}
 
@@ -139,7 +159,30 @@ function afterEnter(element: Element) {
 	}
 
 	&.aside-leave-active {
+		transition-duration: var(--motion-dismiss-duration);
+		transition-timing-function: var(--motion-exit-easing);
 		pointer-events: none;
+	}
+
+	@media (min-width: 1025px) and (max-width: 1080px) {
+		&:has(.reading-navigation) {
+			position: sticky;
+			inset-inline-end: auto;
+			width: auto;
+			height: 100dvh;
+			max-height: none;
+			padding-bottom: 0.5rem;
+			transform: none;
+			transition: none;
+
+			> :deep(.reading-navigation) {
+				padding: 0;
+				border-radius: 0;
+				box-shadow: none;
+				background: transparent;
+				backdrop-filter: none;
+			}
+		}
 	}
 }
 </style>

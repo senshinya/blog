@@ -56,6 +56,23 @@ const src = computed(() => {
 
 const videoPlayer = useTemplateRef('video-player')
 
+// 浏览器的 iframe lazy 预取距离很大；屏外播放器的初始化会与页面快照争用资源。
+const nearViewport = ref(false)
+const transitioning = ref(import.meta.client && document.documentElement.hasAttribute('data-article-transition'))
+const playerLoaded = ref(false)
+useIntersectionObserver(videoPlayer, ([entry]) => {
+	nearViewport.value = entry?.isIntersecting ?? false
+}, { rootMargin: '300px' })
+if (import.meta.client) {
+	useEventBus<'capture' | 'finish'>('page-transition').on((phase) => {
+		transitioning.value = phase === 'capture'
+	})
+}
+watch([nearViewport, transitioning], ([near, moving]) => {
+	if (near && !moving)
+		playerLoaded.value = true
+})
+
 // 抖音会预检测宽度是否小于 730px，再返回竖屏或横屏模式
 // douyin-wide 需要阻塞加载，等进入视口后通过 zoom: 0.1 触发横屏模式
 // 已优化为 loading="lazy"
@@ -99,7 +116,7 @@ onMounted(() => {
 	/>
 	<iframe
 		v-else
-		:src
+		:src="playerLoaded ? src : undefined"
 		:style="{ zoom }"
 		scrolling="no"
 		loading="lazy"

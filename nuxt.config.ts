@@ -85,6 +85,9 @@ export default defineNuxtConfig({
 	// @keep-sorted
 	experimental: {
 		extractAsyncDataHandlers: true,
+		// Native article capture suspends rAF; the repaint guard otherwise waits
+		// for its 100ms timeout before it can commit the returning page.
+		navigationRepaint: false,
 		typescriptPlugin: true,
 	},
 

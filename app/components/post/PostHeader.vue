@@ -5,7 +5,20 @@ import { buildPath } from '~/utils/locale'
 
 defineOptions({ inheritAttrs: false })
 
-const props = defineProps<ArticleProps>()
+const props = defineProps<ArticleProps & { previewImage?: string, holdCover?: boolean }>()
+const mounted = useMounted()
+const fullCoverReady = ref(false)
+watch(() => props.image, () => fullCoverReady.value = false)
+
+async function onCoverLoad(event: Event) {
+	if (!props.previewImage || !(event.target instanceof HTMLImageElement))
+		return
+	const image = event.target
+	const source = image.currentSrc
+	await image.decode().catch(() => {})
+	if (mounted.value && image.currentSrc === source)
+		fullCoverReady.value = true
+}
 
 const appConfig = useAppConfig()
 const { locale } = useI18n()
@@ -14,21 +27,19 @@ const currentLanguage = computed(() =>
 
 const coverFilter = computed(() => props.meta?.coverFilter || (props.meta?.coverDim && 'brightness(0.75)') || undefined)
 
-/**
- * 分享文本不需要是响应式的：这个组件在文章页面内，切换语言会改变路由（/daily/foo → /ja/daily/foo），
- * 导致组件重新挂载。因此在 setup 期间读取一次是正确的——locale 在组件的生命周期内是常数。
- * useCopy 的类型期望 string 或元素引用，传 ComputedRef 会被误认为是元素引用，返回空字符串。
- */
-const shareText = `【${appConfig.title}】${props.title}\n\n${
+const shareText = computed(() => `【${appConfig.title}】${props.title}\n\n${
 	props.description ? `${props.description}\n\n` : ''}${
-	new URL(buildPath(props.path!, locale.value, 'zh'), appConfig.url).href}`
+	new URL(buildPath(props.path!, locale.value, 'zh'), appConfig.url).href}`)
 
-const { copy, copied } = useCopy(shareText)
+const { copy, copied } = useClipboard({ source: shareText, legacy: true })
 </script>
 
 <template>
 <div class="post-header" :class="{ 'has-cover': image }" :data-transition-key="path" data-transition-enter>
-	<Pic v-if="image" class="post-cover" :src="image" :alt="title" :filter="coverFilter" loading="eager" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 65vw, 900px" />
+	<Pic v-if="image && !holdCover" class="post-cover" :src="image" :alt="title" :filter="coverFilter" loading="eager" sizes="(max-width: 768px) 100vw, (max-width: 1280px) 65vw, 900px" @load.capture="onCoverLoad" />
+	<Transition name="cover-resolve">
+		<img v-if="previewImage && (holdCover || !fullCoverReady)" class="post-cover-preview" :src="previewImage" :style="{ filter: coverFilter }" alt="" aria-hidden="true">
+	</Transition>
 	<div class="post-nav">
 		<div class="operations">
 			<Icon v-show="false" name="tabler:check" />
@@ -94,6 +105,7 @@ const { copy, copied } = useCopy(shareText)
 	&.has-cover {
 		min-height: 16rem;
 		max-height: 20rem;
+		background-color: #30383F;
 		color: white;
 		transition: font-size 0.2s;
 
@@ -130,6 +142,20 @@ const { copy, copied } = useCopy(shareText)
 		height: 100%;
 		object-fit: cover;
 	}
+}
+
+.post-cover-preview {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	pointer-events: none;
+}
+.cover-resolve-leave-active { transition: opacity 0.18s ease-out; }
+.cover-resolve-leave-to { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+	.cover-resolve-leave-active { transition: none; }
 }
 
 .post-title {

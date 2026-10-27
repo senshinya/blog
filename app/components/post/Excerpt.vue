@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-<div class="md-excerpt gradient-card">
+<div class="md-excerpt gradient-card" data-transition-enter>
 	<span class="dynamic"><Icon name="tabler:sparkles-2" />{{ excerpt }}</span>
 </div>
 </template>

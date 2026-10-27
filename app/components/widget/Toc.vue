@@ -1,129 +1,132 @@
 <script setup lang="ts">
-import type { TocLink } from '@nuxt/content'
+import '~/assets/css/reading-navigation.css'
 
-const [DefineTemplate, ReuseTemplate] = createReusableTemplate({
-	props: {
-		tocTree: { type: Array as PropType<TocLink[]> },
-	},
-})
+const { headings, percent, activeId, visibleRoots, visibleIds, reading, paused, ready, navigate, backToTop, setMeterVisible } = useArticleReading()
+const owner = Symbol('reading-meter')
+const meter = useTemplateRef<HTMLElement>('meter')
+const meterVisible = useElementVisibility(meter)
+watch(meterVisible, value => setMeterVisible(owner, value), { immediate: true })
+onScopeDispose(() => setMeterVisible(owner, false))
+const hovering = ref(false)
+const keyboard = ref(false)
+const focused = computed(() => ready.value && !!headings.value.length && reading.value && !hovering.value && !keyboard.value)
 
-const { toc } = useArticle()
-const scrollableEl = useTemplateRef('toc')
-const { tocOffsets, activeHeadingId } = useToc(toc, computed(() => scrollableEl.value?.body))
-
-function hasHeading(tocTree: TocLink, heading?: string): boolean {
-	return tocTree.id === heading || !!tocTree.children?.some(child => hasHeading(child, heading))
+function focusOut(event: FocusEvent) {
+	if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null))
+		keyboard.value = false
 }
 </script>
 
 <template>
-<BlogWidget
-	ref="toc"
-	:title="$t('widget.toc.title')"
-	shrink
-	:style="{ minHeight: `clamp(4rem, ${tocOffsets.length}rem, 20rem)` }"
+<section
+	class="blog-widget reading-navigation reading-theme"
+	:data-focused="focused || undefined"
+	:data-progress="percent"
+	:data-paused="paused || undefined"
+	:aria-label="$t('widget.toc.title')"
+	tabindex="0"
+	@mouseenter="hovering = true"
+	@mouseleave="hovering = false"
+	@focusin="keyboard = true"
+	@focusout="focusOut"
 >
-	<template #action>
-		<!-- use <a> for anchor -->
-		<a href="#main-content" :aria-label="$t('widget.toc.backToTop')">
-			<Icon name="tabler:arrow-bar-to-up" />
-		</a>
-
-		<a href="#comment" :aria-label="$t('widget.toc.comments')">
-			<Icon name="tabler:message-dots" />
-		</a>
-	</template>
-
-	<!-- 放在顶层会导致 Transition 失效 -->
-	<DefineTemplate v-slot="{ tocTree }">
-		<ol>
-			<li
-				v-for="(entry, index) in tocTree"
-				:key="index"
-				:class="{
-					'has-active': hasHeading(entry, activeHeadingId),
-					'active': entry.id === activeHeadingId,
-				}"
-			>
-				<!-- 使用 <a> 确保键盘焦点切换 -->
-				<a :href="`#${entry?.id}`" :title="entry.text">{{ entry.text }}</a>
-				<ReuseTemplate v-if="entry.children" :toc-tree="entry.children" />
-			</li>
-		</ol>
-	</DefineTemplate>
-
-	<ReuseTemplate
-		v-if="toc?.links.length"
-		class="toc"
-		:toc-tree="toc.links"
-	/>
-	<p v-else class="no-toc">
-		{{ $t('widget.toc.empty') }}
-	</p>
-</BlogWidget>
+	<div class="reading-navigation-inner">
+		<div class="reading-directory">
+			<PostReadingToc :headings :active-id="activeId" :visible-roots="visibleRoots" :visible-ids="visibleIds" :collapsed="focused" @navigate="navigate" />
+			<div class="reading-extras" :inert="focused || undefined">
+				<div class="reading-wave" aria-hidden="true">
+					<svg width="150" height="10" viewBox="0 0 28 10" preserveAspectRatio="none" fill="none">
+						<path d="M2 7 C4 2,7 2,9 5.5 C11 9,14 9,16 5 C18 1,21 2,24 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+					</svg>
+				</div>
+				<div ref="meter" class="reading-meter" role="progressbar" :aria-label="$t('widget.toc.progress')" :aria-valuenow="percent" :aria-valuemin="0" :aria-valuemax="100">
+					<svg v-if="percent === 0" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+						<path d="M21 12a9 9 0 1 1-9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+					</svg>
+					<svg v-else width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+						<circle cx="7" cy="7" r="6" stroke="var(--reading-ring)" stroke-width="2" />
+						<circle cx="7" cy="7" r="6" stroke="var(--reading-accent)" stroke-width="2" stroke-linecap="round" stroke-dasharray="37.699" :stroke-dashoffset="37.699 * (1 - percent / 100)" transform="rotate(-90 7 7)" />
+					</svg>
+					<span>{{ percent }}%</span>
+				</div>
+				<button class="reading-back-top" :class="{ available: percent > 10 }" :tabindex="percent > 10 ? 0 : -1" @click="backToTop">
+					<Icon name="mingcute:arrow-up-circle-line" aria-hidden="true" />
+					<span>{{ $t('widget.toc.backToTop') }}</span>
+				</button>
+			</div>
+		</div>
+		<PostReadingRail :focused />
+	</div>
+</section>
 </template>
 
 <style scoped>
-.toc {
+.reading-navigation {
+	flex: none;
 	position: relative;
-
-	&::before {
-		content: "";
-		position: absolute;
-		inset: 0.3rem;
-		width: 3px;
-		border-radius: 1rem;
-		background-color: var(--c-bg-soft);
+	width: 200px;
+	height: max(120px, calc(100dvh - 417px));
+	min-width: 0;
+	max-width: 100%;
+	margin: 120px 0 0;
+	padding: 0;
+	outline-offset: -4px;
+	animation: none !important;
+	@media (max-width: 1024px) { display: none; }
+}
+.reading-navigation-inner {
+	position: relative;
+	height: 100%;
+	max-width: 165px;
+	margin-inline-start: 35px;
+}
+.reading-directory {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	inset: 0 0 auto;
+	min-height: 120px;
+	max-height: 75vh;
+}
+.reading-extras {
+	flex: none;
+	transition: opacity 300ms;
+	[data-focused] & {
+		opacity: 0;
+		pointer-events: none;
 	}
 }
-
-ol {
-	padding-inline-start: 0.8rem;
+.reading-wave {
+	display: flex;
+	align-items: center;
+	height: 28px;
+	color: color-mix(in srgb, var(--reading-wave) 12%, transparent);
 }
-
-li {
-	opacity: 0.6;
-	font-size: 0.94em;
-	color: var(--c-text);
-	transition: opacity 0.2s;
-
-	&:hover {
-		opacity: 0.94;
+.reading-meter, .reading-back-top {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	padding: 0 7px;
+	line-height: 21px;
+	svg { flex: none; }
+}
+.reading-meter circle { transition: stroke-dashoffset 300ms; }
+.reading-back-top {
+	opacity: 0;
+	margin-top: 3.5px;
+	transition: opacity 500ms;
+	pointer-events: none;
+	&.available {
+		opacity: 0.5;
+		pointer-events: auto;
 	}
-
-	&.has-active, &.active {
-		opacity: 1;
-		font-size: 1em;
-	}
-
-	&.active::before {
-		content: "";
-		position: absolute;
-		inset-inline-start: 0.3rem;
-		margin: 0.2rem 0;
-		padding: 0.6rem 1.5px;
-		border-radius: 1rem;
-		background-color: var(--c-primary);
-	}
-
-	> a {
-		display: block;
-		overflow: hidden;
-		padding: 0.2em 0.5em;
-		border-radius: 0.5em;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		transition: all 0.2s;
-
-		&:hover {
-			background-color: var(--c-bg-soft);
-		}
+	&:hover { opacity: 1; }
+	.iconify {
+		width: 14px;
+		height: 14px;
 	}
 }
-
-.no-toc {
-	padding: 1em;
-	text-align: center;
-	color: var(--c-text-3);
+@media (prefers-reduced-motion: reduce) {
+	.reading-extras, .reading-back-top, .reading-meter circle { transition: none; }
 }
 </style>

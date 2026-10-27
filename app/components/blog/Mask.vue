@@ -35,8 +35,17 @@ const show = defineModel<boolean>('show')
 	opacity: 0;
 }
 
-.v-enter-active,
+.v-enter-active {
+	transition: opacity var(--motion-fade-duration) var(--motion-easing);
+}
+
 .v-leave-active {
-	transition: all var(--delay);
+	transition: opacity var(--motion-dismiss-duration) var(--motion-exit-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.v-enter-active, .v-leave-active {
+		transition: none;
+	}
 }
 </style>

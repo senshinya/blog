@@ -40,11 +40,18 @@ function enabled() {
 }
 
 function frame() {
+	raf = 0
 	currentX += (targetX - currentX) * LERP
 	currentY += (targetY - currentY) * LERP
+	const settled = Math.abs(targetX - currentX) < 0.1 && Math.abs(targetY - currentY) < 0.1
+	if (settled) {
+		currentX = targetX
+		currentY = targetY
+	}
 	if (card.value)
 		card.value.style.translate = `${Math.round(currentX)}px ${Math.round(currentY)}px`
-	raf = requestAnimationFrame(frame)
+	if (!settled)
+		raf = requestAnimationFrame(frame)
 }
 
 function stop() {
@@ -87,12 +94,12 @@ function onPointerMove(event: PointerEvent) {
 		if (card.value)
 			card.value.style.translate = `${currentX}px ${currentY}px`
 		visible.value = true
-		raf ||= requestAnimationFrame(frame)
 	}
 	else if (src.value !== cover) {
 		// 换行时保留旧图直到新图解码完成，避免中间闪一帧空白。
 		src.value = cover
 	}
+	raf ||= requestAnimationFrame(frame)
 }
 
 function hide() {

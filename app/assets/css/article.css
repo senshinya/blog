@@ -1,15 +1,6 @@
-/* 阅读进度条的时间轴作用域。没有这一条，PostProgress 引用的名字解析不到， */
-/* animation-timeline 退化为 none，而 duration 默认 auto（0s）+ fill: both， */
-/* 结果是进度条一上来就钉在满格 —— 比不显示更糟。声明了作用域，即使 */
-/* 名字无人定义也只会得到一条"未激活"时间轴，动画不生效，进度条保持 scaleX(0)。 */
-#main-content {
-	timeline-scope: --article-progress;
-}
-
 .article {
 	margin: 1rem;
 	line-height: 1.8;
-	view-timeline-name: --article-progress;
 
 	p {
 		margin: 0.5em 0;
