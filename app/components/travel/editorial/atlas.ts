@@ -366,7 +366,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 					}
 				}
 				const veil = atlasVeil(contentRight, readingRight)
-				root.style.setProperty('--travel-map-fade-start', `${veil.start}px`)
+				root.querySelector<HTMLElement>('.map-cover')?.style.setProperty('--travel-map-fade-start', `${veil.start}px`)
 				left = veil.end
 			}
 		}
@@ -917,7 +917,7 @@ export async function createTravelAtlas(options: AtlasOptions): Promise<TravelAt
 			map?.remove()
 			snapshotMap?.remove()
 			renderer?.remove()
-			root.style.removeProperty('--travel-map-fade-start')
+			root.querySelector<HTMLElement>('.map-cover')?.style.removeProperty('--travel-map-fade-start')
 		},
 	}
 	try {

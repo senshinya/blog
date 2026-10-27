@@ -23,7 +23,7 @@
 }
 .travel-editorial .map-cover {
 	opacity: 1;
-	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing);
+	transition: opacity var(--travel-motion-mode) var(--travel-motion-easing), --travel-map-fade-start var(--travel-motion-mode) var(--travel-motion-easing);
 }
 .travel-editorial.viewer-active .map-cover {
 	opacity: 0;

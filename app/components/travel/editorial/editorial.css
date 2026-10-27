@@ -1,6 +1,6 @@
 @property --travel-map-fade-start {
 	syntax: "<length>";
-	inherits: true;
+	inherits: false;
 	initial-value: 0px;
 }
 .travel-editorial {
@@ -18,9 +18,7 @@
 	--reading-width: var(--column);
 	--reading-gutter: 5.5vw;
 	--map-fade-end: calc(var(--reading-width) - var(--reading-gutter) + 120px);
-	--travel-map-fade-start: calc(var(--map-fade-end) - 220px);
 	color-scheme: light;
-	transition: --travel-map-fade-start var(--travel-motion-mode) var(--travel-motion-easing);
 }
 .travel-editorial * {
 	margin: 0;
@@ -1140,6 +1138,8 @@
 	background: var(--surface);
 }
 .travel-editorial .map-cover {
+	/* 渐变只影响地图遮罩，不把逐帧变化的值继承到整篇游记。 */
+	--travel-map-fade-start: calc(var(--map-fade-end) - 220px);
 	--fade-start: var(--travel-map-fade-start);
 	background: linear-gradient(90deg, var(--paper) var(--fade-start), color-mix(in oklab, var(--paper) 75%, transparent) calc(var(--fade-start) * 0.67 + var(--map-fade-end) * 0.33), color-mix(in oklab, var(--paper) 25%, transparent) calc(var(--fade-start) * 0.33 + var(--map-fade-end) * 0.67), transparent var(--map-fade-end));
 }
@@ -1554,7 +1554,10 @@
 	}
 }
 @media (prefers-reduced-motion: reduce) {
-	.travel-editorial .topbar button, .travel-editorial .chapter-read span, .travel-editorial .map-peek img {
+	.travel-editorial .map-cover,
+	.travel-editorial .topbar button,
+	.travel-editorial .chapter-read span,
+	.travel-editorial .map-peek img {
 		transition: none;
 	}
 	.travel-editorial .theme-menu, .travel-editorial .story-photo.active figcaption, .travel-editorial .reading-step.is-current .chapter-head h2 {
