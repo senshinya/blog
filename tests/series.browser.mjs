@@ -11,6 +11,15 @@ before(async () => {
 })
 after(async () => browser?.close())
 
+async function revealPreferences(page) {
+	// Hover the expanded navigation before using its inline language controls.
+	if (page.viewportSize().width > 768)
+		await page.locator('#blog-sidebar').hover()
+	const panel = page.locator('.reading-settings-panel')
+	await panel.waitFor({ state: 'visible' })
+	await panel.evaluate(el => Promise.allSettled(el.getAnimations().map(animation => animation.finished)))
+}
+
 async function open(options = {}) {
 	const context = await browser.newContext({ baseURL, locale: 'zh-CN', viewport: { width: 375, height: 900 }, ...options })
 	await isolateExternalRequests(context, baseURL)
@@ -109,9 +118,13 @@ for (const width of [375, 1440]) {
 				}
 			})
 			for (const language of ['en', 'ja', 'zh']) {
-				if (width === 375)
+				if (width === 375) {
 					await page.locator('.toggle-sidebar').click()
-				await page.locator('.language-trigger').click()
+					await page.locator('#blog-sidebar').evaluate(el => Promise.allSettled(el.getAnimations().map(animation => animation.finished)))
+				}
+				await revealPreferences(page)
+				const trigger = await page.locator('.language-trigger').boundingBox()
+				await page.mouse.click(trigger.x + trigger.width / 2, trigger.y + trigger.height / 2)
 				// Use a physical click: locator.click() can scroll the sticky sidebar itself.
 				await page.locator('.reading-preferences').evaluate(async el => Promise.allSettled(el.getAnimations({ subtree: true }).map(animation => animation.finished)))
 				const option = await page.locator(`.language-options button[lang="${language}"]`).boundingBox()
@@ -130,6 +143,7 @@ for (const width of [375, 1440]) {
 			await page.waitForFunction(() => !document.querySelector('.post-series details').open)
 			if (width === 375)
 				await page.locator('.toggle-sidebar').click()
+			await revealPreferences(page)
 			await page.locator('.language-trigger').click()
 			await page.locator('.language-options button[lang="en"]').click()
 			await page.waitForURL('**/en/projects/mydb/mydb6')
@@ -157,6 +171,7 @@ for (const mode of ['fallback', 'reduce']) {
 					return original.apply(this, args)
 				}
 			})
+			await revealPreferences(page)
 			await page.locator('.language-trigger').click()
 			await page.locator('.language-options button[lang="en"]').click()
 			await page.waitForURL('**/en/projects/mydb/mydb6#series-mydb')
@@ -169,6 +184,7 @@ for (const mode of ['fallback', 'reduce']) {
 				assert.equal(await page.evaluate(() => window.seriesFades), 0)
 			await page.locator('.post-series summary').click()
 			await page.waitForFunction(() => !document.querySelector('.post-series details').open)
+			await revealPreferences(page)
 			await page.locator('.language-trigger').click()
 			await page.locator('.language-options button[lang="ja"]').click()
 			await page.waitForURL('**/ja/projects/mydb/mydb6#series-mydb')

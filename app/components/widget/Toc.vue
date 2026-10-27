@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import '~/assets/css/reading-navigation.css'
 
-const { headings, percent, activeId, visibleRoots, visibleIds, reading, paused, ready, navigate, backToTop, setMeterVisible } = useArticleReading()
+const { headings, percent, activeId, visibleRoots, visibleIds, reading, readingArea, paused, ready, navigate, backToTop, setMeterVisible } = useArticleReading()
 const owner = Symbol('reading-meter')
 const meter = useTemplateRef<HTMLElement>('meter')
 const meterVisible = useElementVisibility(meter)
@@ -9,7 +9,13 @@ watch(meterVisible, value => setMeterVisible(owner, value), { immediate: true })
 onScopeDispose(() => setMeterVisible(owner, false))
 const hovering = ref(false)
 const keyboard = ref(false)
-const focused = computed(() => ready.value && !!headings.value.length && reading.value && !hovering.value && !keyboard.value)
+const marker = ref({ left: 8, top: 0, height: 0 })
+const sidebar = shallowRef<HTMLElement | null>(null)
+onMounted(() => sidebar.value = document.getElementById('blog-sidebar'))
+const sidebarHovering = useElementHover(sidebar)
+const { focused: sidebarKeyboard } = useFocusWithin(sidebar)
+const focused = computed(() => ready.value && !!headings.value.length && reading.value
+	&& !hovering.value && !keyboard.value && !sidebarHovering.value && !sidebarKeyboard.value)
 
 function focusOut(event: FocusEvent) {
 	if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null))
@@ -21,6 +27,7 @@ function focusOut(event: FocusEvent) {
 <section
 	class="blog-widget reading-navigation reading-theme"
 	:data-focused="focused || undefined"
+	:data-reading="readingArea || undefined"
 	:data-progress="percent"
 	:data-paused="paused || undefined"
 	:aria-label="$t('widget.toc.title')"
@@ -32,7 +39,7 @@ function focusOut(event: FocusEvent) {
 >
 	<div class="reading-navigation-inner">
 		<div class="reading-directory">
-			<PostReadingToc :headings :active-id="activeId" :visible-roots="visibleRoots" :visible-ids="visibleIds" :collapsed="focused" @navigate="navigate" />
+			<PostReadingToc :headings :active-id="activeId" :visible-roots="visibleRoots" :visible-ids="visibleIds" :collapsed="focused" @navigate="navigate" @marker="marker = $event" />
 			<div class="reading-extras" :inert="focused || undefined">
 				<div class="reading-wave" aria-hidden="true">
 					<svg width="150" height="10" viewBox="0 0 28 10" preserveAspectRatio="none" fill="none">
@@ -55,42 +62,15 @@ function focusOut(event: FocusEvent) {
 				</button>
 			</div>
 		</div>
-		<PostReadingRail :focused />
+		<PostReadingRail :focused :marker />
 	</div>
 </section>
 </template>
 
 <style scoped>
-.reading-navigation {
-	flex: none;
-	position: relative;
-	width: 200px;
-	height: max(120px, calc(100dvh - 417px));
-	min-width: 0;
-	max-width: 100%;
-	margin: 120px 0 0;
-	padding: 0;
-	outline-offset: -4px;
-	animation: none !important;
-	@media (max-width: 1024px) { display: none; }
-}
-.reading-navigation-inner {
-	position: relative;
-	height: 100%;
-	max-width: 165px;
-	margin-inline-start: 35px;
-}
-.reading-directory {
-	display: flex;
-	flex-direction: column;
-	position: absolute;
-	inset: 0 0 auto;
-	min-height: 120px;
-	max-height: 75vh;
-}
 .reading-extras {
 	flex: none;
-	transition: opacity 300ms;
+	transition: opacity var(--reading-extras-duration);
 	[data-focused] & {
 		opacity: 0;
 		pointer-events: none;

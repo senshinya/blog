@@ -19,6 +19,7 @@ const en: MessageSchema = {
 		skipToContent: 'Skip to content',
 	},
 	sidebar: {
+		readingSettings: 'Reading settings',
 		appearance: 'Appearance',
 		search: 'Search',
 		toggleAside: 'Toggle sidebar',

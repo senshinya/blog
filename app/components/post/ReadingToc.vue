@@ -9,7 +9,10 @@ const props = defineProps<{
 	collapsed?: boolean
 	mobile?: boolean
 }>()
-const emit = defineEmits<{ navigate: [event: MouseEvent, id: string] }>()
+const emit = defineEmits<{
+	navigate: [event: MouseEvent, id: string]
+	marker: [bounds: { left: number, top: number, height: number }]
+}>()
 const list = useTemplateRef<HTMLElement>('list')
 const reduced = usePreferredReducedMotion()
 const rootDepth = computed(() => Math.min(...props.headings.map(heading => heading.depth), 6))
@@ -20,11 +23,22 @@ const groups = computed(() => props.headings.filter(heading => heading.rootId ==
 const activeIndex = computed(() => props.headings.findIndex(heading => heading.id === props.activeId))
 const marker = ref({ top: 0, height: 0 })
 
+function publishMarker() {
+	const element = list.value
+	if (!element || props.mobile)
+		return
+	const top = Math.max(0, marker.value.top - element.scrollTop)
+	const bottom = Math.min(element.clientHeight, marker.value.top + marker.value.height - element.scrollTop)
+	const bounds = element.getBoundingClientRect()
+	const origin = element.closest('.reading-navigation-inner')?.getBoundingClientRect() ?? bounds
+	emit('marker', { left: bounds.left - origin.left + 8, top: bounds.top - origin.top + top, height: Math.max(0, bottom - top) })
+}
+
 function itemStyle(heading: ReadingHeading) {
 	const index = props.headings.findIndex(item => item.id === heading.id)
 	return {
 		'--toc-indent': `${14 + Math.max(0, heading.depth - rootDepth.value) * 8.4}px`,
-		'--toc-delay': `${Math.min(450, 50 * Math.abs(index - Math.max(0, activeIndex.value)))}ms`,
+		'--toc-delay': `min(var(--reading-item-delay-limit), calc(${Math.abs(index - Math.max(0, activeIndex.value))} * var(--reading-item-step)))`,
 	}
 }
 
@@ -37,10 +51,12 @@ function measureMarker() {
 	const last = visible.at(-1)
 	if (!first || !last) {
 		marker.value = { top: marker.value.top, height: 0 }
+		publishMarker()
 		return
 	}
 	const firstBounds = first.getBoundingClientRect()
 	marker.value = { top: firstBounds.top - element.getBoundingClientRect().top + element.scrollTop, height: last.getBoundingClientRect().bottom - firstBounds.top }
+	publishMarker()
 }
 
 watch(() => [props.activeId, props.headings, props.collapsed, props.visibleIds], async () => {
@@ -53,12 +69,12 @@ watch(() => [props.activeId, props.headings, props.collapsed, props.visibleIds],
 	}
 }, { flush: 'post' })
 useResizeObserver(list, measureMarker)
+useEventListener('resize', publishMarker)
 onMounted(measureMarker)
 </script>
 
 <template>
-<nav ref="list" class="reading-toc" :class="{ 'is-collapsed': collapsed, 'is-mobile': mobile }" :aria-label="$t('widget.toc.title')" :inert="collapsed || undefined">
-	<span v-if="!mobile" class="toc-active-mark" :style="{ transform: `translateY(${marker.top}px)`, height: `${marker.height}px`, opacity: marker.height ? undefined : 0 }" aria-hidden="true" />
+<nav ref="list" class="reading-toc" :class="{ 'is-collapsed': collapsed, 'is-mobile': mobile }" :aria-label="$t('widget.toc.title')" :inert="collapsed || undefined" @scroll="publishMarker">
 	<ol v-if="headings.length">
 		<template v-if="mobile">
 			<li v-for="heading in headings" :key="heading.id" class="toc-item" :style="itemStyle(heading)">
@@ -146,7 +162,7 @@ onMounted(measureMarker)
 
 .toc-item {
 	line-height: 14px;
-	transition: opacity 350ms var(--reading-curve), transform 350ms var(--reading-curve);
+	transition: opacity var(--reading-item-duration) var(--reading-curve), transform var(--reading-item-duration) var(--reading-curve);
 }
 
 .toc-children {
@@ -161,24 +177,12 @@ onMounted(measureMarker)
 	}
 }
 
-.toc-active-mark {
-	position: absolute;
-	opacity: 0.8;
-	inset: 0 auto auto 7px;
-	width: 2px;
-	border-radius: 2px;
-	box-shadow: 0 0 6px color-mix(in srgb, var(--reading-accent) 35%, transparent), 1px 0 12px color-mix(in srgb, var(--reading-accent) 12%, transparent);
-	background: linear-gradient(var(--reading-accent) 80%, transparent);
-	transition: transform 400ms var(--reading-curve), height 400ms var(--reading-curve), opacity 300ms;
-	.is-collapsed & { opacity: 0; }
-}
-
 .toc-empty {
 	padding: 0 14px;
 	color: var(--reading-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.reading-toc a, .toc-item, .toc-active-mark, .toc-children { transition: none; }
+	.reading-toc a, .toc-item, .toc-children { transition: none; }
 }
 </style>

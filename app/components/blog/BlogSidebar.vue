@@ -16,36 +16,38 @@ const { locale } = useI18n()
 
 <!-- 不能用 Transition 实现弹出收起动画，因为半宽屏状态始终显示 -->
 <aside id="blog-sidebar" :class="{ show: layoutStore.state === 'sidebar' }">
-	<BlogHeader class="sidebar-header" :to="buildPath('/', locale, 'zh')" />
+	<div class="sidebar-content">
+		<BlogHeader class="sidebar-header" :to="buildPath('/', locale, 'zh')" />
 
-	<nav class="sidebar-nav scrollcheck-y">
-		<div class="search-btn sidebar-nav-item gradient-card" @click="layoutStore.toggle('search')">
-			<Icon name="tabler:search" />
-			<span class="nav-text">{{ searchStore.label }}</span>
-			<Key class="keycut" code="K" cmd prevent @press="layoutStore.toggle('search')" />
-		</div>
+		<nav class="sidebar-nav scrollcheck-y">
+			<button type="button" class="search-btn sidebar-nav-item gradient-card" :aria-label="$t('sidebar.search')" @click="layoutStore.toggle('search')">
+				<Icon name="tabler:search" />
+				<span class="nav-text">{{ searchStore.label }}</span>
+				<Key class="keycut" code="K" cmd prevent @press="layoutStore.toggle('search')" />
+			</button>
 
-		<template v-for="(group, groupIndex) in appConfig.nav" :key="groupIndex">
-			<h3 v-if="group.titleKey || group.title">
-				{{ resolveNavTitle(group, $t) }}
-			</h3>
+			<template v-for="(group, groupIndex) in appConfig.nav" :key="groupIndex">
+				<h3 v-if="group.titleKey || group.title">
+					{{ resolveNavTitle(group, $t) }}
+				</h3>
 
-			<menu>
-				<li v-for="(item, itemIndex) in group.items" :key="itemIndex">
-					<UtilLink :to="resolveNavUrl(item, locale)" class="sidebar-nav-item">
-						<Icon :name="item.icon" />
-						<span class="nav-text">{{ resolveNavText(item, $t) }}</span>
-						<Icon v-if="isExtLink(resolveNavUrl(item, locale))" class="external-tip" name="tabler:arrow-up-right" />
-					</UtilLink>
-				</li>
-			</menu>
-		</template>
-	</nav>
+				<menu>
+					<li v-for="(item, itemIndex) in group.items" :key="itemIndex">
+						<UtilLink :to="resolveNavUrl(item, locale)" class="sidebar-nav-item" :aria-label="resolveNavText(item, $t)" :title="resolveNavText(item, $t)">
+							<Icon :name="item.icon" />
+							<span class="nav-text">{{ resolveNavText(item, $t) }}</span>
+							<Icon v-if="isExtLink(resolveNavUrl(item, locale))" class="external-tip" name="tabler:arrow-up-right" />
+						</UtilLink>
+					</li>
+				</menu>
+			</template>
+		</nav>
 
-	<footer class="sidebar-footer">
-		<BlogReadingPreferences />
-		<ZIconNavList :list="appConfig.footer.iconNav" />
-	</footer>
+		<footer class="sidebar-footer">
+			<BlogSidebarPreferences />
+			<ZIconNavList class="sidebar-social" :list="appConfig.footer.iconNav" />
+		</footer>
+	</div>
 </aside>
 </template>
 
@@ -84,6 +86,13 @@ const { locale } = useI18n()
 			transition-timing-function: var(--motion-easing);
 		}
 	}
+}
+
+.sidebar-content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
 }
 
 .sidebar-nav {
@@ -142,9 +151,11 @@ const { locale } = useI18n()
 
 .search-btn {
 	opacity: 0.5;
+	width: 100%;
 	margin: 1rem 0;
 	outline: 2px solid var(--c-border);
 	outline-offset: -2px;
+	text-align: start;
 	cursor: text;
 	user-select: none;
 

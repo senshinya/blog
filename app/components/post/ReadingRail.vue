@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { createReadingRail } from '~/utils/readingProgress'
 
-const props = defineProps<{ focused: boolean }>()
+const props = defineProps<{ focused: boolean, marker: { left: number, top: number, height: number } }>()
+const gradientId = useId()
 const { headings, percent, scrollPosition, activeId, activeRoot, paused, desktop, reducedMotion } = useArticleReading()
 const rail = useTemplateRef<HTMLElement>('rail')
 const track = useTemplateRef<SVGPathElement>('track')
@@ -11,6 +12,10 @@ const label = useTemplateRef<HTMLElement>('label')
 const labelPercent = useTemplateRef<HTMLElement>('label-percent')
 const visible = useElementVisibility(rail)
 const height = ref(0)
+const origin = ref({ left: 0, top: 0 })
+const shapeTransform = computed(() => props.focused
+	? 'translate(0px, 0px) scale(1, 1)'
+	: `translate(${props.marker.left - origin.value.left - 8}px, ${props.marker.top - origin.value.top}px) scale(1, ${height.value ? props.marker.height / height.value : 0})`)
 let frame = 0
 let lastTime = 0
 let focus = 0
@@ -24,7 +29,7 @@ let dots: SVGCircleElement[] = []
 
 function draw(time: number) {
 	const geometry = createReadingRail(height.value, position, focus, amplitude, reducedMotion.value === 'reduce' ? 0 : time - started)
-	track.value?.setAttribute('d', geometry.path)
+	track.value?.setAttribute('d', focus === 0 ? `M8 0 L8 ${height.value}` : geometry.path)
 	highlight.value?.setAttribute('d', geometry.path)
 	highlight.value?.setAttribute('stroke-dashoffset', `${0.06 - (height.value ? geometry.y / height.value : 0)}`)
 	for (let index = 0; index < dots.length; index++) {
@@ -44,7 +49,8 @@ function draw(time: number) {
 
 function animate(time: number) {
 	frame = 0
-	const delta = Math.max(1, Math.min(64, time - (lastTime || time - 16)))
+	// Match the reference's Motion frame clock: a 60Hz first step, then 1–40ms.
+	const delta = lastTime ? Math.max(1, Math.min(40, time - lastTime)) : 1000 / 60
 	lastTime = time
 	const active = props.focused ? 1 : 0
 	const smoothing = 1 - Math.exp(-delta / 140)
@@ -53,8 +59,9 @@ function animate(time: number) {
 		focus = active
 	const target = percent.value / 100 * height.value
 	position = focus === 0 ? target : position + (target - position) * Math.min(1, 1.4 * smoothing)
-	const velocity = (scrollPosition.value - lastScroll) / delta * 1000
-	lastScroll = scrollPosition.value
+	const currentScroll = window.scrollY
+	const velocity = (currentScroll - lastScroll) / delta * 1000
+	lastScroll = currentScroll
 	scrollVelocity += (velocity - scrollVelocity) * Math.min(1, delta / 80)
 	const targetAmplitude = Math.min(14, 0.012 * Math.abs(scrollVelocity))
 	const seconds = delta / 1000
@@ -71,11 +78,12 @@ function sync() {
 	cancelAnimationFrame(frame)
 	frame = 0
 	lastTime = 0
-	lastScroll = scrollPosition.value
+	lastScroll = window.scrollY
 	if (paused.value || !desktop.value || !visible.value)
 		return
 	if (!props.focused && focus === 0) {
 		position = percent.value / 100 * height.value
+		draw(0)
 		return
 	}
 	if (reducedMotion.value === 'reduce') {
@@ -88,10 +96,17 @@ function sync() {
 	frame = requestAnimationFrame(animate)
 }
 
-useResizeObserver(rail, ([entry]) => {
-	height.value = entry?.contentRect.height ?? 0
+function measure() {
+	if (!rail.value?.parentElement)
+		return
+	const bounds = rail.value.getBoundingClientRect()
+	const parent = rail.value.parentElement.getBoundingClientRect()
+	height.value = bounds.height
+	origin.value = { left: bounds.left - parent.left, top: bounds.top - parent.top }
 	sync()
-})
+}
+useResizeObserver(rail, measure)
+useEventListener('resize', measure)
 watch([() => props.focused, paused, desktop, visible, reducedMotion], sync)
 watch([percent, scrollPosition], () => {
 	if (!frame)
@@ -100,12 +115,12 @@ watch([percent, scrollPosition], () => {
 watch(headings, async () => {
 	await nextTick()
 	dots = [...(svg.value?.querySelectorAll<SVGCircleElement>('circle') ?? [])]
-	sync()
+	measure()
 }, { flush: 'post' })
 onMounted(() => {
 	started = performance.now()
 	dots = [...(svg.value?.querySelectorAll<SVGCircleElement>('circle') ?? [])]
-	sync()
+	measure()
 })
 onScopeDispose(() => {
 	if (import.meta.client)
@@ -114,17 +129,26 @@ onScopeDispose(() => {
 </script>
 
 <template>
-<div ref="rail" class="reading-rail" :class="{ focused }" :style="{ '--rail-progress': `${percent}%` }" aria-hidden="true">
+<div ref="rail" class="reading-rail" :class="{ focused, 'has-marker': marker.height > 0 }" aria-hidden="true">
 	<svg ref="svg" class="rail-svg" width="48" height="100%" fill="none">
-		<path ref="track" class="rail-track" stroke-width="1.2" />
-		<path ref="highlight" class="rail-highlight" pathLength="1" stroke-dasharray="0.12 0.88" stroke-width="1.6" stroke-linecap="round" />
-		<circle
-			v-for="heading in headings"
-			:key="heading.id"
-			class="rail-dot"
-			:class="{ 'is-root': heading.id === heading.rootId, 'is-active': heading.id === activeId }"
-			:r="heading.id === activeId ? 2.5 : heading.id === heading.rootId ? 1.75 : 1.25"
-		/>
+		<defs>
+			<linearGradient :id="gradientId" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="0" :y2="height">
+				<stop class="rail-color" offset="0" />
+				<stop class="rail-color" offset="0.8" />
+				<stop class="rail-color rail-fade" offset="1" />
+			</linearGradient>
+		</defs>
+		<g class="rail-shape" :style="{ transform: shapeTransform }">
+			<path ref="track" class="rail-track" :stroke="`url(#${gradientId})`" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+			<path ref="highlight" class="rail-highlight" pathLength="1" stroke-dasharray="0.12 0.88" stroke-width="1.6" stroke-linecap="round" />
+			<circle
+				v-for="heading in headings"
+				:key="heading.id"
+				class="rail-dot"
+				:class="{ 'is-root': heading.id === heading.rootId, 'is-active': heading.id === activeId }"
+				:r="heading.id === activeId ? 2.5 : heading.id === heading.rootId ? 1.75 : 1.25"
+			/>
+		</g>
 	</svg>
 	<div ref="label" class="rail-label">
 		<Transition name="rail-title" mode="out-in">
@@ -149,27 +173,37 @@ onScopeDispose(() => {
 	inset: 0;
 	width: 100%;
 	height: 100%;
-	clip-path: inset(var(--rail-progress) -50% calc(100% - var(--rail-progress)) -2%);
-	transition: clip-path 450ms var(--reading-curve);
-	.focused & {
-		clip-path: inset(-2% -50% -2% -2%);
-		transition-duration: 550ms;
-	}
+}
+.rail-shape {
+	transform-origin: 0 0;
+	transition: transform var(--reading-expand-duration) var(--reading-curve);
+	.focused & { transition-duration: var(--reading-collapse-duration); }
 }
 .rail-track {
-	stroke: color-mix(in srgb, var(--reading-ink) 15%, transparent);
 	opacity: 0;
-	transition: opacity 450ms;
+	transition: opacity 450ms, stroke-width 450ms var(--reading-curve), filter 450ms var(--reading-curve);
+	filter: drop-shadow(0 0 4px color-mix(in srgb, var(--reading-accent) 35%, transparent));
+	stroke-width: 2;
+	.has-marker & { opacity: 0.8; }
 	.focused & {
 		opacity: 1;
-		transition-duration: 200ms;
-		transition-delay: 100ms;
+		filter: drop-shadow(0 0 2px color-mix(in srgb, var(--reading-accent) 20%, transparent));
+		stroke-width: 1.2;
 	}
+}
+.rail-color {
+	stop-color: var(--reading-accent);
+	transition: stop-color 450ms var(--reading-curve), stop-opacity 450ms var(--reading-curve);
+	.focused & { stop-color: color-mix(in srgb, var(--reading-ink) 15%, transparent); }
+}
+.rail-fade {
+	stop-opacity: 0;
+	.focused & { stop-opacity: 1; }
 }
 .rail-highlight {
 	opacity: 0;
 	transition: opacity 200ms;
-	filter: drop-shadow(0 0 4px color-mix(in srgb, var(--reading-accent) 35%, transparent));
+	filter: drop-shadow(0 0 2px color-mix(in srgb, var(--reading-accent) 20%, transparent));
 	stroke: var(--reading-accent);
 	.focused & {
 		opacity: 0.55;
@@ -222,6 +256,6 @@ onScopeDispose(() => {
 	transform: translateY(-3px);
 }
 @media (prefers-reduced-motion: reduce) {
-	.rail-svg, .rail-track, .rail-highlight, .rail-dot, .rail-label, .rail-title-enter-active, .rail-title-leave-active { transition: none; }
+	.rail-shape, .rail-track, .rail-color, .rail-highlight, .rail-dot, .rail-label, .rail-title-enter-active, .rail-title-leave-active { transition: none; }
 }
 </style>

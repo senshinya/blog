@@ -71,8 +71,14 @@ function afterEnter(element: Element) {
 		:inert="!hasAside"
 		@click.self="layoutStore.close()"
 	>
-		<div v-if="arriving" class="blog-widget arrival-aside-skeleton" aria-hidden="true">
-			<i /><i /><i />
+		<div v-if="arriving" class="blog-widget reading-navigation arrival-aside-skeleton" aria-hidden="true">
+			<div class="reading-navigation-inner">
+				<div class="reading-directory">
+					<div class="arrival-toc-skeleton">
+						<i /><i /><i /><i /><i />
+					</div>
+				</div>
+			</div>
 		</div>
 		<slot v-else />
 	</aside>
@@ -81,12 +87,16 @@ function afterEnter(element: Element) {
 
 <style scoped>
 .arrival-aside-skeleton {
-	display: grid;
-	gap: 1rem;
-	padding: 1rem;
 	color: var(--c-text-3);
+	.arrival-toc-skeleton {
+		display: grid;
+		grid-auto-rows: 21px;
+		gap: 3.5px;
+		padding-inline: 7px;
+	}
 	i {
-		opacity: 0.1;
+		align-self: center;
+		opacity: 0.25;
 		height: 0.6rem;
 		border-radius: 0.3rem;
 		background: currentColor;

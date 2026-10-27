@@ -22,6 +22,126 @@ async function article(width, options = {}) {
 	return { context, page }
 }
 
+test('reading rail retains the reference bulge, scroll pulse and settling range', async () => {
+	const { context, page } = await article(1440)
+	try {
+		await page.locator('.article').hover({ position: { x: 150, y: 150 } })
+		await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+		await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+		await page.waitForTimeout(1600)
+		const baseline = await page.locator('.rail-track').evaluate(el => el.getBBox().width)
+		assert.ok(baseline >= 9.7 && baseline <= 11.1, `reference breathing range is 10.4 ± 0.6px: ${baseline}`)
+		const samples = await page.evaluate(async () => {
+			const path = document.querySelector('.rail-track')
+			const samples = []
+			const started = performance.now()
+			const initialScroll = scrollY
+			await new Promise((resolve) => {
+				function frame() {
+					const elapsed = performance.now() - started
+					scrollTo({ top: initialScroll + Math.min(elapsed, 260) * 1.5, behavior: 'instant' })
+					samples.push(path.getBBox().width)
+					if (performance.now() - started < 1400)
+						requestAnimationFrame(frame)
+					else resolve()
+				}
+				requestAnimationFrame(frame)
+			})
+			return samples
+		})
+		const peak = Math.max(...samples)
+		assert.ok(peak >= 20 && peak <= 26.5, `fast scrolling retains the reference spring amplitude: ${peak}`)
+		assert.ok(samples.at(-1) >= 9.7 && samples.at(-1) <= 11.3, `the pulse settles back into the breathing range: ${samples.at(-1)}`)
+	}
+	finally { await context.close() }
+})
+
+for (const width of [1025, 1440]) {
+	test(`directory highlight continuously becomes the reading axis at ${width}px`, async () => {
+		const { context, page } = await article(width)
+		try {
+			await page.mouse.move(5, 5)
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			await page.waitForTimeout(900)
+			const measure = () => page.evaluate(() => {
+				const path = document.querySelector('.rail-track')
+				const rect = path.getBoundingClientRect()
+				const links = [...document.querySelectorAll('.reading-navigation a.is-visible')]
+				const toc = document.querySelector('.reading-navigation .reading-toc').getBoundingClientRect()
+				return { x: rect.x, y: rect.y, height: rect.height, opacity: Number(getComputedStyle(path).opacity), tocRight: toc.right, markerX: toc.x + 8, markerY: links[0]?.getBoundingClientRect().y, markerHeight: links.at(-1)?.getBoundingClientRect().bottom - links[0]?.getBoundingClientRect().y }
+			})
+			const expanded = await measure()
+			assert.ok(expanded.opacity > 0.5 && expanded.height > 0, 'the axis itself must render the expanded highlight')
+			assert.ok(expanded.tocRight <= width - 12, 'the outward directory stays inside the viewport')
+			assert.ok(Math.abs(expanded.x - expanded.markerX) < 1, 'the line starts at the directory highlight')
+			assert.ok(Math.abs(expanded.y - expanded.markerY) < 2 && Math.abs(expanded.height - expanded.markerHeight) < 2, 'the line covers the visible headings')
+			async function capture(action) {
+				await page.evaluate(() => {
+					const path = document.querySelector('.rail-track')
+					const start = performance.now()
+					window.axisFrames = new Promise((resolve) => {
+						const frames = []
+						function frame() {
+							const rect = path.getBoundingClientRect()
+							frames.push({ x: rect.x, y: rect.y, height: rect.height, opacity: Number(getComputedStyle(path).opacity), same: document.querySelector('.rail-track') === path })
+							if (performance.now() - start < 950)
+								requestAnimationFrame(frame)
+							else resolve(frames)
+						}
+						requestAnimationFrame(frame)
+					})
+				})
+				await action()
+				return page.evaluate(() => window.axisFrames)
+			}
+			const bodyX = (await page.locator('.article').boundingBox()).x + 150
+			const folded = await capture(() => page.mouse.move(bodyX, 450))
+			assert.equal(await page.locator('.reading-navigation').getAttribute('data-focused'), 'true')
+			const compact = folded.at(-1)
+			const axisTravel = width < 1360 ? -8 : -16
+			assert.ok(Math.abs(compact.x - expanded.x - axisTravel) < 1, 'the right line folds left toward the article')
+			assert.ok(compact.height > expanded.height + 50, 'the highlight stretches into the full axis')
+			assert.ok(folded.some(frame => (frame.x - expanded.x) / axisTravel > 0.1 && (frame.x - expanded.x) / axisTravel < 0.9 && frame.height > expanded.height + 5 && frame.height < compact.height - 5), 'the line moves and stretches through intermediate frames')
+			const unfolded = await capture(() => page.locator('.reading-navigation').hover())
+			assert.ok(Math.abs(unfolded.at(-1).x - expanded.x) < 1 && Math.abs(unfolded.at(-1).height - expanded.height) < 2, 'expansion returns the same line to the visible headings')
+			assert.ok(unfolded.some(frame => (frame.x - expanded.x) / axisTravel > 0.1 && (frame.x - expanded.x) / axisTravel < 0.9), 'the return is animated too')
+			assert.ok([...folded, ...unfolded].every(frame => frame.same && frame.opacity > 0.1 && frame.height > 0), 'the shared line never disappears or gets replaced during either transition')
+			const reversed = await capture(async () => {
+				await page.mouse.move(bodyX, 450)
+				await page.waitForTimeout(150)
+				await page.locator('.reading-navigation').hover()
+			})
+			assert.ok(reversed.some(frame => frame.x < expanded.x - 1), 'an interrupted fold starts moving the line')
+			assert.ok(Math.abs(reversed.at(-1).x - expanded.x) < 1, 'reversing partway returns to the highlight')
+			assert.ok(reversed.every((frame, i) => frame.same && frame.opacity > 0.1 && (!i || Math.abs(frame.x - reversed[i - 1].x) < 32)), 'reversing preserves position and visibility')
+		}
+		finally { await context.close() }
+	})
+}
+
+test('directory axis switches without motion when reduced motion is requested', async () => {
+	const { context, page } = await article(1440, { reducedMotion: 'reduce' })
+	try {
+		await page.locator('.article').hover({ position: { x: 150, y: 150 } })
+		await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+		await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+		const bounds = () => page.locator('.rail-track').evaluate((el) => {
+			const start = el.getPointAtLength(0).matrixTransform(el.getScreenCTM())
+			return { x: start.x, height: el.getBoundingClientRect().height }
+		})
+		const compact = await bounds()
+		assert.equal(await page.locator('#blog-sidebar .sidebar-nav-item[href]').first().evaluate(el => el.getAnimations().length), 0, 'compact hit areas settle immediately with reduced motion')
+		assert.equal(await page.locator('#blog-sidebar .sidebar-header').evaluate(el => el.getAnimations().length), 0, 'avatar settles immediately with reduced motion')
+		await page.locator('.reading-navigation').hover()
+		await page.waitForFunction(() => !document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+		const expanded = await bounds()
+		assert.ok(Math.abs(compact.x - expanded.x + 16) < 1, JSON.stringify({ compact, expanded }))
+		assert.ok(expanded.height > 0 && compact.height > expanded.height)
+		assert.equal(await page.locator('.rail-shape').evaluate(el => el.getAnimations().length), 0)
+	}
+	finally { await context.close() }
+})
+
 test('desktop directory folds into a curved reading rail and opens for pointer and keyboard', async () => {
 	const { context, page } = await article(1440)
 	try {
@@ -258,3 +378,323 @@ for (const width of [375, 1440]) {
 		finally { await context.close() }
 	})
 }
+
+for (const width of [1440, 1920]) {
+	test(`article stays centered while both reading sides settle and navigation expands at ${width}px`, async () => {
+		const { context, page } = await article(width, { reducedMotion: 'reduce' })
+		try {
+			const body = page.locator('.article')
+			const original = await body.boundingBox()
+			assert.ok(Math.abs(original.x + original.width / 2 - width / 2) < 1, 'article must share the viewport center')
+			assert.ok(original.width >= 720 && original.width <= 760, 'desktop reading measure stays comfortable')
+			await body.hover({ position: { x: 150, y: 150 } })
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			const label = page.locator('#blog-sidebar .sidebar-nav-item .nav-text').last()
+			await page.waitForFunction(() => getComputedStyle(document.querySelector('#blog-sidebar .sidebar-nav-item .nav-text')).opacity === '0')
+			const settled = await body.boundingBox()
+			assert.equal(settled.x, original.x)
+			assert.equal(settled.width, original.width)
+			const nav = page.locator('#blog-sidebar .sidebar-nav-item[href]').first()
+			assert.ok(await nav.getAttribute('aria-label'), 'compact links keep their accessible names')
+			await nav.focus()
+			assert.equal(await label.evaluate(el => getComputedStyle(el).opacity), '1')
+			const expanded = await body.boundingBox()
+			assert.equal(expanded.x, original.x)
+			assert.equal(expanded.width, original.width)
+			await page.locator('.reading-navigation').hover()
+			const directory = await body.boundingBox()
+			assert.equal(directory.x, original.x)
+			assert.equal(directory.width, original.width)
+		}
+		finally { await context.close() }
+	})
+}
+
+for (const width of [1025, 1440]) {
+	test(`sidebar footer hides without a compact button and restores all settings when expanded at ${width}px`, async () => {
+		const { context, page } = await article(width, { reducedMotion: 'reduce' })
+		try {
+			await page.locator('.article').hover({ position: { x: 150, y: 150 } })
+			const before = await page.locator('.sidebar-footer').boundingBox()
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			assert.equal(await page.locator('.reading-settings-trigger').count(), 0, 'compact mode has no settings button')
+			assert.equal(await page.locator('#blog-sidebar .reading-preferences').isVisible(), false)
+			assert.equal(await page.locator('#blog-sidebar .sidebar-social a').first().isVisible(), false)
+			assert.equal((await page.locator('.sidebar-footer').boundingBox()).height, before.height)
+			await page.locator('.reading-navigation').hover()
+			await page.waitForFunction(() => !document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			assert.equal(await page.locator('#blog-sidebar .reading-preferences').isVisible(), true)
+			assert.equal(await page.locator('#blog-sidebar .language-trigger').isVisible(), true)
+			for (const theme of ['light', 'system', 'dark'])
+				assert.equal(await page.locator(`#blog-sidebar button[data-theme="${theme}"]`).isVisible(), true)
+			assert.equal(await page.locator('#blog-sidebar .sidebar-social a').first().isVisible(), true)
+			await page.locator('#blog-sidebar button[data-theme="dark"]').click()
+			await page.waitForFunction(() => document.documentElement.classList.contains('dark'))
+			await page.locator('#blog-sidebar .language-trigger').click()
+			assert.equal(await page.locator('#blog-sidebar .language-options button').count(), 3)
+			await page.keyboard.press('Escape')
+			assert.equal(await page.locator('#blog-sidebar .language-trigger').evaluate(el => document.activeElement === el), true)
+			assert.equal((await page.locator('.sidebar-footer').boundingBox()).height, before.height)
+		}
+		finally { await context.close() }
+	})
+}
+
+for (const width of [900, 1025]) {
+	test(`tablet article reserves a light navigation rail without horizontal overflow at ${width}px`, async () => {
+		const { context, page } = await article(width, { reducedMotion: 'reduce' })
+		try {
+			assert.ok((await page.locator('#blog-sidebar').boundingBox()).width <= 80)
+			assert.equal(await page.locator('#blog-sidebar .nav-text').first().evaluate(el => getComputedStyle(el).opacity), '0')
+			assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
+			const original = await page.locator('.article').boundingBox()
+			assert.ok(Math.abs(original.x + original.width / 2 - width / 2) < 1, 'tablet article stays on the viewport center')
+			const link = page.locator('#blog-sidebar .sidebar-nav-item[href]').first()
+			await link.focus()
+			assert.equal(await page.locator('#blog-sidebar .nav-text').first().evaluate(el => getComputedStyle(el).opacity), '1')
+			assert.equal((await page.locator('.article').boundingBox()).x, original.x)
+		}
+		finally { await context.close() }
+	})
+}
+
+for (const width of [1280, 1359]) {
+	test(`medium desktop keeps the article centered and bounded at ${width}px`, async () => {
+		const { context, page } = await article(width, { reducedMotion: 'reduce' })
+		try {
+			const bounds = await page.locator('.article').boundingBox()
+			assert.ok(bounds.width <= 760, 'article must not grow past its reading measure')
+			assert.ok(Math.abs(bounds.x + bounds.width / 2 - width / 2) < 1)
+		}
+		finally { await context.close() }
+	})
+}
+
+test('starting reading preserves focus already inside the preferences', async () => {
+	const { context, page } = await article(1440, { reducedMotion: 'reduce' })
+	try {
+		const theme = page.locator('#blog-sidebar button[data-theme="dark"]')
+		await theme.focus()
+		await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+		await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-reading'))
+		assert.equal(await theme.isVisible(), true)
+		assert.equal(await theme.evaluate(el => document.activeElement === el), true)
+	}
+	finally { await context.close() }
+})
+
+test('article sidebar keeps the home typography and navigation rhythm', async () => {
+	const { context, page } = await article(1440, { reducedMotion: 'reduce' })
+	try {
+		const styles = () => page.evaluate(() => Object.fromEntries(['.header-title', '.sidebar-header', '.sidebar-nav-item[href]'].map((selector) => {
+			const el = document.querySelector(selector)
+			const css = getComputedStyle(el)
+			return [selector, { font: css.fontSize, padding: css.padding, height: el.getBoundingClientRect().height }]
+		})))
+		const entry = await styles()
+		await page.goto('/')
+		await page.waitForFunction(() => document.querySelector('#blog-root')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating === false)
+		assert.deepEqual(entry, await styles(), 'article sidebar uses the same title, avatar and navigation sizing as home')
+	}
+	finally { await context.close() }
+})
+
+test('reading keeps the footer anchored between frames', async () => {
+	const { context, page } = await article(1440)
+	try {
+		await page.waitForTimeout(300)
+		await page.locator('.article').hover({ position: { x: 150, y: 150 } })
+		const samples = await page.evaluate(async () => {
+			const selectors = ['#blog-sidebar .sidebar-footer']
+			const samples = []
+			const measure = () => selectors.map((selector) => {
+				const rect = document.querySelector(selector).getBoundingClientRect()
+				return { x: rect.x, y: rect.y, height: rect.height }
+			})
+			samples.push(measure())
+			scrollTo({ top: 900, behavior: 'instant' })
+			const start = performance.now()
+			await new Promise((resolve) => {
+				function frame() {
+					samples.push(measure())
+					if (performance.now() - start < 450)
+						requestAnimationFrame(frame)
+					else resolve()
+				}
+				requestAnimationFrame(frame)
+			})
+			return samples
+		})
+		assert.equal(await page.locator('.reading-navigation').getAttribute('data-reading'), 'true')
+		for (const frame of samples) {
+			for (let i = 0; i < frame.length; i++) {
+				assert.ok(Math.abs(frame[i].x - samples[0][i].x) < 0.5, `item ${i} must stay horizontally anchored`)
+				assert.ok(Math.abs(frame[i].y - samples[0][i].y) < 0.5, `item ${i} must keep its vertical position`)
+				assert.ok(Math.abs(frame[i].height - samples[0][i].height) < 0.5, `item ${i} must retain its height`)
+			}
+		}
+	}
+	finally { await context.close() }
+})
+
+for (const width of [1025, 1440]) {
+	test(`compact avatar and navigation move together with the reading axis at ${width}px`, async () => {
+		const { context, page } = await article(width)
+		try {
+			await page.mouse.move(5, 5)
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			await page.waitForTimeout(900)
+			const measure = () => page.evaluate(() => {
+				const icon = document.querySelector('#blog-sidebar .sidebar-nav-item[href] .iconify').getBoundingClientRect()
+				const path = document.querySelector('.rail-track')
+				const axis = path.getPointAtLength(0).matrixTransform(path.getScreenCTM())
+				const avatar = document.querySelector('#blog-sidebar .blog-logo').getBoundingClientRect()
+				return { iconX: icon.x, axisX: axis.x, avatarX: avatar.x, avatarY: avatar.y, avatarWidth: avatar.width, avatarHeight: avatar.height }
+			})
+			const expanded = await measure()
+			const body = await page.locator('.article').boundingBox()
+			async function capture(action) {
+				await page.evaluate(() => {
+					const start = performance.now()
+					window.inwardFrames = new Promise((resolve) => {
+						const frames = []
+						function frame() {
+							const icon = document.querySelector('#blog-sidebar .sidebar-nav-item[href] .iconify').getBoundingClientRect()
+							const path = document.querySelector('.rail-track')
+							const avatar = document.querySelector('#blog-sidebar .blog-logo').getBoundingClientRect()
+							frames.push({ iconX: icon.x, axisX: path.getPointAtLength(0).matrixTransform(path.getScreenCTM()).x, avatarX: avatar.x, avatarY: avatar.y, avatarWidth: avatar.width, avatarHeight: avatar.height, iconOpacity: Number(getComputedStyle(document.querySelector('#blog-sidebar .sidebar-nav-item[href] .iconify')).opacity), avatarOpacity: Number(getComputedStyle(document.querySelector('#blog-sidebar .blog-logo')).opacity), backgroundOpacity: Number(getComputedStyle(document.querySelector('#blog-sidebar .emoji-tail')).opacity) })
+							if (performance.now() - start < 800)
+								requestAnimationFrame(frame)
+							else resolve(frames)
+						}
+						requestAnimationFrame(frame)
+					})
+				})
+				await action()
+				return page.evaluate(() => window.inwardFrames)
+			}
+			const folded = await capture(() => page.mouse.move(body.x + 150, 450))
+			const compact = folded.at(-1)
+			const travel = compact.iconX - expanded.iconX
+			assert.ok(compact.iconOpacity >= 0.4 && compact.iconOpacity <= 0.5, 'compact controls soften to the rail label emphasis')
+			assert.ok(folded.some(frame => frame.iconOpacity > 0.55 && frame.iconOpacity < 0.95), 'icons dim progressively during collapse')
+			assert.ok(travel > 80 && travel < 190, 'the compact icon group moves right toward the article')
+			assert.ok(compact.axisX < expanded.axisX - 5, 'the right axis moves left, opposing the left navigation')
+			assert.ok(folded.some(frame => frame.iconX > expanded.iconX + 10 && frame.iconX < compact.iconX - 10), 'icons move through intermediate positions')
+			const unfolded = await capture(() => page.locator('.reading-navigation').hover())
+			assert.ok(Math.abs(unfolded.at(-1).iconX - expanded.iconX) < 0.5, 'expanded navigation returns to its existing position')
+			assert.equal(unfolded.at(-1).iconOpacity, 1, 'expanded icons restore their full emphasis')
+			assert.ok(unfolded.every(frame => Math.abs(frame.iconX - expanded.iconX) <= 0.5 || frame.backgroundOpacity < 0.01), 'the decorative background stays hidden while the avatar returns')
+			assert.ok(unfolded.some(frame => Math.abs(frame.iconX - expanded.iconX) <= 0.5 && frame.backgroundOpacity > 0.01 && frame.backgroundOpacity < 0.18), 'the background fades in only after the avatar settles')
+			assert.ok(folded.every(frame => frame.iconX - expanded.iconX < 0.5 || frame.backgroundOpacity < 0.01), 'the background hides before compact movement')
+			for (const frame of [...folded, ...unfolded]) {
+				const left = (frame.iconX - expanded.iconX) / travel
+				const right = (frame.axisX - expanded.axisX) / (width < 1360 ? -8 : -16)
+				assert.ok(Math.abs(left - right) < 0.15, `both sides move with the same timing: ${left}, ${right}`)
+				assert.ok(Math.abs(frame.avatarX - expanded.avatarX - (frame.iconX - expanded.iconX)) < 0.5, 'avatar and navigation translate together in every frame')
+				assert.ok(Math.abs(frame.avatarY - expanded.avatarY) < 0.5, 'avatar keeps its vertical position')
+				assert.ok(Math.abs(frame.avatarWidth - expanded.avatarWidth) < 0.5 && Math.abs(frame.avatarHeight - expanded.avatarHeight) < 0.5, 'avatar retains its size throughout the transition')
+				assert.ok(Math.abs(frame.avatarOpacity - frame.iconOpacity) < 0.02, 'avatar and navigation dim together')
+			}
+			assert.deepEqual(await page.locator('.article').boundingBox(), body, 'the reading column stays fixed')
+		}
+		finally { await context.close() }
+	})
+}
+
+for (const width of [1025, 1280, 1359, 1440, 1920]) {
+	test(`settled reading controls keep balanced space beside the article at ${width}px`, async () => {
+		const { context, page } = await article(width, { reducedMotion: 'reduce' })
+		try {
+			await page.locator('.article').hover({ position: { x: 150, y: 150 } })
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			const body = await page.locator('.article').boundingBox()
+			const icon = await page.locator('#blog-sidebar .sidebar-nav-item[href] .iconify').first().boundingBox()
+			const railX = await page.locator('.rail-track').evaluate(el => el.getPointAtLength(0).matrixTransform(el.getScreenCTM()).x)
+			const leftGap = body.x - icon.x - icon.width / 2
+			const rightGap = railX - body.x - body.width
+			const minimumGap = width < 1360 ? 77 : 114
+			assert.ok(leftGap >= minimumGap && leftGap <= minimumGap + 10, `left controls leave slightly more room: ${leftGap}`)
+			assert.ok(Math.abs(rightGap - (width < 1360 ? 80 : 107)) < 1, `right axis leaves slightly more room: ${rightGap}`)
+			assert.ok(Math.abs(leftGap - rightGap) < 20, `side gaps stay visually balanced: ${leftGap}, ${rightGap}`)
+			assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true)
+		}
+		finally { await context.close() }
+	})
+}
+
+for (const width of [1025, 1440]) {
+	test(`both sidebars follow the directory when either side is hovered or focused at ${width}px`, async () => {
+		const { context, page } = await article(width, { reducedMotion: 'reduce' })
+		try {
+			const bodyX = (await page.locator('.article').boundingBox()).x + 150
+			await page.mouse.move(5, 5)
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-reading'))
+			const label = page.locator('#blog-sidebar .sidebar-nav-item[href] .nav-text').first()
+			assert.equal(await label.evaluate(el => getComputedStyle(el).opacity), '1', 'expanded directory keeps the left labels expanded too')
+			// Exercise the reference's 300ms pointer sampler with a continuing move.
+			await page.mouse.move(bodyX, 450)
+			await page.waitForTimeout(310)
+			await page.mouse.move(bodyX + 1, 450)
+			await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			assert.equal(await label.evaluate(el => getComputedStyle(el).opacity), '0')
+			await page.locator('.reading-navigation').hover()
+			await page.waitForFunction(() => !document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			assert.equal(await label.evaluate(el => getComputedStyle(el).opacity), '1', 'hovering the right side expands both sides')
+			// Exercise the reference's 300ms pointer sampler with a continuing move.
+			await page.mouse.move(bodyX, 450)
+			await page.waitForTimeout(310)
+			await page.mouse.move(bodyX + 1, 450)
+			await page.waitForFunction(() => document.querySelector('.reading-navigation')?.hasAttribute('data-focused'))
+			await page.locator('#blog-sidebar .sidebar-nav-item[href]').first().focus()
+			await page.waitForFunction(() => !document.querySelector('.reading-navigation')?.hasAttribute('data-focused'), { timeout: 3000 })
+			assert.equal(await label.evaluate(el => getComputedStyle(el).opacity), '1', 'left keyboard navigation expands the directory too')
+		}
+		finally { await context.close() }
+	})
+}
+
+test('left labels follow the actual directory fade on collapse and expansion', async () => {
+	const { context, page } = await article(1440)
+	try {
+		const bodyX = (await page.locator('.article').boundingBox()).x + 150
+		await page.mouse.move(5, 5)
+		await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+		await page.waitForTimeout(850)
+		async function capture(action) {
+			await page.evaluate(() => {
+				window.sideFrames = []
+				const start = performance.now()
+				window.sideCapture = new Promise((resolve) => {
+					function frame() {
+						const label = document.querySelector('#blog-sidebar .sidebar-nav-item[href] .nav-text')
+						const item = document.querySelector('.reading-navigation a[aria-current]')?.closest('.toc-item')
+						if (item)
+							window.sideFrames.push({ left: Number(getComputedStyle(label).opacity), right: Number(getComputedStyle(item).opacity) })
+						if (performance.now() - start < 800)
+							requestAnimationFrame(frame)
+						else resolve(window.sideFrames)
+					}
+					requestAnimationFrame(frame)
+				})
+			})
+			await action()
+			return page.evaluate(() => window.sideCapture)
+		}
+		for (const action of [
+			() => page.mouse.move(bodyX, 450),
+			() => page.locator('.reading-navigation').hover(),
+			() => page.mouse.move(bodyX, 450),
+			() => page.locator('#blog-sidebar .sidebar-nav-item[href]').first().hover(),
+		]) {
+			const frames = await capture(action)
+			assert.ok(frames.some(frame => frame.right > 0.1 && frame.right < 0.9), 'capture must include the directory transition')
+			assert.ok(frames.every(frame => Math.abs(frame.left - frame.right) < 0.12), `both sides should fade together: ${JSON.stringify(frames)}`)
+		}
+	}
+	finally { await context.close() }
+})

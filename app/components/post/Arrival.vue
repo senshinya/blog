@@ -22,27 +22,31 @@ const post = computed(() => arrival.value?.moving ? arrival.value.post : arrival
 
 <style scoped>
 .article-arrival-loading {
-	min-height: max(28rem, calc(100dvh - 22rem));
-	padding: 1.5rem 1rem;
+	/* Leave room below the cover so sticky navigation does not hit its track end. */
+	min-height: max(28rem, 100dvh);
+	padding: 1rem;
 	color: var(--c-text-3);
 	animation: content-in 0.2s ease-out;
 }
 .arrival-status {
-	display: block;
-	opacity: 0.6;
-	margin-bottom: 1.5rem;
-	font-size: 0.8rem;
+	/* Announce loading without displacing the first body placeholder. */
+	position: absolute;
+	overflow: hidden;
+	width: 1px;
+	height: 1px;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 .arrival-heading, .arrival-lines i {
 	display: block;
-	opacity: 0.1;
+	opacity: 0.25;
 	border-radius: 0.3rem;
 	background: currentColor;
 }
 .arrival-heading {
 	width: 25%;
 	height: 1.2rem;
-	margin-block: 0.5rem 2rem;
+	margin-block: 0 2rem;
 }
 .arrival-lines {
 	display: grid;

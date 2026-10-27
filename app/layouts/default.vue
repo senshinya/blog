@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '~/assets/css/article-layout.css'
+
 const { slots } = provideLayoutSlots()
 const { arrival } = useArticleArrival()
 const arriving = computed(() => arrival.value?.visible && (arrival.value.loading || arrival.value.moving))
@@ -47,22 +49,19 @@ const mounted = useMounted()
 	max-width: calc(var(--aside-width) + 1rem + 1080px);
 	margin-inline: auto;
 
-	&:not(:has(> .blog-aside-track > #blog-aside:not(.is-empty))) {
+	/* Keep responsive overrides from inheriting the aside selector's ID weight. */
+	&:where(:not(:has(> .blog-aside-track > #blog-aside:not(.is-empty)))) {
 		grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
 	}
 
 	@media (max-width: 1080px) {
 		--sidebar-width: clamp(240px, 25vw, var(--aside-width));
 
-		&, &:not(:has(> .blog-aside-track > #blog-aside:not(.is-empty))) {
-			grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-		}
+		grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
 	}
 
 	@media (max-width: 768px) {
-		&, &:not(:has(> .blog-aside-track > #blog-aside:not(.is-empty))) {
-			grid-template-columns: minmax(0, 1fr);
-		}
+		grid-template-columns: minmax(0, 1fr);
 	}
 }
 

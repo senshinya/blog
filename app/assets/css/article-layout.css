@@ -1,0 +1,250 @@
+/* Share directory placement between the loading shell and the resolved widget. */
+.reading-navigation {
+	flex: none;
+	position: relative;
+	width: 200px;
+	height: max(120px, calc(100dvh - 417px));
+	min-width: 0;
+	max-width: 100%;
+	margin: 120px 0 0;
+	padding: 0;
+	outline-offset: -4px;
+	animation: none !important;
+	@media (max-width: 1024px) { display: none; }
+}
+.reading-navigation-inner {
+	position: relative;
+	height: 100%;
+	max-width: 165px;
+	margin-inline-start: 35px;
+}
+.reading-directory {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	inset: 0 0 auto;
+	min-height: 120px;
+	max-height: 75vh;
+}
+
+#blog-root:has(.arrival-aside-skeleton) #blog-panel .toggle-aside { display: none; }
+
+/* Reading moves compact navigation within the side space; the main keeps its measure. */
+@media (min-width: 769px) {
+	#blog-root:has(> #main-content :is(.article, .article-arrival)) {
+		--article-sidebar-width: 280px;
+		--article-nav-opacity: 1;
+		--article-nav-visibility: visible;
+		--article-preferences-pointer: auto;
+		--article-reading-outset: 8px;
+		--article-reading-nav-shift: calc(160px - var(--article-reading-outset));
+		--article-reading-icon-opacity: 1;
+		--article-reading-icon-duration: var(--reading-expand-duration);
+		--article-reading-rail-offset: calc(24px + var(--article-reading-outset));
+		--article-reading-rail-travel: 16px;
+		--article-reading-directory-shift: calc(var(--article-reading-rail-offset) + var(--article-reading-rail-travel));
+		--article-reading-directory-allowance: var(--article-reading-directory-shift);
+
+		grid-template-columns: minmax(0, 1fr) minmax(0, 792px) minmax(0, 1fr);
+		column-gap: 16px;
+		max-width: 1376px;
+		padding-inline: 0;
+
+		#blog-sidebar {
+			justify-self: start;
+			width: var(--article-sidebar-width);
+			margin: 0;
+			z-index: 2;
+		}
+		/* Share home's dimensions, typography, spacing and icon positions. */
+		.sidebar-content { width: 280px; }
+		.sidebar-header, .sidebar-nav {
+			clip-path: inset(0);
+			transition: translate var(--reading-expand-duration) var(--reading-motion-curve), clip-path var(--reading-expand-duration) var(--reading-motion-curve);
+			translate: 0;
+		}
+		.sidebar-header {
+			width: calc(100% - 2rem);
+			clip-path: inset(-4em);
+			.blog-logo { flex: none; }
+			.blog-text {
+				flex: none;
+				white-space: nowrap;
+			}
+		}
+		.sidebar-nav-item > .iconify:first-child { flex: none; }
+		.sidebar-header .blog-logo, .sidebar-nav-item > .iconify:first-child {
+			opacity: var(--article-reading-icon-opacity);
+			transition: opacity var(--article-reading-icon-duration) var(--reading-motion-curve);
+		}
+		.sidebar-nav-item { width: 100%; }
+		.sidebar-nav-item:focus-visible {
+			outline: 2px solid var(--c-primary);
+			outline-offset: -2px;
+		}
+		.sidebar-header .blog-text,
+		.sidebar-nav :is(h3, .nav-text, .keycut, .external-tip),
+		.sidebar-social {
+			visibility: var(--article-nav-visibility);
+			opacity: var(--article-nav-opacity);
+			transition: opacity var(--reading-item-duration) var(--reading-motion-curve), visibility var(--reading-item-duration) var(--reading-motion-curve);
+		}
+		.sidebar-header .emoji-tail {
+			visibility: var(--article-nav-visibility);
+			opacity: calc(var(--article-nav-opacity) * 0.2);
+			transition: opacity var(--reading-item-duration) var(--reading-motion-curve), visibility 0s;
+		}
+		.sidebar-header:hover .emoji-tail { opacity: calc(var(--article-nav-opacity) * 0.5); }
+		.sidebar-preferences {
+			/* Keep the footer height stable while its full contents fade. */
+			height: 46px;
+			min-height: 46px;
+
+			.reading-settings-panel {
+				visibility: var(--article-nav-visibility);
+				opacity: var(--article-nav-opacity);
+				transition: opacity var(--reading-extras-duration), visibility var(--reading-extras-duration);
+				pointer-events: var(--article-preferences-pointer);
+			}
+		}
+		.blog-aside-track {
+			display: block;
+			/* Include the footer row so the reading rail stays pinned at page end. */
+			grid-area: 1 / 3 / 3 / 4;
+			align-self: stretch;
+			min-width: 0;
+		}
+		#blog-aside:has(.reading-navigation) {
+			overflow: visible;
+			padding-inline: 0;
+		}
+		.reading-navigation { width: 200px; }
+		.reading-rail { translate: var(--article-reading-rail-offset) 0; }
+		.reading-directory {
+			inset-inline: var(--article-reading-directory-shift) auto;
+			width: 165px;
+			max-width: calc(100% - var(--article-reading-directory-shift) + var(--article-reading-directory-allowance));
+		}
+		.reading-wave svg { max-width: 100%; }
+		.rail-label { max-width: 80px; }
+		/* Match the cover and reading column edges, including the arrival shell. */
+		.post-header { margin-inline: 16px; }
+		> .blog-footer { grid-column: 2; }
+	}
+
+
+	#blog-root:has(.reading-navigation[data-focused]) #blog-sidebar {
+		--article-nav-opacity: 0;
+		--article-nav-visibility: hidden;
+		--article-preferences-pointer: none;
+		--article-reading-icon-opacity: 0.45;
+		--article-reading-icon-duration: var(--reading-collapse-duration);
+		.sidebar-header .emoji-tail { transition: none; }
+		.sidebar-header, .sidebar-nav {
+			/* Restrict the moving hit area to the visible icons, clear of the article. */
+			clip-path: inset(0 calc(100% - 72px) 0 0);
+			transition-duration: var(--reading-collapse-duration);
+			translate: var(--article-reading-nav-shift) 0;
+		}
+		.sidebar-header {
+			/* Preserve the avatar's shadow and match its link to the compact image. */
+			width: 3em;
+			clip-path: inset(-12px calc(100% - 3.5em) -12px -12px);
+			transition: translate var(--reading-collapse-duration) var(--reading-motion-curve), clip-path var(--reading-collapse-duration) var(--reading-motion-curve), width 0s var(--reading-collapse-duration);
+		}
+		.sidebar-nav-item {
+			/* Keep labels intact while they fade; then match the hit box to the icon. */
+			width: 52px;
+			transition: width 0s var(--reading-collapse-duration), background-color var(--motion-feedback-duration), color var(--motion-feedback-duration), opacity var(--motion-feedback-duration), outline-color var(--motion-feedback-duration);
+		}
+		.search-btn {
+			outline-color: transparent;
+			background-color: transparent;
+		}
+		.sidebar-nav :is(.nav-text, .keycut, .external-tip) {
+			transition-delay: min(var(--reading-item-delay-limit), calc(var(--reading-nav-index, 0) * var(--reading-item-step)));
+		}
+	}
+	#blog-root:has(.reading-navigation[data-reading]):not(:has(.reading-navigation[data-focused])) #blog-sidebar .sidebar-header .emoji-tail {
+		/* Reveal decoration only after the header finishes its return movement. */
+		transition-delay: var(--reading-expand-duration);
+	}
+	#blog-root:has(> #main-content :is(.article, .article-arrival)) .sidebar-nav {
+		li:nth-child(1) { --reading-nav-index: 0; }
+		li:nth-child(2) { --reading-nav-index: 1; }
+		li:nth-child(3) { --reading-nav-index: 2; }
+		li:nth-child(4) { --reading-nav-index: 3; }
+		li:nth-child(5) { --reading-nav-index: 4; }
+		li:nth-child(6) { --reading-nav-index: 5; }
+	}
+}
+
+/* Tablet navigation opens over the side space without resizing the main column. */
+@media (min-width: 769px) and (max-width: 1359px) {
+	#blog-root:has(> #main-content :is(.article, .article-arrival)) {
+		--article-sidebar-width: 80px;
+
+		grid-template-columns: minmax(80px, 1fr) minmax(0, 792px) minmax(80px, 1fr);
+		.sidebar-content { clip-path: inset(0 200px 0 0); }
+		#blog-sidebar:not(:hover):not(:focus-within) {
+			--article-nav-opacity: 0;
+			--article-nav-visibility: hidden;
+			.search-btn {
+				outline-color: transparent;
+				background-color: transparent;
+			}
+		}
+		#blog-sidebar:is(:hover, :focus-within) .sidebar-content {
+			border-radius: 0 16px 16px 0;
+			box-shadow: var(--box-shadow-3);
+			background-color: var(--c-bg);
+			clip-path: none;
+		}
+
+		/* Once reading, the directory also controls the tablet navigation overlay. */
+		&:has(.reading-navigation[data-reading]):not(:has(.reading-navigation[data-focused])) #blog-sidebar {
+			--article-nav-opacity: 1;
+			--article-nav-visibility: visible;
+			--article-preferences-pointer: auto;
+			.sidebar-content {
+				border-radius: 0 16px 16px 0;
+				box-shadow: var(--box-shadow-3);
+				background-color: var(--c-bg);
+				clip-path: none;
+			}
+		}
+		&:has(.reading-navigation[data-focused]) #blog-sidebar .sidebar-content {
+			clip-path: inset(0 calc(280px - var(--article-reading-nav-shift) - 72px) 0 0);
+		}
+	}
+}
+
+@media (min-width: 1025px) and (max-width: 1359px) {
+	#blog-root:has(> #main-content :is(.article, .article-arrival)) {
+		/* Hold 106px until the 792px body fits; then consume half the extra viewport. */
+		--article-reading-nav-shift: calc(max(106px, calc(50vw - 498px)) - var(--article-reading-outset));
+		--article-reading-rail-travel: 8px;
+		/* Recover directory width as the side columns grow beyond the body's max width. */
+		--article-reading-directory-allowance: clamp(0px, calc((100vw - 1208px) / 2), var(--article-reading-directory-shift));
+		grid-template-columns: minmax(184px, 1fr) minmax(0, 792px) minmax(184px, 1fr);
+		padding-inline: 8px;
+		.reading-navigation { width: 184px; }
+		.reading-navigation-inner { margin-inline-start: 8px; }
+	}
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+	#blog-root:has(> #main-content :is(.article, .article-arrival)) {
+		grid-template-columns: 80px minmax(0, 792px) 80px;
+		justify-content: center;
+		.blog-aside-track { display: contents; }
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#blog-root:has(> #main-content :is(.article, .article-arrival)) #blog-sidebar {
+		:is(.sidebar-header, .sidebar-nav, .sidebar-nav-item, .blog-logo, .iconify, .blog-text, .emoji-tail, h3, .nav-text, .keycut, .external-tip, .sidebar-social, .reading-settings-panel) {
+			transition: none;
+		}
+	}
+}

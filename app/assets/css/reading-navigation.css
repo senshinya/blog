@@ -1,4 +1,14 @@
 /* Reference component uses a 14px root; pixel dimensions preserve its proportions. */
+:root {
+	--reading-motion-curve: cubic-bezier(0.4, 0, 0.2, 1);
+	--reading-item-duration: 350ms;
+	--reading-item-step: 50ms;
+	--reading-item-delay-limit: 450ms;
+	--reading-extras-duration: 300ms;
+	--reading-collapse-duration: 550ms;
+	--reading-expand-duration: 450ms;
+}
+
 .reading-theme {
 	--reading-accent: var(--c-primary);
 	--reading-ink: #403F3A;
@@ -8,7 +18,7 @@
 	--reading-panel: #FEFEFB;
 	--reading-ring: #E3E1DB;
 	--reading-border: rgb(0 0 0 / 5%);
-	--reading-curve: cubic-bezier(0.4, 0, 0.2, 1);
+	--reading-curve: var(--reading-motion-curve);
 
 	font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	font-size: 14px;

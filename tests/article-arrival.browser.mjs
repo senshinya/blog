@@ -55,7 +55,7 @@ for (const width of [375, 1440]) {
 	})
 }
 
-for (const width of [375, 1440]) {
+for (const width of [375, 900, 1025, 1080, 1440, 1920]) {
 	test(`a clicked article expands before its content query finishes at ${width}px`, async () => {
 		const context = await browser.newContext({ baseURL, viewport: { width, height: 1000 }, locale: 'zh-CN' })
 		await isolateExternalRequests(context, baseURL)
@@ -120,6 +120,17 @@ for (const width of [375, 1440]) {
 			})
 			await page.waitForTimeout(150)
 			assert.ok(await page.evaluate(() => window.arrivalTicks) > 2, 'loading the body must leave the page responsive')
+			// A click can leave a small scroll offset after the cover moves. The
+			// skeleton track must still support sticky positioning at that offset.
+			await page.evaluate(() => window.scrollTo({ top: 16, behavior: 'instant' }))
+			const loadingHeading = await page.locator('.arrival-heading').boundingBox()
+			const loadingCover = await page.locator('.post-header:visible').boundingBox()
+			assert.equal(await page.locator('.arrival-aside-skeleton .reading-directory').count(), 1, 'loading must use the shared reading directory layout')
+			const loadingDirectory = await page.locator('.arrival-aside-skeleton .reading-directory').boundingBox()
+			const loadingRow = await page.locator('.arrival-aside-skeleton i').first().boundingBox()
+			assert.equal(await page.locator('.arrival-aside-skeleton').isVisible(), width > 1024, 'the placeholder must share the desktop directory breakpoint')
+			if (width <= 1024)
+				assert.equal(await page.locator('#blog-panel .toggle-aside').isVisible(), false, 'loading must not expose the replaced aside drawer toggle')
 			await page.evaluate(() => window.WebAssembly = window.arrivalWasm)
 			release()
 			await page.locator('.article:visible').waitFor()
@@ -127,6 +138,19 @@ for (const width of [375, 1440]) {
 			assert.equal(queryAfterMotion, true, 'cold database work must start after the cover finishes moving')
 			assert.equal(await page.locator('.post-header:visible').count(), 1)
 			await page.locator('.article-arrival-loading').waitFor({ state: 'detached' })
+			await page.locator('.reading-navigation').waitFor({ state: width > 1024 ? 'visible' : 'attached' })
+			const body = await page.locator('.article:visible').boundingBox()
+			assert.ok(Math.abs(loadingHeading.x - body.x) < 1, 'body skeleton must share the reading column left edge')
+			assert.ok(Math.abs(loadingHeading.y - body.y) < 3, 'body skeleton must start where the article starts')
+			assert.deepEqual(await page.locator('.post-header:visible').boundingBox(), loadingCover, 'loading must preserve the cover geometry')
+			if (width > 1024) {
+				const directory = await page.locator('.reading-directory').boundingBox()
+				const link = await page.locator('.reading-toc a').first().boundingBox()
+				assert.deepEqual(loadingDirectory, { ...directory, height: loadingDirectory.height }, 'loading directory must share the real directory position and width')
+				assert.ok(Math.abs(loadingRow.x - link.x) < 1, 'directory placeholders must align with the real labels')
+				assert.ok(Math.abs(loadingRow.y + loadingRow.height / 2 - link.y - link.height / 2) < 1, 'directory placeholders must share the real first row center')
+			}
+			assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false)
 			assert.doesNotMatch(await page.title(), /404/)
 			await page.goBack()
 			await page.locator('.article-card').first().waitFor()
@@ -137,6 +161,35 @@ for (const width of [375, 1440]) {
 			release?.()
 			await context.close()
 		}
+	})
+}
+
+for (const width of [1025, 1440, 1920]) {
+	test(`the reading directory stays pinned through comments and the page bottom at ${width}px`, async () => {
+		const context = await browser.newContext({ baseURL, viewport: { width, height: 1000 }, locale: 'zh-CN' })
+		await isolateExternalRequests(context, baseURL)
+		const page = await context.newPage()
+		try {
+			await page.goto('/fiddling/macos-27-apple-intelligence-chatgpt')
+			await page.waitForFunction(() => document.querySelector('#blog-root')?.__vue_app__?.config.globalProperties.$nuxt?.isHydrating === false)
+			await page.locator('.z-comment').waitFor()
+			// Stand in for a long thread without depending on the external API.
+			await page.locator('.z-comment').evaluate(el => el.style.minHeight = '1200px')
+			await page.mouse.move(5, 5)
+			await page.evaluate(() => scrollTo({ top: 900, behavior: 'instant' }))
+			const initial = await page.locator('.reading-navigation').boundingBox()
+			for (const bottom of [false, true]) {
+				await page.evaluate((bottom) => {
+					const comments = document.querySelector('.z-comment')
+					const top = bottom ? document.documentElement.scrollHeight : comments.getBoundingClientRect().top + scrollY
+					scrollTo({ top, behavior: 'instant' })
+				}, bottom)
+				const directory = await page.locator('.reading-navigation').boundingBox()
+				assert.ok(Math.abs(directory.y - initial.y) < 1, `directory must stay pinned ${bottom ? 'at the page bottom' : 'in comments'}: ${directory.y} vs ${initial.y}`)
+				assert.ok(Math.abs((await page.locator('#blog-aside').boundingBox()).y) < 1, 'the reading aside must retain its viewport anchor')
+			}
+		}
+		finally { await context.close() }
 	})
 }
 

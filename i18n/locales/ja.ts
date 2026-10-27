@@ -19,6 +19,7 @@ const ja: MessageSchema = {
 		skipToContent: '本文へ移動',
 	},
 	sidebar: {
+		readingSettings: '読書設定',
 		appearance: '外観',
 		search: '検索',
 		toggleAside: 'サイドバー切替',

@@ -13,6 +13,7 @@ export const useArticleReading = createSharedComposable(() => {
 	const visibleRoots = shallowRef<string[]>([])
 	const visibleIds = shallowRef<string[]>([])
 	const reading = ref(false)
+	const readingArea = ref(false)
 	const scrollingDown = ref(false)
 	const atEnd = ref(false)
 	const ready = ref(false)
@@ -108,8 +109,8 @@ export const useArticleReading = createSharedComposable(() => {
 			return
 		// The reference focuses on pointer entry. Our shorter header places the body
 		// under the arrival pointer sooner; keep the directory until reading begins.
-		const inReadingArea = scroll > 0 && geometry.top - scroll <= 100
-		reading.value = ready.value && desktop.value && inReadingArea && !!pointer
+		readingArea.value = ready.value && desktop.value && scroll > 0 && geometry.top - scroll <= 100
+		reading.value = readingArea.value && !!pointer
 			&& pointer.x >= geometry.left && pointer.x <= geometry.right
 			&& pointer.y + scroll >= geometry.top && pointer.y + scroll <= geometry.top + geometry.height
 	}
@@ -147,6 +148,7 @@ export const useArticleReading = createSharedComposable(() => {
 
 	watch([toc, dataKey], () => {
 		reading.value = false
+		readingArea.value = false
 		pointer = undefined
 		scrollingDown.value = false
 		ready.value = false
@@ -181,5 +183,5 @@ export const useArticleReading = createSharedComposable(() => {
 		rootObserver?.disconnect()
 	})
 
-	return { headings, percent, scrollPosition, activeId, activeRoot, visibleRoots, visibleIds, reading, scrollingDown, atEnd, ready, desktopMeterVisible, paused, desktop, reducedMotion, navigate, backToTop, setMeterVisible }
+	return { headings, percent, scrollPosition, activeId, activeRoot, visibleRoots, visibleIds, reading, readingArea, scrollingDown, atEnd, ready, desktopMeterVisible, paused, desktop, reducedMotion, navigate, backToTop, setMeterVisible }
 })

@@ -21,6 +21,7 @@ const zh = {
 		skipToContent: '跳转到主要内容',
 	},
 	sidebar: {
+		readingSettings: '阅读设置',
 		appearance: '外观',
 		search: '搜索',
 		toggleAside: '切换侧边栏',
