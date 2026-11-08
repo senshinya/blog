@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { headings, activeId, visibleRoots, visibleIds, scrollingDown, desktop, reducedMotion, navigate } = useArticleReading()
+const { headings, activeId, visibleRoots, visibleIds, desktop, reducedMotion, navigate } = useArticleReading()
 const trigger = useTemplateRef<HTMLButtonElement>('trigger')
 const dialog = useTemplateRef<HTMLDialogElement>('dialog')
 const panel = useTemplateRef<HTMLElement>('panel')
@@ -134,10 +134,10 @@ onScopeDispose(() => {
 </script>
 
 <template>
-<div v-if="headings.length" class="reading-menu-entry reading-theme" :data-hidden="scrollingDown && !open || undefined">
-	<div class="reading-menu-button">
-		<button ref="trigger" type="button" :aria-label="$t('widget.toc.show')" aria-haspopup="dialog" :aria-expanded="open" :inert="scrollingDown && !open || undefined" @click="show">
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+<div v-if="headings.length" class="reading-menu-entry reading-theme">
+	<div class="reading-menu-button floating-navigation" :class="{ 'has-active': open }">
+		<button ref="trigger" type="button" :aria-label="$t('widget.toc.show')" aria-haspopup="dialog" :aria-expanded="open" @click="show">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
 				<path fill="currentColor" d="M20.837 5.607c.132-.258-.062-.556-.38-.584a29 29 0 0 0-2.454-.1c-1.106 0-1.983.058-2.516.105c-.296.027-.461.299-.332.552c.22.432.596 1.121 1.144 1.966c.549.845 1.033 1.48 1.343 1.865c.183.225.53.235.704.02c.311-.385.806-1.03 1.361-1.884a22 22 0 0 0 1.13-1.94m0 9.999c.132-.257-.062-.556-.38-.583c-.536-.046-1.39-.1-2.454-.1c-1.106 0-1.983.057-2.516.105c-.296.026-.461.298-.332.552c.22.431.596 1.12 1.144 1.966a23 23 0 0 0 1.343 1.864c.183.226.53.236.704.02c.311-.384.806-1.03 1.361-1.883a22 22 0 0 0 1.13-1.94" />
 				<path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 5h8m-8 7h8m-8 7h8" />
 			</svg>
@@ -168,51 +168,25 @@ onScopeDispose(() => {
 	flex-direction: column;
 	align-items: flex-end;
 	position: fixed;
-	overflow-x: clip;
 	opacity: 1;
-	inset: auto env(safe-area-inset-right, 0px) calc(70px + env(safe-area-inset-bottom)) auto;
-	transition: opacity 300ms cubic-bezier(0.22, 1, 0.36, 1), transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+	inset-inline-end: min(1rem, 5%);
+	bottom: calc(min(2rem, 5vh) + 2.68rem + 0.5rem);
+	font-size: 1.4rem;
+	color: var(--c-text-1);
 	z-index: calc(var(--z-index-popover) - 1);
 
-	&[data-hidden] {
-		opacity: 0;
-		transform: translateY(12px);
-		pointer-events: none;
-	}
 	.reading-menu-button {
-		overflow: hidden;
-		width: 48px;
-		margin-top: 7px;
-		transform-origin: right center;
 		animation: reading-entry 280ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 	button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 42px;
-		height: 49px;
-		padding: 0 3.5px 0 0;
-		border: 1px solid rgb(0 0 0 / 8%);
-		border-inline-end: 0;
-		border-radius: 14px 0 0 14px;
-		background: color-mix(in srgb, var(--reading-paper) 95%, transparent);
-		color: var(--reading-muted);
-		transition: color 200ms cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms cubic-bezier(0.22, 1, 0.36, 1), transform 120ms;
-		&:hover {
-			background: rgb(0 0 0 / 2%);
-			color: #24231F;
-		}
-		&:active {
-			background: rgb(0 0 0 / 4%);
-			transform: scale(0.97);
-		}
+		padding: 0.5rem;
 		svg {
-			opacity: 0.75;
-			transition: opacity 200ms;
+			width: 1.68rem;
+			height: 1.68rem;
 		}
-		&:hover svg { opacity: 1; }
-		:root.dark & { border-color: rgb(255 255 255 / 10%); }
 	}
 	@media (min-width: 1025px) { display: none; }
 }
@@ -295,11 +269,11 @@ onScopeDispose(() => {
 @keyframes reading-entry {
 	from {
 		opacity: 0;
-		width: 0;
+		transform: translateY(6px);
 	}
 	to {
 		opacity: 1;
-		width: 48px;
+		transform: translateY(0);
 	}
 }
 @media (prefers-reduced-motion: reduce) {

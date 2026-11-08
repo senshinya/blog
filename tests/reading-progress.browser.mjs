@@ -166,13 +166,19 @@ test('desktop directory folds into a curved reading rail and opens for pointer a
 	finally { await context.close() }
 })
 
-test('mobile reading line and bottom directory support selection, escape and focus return', async () => {
+test('mobile navigation stays visible after scrolling and supports directory selection, escape and focus return', async () => {
 	const { context, page } = await article(375, { isMobile: true, hasTouch: true })
 	try {
 		await page.locator('.reading-edge').waitFor({ timeout: 3000 })
 		await page.evaluate(() => scrollTo({ top: 1300, behavior: 'instant' }))
-		await page.waitForTimeout(100)
-		await page.evaluate(() => scrollBy({ top: -160, behavior: 'instant' }))
+		await page.waitForTimeout(400)
+		async function assertNavigationVisible() {
+			for (const selector of ['.reading-menu-entry', '#blog-panel']) {
+				assert.equal(await page.locator(selector).evaluate(el => getComputedStyle(el).opacity), '1', `${selector} remains visible after scrolling`)
+			}
+			assert.equal(await page.locator('.reading-menu-entry button').evaluate(el => el.inert), false, 'the directory remains interactive')
+		}
+		await assertNavigationVisible()
 		const trigger = page.getByRole('button', { name: '显示目录', exact: true })
 		await trigger.click()
 		const dialog = page.getByRole('dialog', { name: '目录', exact: true })
@@ -180,6 +186,9 @@ test('mobile reading line and bottom directory support selection, escape and foc
 		await page.keyboard.press('Escape')
 		await dialog.waitFor({ state: 'hidden' })
 		assert.equal(await trigger.evaluate(el => document.activeElement === el), true)
+		await page.evaluate(() => scrollBy({ top: -160, behavior: 'instant' }))
+		await page.waitForTimeout(400)
+		await assertNavigationVisible()
 		await trigger.click()
 		const target = dialog.locator('a').nth(2)
 		const hash = await target.getAttribute('href')

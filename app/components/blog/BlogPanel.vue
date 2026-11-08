@@ -15,6 +15,7 @@ const { transform } = useAvoidTransform(panelRef, avoidTargets)
 <div ref="panel-anchor" class="panel-anchor">
 	<div
 		id="blog-panel"
+		class="floating-navigation"
 		:class="{ 'has-active': layoutStore.state !== 'none' }"
 		:style="{ transform }"
 	>
@@ -51,10 +52,6 @@ const { transform } = useAvoidTransform(panelRef, avoidTargets)
 }
 
 #blog-panel {
-	contain: paint;
-	border-radius: 0.5rem;
-	background-color: var(--c-bg-a50);
-	backdrop-filter: blur(0.5rem);
 	font-size: 1.4rem;
 	transition: transform 0.1s;
 	pointer-events: auto;
@@ -67,26 +64,11 @@ const { transform } = useAvoidTransform(panelRef, avoidTargets)
 	@media (max-height: 528px) {
 		display: flex;
 	}
-
-	&.has-active {
-		box-shadow: var(--box-shadow-1), var(--box-shadow-3);
-	}
 }
 
 button {
 	display: block;
 	padding: 0.5rem;
-	transition: all 0.2s;
-
-	&:hover {
-		background-color: var(--c-bg-a80);
-		color: var(--c-primary);
-	}
-
-	&.active {
-		background-color: var(--ld-bg-active);
-		color: var(--c-primary);
-	}
 }
 
 /* 正文有独立快照，在 Panel 的快照层重新合成磨砂背景。 */
